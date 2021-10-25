@@ -4,7 +4,7 @@
 |J036 김승현|J046 김유석|J122 안주영|J195 조성현|
 |---|---|---|---|
 |<img src="https://github.com/daejjyu.png" width="110">|<img src="https://github.com/yusokk.png" width="110">|<img src="https://github.com/juyahn.png" width="110">|<img src="https://github.com/Tongky-HGU.png" width="110">|
-|@daejjyu|@yusokk|@juyahn|@Tongky-HGU|
+|[@daejjyu](https://github.com/daejjyu)|[@yusokk](https://github.com/yusokk)|[@juyahn](https://github.com/juyahn)|[@Tongky-HGU](https://github.com/Tongky-HGU)|
 
 
 ### Wiki 홈
