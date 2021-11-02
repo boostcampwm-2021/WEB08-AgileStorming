@@ -53,16 +53,22 @@ const flex = {
   columnCenter: `
     display:flex;
     flex-direction:column;
-    justify-content:center;
     align-items:center;
   `,
   rowCenter: `
     display:flex;
     flex-direction:row;
     justify-content:center;
+  `,
+  center: `
+    display:flex;
+    flex-direction:row;
     align-items:center;
+    justify-content:center;
   `,
 };
+
+const shadow = `box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)`
 
 const common = {
   color,
@@ -70,6 +76,7 @@ const common = {
   padding,
   margin,
   flex,
+  shadow
 };
 
 export default common;
