@@ -1,16 +1,9 @@
 import React from 'react';
-import Button from 'components/atoms/Button';
-
-const clickHandle = () => {
-  console.log(123);
-};
+import LoginTemplate from 'components/templates/Login';
 
 const Login = () => {
   return (
-    <div>
-      로그인페이지
-      <Button onClick={clickHandle}></Button>
-    </div>
+    <LoginTemplate />
   );
 };
 
