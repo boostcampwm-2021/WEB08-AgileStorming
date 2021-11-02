@@ -13,7 +13,7 @@ const color = {
 
 const calcRem = (px: number) => `${px / 16}rem`;
 
-const fontSizes = {
+const fontSize = {
   small: calcRem(14),
   normal: calcRem(16),
   large: calcRem(18),
@@ -23,7 +23,7 @@ const fontSizes = {
   title: calcRem(50),
 };
 
-const paddings = {
+const padding = {
   small: calcRem(8),
   normal: calcRem(10),
   large: calcRem(12),
@@ -32,7 +32,7 @@ const paddings = {
   xxxlarge: calcRem(18),
 };
 
-const margins = {
+const margin = {
   small: calcRem(8),
   normal: calcRem(10),
   large: calcRem(12),
@@ -66,9 +66,10 @@ const flex = {
 
 const common = {
   color,
-  fontSizes,
-  paddings,
-  margins,
+  fontSize,
+  padding,
+  margin,
   flex,
 };
+
 export default common;
