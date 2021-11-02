@@ -1,7 +1,7 @@
-import React from 'react';
+import { Project } from 'components/templates';
 
-const Project = () => {
-  return <div>프로젝트페이지</div>;
+const ProjectPage = () => {
+  return <Project />;
 };
 
-export default Project;
+export default ProjectPage;
