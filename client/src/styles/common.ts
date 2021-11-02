@@ -53,14 +53,18 @@ const flex = {
   columnCenter: `
     display:flex;
     flex-direction:column;
-    justify-content:center;
     align-items:center;
   `,
   rowCenter: `
     display:flex;
     flex-direction:row;
     justify-content:center;
+  `,
+  center: `
+    display:flex;
+    flex-direction:row;
     align-items:center;
+    justify-content:center;
   `,
 };
 
