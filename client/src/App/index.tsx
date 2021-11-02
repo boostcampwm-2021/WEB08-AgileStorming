@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Global, ThemeProvider } from '@emotion/react';
-import { LoginPage, KanbanPage, ProjectPage, MindmapPage, CalendarPage, ChartPage } from '../pages';
-import { common, global } from '../styles';
+import { LoginPage, KanbanPage, ProjectPage, MindmapPage, CalendarPage, ChartPage } from 'pages';
+import { common, global } from 'styles';
 
 const App = () => {
   return (
