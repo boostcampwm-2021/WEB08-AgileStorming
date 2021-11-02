@@ -1,5 +1,4 @@
 import '@emotion/react';
-import { common } from 'styles';
 
 declare module '@emotion/react' {
   export interface Theme {
@@ -45,6 +44,7 @@ declare module '@emotion/react' {
       row: string;
       columnCenter: string;
       rowCenter: string;
+      center: string;
     };
   }
 }
