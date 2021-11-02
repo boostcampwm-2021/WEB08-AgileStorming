@@ -1,1 +1,1 @@
-export { default as ProjectMain } from 'components/organisms/ProjectMain';
+export { default as ProjectCardContainer } from 'components/organisms/ProjectCardContainer';

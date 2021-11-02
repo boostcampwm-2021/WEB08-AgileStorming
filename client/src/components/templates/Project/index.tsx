@@ -1,7 +1,13 @@
-import { ProjectMain } from 'components/organisms';
+import { ProjectCardContainer } from 'components/organisms';
+import { Toast } from 'components/atoms';
 
 const Project = () => {
-  return <ProjectMain />;
+  return (
+    <>
+      <Toast />
+      <ProjectCardContainer />
+    </>
+  );
 };
 
 export default Project;
