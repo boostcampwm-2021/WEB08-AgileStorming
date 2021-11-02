@@ -1,4 +1,5 @@
 import '@emotion/react';
+import { common } from 'styles';
 
 declare module '@emotion/react' {
   export interface Theme {
@@ -14,7 +15,6 @@ declare module '@emotion/react' {
       gray2: string;
       gray3: string;
     };
-
     fontSize: {
       small: string;
       normal: string;
@@ -24,7 +24,6 @@ declare module '@emotion/react' {
       xxxlarge: string;
       title: string;
     };
-
     padding: {
       small: string;
       normal: string;
@@ -33,7 +32,6 @@ declare module '@emotion/react' {
       xxlarge: string;
       xxxlarge: string;
     };
-
     margin: {
       small: string;
       normal: string;
@@ -42,7 +40,6 @@ declare module '@emotion/react' {
       xxlarge: string;
       xxxlarge: string;
     };
-
     flex: {
       column: string;
       row: string;
