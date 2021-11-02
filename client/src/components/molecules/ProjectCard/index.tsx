@@ -1,19 +1,26 @@
 import React from 'react';
+import styled from '@emotion/styled';
 import { ShareButton } from 'components/atoms';
 
 interface IProps {
   projectId: string;
+  onClickShareButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const ProjectCard: React.FC<IProps> = ({ projectId }) => {
-  const handleClickShareButton = () => {
-    navigator.clipboard.writeText(process.env.REACT_APP_CLIENT + 'mindmap:' + projectId);
-  };
+const StyledProjectCard = styled.div`
+  width: 150px;
+  height: 300px;
+  background: ${(props) => props.theme.color.bgWhite};
+  border: 1px solid ${(props) => props.theme.color.black};
+  border-radius: 8px;
+  margin: 10px;
+`;
 
+const ProjectCard: React.FC<IProps> = ({ projectId, onClickShareButton }) => {
   return (
-    <>
-      <ShareButton onClick={handleClickShareButton} />
-    </>
+    <StyledProjectCard>
+      <ShareButton onClick={onClickShareButton} />
+    </StyledProjectCard>
   );
 };
 
