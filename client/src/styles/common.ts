@@ -1,6 +1,3 @@
-import { ThemeProvider } from '@emotion/react';
-import { FC } from 'react';
-
 const color = {
   primary1: '#5865F2',
   primary2: '#0A127C',
@@ -74,9 +71,4 @@ const common = {
   margins,
   flex,
 };
-
-const CommonStyle: FC = () => {
-  return <ThemeProvider theme={common} />;
-};
-
-export default CommonStyle;
+export default common;

@@ -1,2 +1,2 @@
-export { default as GlobalStyle } from './GlobalStyle';
-export { default as CommonStyle } from './CommonStyle';
+export { default as global } from './global';
+export { default as common } from './common';

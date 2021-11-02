@@ -1,6 +1,5 @@
-import React, { FC } from 'react';
 import emotionReset from 'emotion-reset';
-import { Global, css } from '@emotion/react';
+import { css } from '@emotion/react';
 
 const global = css`
   ${emotionReset}
@@ -13,8 +12,4 @@ const global = css`
   }
 `;
 
-const GlobalStyle: FC = () => {
-  return <Global styles={global} />;
-};
-
-export default GlobalStyle;
+export default global;
