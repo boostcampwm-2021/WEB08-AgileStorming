@@ -1,48 +1,20 @@
-import "reflect-metadata";
-import {createConnection} from "typeorm";
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import {Request, Response} from "express";
-import {Routes} from "./routes";
-import {User} from "./entity/User";
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as dotenv from 'dotenv';
+import userRouter from './routes/user';
+import ormconfig from '../ormconfig';
+dotenv.config();
 
-createConnection().then(async connection => {
+const app = express();
+const port = process.env.PORT || 5000;
+const connection = createConnection(ormconfig);
 
-    // create express app
-    const app = express();
-    app.use(bodyParser.json());
+app.use(bodyParser.json());
 
-    // register express routes from defined application routes
-    Routes.forEach(route => {
-        (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-            const result = (new (route.controller as any))[route.action](req, res, next);
-            if (result instanceof Promise) {
-                result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+app.use('/', userRouter);
 
-            } else if (result !== null && result !== undefined) {
-                res.json(result);
-            }
-        });
-    });
+app.listen(port);
 
-    // setup express app here
-    // ...
-
-    // start express server
-    app.listen(3000);
-
-    // insert new users for test
-    await connection.manager.save(connection.manager.create(User, {
-        firstName: "Timber",
-        lastName: "Saw",
-        age: 27
-    }));
-    await connection.manager.save(connection.manager.create(User, {
-        firstName: "Phantom",
-        lastName: "Assassin",
-        age: 24
-    }));
-
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
-
-}).catch(error => console.log(error));
+console.log(`server listen ${port}...`);
