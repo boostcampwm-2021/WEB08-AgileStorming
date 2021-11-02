@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 
 interface IProps {
   width?: string;
   height?: string;
+  children?: HTMLElement | ReactJSXElement;
 }
 
 const WhiteBackground = styled.div<IProps>`
@@ -12,8 +14,12 @@ const WhiteBackground = styled.div<IProps>`
   height: ${(props) => props.height};
 `;
 
-const Background: React.FC<IProps> = ({ width = '100vw', height = '100vh' }) => {
-  return <WhiteBackground width={width} height={height}></WhiteBackground>;
+const Background = ({ width = '100vw', height = '100vh', children }: IProps) => {
+  return (
+    <WhiteBackground width={width} height={height}>
+      {children}
+    </WhiteBackground>
+  );
 };
 
 export default Background;
