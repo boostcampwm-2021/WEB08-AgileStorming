@@ -46,5 +46,6 @@ declare module '@emotion/react' {
       rowCenter: string;
       center: string;
     };
+    shadow: string;
   }
 }
