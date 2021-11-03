@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { ShareButton } from 'components/atoms';
+import * as img from 'img';
+import { IconButton } from 'components/molecules';
 
 interface IProps {
   projectId: string;
@@ -8,18 +9,24 @@ interface IProps {
 }
 
 const StyledProjectCard = styled.div`
-  width: 150px;
+  ${(props) => props.theme.flex.column}
+  width: 320px;
   height: 300px;
-  background: ${(props) => props.theme.color.bgWhite};
-  border: 1px solid ${(props) => props.theme.color.black};
-  border-radius: 8px;
+  background: ${(props) => props.theme.color.white};
+  border: 1px solid ${(props) => props.theme.color.gray3};
+  border-radius: 5px;
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
   margin: 10px;
+  :hover {
+    cursor: pointer;
+    background: ${(props) => props.theme.color.bgWhite};
+  }
 `;
 
 const ProjectCard: React.FC<IProps> = ({ projectId, onClickShareButton }) => {
   return (
     <StyledProjectCard>
-      <ShareButton onClick={onClickShareButton} />
+      <IconButton onClick={onClickShareButton} imgSrc={img.share} />
     </StyledProjectCard>
   );
 };

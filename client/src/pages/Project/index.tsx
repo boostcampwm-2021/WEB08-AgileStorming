@@ -1,7 +1,13 @@
-import { Project } from 'components/templates';
+import { ProjectCardContainer } from 'components/templates';
+import { Toast } from 'components/atoms';
 
-const ProjectPage = () => {
-  return <Project />;
+const Project = () => {
+  return (
+    <>
+      <ProjectCardContainer />
+      <Toast />
+    </>
+  );
 };
 
-export default ProjectPage;
+export default Project;

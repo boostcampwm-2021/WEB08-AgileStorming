@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ProjectCard } from 'components/molecules';
+import { ProjectCard } from 'components/organisms';
 import useToast from 'hooks/toast';
 
 const StyledProjectCardContainer = styled.div`

@@ -1,1 +1,1 @@
-export { default as Project } from 'components/templates/Project';
+export { default as ProjectCardContainer } from 'components/templates/ProjectCardContainer';
