@@ -8,6 +8,7 @@
     "express": "^4.15.4",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
+    "morgan": "^1.10.0",
     "mysql": "^2.14.1",
     "mysql2": "^2.3.2",
     "reflect-metadata": "^0.1.10",
