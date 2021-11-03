@@ -15,7 +15,7 @@ const StyledIconImg = styled.img`
 `;
 
 const IconImg: React.FC<IProps> = ({ imgSrc }) => {
-  return <StyledIconImg src={imgSrc} alt='IconButton' />;
+  return <StyledIconImg src={imgSrc} alt='IconImg' />;
 };
 
 export default IconImg;
