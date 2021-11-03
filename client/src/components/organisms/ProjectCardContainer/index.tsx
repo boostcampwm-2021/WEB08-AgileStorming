@@ -16,8 +16,8 @@ const ProjectCardContainer = () => {
   };
   return (
     <StyledProjectCardContainer>
-      {projectIdList.map((projectId, idx) => (
-        <ProjectCard key={idx} projectId={projectId} onClickShareButton={() => handleClickShareButton(projectId)} />
+      {projectIdList.map((projectId) => (
+        <ProjectCard key={projectId} projectId={projectId} onClickShareButton={() => handleClickShareButton(projectId)} />
       ))}
     </StyledProjectCardContainer>
   );
