@@ -1,13 +1,6 @@
 import { useEffect, useRef } from 'react';
-import styled from '@emotion/styled';
-import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import Background from 'components/atoms/Background';
-import { numToPx } from 'utils/helpers';
-
-enum MINDMAP_BG_SIZE {
-  WIDTH = 5000,
-  HEIGHT = 5000,
-}
+import { getCenterCoord, MINDMAP_BG_SIZE, numToPx } from 'utils/helpers';
 
 interface ICoord {
   clientX: number;
@@ -15,8 +8,10 @@ interface ICoord {
 }
 
 interface IProps {
-  children?: HTMLElement | ReactJSXElement;
+  children?: React.ReactNode;
 }
+
+const [centerX, centerY] = getCenterCoord(window.innerWidth, window.innerHeight);
 
 const MindmapBackground = ({ children }: IProps) => {
   const lastCoord = useRef<ICoord | null>(null);
@@ -69,9 +64,6 @@ const MindmapBackground = ({ children }: IProps) => {
   };
 
   useEffect(() => {
-    const centerX = (MINDMAP_BG_SIZE.WIDTH - window.innerWidth) / 2;
-    const centerY = (MINDMAP_BG_SIZE.HEIGHT - window.innerHeight) / 2;
-
     window.scrollTo(centerX, centerY);
     addListeners();
 
