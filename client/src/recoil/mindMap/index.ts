@@ -1,8 +1,10 @@
 import { atom } from 'recoil';
 
+export type levels = 'ROOT' | 'EPIC' | 'STORY' | 'TASK';
+
 export interface IMindNode {
   nodeId: number;
-  level: string;
+  level: levels;
   content: string;
   children: Array<number>;
 }
@@ -15,7 +17,7 @@ export interface IMindMap {
 const initRootId = 0;
 const initRootNode = {
   nodeId: initRootId,
-  level: 'root',
+  level: 'ROOT' as levels,
   content: '',
   children: [],
 };

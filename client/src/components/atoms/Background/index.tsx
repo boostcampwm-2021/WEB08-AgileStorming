@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 
 interface IProps {
   width?: string;
   height?: string;
-  children?: HTMLElement | ReactJSXElement;
+  children?: React.ReactNode;
 }
 
 const WhiteBackground = styled.div<IProps>`

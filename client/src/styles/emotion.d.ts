@@ -20,5 +20,8 @@ declare module '@emotion/react' {
     };
     shadow: string;
     absoluteCenter: string;
+    nodeBgColors: string[];
+    nodeColors: string[];
+    nodeFontSizes: string[];
   }
 }

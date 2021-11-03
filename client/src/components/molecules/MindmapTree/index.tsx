@@ -1,21 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { IMindNode, IMindMap } from 'recoil/mindMap';
-
-///분업을 위한 임시 지정 삭제예정
-interface INodeProps {
-  nodeId: number;
-  level: string;
-}
-
-const Node = styled.div<INodeProps>`
-  width: 5rem;
-  height: 2.5rem;
-  cursor: pointer;
-  background-color: ${(props) =>
-    props.level === 'epic' ? 'red' : props.level === 'story' ? 'yellow' : props.level === 'task' ? 'skyblue' : 'purple'};
-`;
-///분업을 위한 임시 지정 삭제예정
+import Node from 'components/atoms/Node';
 
 interface IProps {
   mindMap: IMindMap;
@@ -43,7 +29,7 @@ const getNodeContainer = (nodeId: number, mindNodes: Map<number, IMindNode>) => 
   const { level, content, children } = node!;
   return (
     <NodeContainer key={nodeId} isRoot={isRoot} draggable='true'>
-      <Node nodeId={nodeId} level={level}>
+      <Node id={nodeId.toString()} level={level}>
         {content}
       </Node>
       <ChildContainer>{children.map((childrenId) => getNodeContainer(childrenId, mindNodes))}</ChildContainer>
