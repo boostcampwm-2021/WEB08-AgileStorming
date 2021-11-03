@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import styled from '@emotion/styled';
 import * as img from 'img';
 
 interface IProps {
   onClickPlusButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  modal: ReactElement;
 }
 
 const StyledNewProjectCard = styled.button`
@@ -21,11 +22,14 @@ const StyledNewProjectCard = styled.button`
   }
 `;
 
-const NewProjectCard: React.FC<IProps> = ({ onClickPlusButton }) => {
+const NewProjectCard: React.FC<IProps> = ({ onClickPlusButton, modal }) => {
   return (
-    <StyledNewProjectCard onClick={onClickPlusButton}>
-      <img src={img.plus} />
-    </StyledNewProjectCard>
+    <>
+      <StyledNewProjectCard onClick={onClickPlusButton}>
+        <img src={img.plus} alt='plus' />
+      </StyledNewProjectCard>
+      {modal}
+    </>
   );
 };
 

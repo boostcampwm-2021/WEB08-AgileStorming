@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { NewProjectCard, ProjectCard } from 'components/organisms';
+import { ProjectCard } from 'components/organisms';
 import useToast from 'hooks/toast';
 
 const StyledProjectCardContainer = styled.div`
@@ -14,12 +14,8 @@ const ProjectCardContainer = () => {
     navigator.clipboard.writeText(process.env.REACT_APP_CLIENT + 'mindmap:' + projectId);
     showMessage('마인드맵 링크가 클립보드에 복사되었습니다.');
   };
-  const handleClickPlusButton = () => {
-    alert('add new project');
-  };
   return (
     <StyledProjectCardContainer>
-      <NewProjectCard onClickPlusButton={handleClickPlusButton} />
       {projectIdList.map((projectId) => (
         <ProjectCard key={projectId} projectId={projectId} onClickShareButton={() => handleClickShareButton(projectId)} />
       ))}
