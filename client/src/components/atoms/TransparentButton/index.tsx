@@ -11,6 +11,7 @@ const StyledTransparentButton = styled.button`
   margin: 0;
   padding: 0;
   width: fit-content;
+  cursor: pointer;
 `;
 const TransparentButton: React.FC<IProps> = ({ children, onClick }) => {
   return <StyledTransparentButton onClick={onClick}>{children}</StyledTransparentButton>;
