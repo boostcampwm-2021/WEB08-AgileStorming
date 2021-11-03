@@ -1,19 +1,20 @@
 import { atom } from 'recoil';
 
 export interface IMindNode {
-  id: number;
+  nodeId: number;
   level: string;
   content: string;
   children: Array<number>;
 }
 
 export interface IMindMap {
-  root: IMindNode;
+  rootId: number;
   mindNodes: Map<number, IMindNode>;
 }
 
-const initRoot = {
-  id: 0,
+const initRootId = 0;
+const initRootNode = {
+  nodeId: initRootId,
   level: 'root',
   content: '',
   children: [],
@@ -21,5 +22,5 @@ const initRoot = {
 
 export const mindMapState = atom<IMindMap>({
   key: 'mindMapAtom',
-  default: { root: initRoot, mindNodes: new Map() },
+  default: { rootId: initRootId, mindNodes: new Map([[initRootId, initRootNode]]) },
 });
