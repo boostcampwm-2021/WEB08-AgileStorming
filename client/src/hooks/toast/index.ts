@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
-import { IToast, toastState } from 'recoil/toast';
+import { toastState } from 'recoil/toast';
 
 interface IUseToast {
   showMessage: (message: string) => void;
@@ -16,7 +16,7 @@ const useToast = (): IUseToast => {
   }, [toastObject]);
 
   const showMessage = (message: string) => {
-    setToastObject({ show: true, message } as IToast);
+    setToastObject({ show: true, message });
     setTimeout(hideMessage, 2000);
   };
 

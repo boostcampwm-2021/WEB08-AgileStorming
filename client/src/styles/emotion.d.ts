@@ -1,50 +1,22 @@
 import '@emotion/react';
+import * as Types from './common';
 
 declare module '@emotion/react' {
   export interface Theme {
     color: {
-      primary1: string;
-      primary2: string;
-      primary3: string;
-      red: string;
-      bgWhite: string;
-      white: string;
-      black: string;
-      gray1: string;
-      gray2: string;
-      gray3: string;
+      [key in Types.TColor]: string;
     };
     fontSize: {
-      small: string;
-      normal: string;
-      large: string;
-      xlarge: string;
-      xxlarge: string;
-      xxxlarge: string;
-      title: string;
+      [key in Types.TFontSize]: string;
     };
     padding: {
-      small: string;
-      normal: string;
-      large: string;
-      xlarge: string;
-      xxlarge: string;
-      xxxlarge: string;
+      [key in Types.TSize]: string;
     };
     margin: {
-      small: string;
-      normal: string;
-      large: string;
-      xlarge: string;
-      xxlarge: string;
-      xxxlarge: string;
+      [key in Types.TSize]: string;
     };
     flex: {
-      column: string;
-      row: string;
-      columnCenter: string;
-      rowCenter: string;
-      center: string;
+      [key in Types.TFlex]: string;
     };
     shadow: string;
   }

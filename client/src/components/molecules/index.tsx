@@ -1,1 +1,2 @@
-export { default as ProjectCard } from 'components/molecules/ProjectCard';
+export { default as IconButton } from 'components/molecules/IconButton';
+export { default as TextButton } from 'components/molecules/TextButton';
