@@ -74,6 +74,12 @@ const flex: { [key in TFlex]: string } = {
 };
 
 const shadow = `box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)`;
+const absoluteCenter = `
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  `;
 
 const common = {
   color,
@@ -82,6 +88,7 @@ const common = {
   margin,
   flex,
   shadow,
+  absoluteCenter,
 };
 
 export default common;

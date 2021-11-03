@@ -9,6 +9,7 @@ interface IProps {
 }
 
 const WhiteBackground = styled.div<IProps>`
+  position: relative;
   background-color: ${(props) => props.theme.color.bgWhite};
   width: ${(props) => props.width};
   height: ${(props) => props.height};

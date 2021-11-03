@@ -1,6 +1,7 @@
-import styled from '@emotion/styled';
-import Background from 'components/atoms/Background';
 import { useEffect, useRef } from 'react';
+import styled from '@emotion/styled';
+import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
+import Background from 'components/atoms/Background';
 import { numToPx } from 'utils/helpers';
 
 enum MINDMAP_BG_SIZE {
@@ -8,29 +9,16 @@ enum MINDMAP_BG_SIZE {
   HEIGHT = 5000,
 }
 
-interface TempProps {
-  x: string;
-  y: string;
-}
-
 interface ICoord {
   clientX: number;
   clientY: number;
 }
 
-const TestDiv = styled.div<TempProps>`
-  position: absolute;
-  top: ${(props) => props.y};
-  left: ${(props) => props.x};
-  width: 100px;
-  height: 100px;
-  background-color: blue;
-`;
+interface IProps {
+  children?: HTMLElement | ReactJSXElement;
+}
 
-const divX = numToPx((MINDMAP_BG_SIZE.WIDTH - 100) / 2);
-const divY = numToPx((MINDMAP_BG_SIZE.HEIGHT - 100) / 2);
-
-const MindmapBackground = () => {
+const MindmapBackground = ({ children }: IProps) => {
   const lastCoord = useRef<ICoord | null>(null);
   const draggable = useRef(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
@@ -92,7 +80,7 @@ const MindmapBackground = () => {
 
   return (
     <Background width={numToPx(MINDMAP_BG_SIZE.WIDTH)} height={numToPx(MINDMAP_BG_SIZE.HEIGHT)}>
-      <TestDiv x={divX} y={divY} />
+      {children}
     </Background>
   );
 };
