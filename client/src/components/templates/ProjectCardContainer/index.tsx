@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 import { ProjectCard } from 'components/organisms';
+import { NewProjectModalWrapper } from 'components/templates';
 import useToast from 'hooks/toast';
 
 const StyledProjectCardContainer = styled.div`
   ${(props) => props.theme.flex.row}
   flex-wrap: wrap;
+  margin: ${(props) => props.theme.margin.xxxlarge};
 `;
 
 const ProjectCardContainer = () => {
@@ -16,6 +18,7 @@ const ProjectCardContainer = () => {
   };
   return (
     <StyledProjectCardContainer>
+      <NewProjectModalWrapper />
       {projectIdList.map((projectId) => (
         <ProjectCard key={projectId} projectId={projectId} onClickShareButton={() => handleClickShareButton(projectId)} />
       ))}
