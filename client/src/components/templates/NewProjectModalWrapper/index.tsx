@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, ChangeEvent } from 'react';
 import { NewProjectCard, TextInputModal } from 'components/organisms';
 
 interface IProps {}
 
 const NewProjectModalWrapper: React.FC<IProps> = () => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const projectName = useRef<string>('');
   const handleClickPlusButton = () => {
     setModalVisible((isModalVisible) => !isModalVisible);
   };
@@ -12,7 +13,12 @@ const NewProjectModalWrapper: React.FC<IProps> = () => {
     setModalVisible(false);
   };
   const handleClickSubmitButton = () => {
-    alert('submit');
+    if (!projectName.current) return;
+    alert(`submit ${projectName.current}`);
+    setModalVisible(false);
+  };
+  const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+    projectName.current = event.target.value;
   };
   return (
     <>
@@ -22,8 +28,9 @@ const NewProjectModalWrapper: React.FC<IProps> = () => {
           <TextInputModal
             onClickSubmitButton={handleClickSubmitButton}
             onClickOverlay={handleClickOverlay}
+            onClickChangeInput={handleChangeInput}
             text={'새로운 프로젝트 만들기'}
-            placeholder={'새 프로젝트 이름을 입력하세요.'}
+            placeholder={'프로젝트 이름'}
             visible={isModalVisible}
           />
         }
