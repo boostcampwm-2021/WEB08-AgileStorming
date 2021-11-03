@@ -1,7 +1,6 @@
 import React from 'react';
 import { ModalBox, ModalOverlay, Input } from 'components/atoms';
-import { IconButton } from 'components/molecules';
-import * as img from 'img';
+import { TextButton } from 'components/molecules';
 
 interface IProps {
   onClickSubmitButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -18,7 +17,7 @@ const TextInputModal: React.FC<IProps> = ({ onClickSubmitButton, onClickOverlay,
       <ModalBox visible={visible}>
         <p>{text}</p>
         <Input placeholder={placeholder} margin={'20px 0'} />
-        <IconButton onClick={onClickSubmitButton} imgSrc={img.share} />
+        <TextButton onClick={onClickSubmitButton} text={'확인'} textColor={'red'} textWeight={'bold'} />
       </ModalBox>
     </>
   );
