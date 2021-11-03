@@ -19,5 +19,6 @@ declare module '@emotion/react' {
       [key in Types.TFlex]: string;
     };
     shadow: string;
+    absoluteCenter: string;
   }
 }

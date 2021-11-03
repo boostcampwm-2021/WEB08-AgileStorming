@@ -9,23 +9,6 @@ enum MINDMAP_BG_SIZE {
   HEIGHT = 5000,
 }
 
-// interface TempProps {
-//   x: string;
-//   y: string;
-// }
-
-// const TestDiv = styled.div<TempProps>`
-//   position: absolute;
-//   top: ${(props) => props.y};
-//   left: ${(props) => props.x};
-//   width: 100px;
-//   height: 100px;
-//   background-color: blue;
-// `;
-
-// const divX = numToPx((MINDMAP_BG_SIZE.WIDTH - 100) / 2);
-// const divY = numToPx((MINDMAP_BG_SIZE.HEIGHT - 100) / 2);
-
 interface ICoord {
   clientX: number;
   clientY: number;
@@ -97,7 +80,6 @@ const MindmapBackground = ({ children }: IProps) => {
 
   return (
     <Background width={numToPx(MINDMAP_BG_SIZE.WIDTH)} height={numToPx(MINDMAP_BG_SIZE.HEIGHT)}>
-      {/* <TestDiv x={divX} y={divY} /> */}
       {children}
     </Background>
   );
