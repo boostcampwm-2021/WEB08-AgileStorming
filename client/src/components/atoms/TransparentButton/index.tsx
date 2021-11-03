@@ -8,6 +8,8 @@ interface IProps {
 const StyledTransparentButton = styled.button`
   border: none;
   background: transparent;
+  margin: 0;
+  padding: 0;
 `;
 const TransparentButton: React.FC<IProps> = ({ children, onClick }) => {
   return <StyledTransparentButton onClick={onClick}>{children}</StyledTransparentButton>;
