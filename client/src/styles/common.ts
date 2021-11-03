@@ -1,4 +1,16 @@
-export type TColor = 'primary1' | 'primary2' | 'primary3' | 'red' | 'bgWhite' | 'white' | 'black' | 'gray1' | 'gray2' | 'gray3';
+export type TColor =
+  | 'primary1'
+  | 'primary2'
+  | 'primary3'
+  | 'red'
+  | 'bgWhite'
+  | 'white'
+  | 'black'
+  | 'gray1'
+  | 'gray2'
+  | 'gray3'
+  | 'yellow'
+  | 'mint';
 export type TFontSize = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge' | 'title';
 export type TSize = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge';
 export type TFlex = 'center' | 'rowCenter' | 'columnCenter' | 'row' | 'column';
@@ -7,7 +19,9 @@ const color: { [key in TColor]: string } = {
   primary1: '#5865F2',
   primary2: '#0A127C',
   primary3: '#BDD4E0',
-  red: '#EB5F52',
+  red: '#FF5656',
+  yellow: '#FBED6F',
+  mint: '#9BE3E3',
   bgWhite: '#F6F6F6',
   white: '#FFFFFF',
   black: '#222222',
@@ -81,6 +95,10 @@ const absoluteCenter = `
   transform: translate(-50%, -50%);
   `;
 
+const nodeBgColors = [color.primary1, color.red, color.yellow, color.mint];
+const nodeColors = [color.white, color.white, color.black, color.black];
+const nodeFontSizes = [fontSize.large, fontSize.normal, fontSize.small, fontSize.small];
+
 const common = {
   color,
   fontSize,
@@ -89,6 +107,9 @@ const common = {
   flex,
   shadow,
   absoluteCenter,
+  nodeBgColors,
+  nodeColors,
+  nodeFontSizes,
 };
 
 export default common;
