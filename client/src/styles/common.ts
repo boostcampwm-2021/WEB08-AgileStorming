@@ -1,4 +1,9 @@
-const color = {
+export type TColor = 'primary1' | 'primary2' | 'primary3' | 'red' | 'bgWhite' | 'white' | 'black' | 'gray1' | 'gray2' | 'gray3';
+export type TFontSize = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge' | 'title';
+export type TSize = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge';
+export type TFlex = 'center' | 'rowCenter' | 'columnCenter' | 'row' | 'column';
+
+const color: { [key in TColor]: string } = {
   primary1: '#5865F2',
   primary2: '#0A127C',
   primary3: '#BDD4E0',
@@ -13,7 +18,7 @@ const color = {
 
 const calcRem = (px: number) => `${px / 16}rem`;
 
-const fontSize = {
+const fontSize: { [key in TFontSize]: string } = {
   small: calcRem(14),
   normal: calcRem(16),
   large: calcRem(18),
@@ -23,7 +28,7 @@ const fontSize = {
   title: calcRem(50),
 };
 
-const padding = {
+const padding: { [key in TSize]: string } = {
   small: calcRem(8),
   normal: calcRem(10),
   large: calcRem(12),
@@ -32,7 +37,7 @@ const padding = {
   xxxlarge: calcRem(18),
 };
 
-const margin = {
+const margin: { [key in TSize]: string } = {
   small: calcRem(8),
   normal: calcRem(10),
   large: calcRem(12),
@@ -41,7 +46,7 @@ const margin = {
   xxxlarge: calcRem(18),
 };
 
-const flex = {
+const flex: { [key in TFlex]: string } = {
   column: `
     display:flex;
     flex-direction:column;
@@ -68,7 +73,7 @@ const flex = {
   `,
 };
 
-const shadow = `box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)`
+const shadow = `box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)`;
 
 const common = {
   color,
@@ -76,7 +81,7 @@ const common = {
   padding,
   margin,
   flex,
-  shadow
+  shadow,
 };
 
 export default common;
