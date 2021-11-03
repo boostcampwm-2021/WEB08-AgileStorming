@@ -18,4 +18,18 @@ router.post('/login', async (req: Request, res: Response, next: Next) => {
   }
 });
 
+router.post('/register', async (req: Request, res: Response, next: Next) => {
+  try {
+    const { id, name } = req.body;
+    const user = await userService.findOneUser(id);
+    if (user) {
+      throw createCustomError(406, '이미 사용중인 아이디입니다. ');
+    }
+    await userService.createUser(id, name);
+    res.sendStatus(200);
+  } catch (e) {
+    next(e);
+  }
+});
+
 export default router;
