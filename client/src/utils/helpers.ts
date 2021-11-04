@@ -15,4 +15,8 @@ const splitEnAndKo = ([str, koreans]: [string, RegExpMatchArray]): [number, numb
 const calculateWidth = ([en, ko]: [number, number]): number => en * 9 + ko * 18 + 20;
 const getNodeWidth = (str: string) => calculateWidth(splitEnAndKo(getKoreans(str)));
 
-export { pxToNum, numToPx, getCenterCoord, getNodeWidth, MINDMAP_BG_SIZE };
+const getRegexNumber = (nodeId: string) => {
+  return Number(nodeId.replace(/[^0-9]/g, ''));
+};
+
+export { pxToNum, numToPx, getCenterCoord, getNodeWidth, MINDMAP_BG_SIZE, getRegexNumber };

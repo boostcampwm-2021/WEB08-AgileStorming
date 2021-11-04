@@ -1,10 +1,15 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { IMindNode, IMindMap } from 'recoil/mindMap';
+import { IMindmapData, IMindNodes } from 'recoil/mindmap';
 import Node from 'components/atoms/Node';
 
 interface IProps {
-  mindMap: IMindMap;
+  mindmapData: IMindmapData;
+}
+
+interface ITreeProps {
+  nodeId: number;
+  mindNodes: IMindNodes;
 }
 
 interface IStyleProps {
@@ -12,8 +17,9 @@ interface IStyleProps {
 }
 
 const NodeContainer = styled.div<IStyleProps>`
-  ${(props) => props.theme.flex.center};
   ${(props) => props.isRoot && props.theme.absoluteCenter};
+  ${(props) => props.theme.flex.row};
+  align-items: center;
   gap: 1rem;
   border: 1px solid blue;
 `;
@@ -23,24 +29,29 @@ const ChildContainer = styled.div`
   gap: 1rem;
 `;
 
-const getNodeContainer = (nodeId: number, mindNodes: Map<number, IMindNode>) => {
+const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes }) => {
   const isRoot = nodeId === 0;
   const node = mindNodes.get(nodeId);
   const { level, content, children } = node!;
+  const id = `${level}#${nodeId}`;
   return (
-    <NodeContainer key={nodeId} isRoot={isRoot} draggable='true'>
-      <Node id={nodeId.toString()} level={level}>
+    <NodeContainer id={id} isRoot={isRoot} draggable='true'>
+      <Node id={id} level={level}>
         {content}
       </Node>
-      <ChildContainer>{children.map((childrenId) => getNodeContainer(childrenId, mindNodes))}</ChildContainer>
+      <ChildContainer>
+        {children.map((childrenId) => (
+          <Tree key={childrenId} nodeId={childrenId} mindNodes={mindNodes} />
+        ))}
+      </ChildContainer>
     </NodeContainer>
   );
 };
 
-const MindMapTree: React.FC<IProps> = ({ mindMap }) => {
-  const { rootId, mindNodes } = mindMap;
+const MindmapTree: React.FC<IProps> = ({ mindmapData }) => {
+  const { rootId, mindNodes } = mindmapData;
 
-  return getNodeContainer(rootId, mindNodes);
+  return <Tree key={rootId} nodeId={rootId} mindNodes={mindNodes} />;
 };
 
-export default MindMapTree;
+export default MindmapTree;

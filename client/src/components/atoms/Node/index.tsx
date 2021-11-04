@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { levels } from 'recoil/mindMap';
+import { levels } from 'recoil/mindmap';
 
 enum LEVEL {
   ROOT,
@@ -12,7 +12,7 @@ interface IProps {
   level: levels;
 }
 
-const Node = styled.div<IProps>`
+const Node = styled.p<IProps>`
   background-color: ${(props) => props.theme.nodeBgColors[LEVEL[props.level as levels]]};
   color: ${(props) => props.theme.nodeColors[LEVEL[props.level as levels]]};
   border-radius: 0.5rem;
