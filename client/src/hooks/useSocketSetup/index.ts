@@ -1,6 +1,5 @@
-import Mindmap from 'pages/Mindmap';
 import { useRecoilState } from 'recoil';
-import { mindMapState } from 'recoil/mindMap';
+import { mindMapState, getNextMapState } from 'recoil/mindMap';
 import { io } from 'socket.io-client';
 
 const useSocketSetup = () => {
@@ -8,10 +7,7 @@ const useSocketSetup = () => {
   const [mindMap, setMindMap] = useRecoilState(mindMapState);
   socket.on('updateHistory', (history) => {
     const { type, sideEffect } = history;
-    const nextState = {
-      ...mindMap,
-      mindNodes: new Map(mindMap.mindNodes),
-    };
+    const nextState = getNextMapState(mindMap);
     switch (type) {
       case 'create':
         const [newMindNodeId, newMindNode] = [sideEffect[0].id, sideEffect[0]];
