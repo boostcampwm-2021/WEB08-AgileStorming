@@ -1,6 +1,10 @@
 import { MindmapBackground, MindmapTree } from 'components/molecules';
+<<<<<<< HEAD
 import MindmapWrapper from 'components/organisms/MindmapBtnWrapper';
 import { useRecoilValue } from 'recoil';
+=======
+// import { useRecoilValue } from 'recoil';
+>>>>>>> 2364753 (✨ 헤더바 페이지 별 분기처리 없이 라우터에 단순 구현)
 // import { mindMapState } from 'recoil/mindMap';
 import { IMindMap } from 'recoil/mindMap';
 
