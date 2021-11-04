@@ -4,7 +4,7 @@ import { Wrapper } from './style';
 import { BoxButton } from 'components/atoms';
 import { Input } from 'components/atoms';
 import useModal from 'hooks/useModal';
-import useToast from 'hooks/toast';
+import useToast from 'hooks/useToast';
 import { MODAL_TYPES } from 'components/templates/GlobalModal';
 import { authApi } from 'utils/api';
 import { useHistory } from 'react-router';

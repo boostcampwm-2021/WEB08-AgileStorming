@@ -2,7 +2,7 @@ import React, { ChangeEvent, useRef } from 'react';
 import { ModalBox, ModalOverlay, Input, Title } from 'components/atoms';
 import { TextButton } from 'components/molecules';
 import useModal from 'hooks/useModal';
-import useToast from 'hooks/toast';
+import useToast from 'hooks/useToast';
 import { common } from 'styles';
 import { authApi } from 'utils/api';
 
