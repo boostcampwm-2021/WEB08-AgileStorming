@@ -14,8 +14,8 @@ const App = () => {
         <Global styles={global} />
         <Switch>
           <Route path='/' exact component={LoginPage} />
+          <Route path='/project' component={ProjectPage} />
           <Header>
-            <Route path='/project' component={ProjectPage} />
             <Route path='/mindmap/:roomId' component={MindmapPage} />
             <Route path='/kanban/:roomId' component={KanbanPage} />
             <Route path='/calendar/:roomId' component={CalendarPage} />

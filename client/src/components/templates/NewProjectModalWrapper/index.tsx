@@ -1,10 +1,13 @@
 import React, { useState, useRef, ChangeEvent } from 'react';
 import { NewProjectCard, TextInputModal } from 'components/organisms';
+import { IProject } from 'pages/Project';
 import { API } from 'utils/api';
 
-interface IProps {}
+interface IProps {
+  addNewProject: (newProject: IProject) => void;
+}
 
-const NewProjectModalWrapper: React.FC<IProps> = () => {
+const NewProjectModalWrapper: React.FC<IProps> = ({ addNewProject }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const projectName = useRef<string>('');
   const handleClickPlusButton = () => {
@@ -13,10 +16,11 @@ const NewProjectModalWrapper: React.FC<IProps> = () => {
   const handleClickOverlay = () => {
     setModalVisible(false);
   };
-  const handleClickSubmitButton = () => {
+  const handleClickSubmitButton = async () => {
     if (!projectName.current) return;
-    API.project.create(projectName.current);
+    const newProject = await API.project.create(projectName.current);
     projectName.current = '';
+    addNewProject(newProject);
     setModalVisible(false);
   };
   const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {

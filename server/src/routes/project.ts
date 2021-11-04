@@ -29,8 +29,8 @@ router.post('/create', async (req: Request, res: Response, next: Next) => {
     const { id } = decoded as userToken;
     const { name } = req.body;
     if (!name) throw createCustomError(400, 'no project name');
-    await projectService.createProject(name, id);
-    res.sendStatus(200);
+    const newProject = await projectService.createProject(name, id);
+    res.send(newProject);
   } catch (e) {
     next(e);
   }
