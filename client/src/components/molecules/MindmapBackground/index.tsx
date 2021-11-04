@@ -26,7 +26,8 @@ const MindmapBackground = ({ children }: IProps) => {
     lastCoord.current = { clientX, clientY };
   }, []);
 
-  const handleWindowMouseUp = useCallback(() => {
+  const handleWindowMouseUp = useCallback(({ target }: MouseEvent) => {
+    if ((target as HTMLElement).id !== 'mindmapBackground') return;
     toggleDraggable();
     lastCoord.current = null;
   }, []);

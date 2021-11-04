@@ -1,4 +1,5 @@
 import { MindmapBackground, MindmapTree } from 'components/molecules';
+import MindmapWrapper from 'components/organisms/MindmapBtnWrapper';
 import { useRecoilValue } from 'recoil';
 // import { mindMapState } from 'recoil/mindMap';
 import { IMindMap } from 'recoil/mindMap';
@@ -10,6 +11,7 @@ const Mindmap = () => {
     <>
       <MindmapBackground>
         <MindmapTree mindMap={mindMap} />
+        <MindmapWrapper></MindmapWrapper>
       </MindmapBackground>
     </>
   );
