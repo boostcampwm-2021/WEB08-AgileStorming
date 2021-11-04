@@ -39,8 +39,8 @@ const MindmapBackground = ({ children }: IProps) => {
         timer.current = null;
 
         if (!lastCoord.current) return;
-        const diffX = clientX - lastCoord.current.clientX;
-        const diffY = clientY - lastCoord.current.clientY;
+        const diffX = lastCoord.current.clientX - clientX;
+        const diffY = lastCoord.current.clientY - clientY;
 
         window.scrollBy(diffX, diffY);
         lastCoord.current = { clientX, clientY };
