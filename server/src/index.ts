@@ -1,48 +1,50 @@
-import "reflect-metadata";
-import {createConnection} from "typeorm";
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import {Request, Response} from "express";
-import {Routes} from "./routes";
-import {User} from "./entity/User";
+import 'reflect-metadata';
+import express from 'express';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
+import { createConnection } from 'typeorm';
+import cors from 'cors';
 
-createConnection().then(async connection => {
+import router from './routes';
 
-    // create express app
-    const app = express();
-    app.use(bodyParser.json());
+import ormConfig from '../ormconfig';
+import dotenv from 'dotenv';
+dotenv.config();
 
-    // register express routes from defined application routes
-    Routes.forEach(route => {
-        (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-            const result = (new (route.controller as any))[route.action](req, res, next);
-            if (result instanceof Promise) {
-                result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+const app = express();
+const port = process.env.PORT || 5000;
 
-            } else if (result !== null && result !== undefined) {
-                res.json(result);
-            }
-        });
-    });
+createConnection(ormConfig)
+  .then(() => console.log(`Database connected`))
+  .catch((error) => console.log(error));
 
-    // setup express app here
-    // ...
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
 
-    // start express server
-    app.listen(3000);
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: process.env.ORIGIN,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['access-control-allow-origin', 'x-access-token', 'X-Requested-With', 'Content-Type', 'Accept'],
+    credentials: true,
+    maxAge: 3600,
+    optionsSuccessStatus: 204,
+  })
+);
 
-    // insert new users for test
-    await connection.manager.save(connection.manager.create(User, {
-        firstName: "Timber",
-        lastName: "Saw",
-        age: 27
-    }));
-    await connection.manager.save(connection.manager.create(User, {
-        firstName: "Phantom",
-        lastName: "Assassin",
-        age: 24
-    }));
+app.use('/', router);
 
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
+app.use(function (err, req, res, next) {
+  if (err.status) {
+    return res.status(err.status).json({ msg: err.message });
+  }
+  return res.status(500).json({ msg: err.message });
+});
 
-}).catch(error => console.log(error));
+app.listen(port);
+
+console.log(`Server listen ${port}...`);
