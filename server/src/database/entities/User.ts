@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Project } from './Project';
 
 @Entity()
@@ -15,6 +15,6 @@ export class User {
   @Column()
   icon: string;
 
-  @OneToMany(() => Project, (project) => project.id)
+  @OneToMany(() => Project, (project) => project.creator)
   projects: Project[];
 }

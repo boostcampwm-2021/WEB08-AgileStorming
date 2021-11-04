@@ -19,16 +19,19 @@ export const authApi = {
 };
 
 export const project = {
+  get: () => {
+    api.get('/project');
+  },
   create: (name: string) =>
-    api.post(
-      '/project/create',
-      {
-        name,
-      },
-      {
-        headers: {
-          'x-access-token': 'empty',
-        },
-      }
-    ),
+    api.post('/project/create', {
+      name,
+    }),
+  delete: (projectId: string) =>
+    api.delete('/project/delete', {
+      data: { projectId },
+    }),
+};
+
+export const API = {
+  project,
 };
