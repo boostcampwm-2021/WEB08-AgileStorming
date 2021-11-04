@@ -4,6 +4,7 @@ import plusPath from './plus.svg';
 import clockPath from './clock.svg';
 import plusCirclePath from './plusCircle.svg';
 import backPath from './back.svg';
+import trashcanPath from './trashcan.svg';
 
 export const share: string = sharePath;
 export const logo: string = logoPath;
@@ -11,3 +12,4 @@ export const plus: string = plusPath;
 export const clock: string = clockPath;
 export const plusCircle: string = plusCirclePath;
 export const back: string = backPath;
+export const trashcan: string = trashcanPath;
