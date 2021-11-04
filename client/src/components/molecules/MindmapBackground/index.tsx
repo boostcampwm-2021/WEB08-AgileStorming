@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import Background from 'components/atoms/Background';
 import { getCenterCoord, MINDMAP_BG_SIZE, numToPx } from 'utils/helpers';
 
@@ -20,18 +20,18 @@ const MindmapBackground = ({ children }: IProps) => {
 
   const toggleDraggable = () => (draggable.current = !draggable.current);
 
-  const handleWindowMouseDown = ({ clientX, clientY, target }: MouseEvent) => {
+  const handleWindowMouseDown = useCallback(({ clientX, clientY, target }: MouseEvent) => {
     if ((target as HTMLElement).id !== 'mindmapBackground') return;
     toggleDraggable();
     lastCoord.current = { clientX, clientY };
-  };
+  }, []);
 
-  const handleWindowMouseUp = () => {
+  const handleWindowMouseUp = useCallback(() => {
     toggleDraggable();
     lastCoord.current = null;
-  };
+  }, []);
 
-  const handleWindowMouseMove = ({ clientX, clientY }: MouseEvent) => {
+  const handleWindowMouseMove = useCallback(({ clientX, clientY }: MouseEvent) => {
     if (!draggable.current || !lastCoord.current) return;
     if (timer.current) return;
 
@@ -50,26 +50,26 @@ const MindmapBackground = ({ children }: IProps) => {
       clientX,
       clientY
     );
-  };
+  }, []);
 
-  const addListeners = () => {
+  const addListeners = useCallback(() => {
     window.addEventListener('mousedown', handleWindowMouseDown);
     window.addEventListener('mousemove', handleWindowMouseMove);
     window.addEventListener('mouseup', handleWindowMouseUp);
-  };
+  }, [handleWindowMouseDown, handleWindowMouseMove, handleWindowMouseUp]);
 
-  const removeListeners = () => {
+  const removeListeners = useCallback(() => {
     window.removeEventListener('mousedown', handleWindowMouseDown);
     window.removeEventListener('mousemove', handleWindowMouseMove);
     window.removeEventListener('mouseup', handleWindowMouseUp);
-  };
+  }, [handleWindowMouseDown, handleWindowMouseMove, handleWindowMouseUp]);
 
   useEffect(() => {
     window.scrollTo(centerX, centerY);
     addListeners();
 
     return removeListeners;
-  }, []);
+  }, [addListeners, removeListeners]);
 
   return (
     <Background id={'mindmapBackground'} width={numToPx(MINDMAP_BG_SIZE.WIDTH)} height={numToPx(MINDMAP_BG_SIZE.HEIGHT)}>
