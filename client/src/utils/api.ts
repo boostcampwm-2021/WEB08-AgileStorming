@@ -5,6 +5,19 @@ const api = axios.create({
   withCredentials: true,
 });
 
+export const authApi = {
+  login: (id: string) =>
+    api.post('/auth/login', {
+      id,
+    }),
+
+  register: (id: string, name: string) =>
+    api.post('/auth/register', {
+      id,
+      name,
+    }),
+};
+
 export const project = {
   create: (name: string) =>
     api.post(

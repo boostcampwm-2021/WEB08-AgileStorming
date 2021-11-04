@@ -13,6 +13,7 @@ const Input = styled.input<IStyleProps>`
   margin: ${(props) => props.margin ?? '0.5rem'};
   border-radius: 0.5rem;
   background-color: ${(props) => props.theme.color.bgWhite};
+  border: 1.5px solid ${(props) => props.theme.color.bgWhite};
 
   color: ${(props) => props.theme.color.black};
   font-size: ${(props) => props.theme.fontSize.large};
@@ -20,9 +21,8 @@ const Input = styled.input<IStyleProps>`
   cursor: text;
   ${(props) => props.theme.shadow};
 
-  :hover,
   :focus {
-    filter: brightness(1.2);
+    border: 1.5px solid ${(props) => props.theme.color.primary2};
   }
 `;
 export default Input;

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { ProjectCard } from 'components/organisms';
 import { NewProjectModalWrapper } from 'components/templates';
-import useToast from 'hooks/toast';
+import useToast from 'hooks/useToast';
 
 const StyledProjectCardContainer = styled.div`
   ${(props) => props.theme.flex.row}
