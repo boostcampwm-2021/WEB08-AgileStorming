@@ -1,5 +1,6 @@
+import { isDeclareFunction, isReferenced } from '@babel/types';
 import { useEffect, useRef } from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { toastState } from 'recoil/toast';
 
 interface IUseToast {
@@ -8,25 +9,31 @@ interface IUseToast {
 }
 
 const useToast = (): IUseToast => {
-  const [toastObject, setToastObject] = useRecoilState(toastState);
-  const latestToast = useRef(toastObject);
-
-  useEffect(() => {
-    latestToast.current = toastObject;
-  }, [toastObject]);
+  const setToast = useSetRecoilState(toastState);
+  const id = useRef(0);
 
   const showMessage = (message: string) => {
-    setToastObject({ show: true, message });
-    setTimeout(hideMessage, 2000);
+    setToast((toastList) => [...toastList, { id: id.current, show: true, message }]);
+    const copyId = id.current;
+    setTimeout(() => hideMessage(copyId), 2000);
+    id.current = id.current + 1;
   };
 
-  const hideMessage = () => {
-    setToastObject({ show: false, message: latestToast.current.message });
+  const hideMessage = (id: number) => {
+    setToast((toastList) => {
+      const newToastList = toastList.filter((e) => e.id !== id);
+      const idx = toastList.findIndex((e) => e.id === id);
+      setTimeout(() => deleteMessage(id), 200);
+      return [...newToastList, { id, show: false, message: toastList[idx].message }];
+    });
+  };
+
+  const deleteMessage = (id: number) => {
+    setToast((toastList) => toastList.filter((e) => e.id !== id));
   };
 
   return {
     showMessage,
-    hideMessage,
   } as IUseToast;
 };
 
