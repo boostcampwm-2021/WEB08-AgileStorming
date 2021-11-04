@@ -1,14 +1,14 @@
 import 'reflect-metadata';
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as morgan from 'morgan';
+import express from 'express';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
 import { createConnection } from 'typeorm';
+import cors from 'cors';
 
-import authRouter from './routes/auth';
-import userRouter from './routes/user';
+import router from './routes';
 
 import ormConfig from '../ormconfig';
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
@@ -23,9 +23,18 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use(bodyParser.json());
+app.use(
+  cors({
+    origin: process.env.ORIGIN,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['access-control-allow-origin', 'x-access-token', 'X-Requested-With', 'Content-Type', 'Accept'],
+    credentials: true,
+    maxAge: 3600,
+    optionsSuccessStatus: 204,
+  })
+);
 
-app.use('/auth', authRouter);
-app.use('/user', userRouter);
+app.use('/', router);
 
 app.use(function (err, req, res, next) {
   if (err.status) {
