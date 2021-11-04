@@ -3,6 +3,7 @@ import { Global, ThemeProvider } from '@emotion/react';
 import { RecoilRoot } from 'recoil';
 import { LoginPage, KanbanPage, ProjectPage, MindmapPage, CalendarPage, ChartPage } from 'pages';
 import { common, global } from 'styles';
+import GlobalModal from 'components/templates/GlobalModal';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path='/chart/:roomId' component={ChartPage} />
           <Redirect from='*' to='/' />
         </Switch>
+        <GlobalModal />
       </RecoilRoot>
     </ThemeProvider>
   );
