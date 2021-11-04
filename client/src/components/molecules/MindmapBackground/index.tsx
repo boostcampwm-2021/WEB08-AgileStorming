@@ -20,7 +20,8 @@ const MindmapBackground = ({ children }: IProps) => {
 
   const toggleDraggable = () => (draggable.current = !draggable.current);
 
-  const handleWindowMouseDown = ({ clientX, clientY }: MouseEvent) => {
+  const handleWindowMouseDown = ({ clientX, clientY, target }: MouseEvent) => {
+    if ((target as HTMLElement).id !== 'mindmapBackground') return;
     toggleDraggable();
     lastCoord.current = { clientX, clientY };
   };
@@ -45,7 +46,7 @@ const MindmapBackground = ({ children }: IProps) => {
         window.scrollBy(diffX, diffY);
         lastCoord.current = { clientX, clientY };
       },
-      30,
+      20,
       clientX,
       clientY
     );
@@ -71,7 +72,7 @@ const MindmapBackground = ({ children }: IProps) => {
   }, []);
 
   return (
-    <Background width={numToPx(MINDMAP_BG_SIZE.WIDTH)} height={numToPx(MINDMAP_BG_SIZE.HEIGHT)}>
+    <Background id={'mindmapBackground'} width={numToPx(MINDMAP_BG_SIZE.WIDTH)} height={numToPx(MINDMAP_BG_SIZE.HEIGHT)}>
       {children}
     </Background>
   );
