@@ -29,7 +29,9 @@ const LoginBox = () => {
           history.push('/project');
         }
       })
-      .catch((err) => showMessage(err.response.data.msg));
+      .catch((err) => {
+        showMessage(err.response?.data.msg);
+      });
   };
 
   const handleClickRegister = (e: React.MouseEvent) => {

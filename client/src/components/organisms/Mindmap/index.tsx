@@ -22,9 +22,12 @@ const getParentId = (element: HTMLElement) => {
   return 0;
 };
 
-const isDraggable = (event: MouseEvent) => {
-  return (event.target as HTMLElement).id.match(/EPIC|STORY|TASK/);
-};
+//elem 확인
+// document.elementFromPoint(e.clientX, e.clientY);
+
+// const isDraggable = (event: MouseEvent) => {
+//   return (event.target as HTMLElement).id.match(/EPIC|STORY|TASK/);
+// };
 
 const handleDragStartNode = (event: MouseEvent) => {
   dragged = event.target as HTMLElement;
