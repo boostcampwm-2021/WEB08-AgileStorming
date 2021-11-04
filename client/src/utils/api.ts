@@ -5,7 +5,17 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export const userApi = {
-  githubLogin: () => api.get('/github'),
-  getToken: () => api.get('/token'),
+export const project = {
+  create: (name: string) =>
+    api.post(
+      '/project/create',
+      {
+        name,
+      },
+      {
+        headers: {
+          'x-access-token': 'empty',
+        },
+      }
+    ),
 };

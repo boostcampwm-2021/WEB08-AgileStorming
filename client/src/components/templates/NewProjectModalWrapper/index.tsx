@@ -1,5 +1,6 @@
 import React, { useState, useRef, ChangeEvent } from 'react';
 import { NewProjectCard, TextInputModal } from 'components/organisms';
+import * as Api from 'utils/api';
 
 interface IProps {}
 
@@ -14,7 +15,8 @@ const NewProjectModalWrapper: React.FC<IProps> = () => {
   };
   const handleClickSubmitButton = () => {
     if (!projectName.current) return;
-    alert(`submit ${projectName.current}`);
+    Api.project.create(projectName.current);
+    projectName.current = '';
     setModalVisible(false);
   };
   const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
