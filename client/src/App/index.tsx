@@ -4,6 +4,7 @@ import { RecoilRoot } from 'recoil';
 import { LoginPage, KanbanPage, ProjectPage, MindmapPage, CalendarPage, ChartPage } from 'pages';
 import { common, global } from 'styles';
 import GlobalModal from 'components/templates/GlobalModal';
+import { Toast } from 'components/atoms';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Redirect from='*' to='/' />
         </Switch>
         <GlobalModal />
+        <Toast />
       </RecoilRoot>
     </ThemeProvider>
   );
