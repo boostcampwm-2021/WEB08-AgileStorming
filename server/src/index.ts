@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { createConnection } from 'typeorm';
 import cors from 'cors';
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.ORIGIN,

@@ -10,13 +10,13 @@ export class Project {
   @Column()
   name: string;
 
-  @ManyToOne(() => User, (creator) => creator.id, { onDelete: 'CASCADE' })
-  creator: string;
+  @ManyToOne(() => User, (creator) => creator.projects, { cascade: true })
+  creator: User;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToMany(() => User, (participant) => participant.id, { onDelete: 'CASCADE' })
+  @ManyToMany(() => User, (users) => users.id, { cascade: true })
   @JoinTable()
-  participant: string;
+  users: User[];
 }
