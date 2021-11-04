@@ -2,16 +2,13 @@ import React, { useEffect } from 'react';
 import { IMindmapData, getNextMapState } from 'recoil/mindmap';
 import useSocketEmitter, { ISocketEmitter } from 'hooks/useSocketEmit';
 import MindmapTree from 'components/molecules/MindmapTree';
+import { getRegexNumber } from 'utils/helpers';
 
 interface IProps {
   mindmapData: IMindmapData;
 }
 
 let dragged: HTMLElement;
-
-const getRegexNumber = (nodeId: string) => {
-  return Number(nodeId.replace(/[^0-9]/g, ''));
-};
 
 const getTargetId = (element: EventTarget) => {
   return getRegexNumber((element as HTMLElement).id);
@@ -23,6 +20,10 @@ const getParentId = (element: HTMLElement) => {
     if (currentParent.id) return getTargetId(currentParent);
   }
   return 0;
+};
+
+const isDraggable = (event: MouseEvent) => {
+  return (event.target as HTMLElement).id.match(/EPIC|STORY|TASK/);
 };
 
 const handleDragStartNode = (event: MouseEvent) => {
@@ -48,44 +49,45 @@ const handleDragLeaveNode = (event: MouseEvent) => {
 };
 const handleDropNode = (mindmap: IMindmapData, socketEmitter: ISocketEmitter, event: MouseEvent) => {
   event.preventDefault();
-  if ((event.target as HTMLElement).id.match(/EPIC|STORY/)) {
-    (event.target as HTMLElement).style.background = '';
-    if (event.target) {
-      const nextState = getNextMapState(mindmap);
-      const targetId = getTargetId(dragged);
-      const [oldParentId, newParentId] = [getParentId(dragged), getTargetId(event.target)];
-      if (oldParentId === newParentId) return;
-      const [oldParentNode, newParentNode] = [nextState.mindNodes.get(oldParentId), nextState.mindNodes.get(newParentId)];
-      if (oldParentNode && newParentNode) {
-        oldParentNode.children = oldParentNode.children.filter((v) => v !== targetId);
-        newParentNode.children.push(targetId);
-        const history = {
-          oldNode: oldParentNode,
-          newNode: newParentNode,
-        };
-        socketEmitter({ eventName: 'change', history: history, nextState: nextState });
-      }
-    }
+  const target = event.target as HTMLElement;
+  if (target && target.id.match(/EPIC|STORY/)) {
+    target.style.background = '';
+    changeNodeParent(mindmap, socketEmitter, target);
+  }
+};
+
+const changeNodeParent = (mindmap: IMindmapData, socketEmitter: ISocketEmitter, target: HTMLElement) => {
+  const nextState = getNextMapState(mindmap);
+  const targetId = getTargetId(dragged);
+  const [oldParentId, newParentId] = [getParentId(dragged), getTargetId(target)];
+  if (oldParentId === newParentId) return;
+  const [oldParentNode, newParentNode] = [nextState.mindNodes.get(oldParentId), nextState.mindNodes.get(newParentId)];
+  if (oldParentNode && newParentNode) {
+    oldParentNode.children = oldParentNode.children.filter((v) => v !== targetId);
+    newParentNode.children.push(targetId);
+    const history = {
+      oldNode: oldParentNode,
+      newNode: newParentNode,
+    };
+    socketEmitter({ eventName: 'change', history: history, nextState: nextState });
   }
 };
 
 const addDragEvent = (socketEmitter: ISocketEmitter, mindmap: IMindmapData) => {
-  // document.addEventListener('drag', function (event) {}, false);
-  window.addEventListener('dragstart', handleDragStartNode, false);
-  window.addEventListener('dragend', handleDragEndNode, false);
-  window.addEventListener('dragover', handleDragOverNode, false);
-  window.addEventListener('dragenter', handleDragEnterNode, false);
-  window.addEventListener('dragleave', handleDragLeaveNode, false);
   const bindhandleDropNode = handleDropNode.bind(null, mindmap, socketEmitter);
-  window.addEventListener('drop', bindhandleDropNode, false);
+  const dragEvents = [
+    ['dragstart', handleDragStartNode],
+    ['dragend', handleDragEndNode],
+    ['dragover', handleDragOverNode],
+    ['dragenter', handleDragEnterNode],
+    ['dragleave', handleDragLeaveNode],
+    ['drop', bindhandleDropNode],
+  ];
+  //아 이거 handler type이 도대체 뭘까요.. 일단 any 넣었음
+  dragEvents.forEach(([eventname, handler]: (string | any)[]) => window.addEventListener(eventname, handler, false));
 
   const removeCallback = () => {
-    window.removeEventListener('dragstart', handleDragStartNode);
-    window.removeEventListener('dragend', handleDragEndNode);
-    window.removeEventListener('dragover', handleDragOverNode);
-    window.removeEventListener('dragenter', handleDragEnterNode);
-    window.removeEventListener('dragleave', handleDragLeaveNode);
-    window.removeEventListener('drop', bindhandleDropNode);
+    dragEvents.forEach(([eventname, handler]: (string | any)[]) => window.removeEventListener(eventname, handler));
   };
   return removeCallback;
 };
