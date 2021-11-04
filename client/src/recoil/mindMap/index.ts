@@ -2,8 +2,29 @@ import { atom } from 'recoil';
 
 export type levels = 'ROOT' | 'EPIC' | 'STORY' | 'TASK';
 
+export interface IMindmapData {
+  rootId: number;
+  mindNodes: IMindNodes;
+}
+
+export interface IMindNode {
+  nodeId: number;
+  level: levels;
+  content: string;
+  children: Array<number>;
+}
+
+export type IMindNodes = Map<number, IMindNode>;
+
+export const getNextMapState = (mindmap: IMindmapData) => {
+  return {
+    ...mindmap,
+    mindNodes: new Map(mindmap.mindNodes),
+  };
+};
+
 ///더미코드 삭제 예정
-const getDummyMindmap = (): IMindMap => {
+const getDummyMindmapData = (): IMindmapData => {
   const mindNodes = new Map();
   Array(10)
     .fill(0)
@@ -27,27 +48,6 @@ const getDummyMindmap = (): IMindMap => {
   };
 };
 
-export interface IMindNode {
-  nodeId: number;
-  level: levels;
-  content: string;
-  children: Array<number>;
-}
-
-export type IMindNodes = Map<number, IMindNode>;
-
-export interface IMindMap {
-  rootId: number;
-  mindNodes: IMindNodes;
-}
-
-export const getNextMapState = (mindMap: IMindMap) => {
-  return {
-    ...mindMap,
-    mindNodes: new Map(mindMap.mindNodes),
-  };
-};
-
 // const initRootId = 0;
 // const initRootNode = {
 //   nodeId: initRootId,
@@ -56,8 +56,8 @@ export const getNextMapState = (mindMap: IMindMap) => {
 //   children: [],
 // };
 
-export const mindMapState = atom<IMindMap>({
-  key: 'mindMapAtom',
+export const mindmapState = atom<IMindmapData>({
+  key: 'mindmapAtom',
   // default: { rootId: initRootId, mindNodes: new Map([[initRootId, initRootNode]]) },
-  default: getDummyMindmap(),
+  default: getDummyMindmapData(),
 });

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { levels } from 'recoil/mindMap';
+import { levels } from 'recoil/mindmap';
 
 enum LEVEL {
   ROOT,

@@ -1,18 +1,7 @@
-import { MindmapBackground, MindmapTree } from 'components/molecules';
-import MindmapWrapper from 'components/organisms/MindmapBtnWrapper';
-import { useRecoilValue } from 'recoil';
-import { mindMapState } from 'recoil/mindMap';
+import MindmapTemplate from 'components/templates/Mindmap';
 
 const MindmapPage = () => {
-  const mindMap = useRecoilValue(mindMapState);
-  return (
-    <>
-      <MindmapBackground>
-        <MindmapTree mindMap={mindMap} />
-        <MindmapWrapper></MindmapWrapper>
-      </MindmapBackground>
-    </>
-  );
+  return <MindmapTemplate />;
 };
 
 export default MindmapPage;

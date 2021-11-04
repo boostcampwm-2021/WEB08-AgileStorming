@@ -1,12 +1,12 @@
 import { useSetRecoilState } from 'recoil';
-import { IMindMap, mindMapState } from 'recoil/mindMap';
+import { IMindmapData, mindmapState } from 'recoil/mindmap';
 // import { Socket } from 'socket.io-client';
 // let socket: Socket;
 
 interface ISocketEmitterProps {
   eventName: string;
   history: Object;
-  nextState: IMindMap;
+  nextState: IMindmapData;
 }
 
 export interface ISocketEmitter {
@@ -14,7 +14,7 @@ export interface ISocketEmitter {
 }
 
 const useSocketEmitter = () => {
-  const setMindMap = useSetRecoilState(mindMapState);
+  const setMindMap = useSetRecoilState(mindmapState);
 
   const socketEmitter = ({ eventName, history, nextState }: ISocketEmitterProps) => {
     // 추후 소켓 연동 후 코드 수정
@@ -22,7 +22,7 @@ const useSocketEmitter = () => {
       case 'change':
         // socket.emit(eventName, history, (status:number) => {
         //   if(status===200)
-        setMindMap(nextState as IMindMap);
+        setMindMap(nextState as IMindmapData);
         //   else
         //     console.log('node change Error')
         // });
