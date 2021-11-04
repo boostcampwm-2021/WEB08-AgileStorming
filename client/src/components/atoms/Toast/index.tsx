@@ -8,7 +8,7 @@ interface IStyledToast {
   show: IToast['show'];
 }
 
-const StyledToastContainter = styled.div`
+const StyledToastContainer = styled.div`
   position: fixed;
   bottom: 10%;
   left: 50%;
@@ -19,6 +19,7 @@ const StyledToast = styled.div<IStyledToast>`
   ${(props) => props.theme.flex.columnCenter}
   position: sticky;
   top: 0;
+  margin: 0.5rem;
   padding: ${(props) => props.theme.padding.large};
   border-radius: 8px;
   text-align: center;
@@ -31,11 +32,16 @@ const StyledToast = styled.div<IStyledToast>`
 `;
 
 const Toast = () => {
-  const [toastObject] = useRecoilState(toastState);
+  const [toastList] = useRecoilState(toastState);
+  // const renderToastList  = toastList.filter((e) => )
   return (
-    <StyledToastContainter>
-      <StyledToast show={toastObject.show}>{toastObject.message}</StyledToast>
-    </StyledToastContainter>
+    <StyledToastContainer>
+      {toastList.map(({ id, show, message }) => (
+        <StyledToast key={id} show={show}>
+          {message}
+        </StyledToast>
+      ))}
+    </StyledToastContainer>
   );
 };
 
