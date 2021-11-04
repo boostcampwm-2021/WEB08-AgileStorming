@@ -3,7 +3,7 @@ import MindmapWrapper from 'components/organisms/MindmapBtnWrapper';
 import { useRecoilValue } from 'recoil';
 import { mindMapState } from 'recoil/mindMap';
 
-const Mindmap = () => {
+const MindmapPage = () => {
   const mindMap = useRecoilValue(mindMapState);
   return (
     <>
@@ -15,4 +15,4 @@ const Mindmap = () => {
   );
 };
 
-export default Mindmap;
+export default MindmapPage;

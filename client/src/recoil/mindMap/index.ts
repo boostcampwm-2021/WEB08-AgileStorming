@@ -34,10 +34,19 @@ export interface IMindNode {
   children: Array<number>;
 }
 
+export type IMindNodes = Map<number, IMindNode>;
+
 export interface IMindMap {
   rootId: number;
-  mindNodes: Map<number, IMindNode>;
+  mindNodes: IMindNodes;
 }
+
+export const getNextMapState = (mindMap: IMindMap) => {
+  return {
+    ...mindMap,
+    mindNodes: new Map(mindMap.mindNodes),
+  };
+};
 
 // const initRootId = 0;
 // const initRootNode = {

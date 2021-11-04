@@ -31,6 +31,7 @@ const BoxLink = styled.div`
 
 const Header: React.FC<IProps> = ({ children }: IProps) => {
   const history = useHistory();
+
   const handleLinkClick = (link: any) => {
     history.push(link);
   };
