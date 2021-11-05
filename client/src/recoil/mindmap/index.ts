@@ -1,6 +1,5 @@
 import { atom } from 'recoil';
-
-export type levels = 'ROOT' | 'EPIC' | 'STORY' | 'TASK';
+import { Levels } from 'utils/helpers';
 
 export interface IMindmapData {
   rootId: number;
@@ -9,17 +8,17 @@ export interface IMindmapData {
 
 export interface IMindNode {
   nodeId: number;
-  level: levels;
+  level: Levels;
   content: string;
   children: Array<number>;
 }
 
 export type IMindNodes = Map<number, IMindNode>;
 
-export const getNextMapState = (mindmap: IMindmapData) => {
+export const getNextMapState = (prevState: IMindmapData) => {
   return {
-    ...mindmap,
-    mindNodes: new Map(mindmap.mindNodes),
+    ...prevState,
+    mindNodes: new Map(prevState.mindNodes),
   };
 };
 
@@ -51,7 +50,7 @@ const getDummyMindmapData = (): IMindmapData => {
 // const initRootId = 0;
 // const initRootNode = {
 //   nodeId: initRootId,
-//   level: 'ROOT' as levels,
+//   level: 'ROOT' as Levels,
 //   content: '',
 //   children: [],
 // };

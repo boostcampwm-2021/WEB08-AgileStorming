@@ -1,23 +1,16 @@
 import styled from '@emotion/styled';
-import { levels } from 'recoil/mindmap';
-
-enum LEVEL {
-  ROOT,
-  EPIC,
-  STORY,
-  TASK,
-}
+import { Levels, levelToIdx } from 'utils/helpers';
 
 interface IProps {
-  level: levels;
+  level: Levels;
 }
 
 const Node = styled.p<IProps>`
-  background-color: ${(props) => props.theme.nodeBgColors[LEVEL[props.level as levels]]};
-  color: ${(props) => props.theme.nodeColors[LEVEL[props.level as levels]]};
+  background-color: ${(props) => props.theme.nodeBgColors[levelToIdx(props.level)]};
+  color: ${(props) => props.theme.nodeColors[levelToIdx(props.level)]};
   border-radius: 0.5rem;
-  font-size: ${(props) => props.theme.nodeFontSizes[LEVEL[props.level as levels]]};
-  line-height: ${(props) => props.theme.nodeFontSizes[LEVEL[props.level as levels]]};
+  font-size: ${(props) => props.theme.nodeFontSizes[levelToIdx(props.level)]};
+  line-height: ${(props) => props.theme.nodeFontSizes[levelToIdx(props.level)]};
   padding: 0.5rem 1rem;
 `;
 

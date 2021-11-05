@@ -1,6 +1,5 @@
 import { useSetRecoilState } from 'recoil';
 import { IMindmapData, mindmapState } from 'recoil/mindmap';
-import { Socket } from 'socket.io-client';
 // import { Socket } from 'socket.io-client';
 // let socket: Socket;
 
