@@ -39,7 +39,7 @@ const Header: React.FC<IProps> = ({ children }: IProps) => {
   return (
     <>
       <HeaderContainer>
-        <BackIcon src={img.back} onClick={() => history.push('/')} alt='IconImgNoHoverStyle' />
+        <BackIcon src={img.back} onClick={() => history.push('/project')} alt='IconImgNoHoverStyle' />
         <BoxLink onClick={handleLinkClick.bind(null, '/mindmap/123')}>마인드맵</BoxLink>
         <BoxLink onClick={handleLinkClick.bind(null, '/kanban/123')}>칸반보드</BoxLink>
         <BoxLink onClick={handleLinkClick.bind(null, '/calendar/123')}>캘린더</BoxLink>

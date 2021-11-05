@@ -1,107 +1,115 @@
-import React, { useEffect } from 'react';
-import { IMindmapData, getNextMapState } from 'recoil/mindmap';
+import React from 'react';
+import { IMindmapData, getNextMapState, IMindNodes } from 'recoil/mindmap';
 import useSocketEmitter, { ISocketEmitter } from 'hooks/useSocketEmit';
 import MindmapTree from 'components/molecules/MindmapTree';
-import { getRegexNumber } from 'utils/helpers';
+import { getRegexNumber, idxToLevel, levelToIdx } from 'utils/helpers';
+import useDragEvent from 'hooks/useDragEvent';
 
 interface IProps {
   mindmapData: IMindmapData;
 }
 
-let dragged: HTMLElement;
+interface INodeInfo {
+  depth: number;
+  isFinished: boolean;
+}
 
-const getTargetId = (element: EventTarget) => {
+type INodeInfos = Map<number, INodeInfo>;
+
+interface IChangeFnProps {
+  nextMapData: IMindmapData;
+  nodeInfos: INodeInfos;
+  socketEmitter: ISocketEmitter;
+  draggedElem: HTMLElement;
+  droppedElem: HTMLElement;
+}
+
+const getNodeNum = (element: EventTarget | null) => {
+  if (!(element as HTMLElement)?.id) return null;
   return getRegexNumber((element as HTMLElement).id);
 };
 
-const getParentId = (element: HTMLElement) => {
-  if (element.parentNode?.parentNode) {
-    const currentParent = element.parentNode.parentNode as HTMLElement;
-    if (currentParent.id) return getTargetId(currentParent);
+const getParentElem = (element: HTMLElement) => {
+  const container = element?.parentNode;
+  const parentNode = container?.parentNode;
+  return parentNode ?? null;
+};
+
+const isChangeConditon = (dragged: number | null, oldParent: number | null, newParent: number | null, newAncestor: number | null) => {
+  const isParentsNotExist = oldParent === null || newParent === null;
+  const isSameParent = newParent === dragged || newParent === oldParent;
+  const isChildNodeSelected = dragged === newAncestor;
+  if (isParentsNotExist || isSameParent || isChildNodeSelected) return false;
+  return true;
+};
+
+const isTaskCondition = (depth: number, draggedLevel: string, newParentLevel: string, oldParentIdx: number, newParentIdx: number) => {
+  const MAX_DEPTH = 3;
+  const isMoveTaskeUpperLevel = draggedLevel === 'TASK' && newParentLevel !== 'STORY';
+  const isMoveParentOfTask = depth + oldParentIdx === MAX_DEPTH && depth + newParentIdx !== MAX_DEPTH;
+  const isOverDepth = depth + newParentIdx > MAX_DEPTH;
+  if (isMoveTaskeUpperLevel || isMoveParentOfTask || isOverDepth) return false;
+  return true;
+};
+
+const changeNodeParent = ({ nextMapData, nodeInfos, socketEmitter, draggedElem, droppedElem }: IChangeFnProps) => {
+  const nextMapNodes = nextMapData.mindNodes;
+  const [draggedNodeNum, oldParentNodeNum] = [getNodeNum(draggedElem), getNodeNum(getParentElem(draggedElem))];
+  const [newParentNodeNum, newAncestorNodeNum] = [getNodeNum(droppedElem), getNodeNum(getParentElem(droppedElem))];
+  if (!isChangeConditon(draggedNodeNum, oldParentNodeNum, newParentNodeNum, newAncestorNodeNum)) return;
+
+  const [draggedNode, oldParentNode, newParentNode] = [draggedNodeNum, oldParentNodeNum, newParentNodeNum].map(
+    (nodenum) => nextMapNodes.get(nodenum!)!
+  );
+  const [draggedLevel, oldParentLevel, newParentLevel] = [draggedNode, oldParentNode, newParentNode].map((node) => node!.level);
+  const [draggedLevelIdx, oldParentLevelIdx, newParentLevelIdx] = [draggedLevel, oldParentLevel, newParentLevel].map((level) =>
+    levelToIdx(level)
+  );
+  const draggedDepth = nodeInfos.get(draggedNodeNum!)!.depth;
+  if (!isTaskCondition(draggedDepth, draggedLevel, newParentLevel, oldParentLevelIdx, newParentLevelIdx)) return;
+
+  oldParentNode.children = oldParentNode.children.filter((v) => v !== draggedNodeNum);
+  newParentNode.children.push(draggedNodeNum!);
+  const isLevelChanged = newParentLevelIdx + 1 !== draggedLevelIdx;
+  if (isLevelChanged) {
+    draggedNode.level = idxToLevel(newParentLevelIdx + 1);
+    draggedNode.children.forEach((childId) => {
+      const childLevel = idxToLevel(newParentLevelIdx + 2);
+      nextMapNodes.get(childId)!.level = childLevel;
+    });
   }
-  return 0;
-};
 
-//elem 확인
-// document.elementFromPoint(e.clientX, e.clientY);
-
-// const isDraggable = (event: MouseEvent) => {
-//   return (event.target as HTMLElement).id.match(/EPIC|STORY|TASK/);
-// };
-
-const handleDragStartNode = (event: MouseEvent) => {
-  dragged = event.target as HTMLElement;
-  (event.target as HTMLElement).style.opacity = '0.5';
-};
-const handleDragEndNode = (event: MouseEvent) => {
-  (event.target as HTMLElement).style.opacity = '';
-};
-const handleDragOverNode = (event: MouseEvent) => {
-  event.preventDefault();
-};
-const handleDragEnterNode = (event: MouseEvent) => {
-  if ((event.target as HTMLElement).id.match(/EPIC|STORY/)) {
-    console.log((event.target as HTMLElement).id);
-    (event.target as HTMLElement).style.background = 'purple';
-  }
-};
-const handleDragLeaveNode = (event: MouseEvent) => {
-  if ((event.target as HTMLElement).id.match(/EPIC|STORY/)) {
-    (event.target as HTMLElement).style.background = '';
-  }
-};
-const handleDropNode = (mindmap: IMindmapData, socketEmitter: ISocketEmitter, event: MouseEvent) => {
-  event.preventDefault();
-  const target = event.target as HTMLElement;
-  if (target && target.id.match(/EPIC|STORY/)) {
-    target.style.background = '';
-    changeNodeParent(mindmap, socketEmitter, target);
-  }
-};
-
-const changeNodeParent = (mindmap: IMindmapData, socketEmitter: ISocketEmitter, target: HTMLElement) => {
-  const nextState = getNextMapState(mindmap);
-  const targetId = getTargetId(dragged);
-  const [oldParentId, newParentId] = [getParentId(dragged), getTargetId(target)];
-  if (oldParentId === newParentId) return;
-  const [oldParentNode, newParentNode] = [nextState.mindNodes.get(oldParentId), nextState.mindNodes.get(newParentId)];
-  if (oldParentNode && newParentNode) {
-    oldParentNode.children = oldParentNode.children.filter((v) => v !== targetId);
-    newParentNode.children.push(targetId);
-    const history = {
-      oldNode: oldParentNode,
-      newNode: newParentNode,
-    };
-    socketEmitter({ eventName: 'change', history: history, nextState: nextState });
-  }
-};
-
-const addDragEvent = (socketEmitter: ISocketEmitter, mindmap: IMindmapData) => {
-  const bindhandleDropNode = handleDropNode.bind(null, mindmap, socketEmitter);
-  const dragEvents = [
-    ['dragstart', handleDragStartNode],
-    ['dragend', handleDragEndNode],
-    ['dragover', handleDragOverNode],
-    ['dragenter', handleDragEnterNode],
-    ['dragleave', handleDragLeaveNode],
-    ['drop', bindhandleDropNode],
-  ];
-  //아 이거 handler type이 도대체 뭘까요.. 일단 any 넣었음
-  dragEvents.forEach(([eventname, handler]: (string | any)[]) => window.addEventListener(eventname, handler, false));
-
-  const removeCallback = () => {
-    dragEvents.forEach(([eventname, handler]: (string | any)[]) => window.removeEventListener(eventname, handler));
+  const history = {
+    oldNode: oldParentNode,
+    newNode: newParentNode,
   };
-  return removeCallback;
+  socketEmitter({ eventName: 'change', history: history, nextState: nextMapData });
+};
+
+const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNodes) => {
+  const node = mindNodes.get(nodeId)!;
+  let [maxChildDepth, finishedChildNum] = [0, 0];
+  node?.children.forEach((childId) => {
+    getNodeInfo(nodeInfos, childId, mindNodes);
+    const { depth, isFinished } = nodeInfos.get(childId)!;
+    maxChildDepth = Math.max(maxChildDepth, depth);
+    finishedChildNum += Number(isFinished);
+  });
+  nodeInfos.set(nodeId, { depth: maxChildDepth + 1, isFinished: node.children.length === finishedChildNum });
+  return nodeInfos;
 };
 
 const MindMap: React.FC<IProps> = ({ mindmapData }) => {
   const socketEmitter = useSocketEmitter();
+  const nextMapData = getNextMapState(mindmapData);
+  const nodeInfos = getNodeInfo(new Map(), mindmapData.rootId, mindmapData.mindNodes);
 
-  useEffect(() => {
-    const removeDragEvent = addDragEvent(socketEmitter, mindmapData);
-    return () => removeDragEvent();
-  }, [socketEmitter, mindmapData]);
+  const handleDropNode = (event: React.MouseEvent, draggedElem: HTMLElement) => {
+    event.preventDefault();
+    const droppedElem = event.target as HTMLElement;
+    changeNodeParent({ nextMapData, nodeInfos, socketEmitter, draggedElem, droppedElem });
+  };
+  useDragEvent({ drop: handleDropNode }, ['EPIC', 'STORY', 'ROOT', 'TASK'], 'skyblue');
 
   return (
     <>
@@ -110,8 +118,16 @@ const MindMap: React.FC<IProps> = ({ mindmapData }) => {
   );
 };
 
-//event 적용
-//useMemo 적용
-//svg 연결
-//노드 추가 미리보기
 export default MindMap;
+
+// <정렬 로직>
+// 각 노드 자식 수, 완료 정보 계산 (O)
+// 자신의 자식으로 못 간다. (O)
+// 깊이가 3을 넘으면 자식으로 못간다. (O)
+// Task가 있는 노드는 이동 후에 깊이 3일때만 이동 가능 (O)
+// 자식끼리 순서 변경 -> y pos 값 필요
+
+// <컴포넌트>
+// event 적용 (O)
+// useMemo 적용
+// 코드 분리 및 리팩토링

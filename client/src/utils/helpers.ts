@@ -19,4 +19,10 @@ const getRegexNumber = (nodeId: string) => {
   return Number(nodeId.replace(/[^0-9]/g, ''));
 };
 
-export { pxToNum, numToPx, getCenterCoord, getNodeWidth, MINDMAP_BG_SIZE, getRegexNumber };
+export type Levels = 'ROOT' | 'EPIC' | 'STORY' | 'TASK';
+type DictType = { [index: number]: string };
+const LEVEL_DICT: DictType = { 0: 'ROOT', 1: 'EPIC', 2: 'STORY', 3: 'TASK' };
+const idxToLevel = (idx: number) => LEVEL_DICT[idx] as Levels;
+const levelToIdx = (level: string) => Object.values(LEVEL_DICT).findIndex((v) => level === v);
+
+export { pxToNum, numToPx, getCenterCoord, getNodeWidth, MINDMAP_BG_SIZE, getRegexNumber, idxToLevel, levelToIdx };
