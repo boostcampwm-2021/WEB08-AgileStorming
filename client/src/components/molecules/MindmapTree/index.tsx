@@ -109,25 +109,23 @@ const GetNodeContainer = (nodeId: number, mindNodes: Map<number, IMindNode>, par
           style={{
             position: 'absolute',
             strokeWidth: '0px',
-            backgroundColor: 'blue',
-            opacity: '20%',
             left: rect.x,
             top: rect.y,
+            zIndex: -100,
           }}
         >
-          {/* <path
+          <path
             fill='none'
             stroke='#000'
             d={
               'M' +
-              (rect.type === 1 ? `${rect.x},${rect.y + rect.height}` : `${rect.x},${rect.y}`) +
-              'L' +
-              (rect.type === 1 ? `${rect.x + rect.width},${rect.y}` : `${rect.x + rect.width},${rect.y + rect.height}`)
+              (rect.type === 1 ? `0,${rect.height}` : `0,0`) +
+              'Q' +
+              (rect.type === 1 ? `0,0 ${rect.width},0` : `0,${rect.height} ${rect.width},${rect.height}`)
             }
-            strokeWidth='0.5'
+            strokeWidth='1'
             strokeLinecap='round'
-            style={{ position: 'absolute' }}
-          ></path> */}
+          ></path>
         </svg>
       ) : (
         ''
