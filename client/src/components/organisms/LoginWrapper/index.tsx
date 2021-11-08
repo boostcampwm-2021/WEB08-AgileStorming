@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useRef } from 'react';
-import { common } from 'styles';
 import { Wrapper } from './style';
 import { BoxButton } from 'components/atoms';
 import { Input } from 'components/atoms';
@@ -41,10 +40,10 @@ const LoginBox = () => {
   return (
     <Wrapper>
       <Input placeholder='아이디를 입력해주세요' onChange={handleIdChange} spellCheck={false} />
-      <BoxButton onClick={handleClickLogin} color={common.color.white} bgColor={common.color.primary2}>
+      <BoxButton onClick={handleClickLogin} btnStyle={'large'} color={'primary2'}>
         로그인
       </BoxButton>
-      <BoxButton onClick={handleClickRegister} bgColor={common.color.primary3}>
+      <BoxButton onClick={handleClickRegister} btnStyle={'large'} color={'primary3'}>
         회원가입
       </BoxButton>
     </Wrapper>
