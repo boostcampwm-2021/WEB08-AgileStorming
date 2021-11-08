@@ -120,14 +120,14 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes, parentCoord }) => {
       <Node ref={nodeRef} id={id} level={level} isSelected={isSelected} className='node mindmap-area'>
         {content}
       </Node>
-      {parentCoord && coord && rect ? (
+      {/* {parentCoord && coord && rect ? (
         <Svg rect={rect} xmlns='http://www.w3.org/2000/svg' xmlnsXlink='http://www.w3.org/1999/xlink'>
           <rect width='100%' height='100%' fill='red' opacity='0.2' />
           <path fill='none' stroke='#000' d={getDrawShape(rect)} strokeWidth='1' strokeLinecap='round'></path>
         </Svg>
       ) : (
         ''
-      )}
+      )} */}
       <ChildContainer>
         {children.map((childrenId) => (
           <Tree key={childrenId} nodeId={childrenId} mindNodes={mindNodes} parentCoord={coord} />
