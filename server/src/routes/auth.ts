@@ -2,6 +2,7 @@ import { Router, Request, Response, Next } from 'express';
 import { createCustomError } from '../utils';
 import * as userService from '../services/user';
 import * as authService from '../services/auth';
+import ERROR_MESSAGE from '../config/error-message';
 const router = Router();
 
 router.post('/login', async (req: Request, res: Response, next: Next) => {
@@ -9,7 +10,7 @@ router.post('/login', async (req: Request, res: Response, next: Next) => {
     const { id } = req.body;
     const user = await userService.findOneUser(id);
     if (!user) {
-      throw createCustomError(401, '등록되지 않은 회원입니다.');
+      throw createCustomError(401, ERROR_MESSAGE.UNREGISTERED_USER);
     }
     const token = authService.createJWTToken(id);
     res.cookie('token', token).sendStatus(200);
@@ -23,7 +24,7 @@ router.post('/register', async (req: Request, res: Response, next: Next) => {
     const { id, name } = req.body;
     const user = await userService.findOneUser(id);
     if (user) {
-      throw createCustomError(406, '이미 사용중인 아이디입니다. ');
+      throw createCustomError(406, ERROR_MESSAGE.USED_ID);
     }
     await userService.createUser(id, name);
     res.sendStatus(200);
