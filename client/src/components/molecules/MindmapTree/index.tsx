@@ -16,9 +16,7 @@ interface ICoord {
   y: number;
 }
 
-interface IRect {
-  x: number;
-  y: number;
+interface IRect extends ICoord {
   width: number;
   height: number;
   type: QUATER_SPACE;
@@ -29,6 +27,13 @@ interface IGap {
   topGap: number;
 }
 
+interface ICalcRectProps {
+  parentCoord: ICoord;
+  currentCoord: ICoord;
+  gap: IGap;
+  type: QUATER_SPACE;
+}
+
 enum QUATER_SPACE {
   FIRST = 1,
   SECOND,
@@ -37,22 +42,22 @@ enum QUATER_SPACE {
 }
 
 const NodeContainer = styled.div<IStyleProps>`
-  ${(props) => (props.isRoot ? props.theme.absoluteCenter : { position: 'relative' })};
-  ${(props) => props.theme.flex.center};
+  ${({ isRoot, theme }) => (isRoot ? theme.absoluteCenter : { position: 'relative' })};
+  ${({ theme }) => theme.flex.center};
   gap: 1rem;
   border: 1px solid blue;
 `;
 
 const ChildContainer = styled.div`
-  ${(props) => props.theme.flex.column};
+  ${({ theme }) => theme.flex.column};
   gap: 1rem;
 `;
 
-const calcRect = (parentCoord: ICoord, childCoord: ICoord, gap: IGap, type: QUATER_SPACE): IRect => ({
-  x: childCoord.x - Math.abs(childCoord.x + gap.leftGap - parentCoord.x),
-  y: type === 1 ? childCoord.y : childCoord.y - Math.abs(childCoord.y + gap.topGap - parentCoord.y),
-  width: Math.abs(childCoord.x + gap.leftGap - parentCoord.x),
-  height: Math.abs(childCoord.y + gap.topGap - parentCoord.y),
+const calcRect = ({ parentCoord, currentCoord, gap, type }: ICalcRectProps): IRect => ({
+  x: currentCoord.x - Math.abs(currentCoord.x + gap.leftGap - parentCoord.x),
+  y: type === 1 ? currentCoord.y : currentCoord.y - Math.abs(currentCoord.y + gap.topGap - parentCoord.y),
+  width: Math.abs(currentCoord.x + gap.leftGap - parentCoord.x),
+  height: Math.abs(currentCoord.y + gap.topGap - parentCoord.y),
   type: type,
 });
 
@@ -72,27 +77,20 @@ const GetNodeContainer = (nodeId: number, mindNodes: Map<number, IMindNode>, par
     const currentNode: HTMLElement = nodeRef.current;
     const currentContainer: HTMLElement = containerRef.current;
 
-    const currentRelativeCoord = {
+    const currentCoord = {
       x: Math.floor(currentNode.offsetLeft + currentNode.offsetWidth / 2),
       y: Math.floor(currentNode.offsetTop + currentNode.offsetHeight / 2),
     };
-    const currentGap = {
+    const gap = {
       topGap: Math.floor(currentContainer.offsetTop),
       leftGap: Math.floor(currentContainer.offsetLeft),
     };
 
-    setCoord(currentRelativeCoord);
+    setCoord(currentCoord);
 
-    if (!parentCoord || !currentRelativeCoord || !currentGap) return;
-    const type = currentRelativeCoord.y + currentGap.topGap > parentCoord.y ? QUATER_SPACE.FOURTH : QUATER_SPACE.FIRST;
-    setRect(calcRect(parentCoord, currentRelativeCoord, currentGap, type));
-    console.log(
-      rect &&
-        'M' +
-          (rect.type === 1 ? `${rect.x},${rect.y + rect.height}` : `${rect.x},${rect.y}`) +
-          'L' +
-          (rect.type === 1 ? `${rect.x + rect.width},${rect.y}` : `${rect.x + rect.width},${rect.y + rect.height}`)
-    );
+    if (!parentCoord || !currentCoord || !gap) return;
+    const type = currentCoord.y + gap.topGap > parentCoord.y ? QUATER_SPACE.FOURTH : QUATER_SPACE.FIRST;
+    setRect(calcRect({ parentCoord, currentCoord, gap, type }));
   }, [parentCoord]);
 
   return (
@@ -101,32 +99,9 @@ const GetNodeContainer = (nodeId: number, mindNodes: Map<number, IMindNode>, par
         {content}
       </Node>
       {parentCoord && coord && rect ? (
-        <svg
-          width={rect.width}
-          height={rect.height}
-          xmlns='http://www.w3.org/2000/svg'
-          xmlnsXlink='http://www.w3.org/1999/xlink'
-          style={{
-            position: 'absolute',
-            strokeWidth: '0px',
-            left: rect.x,
-            top: rect.y,
-            zIndex: -100,
-          }}
-        >
-          <path
-            fill='none'
-            stroke='#000'
-            d={
-              'M' +
-              (rect.type === 1 ? `0,${rect.height}` : `0,0`) +
-              'Q' +
-              (rect.type === 1 ? `0,0 ${rect.width},0` : `0,${rect.height} ${rect.width},${rect.height}`)
-            }
-            strokeWidth='1'
-            strokeLinecap='round'
-          ></path>
-        </svg>
+        <Svg rect={rect} xmlns='http://www.w3.org/2000/svg' xmlnsXlink='http://www.w3.org/1999/xlink'>
+          <path fill='none' stroke='#000' d={getDrawShape(rect)} strokeWidth='1' strokeLinecap='round'></path>
+        </Svg>
       ) : (
         ''
       )}
@@ -142,3 +117,24 @@ const MindMapTree: React.FC<IProps> = ({ mindMap }) => {
 };
 
 export default MindMapTree;
+
+interface ISvgProps {
+  rect: IRect;
+}
+
+const Svg = styled.svg<ISvgProps>`
+  position: 'absolute';
+  stroke-width: '0px';
+  left: ${({ rect }) => rect.x};
+  top: ${({ rect }) => rect.y};
+  width: ${({ rect }) => rect.width};
+  height: ${({ rect }) => rect.height};
+  overflow: 'hidden';
+  z-index: -100;
+`;
+
+const getDrawShape = (rect: IRect): string =>
+  'M' +
+  (rect.type === 1 ? `0,${rect.height}` : `0,0`) +
+  'Q' +
+  (rect.type === 1 ? `0,0 ${rect.width},0` : `0,${rect.height} ${rect.width},${rect.height}`);
