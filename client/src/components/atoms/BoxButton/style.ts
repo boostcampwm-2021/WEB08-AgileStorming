@@ -1,7 +1,7 @@
 import { common } from 'styles';
 import styled from '@emotion/styled';
 
-export type TStyle = 'small' | 'normal' | 'large';
+export type TStyle = 'small' | 'normal' | 'large' | 'full';
 export type TColor = 'white' | 'primary1' | 'primary2' | 'primary3';
 
 interface IStyleProps {
@@ -18,7 +18,6 @@ export const StyledButton = styled.button<IStyleProps>`
   ${({ theme }) => theme.flex.center};
   ${({ theme }) => theme.shadow};
   margin: ${({ margin }) => margin};
-  width: 100%;
   border-radius: 0.5rem;
   font-weight: bold;
   cursor: pointer;
@@ -32,18 +31,20 @@ export const StyledButton = styled.button<IStyleProps>`
 
 const styleOptions: { [key in TStyle]: string } = {
   small: `
-    height: 1.5rem;
-    max-width: 10rem;
+    padding: 0.4rem 0.8rem;
     font-size: ${common.fontSize.small};
   `,
   normal: `
-    height: 2rem;
-    max-width: 15rem;
+    padding: 0.5rem 1.4rem;
     font-size: ${common.fontSize.normal};
   `,
   large: `
-    height: 3rem;
-    max-width: 20rem;
+    padding: 0.5rem 2rem;
+    font-size: ${common.fontSize.large};
+  `,
+  full: `
+    width: 100%;
+    padding: 0.9rem 0;
     font-size: ${common.fontSize.large};
   `,
 };
