@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { IMindmapData, IMindNodes } from 'recoil/mindmap';
+import { IMindmapData, IMindNodes, selectedNodeState } from 'recoil/mindmap';
 import Node from 'components/atoms/Node';
+import { useRecoilValue } from 'recoil';
 
 interface IProps {
   mindmapData: IMindmapData;
@@ -47,6 +48,17 @@ enum QUATER_SPACE {
   FOURTH,
 }
 
+const Svg = styled.svg<ISvgProps>`
+  position: 'absolute';
+  stroke-width: '0px';
+  left: ${({ rect }) => rect.x};
+  top: ${({ rect }) => rect.y};
+  width: ${({ rect }) => rect.width};
+  height: ${({ rect }) => rect.height};
+  overflow: 'hidden';
+  z-index: -100;
+`;
+
 const NodeContainer = styled.div<IStyleProps>`
   ${({ isRoot, theme }) => (isRoot ? theme.absoluteCenter : { position: 'relative' })};
   ${({ theme }) => theme.flex.center};
@@ -72,6 +84,9 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes, parentCoord }) => {
   const node = mindNodes.get(nodeId);
   const { level, content, children } = node!;
   const id = `${level}#${nodeId}`;
+
+  const selectedNodeId = useRecoilValue(selectedNodeState);
+  const isSelected = id + 'node' === selectedNodeId;
 
   const [coord, setCoord] = useState<ICoord | null>(null);
   const [rect, setRect] = useState<IRect | null>(null);
@@ -102,11 +117,12 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes, parentCoord }) => {
 
   return (
     <NodeContainer id={id} ref={containerRef} isRoot={isRoot} draggable='true'>
-      <Node ref={nodeRef} id={id} level={level}>
+      <Node ref={nodeRef} id={id + 'node'} level={level} isSelected={isSelected}>
         {content}
       </Node>
       {parentCoord && coord && rect ? (
         <Svg rect={rect} xmlns='http://www.w3.org/2000/svg' xmlnsXlink='http://www.w3.org/1999/xlink'>
+          <rect width='100%' height='100%' fill='red' opacity='0.2' />
           <path fill='none' stroke='#000' d={getDrawShape(rect)} strokeWidth='1' strokeLinecap='round'></path>
         </Svg>
       ) : (
@@ -131,21 +147,10 @@ interface ISvgProps {
   rect: IRect;
 }
 
-const Svg = styled.svg<ISvgProps>`
-  position: 'absolute';
-  stroke-width: '0px';
-  left: ${({ rect }) => rect.x};
-  top: ${({ rect }) => rect.y};
-  width: ${({ rect }) => rect.width};
-  height: ${({ rect }) => rect.height};
-  overflow: 'hidden';
-  z-index: -100;
-`;
-
 const getDrawShape = (rect: IRect): string =>
   'M' +
   (rect.type === 1 ? `0,${rect.height}` : `0,0`) +
   'Q' +
   (rect.type === 1 ? `0,0 ${rect.width},0` : `0,${rect.height} ${rect.width},${rect.height}`);
 
-export default Tree;
+export default MindmapTree;

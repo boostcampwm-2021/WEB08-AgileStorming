@@ -60,3 +60,5 @@ export const mindmapState = atom<IMindmapData>({
   // default: { rootId: initRootId, mindNodes: new Map([[initRootId, initRootNode]]) },
   default: getDummyMindmapData(),
 });
+
+export const selectedNodeState = atom<string | null>({ key: 'selectedNodeAtom', default: null });

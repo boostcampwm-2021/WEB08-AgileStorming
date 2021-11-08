@@ -111,11 +111,7 @@ const MindMap: React.FC<IProps> = ({ mindmapData }) => {
   };
   useDragEvent({ drop: handleDropNode }, ['EPIC', 'STORY', 'ROOT', 'TASK'], 'skyblue');
 
-  return (
-    <>
-      <MindmapTree mindmapData={mindmapData} />
-    </>
-  );
+  return <MindmapTree mindmapData={mindmapData} />;
 };
 
 export default MindMap;
