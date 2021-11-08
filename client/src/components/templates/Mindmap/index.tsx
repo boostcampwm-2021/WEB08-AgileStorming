@@ -7,9 +7,9 @@ const MindmapTemplate = () => {
   const mindmapData = useRecoilValue(mindmapState);
   return (
     <>
-      <MindmapBackground>
+      <MindmapBackground className='mindmap-area'>
         <Mindmap mindmapData={mindmapData} />
-        <MindmapBtnWrapper></MindmapBtnWrapper>
+        <MindmapBtnWrapper />
       </MindmapBackground>
     </>
   );

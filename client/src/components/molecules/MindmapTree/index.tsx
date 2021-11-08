@@ -86,7 +86,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes, parentCoord }) => {
   const id = `${level}#${nodeId}`;
 
   const selectedNodeId = useRecoilValue(selectedNodeState);
-  const isSelected = id + 'node' === selectedNodeId;
+  let isSelected = selectedNodeId === id;
 
   const [coord, setCoord] = useState<ICoord | null>(null);
   const [rect, setRect] = useState<IRect | null>(null);
@@ -116,8 +116,8 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes, parentCoord }) => {
   }, [parentCoord]);
 
   return (
-    <NodeContainer id={id} ref={containerRef} isRoot={isRoot} draggable='true'>
-      <Node ref={nodeRef} id={id + 'node'} level={level} isSelected={isSelected}>
+    <NodeContainer id={id + 'container'} ref={containerRef} isRoot={isRoot} draggable='true' className='mindmap-area'>
+      <Node ref={nodeRef} id={id} level={level} isSelected={isSelected} className='node mindmap-area'>
         {content}
       </Node>
       {parentCoord && coord && rect ? (

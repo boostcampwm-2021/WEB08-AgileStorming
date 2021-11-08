@@ -12,9 +12,12 @@ const MindmapPage = () => {
 const useHandleClick = () => {
   const setSelectedNodeId = useSetRecoilState(selectedNodeState);
 
-  const HandleNodeClick = useCallback(({ target }: MouseEvent) => {
-    const currentTarget = target as HTMLElement;
-    if (!currentTarget.id) return setSelectedNodeId(null);
+  const HandleNodeClick = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+    const currentTarget = event.target as HTMLElement;
+
+    if (!currentTarget.classList.contains('mindmap-area')) return;
+    if (!currentTarget.classList.contains('node')) return setSelectedNodeId(null);
 
     setSelectedNodeId(currentTarget.id);
   }, []);
