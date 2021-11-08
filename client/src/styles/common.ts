@@ -77,7 +77,7 @@ const flex: { [key in TFlex]: string } = {
   rowCenter: `
     display:flex;
     flex-direction:row;
-    justify-content:center;
+    align-items:center;
   `,
   center: `
     display:flex;

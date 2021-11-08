@@ -5,6 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { IMindNodes, mindNodesState, selectedNodeState } from 'recoil/mindmap';
 import { PrimaryButton } from 'components/molecules';
 import { getId, idxToLevel, levelToIdx } from 'utils/helpers';
+import { BoxButton } from 'components/atoms';
 
 const Wrapper = styled.div`
   ${({ theme }) => theme.flex.row}
@@ -51,14 +52,13 @@ const MindmapWrapper: React.FC = () => {
 
   return (
     <Wrapper>
-      <PrimaryButton onClick={handleHistoryBtnClick}>
-        <img src={clock} alt='히스토리 버튼' />
-      </PrimaryButton>
-
-      <PrimaryButton onClick={handlePlusNodeBtnClick}>
-        <img src={plusCircle} alt='노드 추가 버튼' />
+      <BoxButton onClick={handleHistoryBtnClick} btnStyle={'large'} color={'primary1'}>
+        <img src={clock} alt='히스토리 버튼'></img>
+      </BoxButton>
+      <BoxButton onClick={handlePlusNodeBtnClick} btnStyle={'large'} color={'primary1'} margin={'0 1rem'}>
+        <img src={plusCircle} alt='노드 추가 버튼'></img>
         {'노드 추가하기'}
-      </PrimaryButton>
+      </BoxButton>
     </Wrapper>
   );
 };
