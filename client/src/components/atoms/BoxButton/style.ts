@@ -54,7 +54,7 @@ const styleOptions: { [key in TStyle]: string } = {
 const colorOptions: { [key in TColor]: string } = {
   white: `
       color: ${common.color.black};
-      background-color: ${common.color.bgWhite};
+      background-color: ${common.color.white};
     `,
   primary1: `
       color: ${common.color.white};

@@ -9,7 +9,6 @@ interface IProps {
 
 export const Layout = styled.div`
   position: relative;
-  background-color: ${({ theme }) => theme.color.bgWhite};
   border-top: 2px solid black;
   padding: 0.5rem 0;
   margin-top: 0.2rem;

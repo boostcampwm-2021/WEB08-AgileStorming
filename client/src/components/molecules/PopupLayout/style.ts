@@ -40,7 +40,7 @@ export const Layout = styled.div<IStyleProps>`
   ${({ theme }) => theme.shadow};
   margin: ${({ margin }) => margin};
   position: relative;
-  background-color: ${({ theme }) => theme.color.bgWhite};
+  background-color: ${({ theme }) => theme.color.white};
   padding: 0.5rem;
   border-radius: 0.5rem;
   overflow: hidden;
