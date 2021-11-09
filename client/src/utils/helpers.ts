@@ -1,3 +1,39 @@
+interface ICoord {
+  x: number;
+  y: number;
+}
+
+interface IRect extends ICoord {
+  width: number;
+  height: number;
+  type: QUATER_SPACE;
+}
+
+interface IGetTypeParams {
+  parentCoord: TCoord;
+  currentCoord: TCoord;
+  gap: IGap;
+}
+
+interface IGap {
+  leftGap: number;
+  topGap: number;
+}
+
+interface ICalcRectParams {
+  parentCoord: TCoord;
+  currentCoord: TCoord;
+  gap: TGap;
+  type: QUATER_SPACE;
+}
+
+enum QUATER_SPACE {
+  FIRST = 1,
+  SECOND,
+  THIRD,
+  FOURTH,
+}
+
 enum MINDMAP_BG_SIZE {
   WIDTH = 5000,
   HEIGHT = 5000,
@@ -30,4 +66,50 @@ const LEVEL_DICT: DictType = { 0: 'ROOT', 1: 'EPIC', 2: 'STORY', 3: 'TASK' };
 const idxToLevel = (idx: number) => LEVEL_DICT[idx] as Levels;
 const levelToIdx = (level: string) => Object.values(LEVEL_DICT).findIndex((v) => level === v);
 
-export { getId, pxToNum, numToPx, getCenterCoord, getNodeWidth, MINDMAP_BG_SIZE, getRegexNumber, idxToLevel, levelToIdx };
+const getDrawShape = (rect: IRect): string =>
+  'M' +
+  (rect.type === 1 ? `0,${rect.height}` : `0,0`) +
+  'Q' +
+  (rect.type === 1 ? `0,0 ${rect.width},0` : `0,${rect.height} ${rect.width},${rect.height}`);
+
+const getCurrentCoord = (currentNode: HTMLElement) => ({
+  x: Math.floor(currentNode.offsetLeft + currentNode.offsetWidth / 2),
+  y: Math.floor(currentNode.offsetTop + currentNode.offsetHeight / 2),
+});
+
+const getGap = (currentContainer: HTMLElement) => ({
+  topGap: Math.floor(currentContainer.offsetTop),
+  leftGap: Math.floor(currentContainer.offsetLeft),
+});
+
+const getType = ({ currentCoord, gap, parentCoord }: IGetTypeParams) =>
+  currentCoord.y + gap.topGap > parentCoord.y ? QUATER_SPACE.FOURTH : QUATER_SPACE.FIRST;
+
+const calcRect = ({ parentCoord, currentCoord, gap, type }: ICalcRectParams): IRect => ({
+  x: currentCoord.x - Math.abs(currentCoord.x + gap.leftGap - parentCoord.x),
+  y: type === 1 ? currentCoord.y : currentCoord.y - Math.abs(currentCoord.y + gap.topGap - parentCoord.y),
+  width: Math.abs(currentCoord.x + gap.leftGap - parentCoord.x),
+  height: Math.abs(currentCoord.y + gap.topGap - parentCoord.y),
+  type: type,
+});
+
+export {
+  calcRect,
+  getType,
+  getGap,
+  getCurrentCoord,
+  QUATER_SPACE,
+  getDrawShape,
+  getId,
+  pxToNum,
+  numToPx,
+  getCenterCoord,
+  getNodeWidth,
+  MINDMAP_BG_SIZE,
+  getRegexNumber,
+  idxToLevel,
+  levelToIdx,
+};
+export type TRect = IRect;
+export type TCoord = ICoord;
+export type TGap = IGap;

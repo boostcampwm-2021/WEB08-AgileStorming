@@ -1,9 +1,9 @@
 import React from 'react';
+import MindmapTree from 'components/organisms/MindmapTree';
 import { IMindmapData, getNextMapState, IMindNodes } from 'recoil/mindmap';
 import useSocketEmitter, { ISocketEmitter } from 'hooks/useSocketEmit';
-import MindmapTree from 'components/molecules/MindmapTree';
-import { getRegexNumber, idxToLevel, levelToIdx } from 'utils/helpers';
 import useDragEvent from 'hooks/useDragEvent';
+import { getRegexNumber, idxToLevel, levelToIdx } from 'utils/helpers';
 
 interface IProps {
   mindmapData: IMindmapData;
