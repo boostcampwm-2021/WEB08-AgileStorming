@@ -8,3 +8,5 @@ const useProjectId = () => {
   const params = useParams<IParams>();
   return params.projectId;
 };
+
+export default useProjectId;
