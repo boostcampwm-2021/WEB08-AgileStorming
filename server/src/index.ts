@@ -5,15 +5,30 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { createConnection } from 'typeorm';
 import cors from 'cors';
-
+import redis from 'redis';
 import router from './routes';
-
 import ormConfig from '../ormconfig';
 import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+const redisClient = redis.createClient();
+
+const xread = ({ stream, id }) => {
+  redisClient.xread('BLOCK', 0, 'STREAMS', stream, id, (err, str) => {
+    if (err) return console.error('Error reading from stream:', err);
+    str[0][1].forEach((message) => {
+      id = message[0];
+      console.log(id);
+      console.log(message[1]);
+    });
+    setTimeout(() => xread({ stream, id }), 0);
+  });
+};
+
+xread({ stream: 'foo', id: '$' });
 
 createConnection(ormConfig)
   .then(() => console.log(`Database connected`))
