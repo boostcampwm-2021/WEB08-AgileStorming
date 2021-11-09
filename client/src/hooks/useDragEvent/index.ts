@@ -30,7 +30,6 @@ const useDragEvent = (events: IEvents, interactElemIds: Array<string> = [], drag
     event.preventDefault();
     if (events['dragover']) events['dragover'](event);
   };
-  // const throttleDragOverNode = useThrottle(handleDragOverNode, 20);
 
   const handleDragLeaveNode = (event: React.MouseEvent) => {
     if (!isInteractable(event)) return;

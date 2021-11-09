@@ -7,13 +7,13 @@ interface IProps {
 }
 
 const Node = styled.p<IProps>`
-  background-color: ${(props) => props.theme.nodeBgColors[levelToIdx(props.level)]};
-  color: ${(props) => props.theme.nodeColors[levelToIdx(props.level)]};
+  background-color: ${({ theme, level }) => theme.nodeBgColors[levelToIdx(level)]};
+  color: ${({ theme, level }) => theme.nodeColors[levelToIdx(level)]};
   border-radius: 0.5rem;
-  font-size: ${(props) => props.theme.nodeFontSizes[levelToIdx(props.level)]};
-  line-height: ${(props) => props.theme.nodeFontSizes[levelToIdx(props.level)]};
+  font-size: ${({ theme, level }) => theme.nodeFontSizes[levelToIdx(level)]};
+  line-height: ${({ theme, level }) => theme.nodeFontSizes[levelToIdx(level)]};
   padding: 0.5rem 1rem;
-  ${({ isSelected }) => (isSelected ? { border: '2px solid blue' } : {})}
+  border: ${({ isSelected }) => (isSelected ? '2px solid blue' : '2px solid transparent')};
 `;
 
 export default Node;

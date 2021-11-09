@@ -6,3 +6,4 @@ export { default as TextInputModal } from 'components/organisms/TextInputModal';
 export { default as MindmapBtnWrapper } from 'components/organisms/MindmapBtnWrapper';
 export { default as Mindmap } from 'components/organisms/Mindmap';
 export { default as MindmapTree } from 'components/organisms/MindmapTree';
+export { default as Header } from 'components/organisms/Header';
