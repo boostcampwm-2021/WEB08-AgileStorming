@@ -9,6 +9,7 @@ export type TColor =
   | 'gray1'
   | 'gray2'
   | 'gray3'
+  | 'gray4'
   | 'yellow'
   | 'mint';
 export type TFontSize = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge' | 'title';
@@ -28,6 +29,7 @@ const color: { [key in TColor]: string } = {
   gray1: '#888888',
   gray2: '#BBBBBB',
   gray3: '#D7D7D7',
+  gray4: '#EEEEEE',
 };
 
 const calcRem = (px: number) => `${px / 16}rem`;
