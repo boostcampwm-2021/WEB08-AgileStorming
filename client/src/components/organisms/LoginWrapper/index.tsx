@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useRef } from 'react';
-import { common } from 'styles';
 import { Wrapper } from './style';
 import { BoxButton } from 'components/atoms';
 import { Input } from 'components/atoms';
@@ -8,6 +7,7 @@ import useToast from 'hooks/useToast';
 import { MODAL_TYPES } from 'components/templates/GlobalModal';
 import { authApi } from 'utils/api';
 import { useHistory } from 'react-router';
+import { logo } from 'img';
 
 const LoginBox = () => {
   const id = useRef<string>('');
@@ -40,11 +40,12 @@ const LoginBox = () => {
 
   return (
     <Wrapper>
-      <Input placeholder='아이디를 입력해주세요' onChange={handleIdChange} spellCheck={false} />
-      <BoxButton onClick={handleClickLogin} color={common.color.white} bgColor={common.color.primary2}>
+      <img src={logo} alt='AgileStorm' />
+      <Input inputStyle='full' placeholder='아이디를 입력해주세요' onChange={handleIdChange} margin='0.5rem 0' spellCheck={false} />
+      <BoxButton onClick={handleClickLogin} btnStyle={'full'} color={'primary2'} margin={'0.3rem 0'}>
         로그인
       </BoxButton>
-      <BoxButton onClick={handleClickRegister} bgColor={common.color.primary3}>
+      <BoxButton onClick={handleClickRegister} btnStyle={'full'} color={'primary3'} margin={'0.3rem 0'}>
         회원가입
       </BoxButton>
     </Wrapper>

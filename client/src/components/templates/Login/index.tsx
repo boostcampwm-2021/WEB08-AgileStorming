@@ -1,20 +1,17 @@
 import React from 'react';
-import { common } from 'styles';
 import { Template } from './style';
-import { logo } from 'img';
-import Title from 'components/atoms/Title';
+import { Title } from 'components/atoms';
 import { LoginWrapper } from 'components/organisms';
 
 const Login = () => {
   return (
     <Template>
-      <Title size={common.fontSize.title} toLeft={true}>
+      <Title titleStyle={'title'} color={'white'} margin={'0 0 0 auto'}>
         쉽게 쓰는 실시간 애자일 협업툴
       </Title>
-      <Title size={common.fontSize.xxxlarge} toLeft={true}>
+      <Title titleStyle={'xxxlarge'} color={'white'} margin={'0 0 0 auto'}>
         마인드맵으로 동료들과 작업을 간편하게 관리할 수 있습니다.
       </Title>
-      <img src={logo} alt='AgileStorm' />
       <LoginWrapper />
     </Template>
   );
