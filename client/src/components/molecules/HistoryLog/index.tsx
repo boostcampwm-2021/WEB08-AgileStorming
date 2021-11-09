@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { IconImg, Title } from 'components/atoms';
+import { Title } from 'components/atoms';
 import { IUser } from 'recoil/user';
+import { Profile } from '..';
 
 const Wrapper = styled.div`
   ${({ theme }) => theme.flex.row};
-  gap: 0.5rem;
   width: 100%;
 `;
 
@@ -16,11 +16,8 @@ interface IPros {
 const HistoryLog: React.FC<IPros> = ({ modifier, log }) => {
   return (
     <Wrapper>
-      <IconImg imgSrc={modifier.icon} altText={modifier.name} />
-      <Title titleStyle='xlarge' color='white'>
-        {modifier.name}
-      </Title>
-      <Title titleStyle='large' color='white'>
+      <Profile user={modifier} />
+      <Title titleStyle='xlarge' color='white' margin='0 0 0 0.5rem' lineHeight={2}>
         {log}
       </Title>
     </Wrapper>

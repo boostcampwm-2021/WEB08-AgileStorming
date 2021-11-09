@@ -6,6 +6,24 @@ import HistoryWindow from 'components/molecules/HistoryWindow';
 import { useHistory } from 'react-router';
 import useProjectId from 'hooks/useRoomId';
 
+const Wrapper = styled.div`
+  ${({ theme }) => theme.flex.columnCenter}
+  position: fixed;
+  background-color: ${({ theme }) => theme.color.gray1};
+  width: 100vw;
+  height: 160px;
+  bottom: 0;
+  padding: 0 2rem;
+`;
+
+const UpperDiv = styled.div`
+  ${({ theme }) => theme.flex.row};
+  justify-content: space-between;
+  padding: 0 2rem;
+  width: 100%;
+  height: 45px;
+`;
+
 const HistoryBar: React.FC = () => {
   const history = useHistory();
   const projectId = useProjectId();
@@ -31,23 +49,3 @@ const HistoryBar: React.FC = () => {
 };
 
 export default HistoryBar;
-
-const Wrapper = styled.div`
-  ${({ theme }) => theme.flex.columnCenter}
-  position: fixed;
-  background-color: ${({ theme }) => theme.color.gray1};
-  width: 100vw;
-  height: 160px;
-  bottom: 0;
-  padding: 0 2rem;
-`;
-
-const UpperDiv = styled.div`
-  ${({ theme }) => theme.flex.row};
-  justify-content: space-between;
-  padding: 0 2rem;
-  width: 100%;
-  height: 45px;
-`;
-
-const topBar = styled.div``;

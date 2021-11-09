@@ -5,6 +5,7 @@ interface IStyleProps {
   titleStyle: TStyle;
   color: TColor;
   margin?: string;
+  lineHeight?: number;
 }
 
 export type TStyle = 'small' | 'normal' | 'large' | 'xlarge' | 'xxxlarge' | 'title';
@@ -15,7 +16,7 @@ export const StyledTitle = styled.div<IStyleProps>`
   ${({ color }) => colorOptions[color]}
   margin: ${({ margin }) => margin};
   font-weight: bold;
-  line-height: 1.2;
+  line-height: ${({ lineHeight }) => lineHeight ?? 1.2};
 `;
 
 const styleOptions: { [key in TStyle]: string } = {
