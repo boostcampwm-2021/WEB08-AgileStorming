@@ -1,7 +1,12 @@
 import React from 'react';
+import CommonLayout from 'components/templates/CommonLayout';
 
 const Kanban = () => {
-  return <div>칸반페이지</div>;
+  return (
+    <CommonLayout>
+      <h1>칸반페이지</h1>
+    </CommonLayout>
+  );
 };
 
 export default Kanban;
