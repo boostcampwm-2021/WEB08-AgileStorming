@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { clock, plusCircle } from 'img';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { IMindNodes, mindNodesState, selectedNodeState } from 'recoil/mindmap';
-import { PrimaryButton } from 'components/molecules';
 import { getId, idxToLevel, levelToIdx } from 'utils/helpers';
 import { BoxButton } from 'components/atoms';
 

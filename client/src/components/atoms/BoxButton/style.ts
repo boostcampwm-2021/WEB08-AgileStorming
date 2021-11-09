@@ -37,11 +37,11 @@ const styleOptions: { [key in TStyle]: string } = {
     font-size: ${common.fontSize.small};
   `,
   normal: `
-    padding: 0.5rem 1.4rem;
+    padding: 0.5rem 1rem;
     font-size: ${common.fontSize.normal};
   `,
   large: `
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
     font-size: ${common.fontSize.large};
   `,
   full: `
