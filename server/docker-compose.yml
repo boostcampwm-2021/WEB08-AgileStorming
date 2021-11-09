@@ -1,0 +1,11 @@
+version: '2'
+services:
+  redis-server:
+    image: 'redis'
+    ports:
+      - '6379:6379'
+    # volumes:
+    #   - D:/boostcamp_membership/project/redis/6379/data:/data
+    #   - D:/boostcamp_membership/project/redis/6379/conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    mem_limit: '500m'

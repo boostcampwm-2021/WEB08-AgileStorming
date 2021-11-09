@@ -5,20 +5,22 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { createConnection } from 'typeorm';
 import cors from 'cors';
-
+import http from 'http';
 import router from './routes';
-
 import ormConfig from '../ormconfig';
+import { socketIO } from './utils';
 import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+const server = http.createServer(app);
+socketIO(server, process.env.ORIGIN);
+
 createConnection(ormConfig)
   .then(() => console.log(`Database connected`))
   .catch((error) => console.log(error));
-
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
@@ -45,6 +47,4 @@ app.use(function (err, req, res, next) {
   return res.status(500).json({ msg: err.message });
 });
 
-app.listen(port);
-
-console.log(`Server listen ${port}...`);
+server.listen(port, () => console.log(`Server listen ${port}...`));
