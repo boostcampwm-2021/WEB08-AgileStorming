@@ -1,17 +1,19 @@
-import styled from "@emotion/styled";
-import common from "styles/common"
+import React from 'react';
+import { StyledTitle, TColor, TStyle } from './style';
 
 interface IProps {
+  children?: React.ReactNode;
+  titleStyle?: TStyle;
+  color?: TColor;
   margin?: string;
-  toLeft?: boolean;
-  size?: string;
 }
 
-export const Title = styled.div`
-margin: ${(props: IProps) => props.margin ?? "0.5rem"};
-margin-left: ${(props: IProps) => props.toLeft ? "auto" : ""};
-font-size: ${(props: IProps) => props.size ?? common.fontSize.normal};
-font-weight: bold;
-line-height: 1.2;
-`
-export default Title
+const Title: React.FC<IProps> = ({ children, margin = '0.5rem 0', color = 'black', titleStyle = 'normal' }) => {
+  return (
+    <StyledTitle titleStyle={titleStyle} color={color} margin={margin}>
+      {children}
+    </StyledTitle>
+  );
+};
+
+export default Title;

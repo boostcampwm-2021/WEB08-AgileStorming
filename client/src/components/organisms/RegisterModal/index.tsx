@@ -3,7 +3,6 @@ import { ModalBox, ModalOverlay, Input, Title } from 'components/atoms';
 import { TextButton } from 'components/molecules';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
-import { common } from 'styles';
 import { authApi } from 'utils/api';
 
 export interface IRegisterModalProps {}
@@ -39,12 +38,12 @@ const RegisterModal: React.FC<IRegisterModalProps> = () => {
     <>
       <ModalOverlay visible={true} onClick={hideModal} />
       <ModalBox visible={true}>
-        <Title size={common.fontSize.xlarge}>회원가입</Title>
-        <Title size={common.fontSize.large} margin={'2rem 0 0 0.5rem'}>
+        <Title titleStyle={'xlarge'}>회원가입</Title>
+        <Title titleStyle={'large'} margin={'2rem 0 0 0.5rem'}>
           아이디
         </Title>
         <Input placeholder={'아이디를 입력해주세요'} margin={'1rem 0'} onChange={handleIdChange} />
-        <Title size={common.fontSize.large} margin={'1rem 0 0 0.5rem'}>
+        <Title titleStyle={'large'} margin={'1rem 0 0 0.5rem'}>
           이름
         </Title>
         <Input placeholder={'이름을 입력해주세요'} margin={'1rem 0'} onChange={handleNameChange} />
