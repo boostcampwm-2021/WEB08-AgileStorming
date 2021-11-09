@@ -50,17 +50,8 @@ const getDummyMindmapData = (): IMindmapData => {
   };
 };
 
-// const initRootId = 0;
-// const initRootNode = {
-//   nodeId: initRootId,
-//   level: 'ROOT' as Levels,
-//   content: '',
-//   children: [],
-// };
-
 export const mindmapState = atom<IMindmapData>({
   key: 'mindmapAtom',
-  // default: { rootId: initRootId, mindNodes: new Map([[initRootId, initRootNode]]) },
   default: getDummyMindmapData(),
 });
 

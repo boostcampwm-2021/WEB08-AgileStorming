@@ -89,7 +89,7 @@ const calcRect = ({ parentCoord, currentCoord, gap, type }: ICalcRectParams): IR
   x: currentCoord.x - Math.abs(currentCoord.x + gap.leftGap - parentCoord.x),
   y: type === 1 ? currentCoord.y : currentCoord.y - Math.abs(currentCoord.y + gap.topGap - parentCoord.y),
   width: Math.abs(currentCoord.x + gap.leftGap - parentCoord.x),
-  height: Math.abs(currentCoord.y + gap.topGap - parentCoord.y),
+  height: Math.max(Math.abs(currentCoord.y + gap.topGap - parentCoord.y), 3),
   type: type,
 });
 

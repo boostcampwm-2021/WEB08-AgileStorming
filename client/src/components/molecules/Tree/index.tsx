@@ -18,7 +18,8 @@ interface IStyleProps {
 
 const NodeContainer = styled.div<IStyleProps>`
   ${({ isRoot, theme }) => (isRoot ? theme.absoluteCenter : { position: 'relative' })};
-  ${({ theme }) => theme.flex.center};
+  ${({ theme }) => theme.flex.row};
+  align-items: center;
   gap: 1rem;
 `;
 

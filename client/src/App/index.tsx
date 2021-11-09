@@ -5,7 +5,7 @@ import { LoginPage, KanbanPage, ProjectPage, MindmapPage, CalendarPage, ChartPag
 import { common, global } from 'styles';
 import GlobalModal from 'components/templates/GlobalModal';
 import { Toast } from 'components/atoms';
-import { Header } from 'components/molecules';
+import { Header } from 'components/organisms';
 
 const App = () => {
   return (
