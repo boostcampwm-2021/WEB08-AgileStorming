@@ -59,8 +59,8 @@ const ProjectCard: React.FC<IProps> = ({ name, count, creator, onClickShareButto
         </SmallText>
       </StyledTextContainer>
       <StyledIconContainer>
-        <IconButton onClick={onClickShareButton} imgSrc={img.share} />
-        <IconButton onClick={onClickDeleteButton} imgSrc={img.trashcan} />
+        <IconButton onClick={onClickShareButton} imgSrc={img.share} altText='공유하기 버튼' />
+        <IconButton onClick={onClickDeleteButton} imgSrc={img.trashcan} altText='삭제하기 버튼' />
       </StyledIconContainer>
     </StyledProjectCard>
   );

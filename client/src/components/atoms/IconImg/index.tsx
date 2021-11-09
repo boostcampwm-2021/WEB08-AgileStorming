@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 
 interface IProps {
   imgSrc: string;
+  altText: string;
 }
 
 const StyledIconImg = styled.img`
@@ -14,8 +15,8 @@ const StyledIconImg = styled.img`
   }
 `;
 
-const IconImg: React.FC<IProps> = ({ imgSrc }) => {
-  return <StyledIconImg src={imgSrc} alt='IconImg' />;
+const IconImg: React.FC<IProps> = ({ imgSrc, altText }) => {
+  return <StyledIconImg src={imgSrc} alt={altText} />;
 };
 
 export default IconImg;
