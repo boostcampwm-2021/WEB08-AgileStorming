@@ -42,11 +42,11 @@ const RegisterModal: React.FC<IRegisterModalProps> = () => {
         <Title titleStyle={'large'} margin={'2rem 0 0 0.5rem'}>
           아이디
         </Title>
-        <Input placeholder={'아이디를 입력해주세요'} margin={'1rem 0'} onChange={handleIdChange} />
+        <Input inputStyle={'large'} placeholder={'아이디를 입력해주세요'} margin={'1rem 0'} onChange={handleIdChange} />
         <Title titleStyle={'large'} margin={'1rem 0 0 0.5rem'}>
           이름
         </Title>
-        <Input placeholder={'이름을 입력해주세요'} margin={'1rem 0'} onChange={handleNameChange} />
+        <Input inputStyle={'large'} placeholder={'이름을 입력해주세요'} margin={'1rem 0'} onChange={handleNameChange} />
         <TextButton onClick={handleSubmit} text={'확인'} textColor={'red'} textWeight={'bold'} margin={'1rem 0 0 auto'} />
       </ModalBox>
     </>

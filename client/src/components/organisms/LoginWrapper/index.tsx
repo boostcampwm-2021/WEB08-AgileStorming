@@ -41,7 +41,7 @@ const LoginBox = () => {
   return (
     <Wrapper>
       <img src={logo} alt='AgileStorm' />
-      <Input placeholder='아이디를 입력해주세요' onChange={handleIdChange} spellCheck={false} />
+      <Input inputStyle='full' placeholder='아이디를 입력해주세요' onChange={handleIdChange} spellCheck={false} />
       <BoxButton onClick={handleClickLogin} btnStyle={'full'} color={'primary2'} margin={'0.3rem 0'}>
         로그인
       </BoxButton>
