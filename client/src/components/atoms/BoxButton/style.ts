@@ -1,10 +1,11 @@
+import { ButtonHTMLAttributes } from 'react';
 import { common } from 'styles';
 import styled from '@emotion/styled';
 
 export type TStyle = 'small' | 'normal' | 'large' | 'full';
 export type TColor = 'white' | 'primary1' | 'primary2' | 'primary3';
 
-interface IStyleProps {
+interface IStyleProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   btnStyle: TStyle;
   color: TColor;
   margin?: string;

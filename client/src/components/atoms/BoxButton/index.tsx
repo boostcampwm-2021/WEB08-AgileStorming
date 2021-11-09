@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import { StyledButton, TColor, TStyle } from './style';
 
-interface IProps {
-  onClick: React.MouseEventHandler;
+interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
   btnStyle?: TStyle;
   color?: TColor;
   margin?: string;
 }
 
-const BoxButton: React.FC<IProps> = ({ children, onClick, margin = '0.5rem 0', color = 'white', btnStyle = 'normal' }) => {
+const BoxButton: React.FC<IProps> = ({ children, margin = '0.5rem 0', color = 'white', btnStyle = 'normal', ...props }) => {
   return (
-    <StyledButton onClick={onClick} btnStyle={btnStyle} color={color} margin={margin}>
+    <StyledButton btnStyle={btnStyle} color={color} margin={margin} {...props}>
       {children}
     </StyledButton>
   );
