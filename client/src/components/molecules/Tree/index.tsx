@@ -20,7 +20,6 @@ const NodeContainer = styled.div<IStyleProps>`
   ${({ isRoot, theme }) => (isRoot ? theme.absoluteCenter : { position: 'relative' })};
   ${({ theme }) => theme.flex.center};
   gap: 1rem;
-  border: 1px solid blue;
 `;
 
 const ChildContainer = styled.div`
@@ -57,7 +56,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes, parentCoord }) => {
     const type = getType({ parentCoord, currentCoord, gap });
 
     setRect(calcRect({ parentCoord, currentCoord, gap, type }));
-  }, [parentCoord]);
+  }, [parentCoord, mindNodes]);
 
   return (
     <NodeContainer id={id + 'container'} ref={containerRef} isRoot={isRoot} draggable='true' className='mindmap-area'>
@@ -69,7 +68,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes, parentCoord }) => {
           <Tree key={childrenId} nodeId={childrenId} mindNodes={mindNodes} parentCoord={coord} />
         ))}
       </ChildContainer>
-      {/* <Path rect={rect} /> */}
+      <Path rect={rect} />
     </NodeContainer>
   );
 };

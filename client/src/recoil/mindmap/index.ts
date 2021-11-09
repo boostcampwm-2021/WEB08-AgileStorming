@@ -16,6 +16,9 @@ export interface IMindNode {
 export type IMindNodes = Map<number, IMindNode>;
 
 export const getNextMapState = (prevState: IMindmapData) => {
+  const nextState = new Map(prevState.mindNodes);
+  nextState.forEach((value, key, mapObject) => mapObject.set(key, { ...value, children: [...value.children] }));
+
   return {
     ...prevState,
     mindNodes: new Map(prevState.mindNodes),
