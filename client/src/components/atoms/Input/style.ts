@@ -30,7 +30,7 @@ export const StyledInput = styled.input<IStyleProps>`
 
 const styleOptions: { [key in TStyle]: string } = {
   small: `
-    padding: 0.4rem 0.5rem;
+    padding: 0.1rem 0.5rem;
     font-size: ${common.fontSize.small};
   `,
   normal: `

@@ -6,7 +6,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   margin?: string;
 }
 
-const BoxButton: React.FC<IProps> = ({ inputStyle = 'normal', margin = '0.5rem 0', ...props }) => {
+const BoxButton: React.FC<IProps> = ({ inputStyle = 'normal', margin = '0', ...props }) => {
   return <StyledInput inputStyle={inputStyle} margin={margin} {...props} />;
 };
 
