@@ -3,6 +3,7 @@ import _ from 'lodash';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { xread, xadd } from './redis';
+import { convertEvent } from './eventConverter';
 
 dotenv.config();
 
@@ -40,10 +41,11 @@ const socketIO = (server, origin) => {
 
     const handleNewEvent = (data: Record<number, object>) => {
       data[0][1].forEach((element) => {
-        console.log('server event', element[1]);
         socket.to(projectId).emit('event', element[1]);
+        convertEvent(element[1]);
       });
     };
+
     socket.join(projectId);
     if (!userInRooms.hasOwnProperty(projectId)) {
       userInRooms[projectId] = [id];
@@ -58,9 +60,18 @@ const socketIO = (server, origin) => {
       socket.to(projectId).emit('left', id);
     });
 
-    socket.on('event', () => {
+    socket.on('leave', (projectId) => {
+      socket.leave(projectId);
+      userInRooms[projectId] = userInRooms[projectId].filter((user) => user !== id);
+      socket.to(projectId).emit('left', id);
+    });
+
+    socket.on('event', (type, data) => {
       xread(projectId, '$', handleNewEvent);
-      xadd({ stream: projectId, args: ['project', projectId, 'user', id] });
+      xadd({
+        stream: projectId,
+        args: ['type', type, 'project', projectId, 'user', id, 'data', data],
+      });
     });
   });
 };
