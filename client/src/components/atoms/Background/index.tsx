@@ -6,6 +6,7 @@ interface IProps {
   height?: string;
   children?: React.ReactNode;
   id?: string;
+  className?: string;
 }
 
 const WhiteBackground = styled.div<IProps>`
@@ -15,9 +16,9 @@ const WhiteBackground = styled.div<IProps>`
   height: ${(props) => props.height};
 `;
 
-const Background = ({ width = '100vw', height = '100vh', children, id }: IProps) => {
+const Background: React.FC<IProps> = ({ className, width = '100vw', height = '100vh', children, id }) => {
   return (
-    <WhiteBackground id={id} width={width} height={height}>
+    <WhiteBackground id={id} width={width} height={height} className={className}>
       {children}
     </WhiteBackground>
   );

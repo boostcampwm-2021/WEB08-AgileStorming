@@ -29,6 +29,7 @@ const Button = styled.button<IStyleProps>`
   font-weight: bold;
   cursor: pointer;
   ${(props) => props.theme.shadow};
+  gap: 0.5rem;
 
   :hover,
   :focus {

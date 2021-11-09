@@ -1,38 +1,64 @@
 import styled from '@emotion/styled';
-import { BoxButton } from 'components/atoms';
 import { useHistory } from 'react-router-dom';
 import { clock, plusCircle } from 'img';
-import common from 'styles/common';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { IMindNodes, mindNodesState, selectedNodeState } from 'recoil/mindmap';
+import { PrimaryButton } from 'components/molecules';
+import { getId, idxToLevel, levelToIdx } from 'utils/helpers';
 
 const Wrapper = styled.div`
-  ${(props) => props.theme.flex.row}
+  ${({ theme }) => theme.flex.row}
   align-items: center;
-  /* justify-content: space-between; */
   position: fixed;
   bottom: 50px;
   left: 50px;
-  /* width: 200px; */
-  > *:not(:last-child) {
-    margin-right: 10px;
-  }
+  gap: 1rem;
 `;
 
-const MindmapWrapper = () => {
+interface ITempNodeParams {
+  mindNodes: IMindNodes;
+  selectedNodeId: string | null;
+}
+
+const createTempNode = ({ mindNodes, selectedNodeId }: ITempNodeParams) => {
+  const nodeId = selectedNodeId === null ? 0 : getId(selectedNodeId);
+  const parentNode = mindNodes.get(nodeId);
+  const level = idxToLevel(levelToIdx(parentNode!.level) + 1);
+  const tempNode = { nodeId: -1, level: level, content: '', children: [] };
+
+  parentNode!.children.push(-1);
+  mindNodes.set(-1, tempNode);
+
+  const tempNodeId = `${level}#-1`;
+  return tempNodeId;
+};
+
+const MindmapWrapper: React.FC = () => {
+  const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeState);
+  const mindNodes = useRecoilValue(mindNodesState);
   const hitory = useHistory();
+
   const handleHistoryBtnClick = () => {
     hitory.push('/history');
   };
-  const handlePlusNodeBtnClick = () => {};
+
+  const handlePlusNodeBtnClick = () => {
+    if (selectedNodeId && getId(selectedNodeId) === -1) return;
+
+    const tempNodeId = createTempNode({ mindNodes, selectedNodeId });
+    setSelectedNodeId(tempNodeId);
+  };
 
   return (
     <Wrapper>
-      <BoxButton onClick={handleHistoryBtnClick} color={common.color.white}>
-        <img src={clock} alt='히스토리 버튼'></img>
-      </BoxButton>
-      <BoxButton onClick={handlePlusNodeBtnClick} color={common.color.white}>
-        <img src={plusCircle} alt='노드 추가 버튼'></img>
+      <PrimaryButton onClick={handleHistoryBtnClick}>
+        <img src={clock} alt='히스토리 버튼' />
+      </PrimaryButton>
+
+      <PrimaryButton onClick={handlePlusNodeBtnClick}>
+        <img src={plusCircle} alt='노드 추가 버튼' />
         {'노드 추가하기'}
-      </BoxButton>
+      </PrimaryButton>
     </Wrapper>
   );
 };

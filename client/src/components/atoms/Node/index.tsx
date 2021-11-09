@@ -3,6 +3,7 @@ import { Levels, levelToIdx } from 'utils/helpers';
 
 interface IProps {
   level: Levels;
+  isSelected: boolean;
 }
 
 const Node = styled.p<IProps>`
@@ -12,6 +13,7 @@ const Node = styled.p<IProps>`
   font-size: ${(props) => props.theme.nodeFontSizes[levelToIdx(props.level)]};
   line-height: ${(props) => props.theme.nodeFontSizes[levelToIdx(props.level)]};
   padding: 0.5rem 1rem;
+  ${({ isSelected }) => (isSelected ? { border: '2px solid blue' } : {})}
 `;
 
 export default Node;

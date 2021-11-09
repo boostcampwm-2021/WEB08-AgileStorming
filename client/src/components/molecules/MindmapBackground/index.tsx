@@ -9,11 +9,12 @@ interface ICoord {
 
 interface IProps {
   children?: React.ReactNode;
+  className?: string;
 }
 
 const [centerX, centerY] = getCenterCoord(window.innerWidth, window.innerHeight);
 
-const MindmapBackground = ({ children }: IProps) => {
+const MindmapBackground: React.FC<IProps> = ({ className, children }) => {
   const lastCoord = useRef<ICoord | null>(null);
   const draggable = useRef(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
@@ -73,7 +74,12 @@ const MindmapBackground = ({ children }: IProps) => {
   }, [addListeners, removeListeners]);
 
   return (
-    <Background id={'mindmapBackground'} width={numToPx(MINDMAP_BG_SIZE.WIDTH)} height={numToPx(MINDMAP_BG_SIZE.HEIGHT)}>
+    <Background
+      id={'mindmapBackground'}
+      width={numToPx(MINDMAP_BG_SIZE.WIDTH)}
+      height={numToPx(MINDMAP_BG_SIZE.HEIGHT)}
+      className={className}
+    >
       {children}
     </Background>
   );
