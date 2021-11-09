@@ -19,6 +19,7 @@ export const StyledButton = styled.button<IStyleProps>`
   ${({ theme }) => theme.flex.center};
   ${({ theme }) => theme.shadow};
   margin: ${({ margin }) => margin};
+  font-family: Noto Sans KR;
   border-radius: 0.5rem;
   font-weight: bold;
   cursor: pointer;
