@@ -6,11 +6,12 @@ interface IProps {
   titleStyle?: TStyle;
   color?: TColor;
   margin?: string;
+  lineHeight?: number;
 }
 
-const Title: React.FC<IProps> = ({ children, margin = '0.5rem 0', color = 'black', titleStyle = 'normal' }) => {
+const Title: React.FC<IProps> = ({ children, margin = '0.5rem 0', color = 'black', titleStyle = 'normal', lineHeight }) => {
   return (
-    <StyledTitle titleStyle={titleStyle} color={color} margin={margin}>
+    <StyledTitle titleStyle={titleStyle} color={color} margin={margin} lineHeight={lineHeight}>
       {children}
     </StyledTitle>
   );

@@ -5,6 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { IMindNodes, mindNodesState, selectedNodeState } from 'recoil/mindmap';
 import { getId, idxToLevel, levelToIdx } from 'utils/helpers';
 import { BoxButton } from 'components/atoms';
+import useProjectId from 'hooks/useRoomId';
 
 const Wrapper = styled.div`
   ${({ theme }) => theme.flex.row}
@@ -37,9 +38,10 @@ const MindmapWrapper: React.FC = () => {
   const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeState);
   const mindNodes = useRecoilValue(mindNodesState);
   const hitory = useHistory();
+  const projectId = useProjectId();
 
   const handleHistoryBtnClick = () => {
-    hitory.push('/history');
+    hitory.push(`/history/${projectId}`);
   };
 
   const handlePlusNodeBtnClick = () => {

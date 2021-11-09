@@ -7,6 +7,10 @@ import clockPath from './clock.svg';
 import plusCirclePath from './plusCircle.svg';
 import backPath from './back.svg';
 import trashcanPath from './trashcan.svg';
+import backwardBtnPath from './backwardBtn.svg';
+import playBtnPath from './playBtn.svg';
+import forwardBtnPath from './forwardBtn.svg';
+import whiteCloseBtnPath from './whiteCloseBtn.svg';
 
 export const share: string = sharePath;
 export const logo: string = logoPath;
@@ -17,3 +21,7 @@ export const clock: string = clockPath;
 export const plusCircle: string = plusCirclePath;
 export const back: string = backPath;
 export const trashcan: string = trashcanPath;
+export const backwardBtn: string = backwardBtnPath;
+export const playBtn: string = playBtnPath;
+export const forwardBtn: string = forwardBtnPath;
+export const whiteCloseBtn: string = whiteCloseBtnPath;
