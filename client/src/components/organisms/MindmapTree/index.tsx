@@ -8,9 +8,9 @@ interface IProps {
 }
 
 const MindmapTree: React.FC<IProps> = ({ mindmapData }) => {
-  const { rootId, mindNodes } = mindmapData;
+  const rootId = mindmapData.rootId;
 
-  return <Tree key={rootId} nodeId={rootId} mindNodes={mindNodes} parentCoord={null} />;
+  return <Tree key={rootId} nodeId={rootId} mindmapData={mindmapData} parentCoord={null} />;
 };
 
 export default MindmapTree;

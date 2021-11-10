@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Label, PopupItemLayout, PopupLayout } from 'components/molecules';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedNodeState, INode, selectedNodeIdState } from 'recoil/node';
 import { priorityListState } from 'recoil/meta-data';
 import { Input } from 'components/atoms';
