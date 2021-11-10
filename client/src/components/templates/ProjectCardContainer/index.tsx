@@ -6,7 +6,6 @@ import { NewProjectModalWrapper } from 'components/templates';
 import useToast from 'hooks/useToast';
 import { API } from 'utils/api';
 import { useHistory } from 'react-router';
-import { SocketManager } from './socket';
 
 const StyledProjectCardContainer = styled.div`
   ${(props) => props.theme.flex.row}
@@ -33,7 +32,6 @@ const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList })
     API.project.delete(projectId);
   };
   const handleClickProjectCard = (projectId: string) => {
-    SocketManager.init(projectId);
     history.push(`/mindmap/${projectId}`);
   };
   const addNewProject = (newProject: IProject) => {

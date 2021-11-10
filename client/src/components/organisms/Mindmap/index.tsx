@@ -127,15 +127,3 @@ const MindMap: React.FC<IProps> = ({ mindmapData }) => {
 };
 
 export default MindMap;
-
-// <정렬 로직>
-// 각 노드 자식 수, 완료 정보 계산 (O)
-// 자신의 자식으로 못 간다. (O)
-// 깊이가 3을 넘으면 자식으로 못간다. (O)
-// Task가 있는 노드는 이동 후에 깊이 3일때만 이동 가능 (O)
-// 자식끼리 순서 변경 -> y pos 값 필요
-
-// <컴포넌트>
-// event 적용 (O)
-// useMemo 적용
-// 코드 분리 및 리팩토링
