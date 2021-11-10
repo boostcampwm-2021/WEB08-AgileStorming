@@ -17,31 +17,31 @@ export const getMindMap = async (projectId: string) => {
     .where('project.id = :projectId', { projectId })
     .getMany();
 };
-export const createNode = async (projectId: string, parendId: number | null, nodeInfo: INode) => {
+export const createNode = async (projectId: string, parentId: number | null, nodeInfo: INode) => {
   const project = await findOneProject(projectId);
   const newNode = await getRepository(Mindmap).save({ children: JSON.stringify([]), ...nodeInfo, project });
-  if (parendId) {
-    addNodeToParent(parendId, newNode.id);
+  if (parentId) {
+    addNodeToParent(parentId, newNode.id);
   }
   return newNode.id;
 };
-export const deleteNode = async (parendId: number, nodeId: number) => {
-  deleteNodeFromParent(parendId, nodeId);
+export const deleteNode = async (parentId: number, nodeId: number) => {
+  deleteNodeFromParent(parentId, nodeId);
   deleteNodeAndChildren(nodeId);
   return;
 };
 export const updateNode = async (nodeId: number, newData: INode) => {
   return getRepository(Mindmap).createQueryBuilder().update().set(newData).where('id = :nodeId', { nodeId }).execute();
 };
-const addNodeToParent = async (parendId: number | null, newNodeId: number) => {
-  const parent = await findOneNode(parendId);
+const addNodeToParent = async (parentId: number | null, newNodeId: number) => {
+  const parent = await findOneNode(parentId);
   const children = [...JSON.parse(parent.children), newNodeId];
-  updateNode(parendId, { children: JSON.stringify(children) });
+  updateNode(parentId, { children: JSON.stringify(children) });
 };
-const deleteNodeFromParent = async (parendId: number | null, nodeId: number) => {
-  const parent = await findOneNode(parendId);
+const deleteNodeFromParent = async (parentId: number | null, nodeId: number) => {
+  const parent = await findOneNode(parentId);
   const children = JSON.parse(parent.children).filter((childId: number) => childId !== nodeId);
-  updateNode(parendId, { children: JSON.stringify(children) });
+  updateNode(parentId, { children: JSON.stringify(children) });
 };
 const deleteNodeAndChildren = async (nodeId: number) => {
   const node = await findOneNode(nodeId);
