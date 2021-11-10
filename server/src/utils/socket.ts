@@ -41,7 +41,7 @@ const socketIO = (server, origin) => {
 
     const handleNewEvent = (data: Record<number, object>) => {
       data[0][1].forEach((element) => {
-        socket.to(projectId).emit('event', element[1]);
+        io.in(projectId).emit('event', element[1]);
         convertEvent(element[1]);
       });
     };
