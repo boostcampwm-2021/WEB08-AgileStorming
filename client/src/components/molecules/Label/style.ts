@@ -24,6 +24,7 @@ export const Wrapper = styled.div<IStyleProps>`
 
 export const StyledLabel = styled.label<IStyleProps>`
   ${({ theme }) => theme.flex.rowCenter};
+  cursor: pointer;
 `;
 
 const styleOptions: { [key in TStyle]: string } = {
