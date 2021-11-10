@@ -16,7 +16,7 @@ export const getUserProject = async (userId: string) => {
 export const createProject = async (name: string, creator: string) => {
   const user = await findOneUser(creator);
   const newProject = await getRepository(Project).save({ name, creator: user, users: [user] });
-  createNode(newProject.id, { content: name, posX: '0', posY: '0' });
+  createNode(newProject.id, null, { content: name, posX: '0', posY: '0', children: JSON.stringify([]) });
   return newProject;
 };
 
