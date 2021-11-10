@@ -43,7 +43,7 @@ const socketIO = (server, origin) => {
     const handleNewEvent = async (data: Record<number, object>) => {
       const eventData = data[0][1][0][1];
       const dbData = await convertEvent(eventData);
-      socket.to(projectId).emit('event', eventData, dbData);
+      io.in(projectId).emit('event', eventData, dbData);
     };
 
     const handleNewUser = () => {
@@ -80,7 +80,7 @@ const socketIO = (server, origin) => {
       xread(projectId, '$', handleNewEvent);
       xadd({
         stream: projectId,
-        args: ['type', type, 'project', projectId, 'user', id, 'data', data],
+        args: ['type', type, 'projectId', projectId, 'user', id, 'data', data],
       });
     });
   });
