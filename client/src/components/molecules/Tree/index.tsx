@@ -61,13 +61,13 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     return true;
   };
 
-  const makeNewNode = () => {};
+  const addNewNode = () => {};
 
   const handleNodeContentFocusout = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
     const content = currentTarget.value;
 
     if (removeEmptyTempNode(content)) return;
-    makeNewNode();
+    addNewNode();
   };
 
   const handleNodeContentEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -76,7 +76,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     const content = event.currentTarget.value;
 
     if (removeEmptyTempNode(content)) return;
-    makeNewNode();
+    addNewNode();
   };
 
   return (
