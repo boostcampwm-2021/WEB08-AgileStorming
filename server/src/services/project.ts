@@ -13,6 +13,25 @@ export const getUserProject = async (userId: string) => {
     .getMany();
 };
 
+export const getUserHasProject = async (userId: string, projectId: string) => {
+  return getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoin('project.users', 'users')
+    .where('users.id = :userId and project.id = :projectId', { userId, projectId })
+    .getOne();
+};
+
+export const addUserToProject = async (userId: string, projectId: string) => {
+  const project = await getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoinAndSelect('project.users', 'users')
+    .where('project.id = :projectId', { projectId })
+    .getOne();
+  const user = await findOneUser(userId);
+  project.users = [...project.users, user];
+  return getRepository(Project).save(project);
+};
+
 export const createProject = async (name: string, creator: string) => {
   const user = await findOneUser(creator);
   const newProject = await getRepository(Project).save({ name, creator: user, users: [user] });
