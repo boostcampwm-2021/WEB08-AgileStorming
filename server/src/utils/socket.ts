@@ -3,7 +3,7 @@ import _ from 'lodash';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { xread, xadd } from './redis';
-import { convertEvent } from './eventConverter';
+import { convertEvent } from './event-converter';
 
 dotenv.config();
 
