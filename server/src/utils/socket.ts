@@ -64,8 +64,7 @@ const socketIO = (server, origin) => {
 
     socket.on('leave', (projectId) => {
       socket.leave(projectId);
-      userInRooms[projectId] = userInRooms[projectId].filter((user) => user !== id);
-      socket.to(projectId).emit('left', id);
+      socket.disconnect();
     });
 
     socket.on('event', (type, data) => {
