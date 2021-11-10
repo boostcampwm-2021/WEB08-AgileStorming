@@ -1,18 +1,30 @@
-import React, { FocusEvent, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Label, PopupItemLayout, PopupLayout } from 'components/molecules';
-import { useRecoilState } from 'recoil';
-import { selectedNodeState } from 'recoil/node';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { selectedNodeState, INode } from 'recoil/node';
+import { priorityListState } from 'recoil/meta-data';
 import { Input } from 'components/atoms';
+import Dropdown from 'components/molecules/Dropdown';
 
 interface IProps {}
 
 export const NodeDetailWrapper: React.FC<IProps> = () => {
   const [selectedNode, setSelectedNode] = useRecoilState(selectedNodeState);
+  const priorityList = useRecoilValue(priorityListState);
 
   const handleCloseButton = () => setSelectedNode(null);
-  const handleChangeNodeContent = useCallback(
-    (e: FocusEvent<HTMLInputElement>) => {
-      if (e.target.value === selectedNode?.content) {
+  const handleBlurNodeDetail = useCallback(
+    (info: keyof INode) => (e: React.FocusEvent<HTMLInputElement>) => {
+      if (e.target.value === selectedNode?.[info]) {
+        return;
+      }
+      //! 노드 내용 변경 요청
+    },
+    [selectedNode]
+  );
+  const handleChangeNodeDetail = useCallback(
+    (info: keyof INode) => (value: string) => {
+      if (value === selectedNode?.[info]) {
         return;
       }
       //! 노드 내용 변경 요청
@@ -23,7 +35,7 @@ export const NodeDetailWrapper: React.FC<IProps> = () => {
   return selectedNode === null ? null : (
     <PopupLayout title={selectedNode.backlogId} onClose={handleCloseButton} popupStyle='normal'>
       <PopupItemLayout title={'내용'}>
-        <Input inputStyle='gray' onBlur={handleChangeNodeContent} defaultValue={selectedNode.content} margin='0.2rem 0 0 0'></Input>
+        <Input inputStyle='gray' onBlur={handleBlurNodeDetail('content')} defaultValue={selectedNode.content} margin='0.2rem 0 0 0'></Input>
       </PopupItemLayout>
       <PopupItemLayout title={'세부사항'}>
         <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
@@ -39,7 +51,12 @@ export const NodeDetailWrapper: React.FC<IProps> = () => {
           <Input inputStyle='small' id='expectedTime' margin='0.1rem 0'></Input>
         </Label>
         <Label label='중요도' labelStyle='small' ratio={0.5} htmlFor='priority'>
-          <Input inputStyle='small' id='priority' margin='0.1rem 0'></Input>
+          <Dropdown
+            dropdownStyle='small'
+            items={priorityList}
+            value={selectedNode.priority}
+            onValueChange={handleChangeNodeDetail('priority')}
+          />
         </Label>
       </PopupItemLayout>
       <PopupItemLayout title={'라벨'}>라벨정보</PopupItemLayout>

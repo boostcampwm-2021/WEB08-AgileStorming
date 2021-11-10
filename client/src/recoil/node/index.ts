@@ -1,4 +1,3 @@
-import { IUser } from 'recoil/user';
 import { Levels } from 'utils/helpers';
 import { atom } from 'recoil';
 
@@ -9,13 +8,13 @@ export interface INode {
   content: string;
   children: Array<number>;
   label: number[];
-  sprint: number | null;
-  assignee: IUser | null;
+  sprint: number | undefined;
+  assignee: string | undefined;
   createdAt: string;
-  expectedAt: string | null;
-  closedAt: Date | null;
-  expectedTime: 1 | null;
-  priority: 1 | null;
+  expectedAt: string | undefined;
+  closedAt: string | undefined;
+  expectedTime: string | undefined;
+  priority: string | undefined;
   comment: [];
 }
 
@@ -26,13 +25,13 @@ const sampleNode: INode = {
   content: '화살표 클릭으로 월별로 달력을 이동할 수 있다.',
   children: [10, 11],
   label: [1, 2],
-  sprint: null,
-  assignee: { id: 1, name: '조성현', color: '000000', icon: 'chicken' }, // id로 프로젝트 전체 멤버랑 join
+  sprint: undefined,
+  assignee: '조성현',
   createdAt: new Date().toISOString(),
   expectedAt: new Date().toISOString(),
-  closedAt: null,
-  expectedTime: 1,
-  priority: 1,
+  closedAt: undefined,
+  expectedTime: '1시간',
+  priority: '높음',
   comment: [],
 };
 
