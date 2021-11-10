@@ -19,16 +19,15 @@ export class SocketManager {
     this.socket.on('left', (id) => {
       console.log('left', id);
     });
-    this.socket.on('event', (data) => {
-      console.log('event', data);
+    this.socket.on('event', (eventLog, dbData) => {
+      console.log('event', eventLog, dbData);
     });
-    const nodeFrom = '';
-    const nodeTo = '';
-    const dataFrom = '';
-    setTimeout(
-      () => this.socket.emit('event', 'ADD_NODE', JSON.stringify({ nodeFrom, nodeTo, dataFrom, dataTo: { content: '123' } })),
-      1000
-    );
+    const eventType = 'DELETE_NODE';
+    const nodeFrom = 20;
+    const nodeTo = null;
+    const dataFrom = { nodeId: 26 };
+    const dataTo = { content: '123345', posX: '1', posY: '2' };
+    setTimeout(() => this.socket.emit('event', eventType, JSON.stringify({ nodeFrom, nodeTo, dataFrom, dataTo })), 1000);
 
     SocketManager.instance = this;
   }
