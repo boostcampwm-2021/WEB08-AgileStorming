@@ -5,10 +5,6 @@ import { verifyToken } from '../middlewares/auth';
 import { identifyUser } from '../middlewares/user';
 const router = Router();
 
-interface userToken {
-  id: string;
-}
-
 router.get('/', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
   try {
     const projectList = await projectService.getUserProject(res.locals.user.id);
