@@ -43,12 +43,12 @@ const socketIO = (server, origin) => {
     const handleNewEvent = async (data: Record<number, object>) => {
       const eventData = data[0][1][0][1];
       const dbData = await convertEvent(eventData);
-      io.in(projectId).emit('event', eventData, dbData);
+      socket.to(projectId).emit('event', eventData, dbData);
     };
 
     const handleNewUser = () => {
       addUserToProject(id, projectId);
-      socket.emit('new');
+      io.in(projectId).emit('new', id);
     };
 
     socket.join(projectId);

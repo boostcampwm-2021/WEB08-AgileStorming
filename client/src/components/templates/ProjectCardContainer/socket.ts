@@ -12,7 +12,7 @@ export class SocketManager {
       transports: ['websocket'],
     });
     this.socketProjectId = projectId;
-    this.socket.once('new', () => {
+    this.socket.on('new', () => {
       console.log('new');
     });
     this.socket.once('init', (userList) => {
