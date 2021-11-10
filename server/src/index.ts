@@ -38,7 +38,7 @@ app.use(
   })
 );
 
-app.use('/', router);
+app.use('/api', router);
 
 app.use(function (err, req, res, next) {
   if (err.status) {

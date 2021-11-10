@@ -39,15 +39,16 @@ const socketIO = (server, origin) => {
     const { id } = socket.decoded;
     const projectId = socket.handshake.query.projectId as string;
 
-    const handleNewEvent = (data: Record<number, object>) => {
-      data[0][1].forEach((element) => {
-        socket.to(projectId).emit('event', element[1]);
-        convertEvent(element[1]);
-      });
+    const handleNewEvent = async (data: Record<number, object>) => {
+      const eventData = data[0][1][0][1];
+      const dbData = await convertEvent(eventData);
+      io.in(projectId).emit('event', eventData, dbData);
     };
 
     socket.join(projectId);
+
     if (!userInRooms.hasOwnProperty(projectId)) {
+      xread(projectId, '$', handleNewEvent);
       userInRooms[projectId] = [id];
     } else {
       userInRooms[projectId].push(id);
@@ -62,8 +63,7 @@ const socketIO = (server, origin) => {
 
     socket.on('leave', (projectId) => {
       socket.leave(projectId);
-      userInRooms[projectId] = userInRooms[projectId].filter((user) => user !== id);
-      socket.to(projectId).emit('left', id);
+      socket.disconnect();
     });
 
     socket.on('event', (type, data) => {

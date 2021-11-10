@@ -6,7 +6,7 @@ export class Mindmap {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Project, (project) => project.mindmap, { cascade: true })
+  @ManyToOne(() => Project, (project) => project.mindmap, { onDelete: 'CASCADE' })
   project: Project;
 
   @Column({ default: null })

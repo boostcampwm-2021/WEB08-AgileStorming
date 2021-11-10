@@ -21,6 +21,6 @@ export class Project {
   @JoinTable()
   users: User[];
 
-  @OneToMany(() => Mindmap, (mindmap) => mindmap.project)
+  @OneToMany(() => Mindmap, (mindmap) => mindmap.project, { cascade: true })
   mindmap: Mindmap[];
 }
