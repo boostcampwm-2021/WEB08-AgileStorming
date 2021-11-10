@@ -39,11 +39,10 @@ const socketIO = (server, origin) => {
     const { id } = socket.decoded;
     const projectId = socket.handshake.query.projectId as string;
 
-    const handleNewEvent = (data: Record<number, object>) => {
-      data[0][1].forEach((element) => {
-        io.in(projectId).emit('event', element[1]);
-        convertEvent(element[1]);
-      });
+    const handleNewEvent = async (data: Record<number, object>) => {
+      const eventData = data[0][1][0][1];
+      const dbData = await convertEvent(eventData);
+      io.in(projectId).emit('event', eventData, dbData);
     };
 
     socket.join(projectId);
