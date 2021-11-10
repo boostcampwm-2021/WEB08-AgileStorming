@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 import { useHistory } from 'react-router-dom';
 import { clock, plusCircle } from 'img';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { IMindNodes, mindNodesState, selectedNodeState } from 'recoil/mindmap';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { getNextMapState, IMindNodes, mindmapState, mindNodesState } from 'recoil/mindmap';
 import { getId, idxToLevel, levelToIdx } from 'utils/helpers';
 import { BoxButton } from 'components/atoms';
 import useProjectId from 'hooks/useRoomId';
+import { selectedNodeIdState } from 'recoil/node';
 
 const Wrapper = styled.div`
   ${({ theme }) => theme.flex.row}
@@ -18,24 +19,29 @@ const Wrapper = styled.div`
 
 interface ITempNodeParams {
   mindNodes: IMindNodes;
-  selectedNodeId: string | null;
+  selectedNodeId: number | null;
 }
 
+const TEMP_NODE_ID = -1;
+
 const createTempNode = ({ mindNodes, selectedNodeId }: ITempNodeParams) => {
-  const nodeId = selectedNodeId === null ? 0 : getId(selectedNodeId);
-  const parentNode = mindNodes.get(nodeId);
+  const parentNode = mindNodes.get(selectedNodeId ?? 0);
   const level = idxToLevel(levelToIdx(parentNode!.level) + 1);
-  const tempNode = { nodeId: -1, level: level, content: '', children: [] };
 
-  parentNode!.children.push(-1);
-  mindNodes.set(-1, tempNode);
+  const tempNode = { nodeId: TEMP_NODE_ID, level: level, content: '', children: [] };
 
-  const tempNodeId = `${level}#-1`;
-  return tempNodeId;
+  parentNode!.children.push(TEMP_NODE_ID);
+  mindNodes.set(parentNode!.nodeId, parentNode!);
+  mindNodes.set(TEMP_NODE_ID, tempNode);
+
+  const newMapState = getNextMapState({ mindNodes, rootId: 0 });
+
+  return newMapState;
 };
 
 const MindmapWrapper: React.FC = () => {
-  const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeState);
+  const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeIdState);
+  const setMindMap = useSetRecoilState(mindmapState);
   const mindNodes = useRecoilValue(mindNodesState);
   const hitory = useHistory();
   const projectId = useProjectId();
@@ -45,10 +51,11 @@ const MindmapWrapper: React.FC = () => {
   };
 
   const handlePlusNodeBtnClick = () => {
-    if (selectedNodeId && getId(selectedNodeId) === -1) return;
+    if (selectedNodeId === -1) return;
 
-    const tempNodeId = createTempNode({ mindNodes, selectedNodeId });
-    setSelectedNodeId(tempNodeId);
+    const newMapState = createTempNode({ mindNodes, selectedNodeId });
+    setSelectedNodeId(TEMP_NODE_ID);
+    setMindMap(newMapState);
   };
 
   return (

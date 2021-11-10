@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { useRecoilValue } from 'recoil';
 import Node from 'components/atoms/Node';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect } from 'utils/helpers';
 import { Path } from '../../molecules';
-import { IMindNodes, selectedNodeState } from 'recoil/mindmap';
+import { IMindNodes } from 'recoil/mindmap';
+import { selectedNodeIdState } from 'recoil/node';
+import { Input } from 'components/atoms';
 
 interface ITreeProps {
   nodeId: number;
@@ -32,10 +34,9 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes, parentCoord }) => {
   const isRoot = nodeId === 0;
   const node = mindNodes.get(nodeId);
   const { level, content, children } = node!;
-  const id = `${level}#${nodeId}`;
 
-  const selectedNodeId = useRecoilValue(selectedNodeState);
-  let isSelected = selectedNodeId === id;
+  const selectedNodeId = useRecoilValue(selectedNodeIdState);
+  let isSelected = selectedNodeId === nodeId;
 
   const [coord, setCoord] = useState<TCoord | null>(null);
   const [rect, setRect] = useState<TRect | null>(null);
@@ -59,9 +60,22 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindNodes, parentCoord }) => {
     setRect(calcRect({ parentCoord, currentCoord, gap, type }));
   }, [parentCoord, mindNodes]);
 
+  const handleNodeContentFocusout = (event: FormEvent) => {
+    console.log((event.target as HTMLInputElement).value);
+  };
+
+  const handleNodeContentEnter = (event: React.KeyboardEvent) => {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    console.log((event.target as HTMLInputElement).value);
+  };
+
   return (
-    <NodeContainer id={id + 'container'} ref={containerRef} isRoot={isRoot} draggable='true' className='mindmap-area'>
-      <Node ref={nodeRef} id={id} level={level} isSelected={isSelected} className='node mindmap-area'>
+    <NodeContainer id={nodeId + 'container'} ref={containerRef} isRoot={isRoot} draggable='true' className='mindmap-area'>
+      <Node ref={nodeRef} id={nodeId.toString()} level={level} isSelected={isSelected} className='node mindmap-area'>
+        {nodeId === -1 ? (
+          <Input inputStyle='small' autoFocus onBlur={handleNodeContentFocusout} onKeyPress={handleNodeContentEnter} />
+        ) : null}
         {content}
       </Node>
       <ChildContainer>

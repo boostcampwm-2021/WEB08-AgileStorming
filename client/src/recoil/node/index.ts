@@ -1,5 +1,5 @@
+import { atom, selector } from 'recoil';
 import { Levels } from 'utils/helpers';
-import { atom } from 'recoil';
 
 export interface INode {
   nodeId: number;
@@ -35,7 +35,22 @@ const sampleNode: INode = {
   comment: [],
 };
 
-export const selectedNodeState = atom<INode | null>({
-  key: 'selectedNode',
-  default: sampleNode,
+export const nodeMapState = atom<Map<number, INode>>({
+  key: 'nodeMapAtom',
+  default: new Map(),
+});
+
+export const selectedNodeIdState = atom<number | null>({
+  key: 'selectedNodeIdAtom',
+  default: null,
+});
+
+export const selectedNodeState = selector({
+  key: 'selectedNodeState',
+  get: ({ get }) => {
+    const nodes = get(nodeMapState);
+    const selectedNodeId = get(selectedNodeIdState);
+
+    return selectedNodeId ? nodes.get(selectedNodeId) : null;
+  },
 });

@@ -61,5 +61,3 @@ export const mindNodesState = selector({
     return get(mindmapState).mindNodes;
   },
 });
-
-export const selectedNodeState = atom<string | null>({ key: 'selectedNodeAtom', default: null });
