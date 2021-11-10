@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Label, PopupItemLayout, PopupLayout } from 'components/molecules';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { selectedNodeState, INode } from 'recoil/node';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { selectedNodeState, INode, selectedNodeIdState } from 'recoil/node';
 import { priorityListState } from 'recoil/meta-data';
 import { Input } from 'components/atoms';
 import { isISODate, isPositiveNumber } from 'utils/form';
@@ -12,10 +12,11 @@ interface IProps {}
 
 export const NodeDetailWrapper: React.FC<IProps> = () => {
   const priorityList = useRecoilValue(priorityListState);
-  const [selectedNode, setSelectedNode] = useRecoilState(selectedNodeState);
+  const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
+  const selectedNode = useRecoilValue(selectedNodeState);
   const { showMessage } = useToast();
 
-  const handleCloseButton = () => setSelectedNode(null);
+  const handleCloseButton = () => setSelectedNodeId(null);
   const handleFocusAlarm = useCallback((msg: string) => (e: React.FocusEvent<HTMLInputElement>) => showMessage(msg), [showMessage]);
 
   const handleBlurNodeDetail = useCallback(
@@ -77,7 +78,7 @@ export const NodeDetailWrapper: React.FC<IProps> = () => {
     [selectedNode, showMessage]
   );
 
-  return selectedNode === null ? null : (
+  return selectedNode ? (
     <PopupLayout title={selectedNode.backlogId} onClose={handleCloseButton} popupStyle='normal'>
       <PopupItemLayout title={'내용'}>
         <Input defaultValue={selectedNode.content} onBlur={handleBlurNodeDetail('content')} inputStyle='gray' margin='0.2rem 0 0 0'></Input>
@@ -133,7 +134,7 @@ export const NodeDetailWrapper: React.FC<IProps> = () => {
       </PopupItemLayout>
       <PopupItemLayout title={'라벨'}>라벨정보</PopupItemLayout>
     </PopupLayout>
-  );
+  ) : null;
 };
 
 export default NodeDetailWrapper;

@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom } from 'recoil';
 import { Levels } from 'utils/helpers';
 
 export interface IMindmapData {
@@ -54,12 +54,3 @@ export const mindmapState = atom<IMindmapData>({
   key: 'mindmapAtom',
   default: getDummyMindmapData(),
 });
-
-export const mindNodesState = selector({
-  key: 'mindNodesState',
-  get: ({ get }) => {
-    return get(mindmapState).mindNodes;
-  },
-});
-
-export const selectedNodeState = atom<string | null>({ key: 'selectedNodeAtom', default: null });

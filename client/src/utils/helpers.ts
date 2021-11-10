@@ -93,7 +93,25 @@ const calcRect = ({ parentCoord, currentCoord, gap, type }: ICalcRectParams): IR
   type: type,
 });
 
+const getNewNode = (id: number, level: Levels, content: string) => ({
+  nodeId: id,
+  backlogId: '',
+  level: level,
+  content: content,
+  children: [],
+  label: [],
+  sprint: null,
+  assignee: null,
+  createdAt: new Date().toISOString(),
+  expectedAt: null,
+  closedAt: null,
+  expectedTime: null,
+  priority: null,
+  comment: [],
+});
+
 export {
+  getNewNode,
   calcRect,
   getType,
   getGap,
