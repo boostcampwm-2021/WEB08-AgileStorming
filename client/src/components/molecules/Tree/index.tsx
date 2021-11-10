@@ -66,7 +66,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
   const handleNodeContentFocusout = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
     const content = currentTarget.value;
 
-    if (removeIfEmptyTempNode(content)) return;
+    if (removeEmptyTempNode(content)) return;
     makeNewNode();
   };
 
@@ -75,7 +75,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     event.preventDefault();
     const content = event.currentTarget.value;
 
-    if (removeIfEmptyTempNode(content)) return;
+    if (removeEmptyTempNode(content)) return;
     makeNewNode();
   };
 
