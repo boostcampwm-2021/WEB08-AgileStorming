@@ -47,7 +47,9 @@ const socketIO = (server, origin) => {
     };
 
     socket.join(projectId);
+
     if (!userInRooms.hasOwnProperty(projectId)) {
+      xread(projectId, '$', handleNewEvent);
       userInRooms[projectId] = [id];
     } else {
       userInRooms[projectId].push(id);
