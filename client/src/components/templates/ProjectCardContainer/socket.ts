@@ -12,7 +12,12 @@ export class SocketManager {
       transports: ['websocket'],
     });
     this.socketProjectId = projectId;
-
+    this.socket.on('new', () => {
+      console.log('new');
+    });
+    this.socket.once('init', (userList) => {
+      console.log(userList);
+    });
     this.socket.on('joined', (id) => {
       console.log('joined', id);
     });
@@ -22,7 +27,7 @@ export class SocketManager {
     this.socket.on('event', (eventLog, dbData) => {
       console.log('event', eventLog, dbData);
     });
-    const eventType = 'DELETE_NODE';
+    const eventType = 'ADD_NODE';
     const nodeFrom = 20;
     const nodeTo = null;
     const dataFrom = { nodeId: 26 };
