@@ -14,11 +14,11 @@ export interface IHistoryData extends IDescription {
   posY?: number;
 }
 
-const getUser = (id: number) => ({ id: id, icon: whiteCloseBtn, color: 'blue', name: 'lapa' });
+const getUser = (id: string) => ({ id: id, icon: whiteCloseBtn, color: 'blue', name: 'lapa' });
 const dummyData = [
-  { modifier: getUser(1), type: 'UPDATE_NODE_POSITION', from: 7, to: 9, target: 11, content: 'TASK' } as const,
-  { modifier: getUser(1), type: 'ADD_NODE', from: 8, target: 19, content: 'TASK' } as const,
-  { modifier: getUser(1), type: 'ADD_NODE', from: 4, target: 18, content: 'TASK' } as const,
+  { modifier: getUser('lapa'), type: 'UPDATE_NODE_POSITION', from: 7, to: 9, target: 11, content: 'TASK' } as const,
+  { modifier: getUser('lapa'), type: 'ADD_NODE', from: 8, target: 19, content: 'TASK' } as const,
+  { modifier: getUser('lapa'), type: 'ADD_NODE', from: 4, target: 18, content: 'TASK' } as const,
 ];
 
 const HistoryBar: React.FC = () => {
