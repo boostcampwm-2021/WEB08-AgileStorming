@@ -10,3 +10,4 @@ export { default as PlayController } from 'components/molecules/PlayController';
 export { default as HistoryLog } from 'components/molecules/HistoryLog';
 export { default as Profile } from 'components/molecules/Profile';
 export { default as Spinner } from 'components/molecules/Spinner';
+export { default as HistoryWindow } from 'components/molecules/HistoryWindow';

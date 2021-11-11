@@ -10,3 +10,4 @@ export { default as MindmapTree } from 'components/organisms/MindmapTree';
 export { default as Header } from 'components/organisms/Header';
 export { default as HistoryBar } from 'components/organisms/HistoryBar';
 export { default as UserList } from 'components/organisms/UserList';
+export { default as HistoryBackground } from 'components/organisms/HistoryBackground';

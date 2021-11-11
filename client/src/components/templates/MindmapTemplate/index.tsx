@@ -6,7 +6,7 @@ import { Mindmap, MindmapBtnWrapper } from 'components/organisms';
 const MindmapTemplate: React.FC = () => {
   const mindmapData = useRecoilValue(mindmapState);
   return (
-    <MindmapBackground className='mindmap-area'>
+    <MindmapBackground className='mindmap-area background'>
       <Mindmap mindmapData={mindmapData} />
       <MindmapBtnWrapper />
     </MindmapBackground>
