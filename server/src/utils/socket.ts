@@ -48,7 +48,7 @@ const socketIO = (server, origin) => {
 
     const handleNewUser = () => {
       addUserToProject(id, projectId);
-      socket.to(projectId).emit('new', id);
+      io.in(projectId).emit('new', id);
     };
 
     socket.join(projectId);
