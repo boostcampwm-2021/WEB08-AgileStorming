@@ -1,14 +1,68 @@
-import styled from '@emotion/styled';
-
-const Wrapper = styled.div`
-  background-color: ${({ theme }) => theme.color.bgWhite};
-  width: 100%;
-  margin: 0 2rem;
-  height: 70px;
-`;
+import { IconWrapper, Wrapper } from './style';
+import { closeIcon } from 'img';
+import { IconImg } from 'components/atoms';
+import { useEffect, useRef } from 'react';
 
 const HistoryWindow = () => {
-  return <Wrapper></Wrapper>;
+  const scrollRef = useRef(null);
+  const data = dummy;
+
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    (scrollRef.current as HTMLElement).scrollIntoView();
+  }, [scrollRef.current]);
+
+  return (
+    <Wrapper>
+      {data.map(({ icon, color }, idx) => (
+        <IconWrapper key={idx} color={color}>
+          <IconImg imgSrc={icon} altText={`히스토리 ${idx + 1}`} />
+        </IconWrapper>
+      ))}
+      <div ref={scrollRef} id='scrollEnd' />
+    </Wrapper>
+  );
 };
 
 export default HistoryWindow;
+
+const dummy = [
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'skyblue' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+  { icon: closeIcon, color: 'red' },
+];
