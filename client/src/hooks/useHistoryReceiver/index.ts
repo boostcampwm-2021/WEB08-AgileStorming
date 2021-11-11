@@ -14,26 +14,23 @@ export interface IHistoryReceiver {
   (props: IHistory): void;
 }
 
-interface IMoveData {
-  oldParentNode: INode;
-  newParentNode: INode;
-  levelChangeNodes: INode[];
-}
-
 const useHistoryReceiver = ({ mindmap, setMindmap, setHistory }: IProps) => {
   const historyReceiver = (history: IHistory) => {
-    const { type, projectId, user, data } = history;
+    let {
+      type,
+      data: { nodeFrom, nodeTo, dataFrom, dataTo },
+    } = history;
     const nextMapState = getNextMapState(mindmap);
     switch (type) {
       case eventType.ADD_NODE:
         break;
       case eventType.MOVE_NODE:
-        const { oldParentNode, newParentNode, levelChangeNodes } = data as IMoveData;
-        const changeNodes = [oldParentNode, newParentNode, ...levelChangeNodes];
-        changeNodes.forEach((node) => nextMapState.mindNodes.set(node.nodeId, { ...node, children: [...node.children] }));
+        const nextNodes = dataTo as INode[];
+        nextNodes.forEach((node) => nextMapState.mindNodes.set(node.nodeId, { ...node, children: [...node.children] }));
         setMindmap(nextMapState);
         break;
       case eventType.DELETE_NODE:
+        console.log(nodeFrom, nodeTo, dataFrom);
         break;
       default:
         break;
