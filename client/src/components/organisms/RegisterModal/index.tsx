@@ -15,7 +15,7 @@ interface INewUser {
 const RegisterModal: React.FC<IRegisterModalProps> = () => {
   const newUser = useRef<INewUser>({ id: '', name: '' });
   const { hideModal } = useModal();
-  const { showMessage } = useToast();
+  const { showMessage, showError } = useToast();
 
   const handleIdChange = (e: ChangeEvent<HTMLInputElement>) => (newUser.current.id = e.target.value);
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => (newUser.current.name = e.target.value);
@@ -32,7 +32,7 @@ const RegisterModal: React.FC<IRegisterModalProps> = () => {
           hideModal();
         }
       })
-      .catch((err) => showMessage(err.response.data.msg));
+      .catch((err) => (err.response?.data.msg ? showMessage(err.response?.data.msg) : showError(err)));
   };
   return (
     <>
