@@ -2,7 +2,6 @@ import { eventType } from 'hooks/useHistoryEmitter';
 import { SetterOrUpdater } from 'recoil';
 import { IHistories, IHistory } from 'recoil/history';
 import { getNextMapState, IMindmapData, IMindNode } from 'recoil/mindmap';
-import { INode } from 'recoil/node';
 
 export interface IProps {
   mindmap: IMindmapData;
@@ -27,7 +26,7 @@ export const historyHandler = ({ mindmap, setMindmap, history, isForward }: IHis
     data: { nodeFrom, dataFrom, dataTo },
   } = history;
   const nextMapState = getNextMapState(mindmap);
-  const setChangeNodes = (nextMapState: IMindmapData, nodes: INode[]) => {
+  const setChangeNodes = (nextMapState: IMindmapData, nodes: IMindNode[]) => {
     nodes.forEach((node) => nextMapState.mindNodes.set(node.nodeId, { ...node, children: node.children }));
   };
   switch (type) {
@@ -42,8 +41,8 @@ export const historyHandler = ({ mindmap, setMindmap, history, isForward }: IHis
       else nextMapState.mindNodes.set(nodeFrom!, dataFrom as IMindNode);
       break;
     case eventType.MOVE_NODE:
-      if (isForward) setChangeNodes(nextMapState, dataTo as INode[]);
-      else setChangeNodes(nextMapState, dataFrom as INode[]);
+      if (isForward) setChangeNodes(nextMapState, dataTo as IMindNode[]);
+      else setChangeNodes(nextMapState, dataFrom as IMindNode[]);
       break;
     case eventType.DELETE_NODE:
       if (isForward) nextMapState.mindNodes.delete(nodeFrom!);

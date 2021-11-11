@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
 import { Label, PopupItemLayout, PopupLayout } from 'components/molecules';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { selectedNodeState, INode, selectedNodeIdState } from 'recoil/node';
+import { selectedNodeState, selectedNodeIdState } from 'recoil/node';
 import { priorityListState } from 'recoil/meta-data';
 import { Input } from 'components/atoms';
 import { isISODate, isPositiveNumber } from 'utils/form';
 import Dropdown from 'components/molecules/Dropdown';
 import useToast from 'hooks/useToast';
+import { IMindNode } from 'recoil/mindmap';
 
 interface IProps {}
 
@@ -20,7 +21,7 @@ export const NodeDetailWrapper: React.FC<IProps> = () => {
   const handleFocusAlarm = useCallback((msg: string) => (e: React.FocusEvent<HTMLInputElement>) => showMessage(msg), [showMessage]);
 
   const handleBlurNodeDetail = useCallback(
-    (info: keyof INode) => (e: React.FocusEvent<HTMLInputElement>) => {
+    (info: keyof IMindNode) => (e: React.FocusEvent<HTMLInputElement>) => {
       if (e.target.value === selectedNode?.[info]) {
         return;
       }
@@ -31,7 +32,7 @@ export const NodeDetailWrapper: React.FC<IProps> = () => {
   );
 
   const handleChangeNodeDetail = useCallback(
-    (info: keyof INode) => (value: string) => {
+    (info: keyof IMindNode) => (value: string) => {
       if (value === selectedNode?.[info]) {
         return;
       }

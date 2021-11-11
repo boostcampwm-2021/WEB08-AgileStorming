@@ -1,22 +1,5 @@
 import { atom, selector } from 'recoil';
-import { Levels } from 'utils/helpers';
-
-export interface INode {
-  nodeId: number;
-  backlogId: string;
-  level: Levels;
-  content: string;
-  children: Array<number>;
-  label: number[];
-  sprint: string | undefined;
-  assignee: string | undefined;
-  createdAt: string;
-  expectedAt: string | undefined;
-  closedAt: string | undefined;
-  expectedTime: string | undefined;
-  priority: string | undefined;
-  comment: [];
-}
+import { mindmapNodesState } from 'recoil/mindmap';
 
 // const sampleNode: INode = {
 //   nodeId: 1,
@@ -35,11 +18,6 @@ export interface INode {
 //   comment: [],
 // };
 
-export const nodeMapState = atom<Map<number, INode>>({
-  key: 'nodeMapAtom',
-  default: new Map(),
-});
-
 export const selectedNodeIdState = atom<number | null>({
   key: 'selectedNodeIdAtom',
   default: null,
@@ -48,9 +26,8 @@ export const selectedNodeIdState = atom<number | null>({
 export const selectedNodeState = selector({
   key: 'selectedNodeState',
   get: ({ get }) => {
-    const nodes = get(nodeMapState);
+    const nodes = get(mindmapNodesState);
     const selectedNodeId = get(selectedNodeIdState);
-
     return selectedNodeId ? nodes.get(selectedNodeId) : null;
   },
 });

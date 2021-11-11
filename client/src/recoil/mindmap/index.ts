@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 import { Levels } from 'utils/helpers';
 
 export interface IMindmapData {
@@ -11,6 +11,16 @@ export interface IMindNode {
   level: Levels;
   content: string;
   children: Array<number>;
+  backlogId?: string;
+  label?: number[];
+  sprint?: string | undefined;
+  assignee?: string | undefined;
+  createdAt?: string;
+  expectedAt?: string | undefined;
+  closedAt?: string | undefined;
+  expectedTime?: string | undefined;
+  priority?: string | undefined;
+  comment?: [];
 }
 
 export type IMindNodes = Map<number, IMindNode>;
@@ -53,4 +63,12 @@ const getDummyMindmapData = (): IMindmapData => {
 export const mindmapState = atom<IMindmapData>({
   key: 'mindmapAtom',
   default: getDummyMindmapData(),
+});
+
+export const mindmapNodesState = selector({
+  key: 'mindmapNodesState',
+  get: ({ get }) => {
+    const { mindNodes } = get(mindmapState);
+    return mindNodes;
+  },
 });

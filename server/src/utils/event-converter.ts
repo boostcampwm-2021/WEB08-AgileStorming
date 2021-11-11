@@ -1,6 +1,6 @@
 import { createNode, updateNode, deleteNode } from '../services/mindmap';
 
-type eventType = 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_CONTENT';
+type eventType = 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_CONTENT' | 'MOVE_NODE';
 enum eventArgs {
   'type' = 1,
   'project' = 3,
@@ -22,6 +22,9 @@ const eventFunction = (): Record<eventType, any> => {
     UPDATE_NODE_CONTENT: (data: string) => {
       const { nodeFrom, dataTo } = JSON.parse(data);
       updateNode(nodeFrom, dataTo);
+      return;
+    },
+    MOVE_NODE: (data: string) => {
       return;
     },
   };

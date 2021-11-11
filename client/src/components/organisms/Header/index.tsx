@@ -2,6 +2,7 @@ import React from 'react';
 import * as img from 'img';
 import styled from '@emotion/styled';
 import { useHistory } from 'react-router';
+import useProjectId from 'hooks/useRoomId';
 
 interface IProps {
   children?: React.ReactNode;
@@ -31,19 +32,20 @@ const BoxLink = styled.div`
 
 const Header: React.FC<IProps> = ({ children }: IProps) => {
   const history = useHistory();
+  const projectId = useProjectId();
 
   const handleLinkClick = (link: any) => {
-    history.push(link);
+    history.push(link + projectId);
   };
 
   return (
     <>
       <HeaderContainer>
         <BackIcon src={img.back} onClick={() => history.push('/project')} alt='IconImgNoHoverStyle' />
-        <BoxLink onClick={handleLinkClick.bind(null, '/mindmap/123')}>마인드맵</BoxLink>
-        <BoxLink onClick={handleLinkClick.bind(null, '/kanban/123')}>칸반보드</BoxLink>
-        <BoxLink onClick={handleLinkClick.bind(null, '/calendar/123')}>캘린더</BoxLink>
-        <BoxLink onClick={handleLinkClick.bind(null, '/chart/123')}>차트</BoxLink>
+        <BoxLink onClick={handleLinkClick.bind(null, '/mindmap/')}>마인드맵</BoxLink>
+        <BoxLink onClick={handleLinkClick.bind(null, '/kanban/')}>칸반보드</BoxLink>
+        <BoxLink onClick={handleLinkClick.bind(null, '/calendar/')}>캘린더</BoxLink>
+        <BoxLink onClick={handleLinkClick.bind(null, '/chart/')}>차트</BoxLink>
       </HeaderContainer>
       {children}
     </>
