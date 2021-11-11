@@ -1,7 +1,7 @@
 import React from 'react';
 import MindmapTree from 'components/organisms/MindmapTree';
 import { IMindmapData, getNextMapState, IMindNodes } from 'recoil/mindmap';
-import useHistoryEmitter, { eventType, IHistoryEmitter } from 'hooks/useHistoryEmitter';
+import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import useDragEvent from 'hooks/useDragEvent';
 import { getRegexNumber, idxToLevel, levelToIdx } from 'utils/helpers';
 import { IData } from 'recoil/history';

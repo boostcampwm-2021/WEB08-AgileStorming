@@ -24,12 +24,6 @@ export const historyState = atom<IHistories>({
   default: { histories: [] },
 });
 
-enum eventArgs {
-  'type' = 1,
-  'project' = 3,
-  'user' = 5,
-  'data' = 7,
-}
 export const getParsedHistory = (data: string[]): IHistory => {
   const stringJson =
     data.reduce((acc: string, v: string, i: number) => {
