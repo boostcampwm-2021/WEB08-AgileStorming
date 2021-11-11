@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Global, ThemeProvider } from '@emotion/react';
 import { RecoilRoot } from 'recoil';
@@ -11,21 +12,23 @@ const App = () => {
   return (
     <ThemeProvider theme={common}>
       <RecoilRoot>
-        <Global styles={global} />
-        <Switch>
-          <Route path='/' exact component={LoginPage} />
-          <Route path='/project' component={ProjectPage} />
-          <Header>
-            <Route path='/mindmap/:projectId' component={MindmapPage} />
-            <Route path='/history/:projectId' component={HistoryPage} />
-            <Route path='/kanban/:projectId' component={KanbanPage} />
-            <Route path='/calendar/:projectId' component={CalendarPage} />
-            <Route path='/chart/:projectId' component={ChartPage} />
-          </Header>
-          <Redirect from='*' to='/' />
-        </Switch>
-        <GlobalModal />
-        <Toast />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Global styles={global} />
+          <Switch>
+            <Route path='/' exact component={LoginPage} />
+            <Route path='/project' component={ProjectPage} />
+            <Header>
+              <Route path='/mindmap/:projectId' component={MindmapPage} />
+              <Route path='/history/:projectId' component={HistoryPage} />
+              <Route path='/kanban/:projectId' component={KanbanPage} />
+              <Route path='/calendar/:projectId' component={CalendarPage} />
+              <Route path='/chart/:projectId' component={ChartPage} />
+            </Header>
+            <Redirect from='*' to='/' />
+          </Switch>
+          <GlobalModal />
+          <Toast />
+        </Suspense>
       </RecoilRoot>
     </ThemeProvider>
   );
