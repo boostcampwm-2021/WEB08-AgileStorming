@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { filterIcon } from 'img';
 import { BoxButton } from 'components/atoms';
-import { NodeDetailWrapper } from 'components/organisms';
+import { NodeDetailWrapper, UserList } from 'components/organisms';
 
 export const Template = styled.div`
   width: 100%;
@@ -36,7 +36,9 @@ const CommonLayout: React.FC<IProps> = ({ children }) => {
   return (
     <Template>
       {children}
-      <LeftInfo></LeftInfo>
+      <LeftInfo>
+        <UserList />
+      </LeftInfo>
       <RightInfo>
         <BoxButton onClick={handleFilterButton} btnStyle={'normal'} margin='1rem 0 0 auto'>
           <img src={filterIcon} alt='필터링 버튼'></img>
