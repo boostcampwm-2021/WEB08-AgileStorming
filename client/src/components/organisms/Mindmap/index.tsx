@@ -127,7 +127,7 @@ const MindMap: React.FC<IProps> = ({ mindmapData }) => {
     const droppedElem = event.target as HTMLElement;
     changeNodeParent({ nextMapData, nodeInfos, historyEmitter, draggedElem, droppedElem });
   };
-  useDragEvent({ drop: handleDropNode }, ['EPIC', 'STORY', 'ROOT', 'TASK'], 'skyblue');
+  useDragEvent({ drop: handleDropNode }, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'], 'skyblue');
 
   return <MindmapTree mindmapData={mindmapData} />;
 };

@@ -38,10 +38,6 @@ const initSocket = ({ projectId, setSocket, historyReceiver, userReceiver }: IIn
     const history = getParsedHistory(data);
     historyReceiver(history);
   });
-
-  socket.on('serverEmit', (data) => {
-    console.log('serverEmit');
-  });
   setSocket({ projectId });
 };
 
@@ -52,6 +48,7 @@ const useSocketSetup = () => {
   const setHistory = useSetRecoilState(historyState);
   const historyReceiver = useHistroyReceiver({ mindmap, setMindmap, setHistory });
   const userReceiver = useUserReceiver();
+
   useEffect(() => {
     const isNewProject = projectId !== newProjectId;
     if (isNewProject) {
