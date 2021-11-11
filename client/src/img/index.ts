@@ -11,6 +11,7 @@ import backwardBtnPath from './backwardBtn.svg';
 import playBtnPath from './playBtn.svg';
 import forwardBtnPath from './forwardBtn.svg';
 import whiteCloseBtnPath from './whiteCloseBtn.svg';
+import userPath from './user.png';
 
 export const share: string = sharePath;
 export const logo: string = logoPath;
@@ -25,3 +26,4 @@ export const backwardBtn: string = backwardBtnPath;
 export const playBtn: string = playBtnPath;
 export const forwardBtn: string = forwardBtnPath;
 export const whiteCloseBtn: string = whiteCloseBtnPath;
+export const userIcon: string = userPath;

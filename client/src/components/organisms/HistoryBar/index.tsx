@@ -31,7 +31,7 @@ const HistoryBar: React.FC = () => {
   const handleCloseHistoryBtnClick = () => {
     history.push(`/mindmap/${projectId}`);
   };
-  const dummyData = { modifier: { id: 1, icon: whiteCloseBtn, color: 'blue', name: 'lapa' } };
+  const dummyData = { modifier: { id: '123', icon: whiteCloseBtn, color: 'blue', name: 'lapa' } };
 
   return (
     <Wrapper>

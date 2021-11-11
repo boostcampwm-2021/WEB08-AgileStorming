@@ -35,4 +35,14 @@ router.delete('/delete', verifyToken, identifyUser, async (req: Request, res: Re
   }
 });
 
+router.get('/user-list', async (req: Request, res: Response, next: Next) => {
+  try {
+    const { projectId } = req.query;
+    const projectList = await projectService.getProjectUserList(projectId);
+    res.send(projectList);
+  } catch (e) {
+    next(e);
+  }
+});
+
 export default router;
