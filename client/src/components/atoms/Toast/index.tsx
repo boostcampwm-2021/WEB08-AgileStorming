@@ -33,7 +33,6 @@ const StyledToast = styled.div<IStyledToast>`
 
 const Toast = () => {
   const [toastList] = useRecoilState(toastState);
-  // const renderToastList  = toastList.filter((e) => )
   return (
     <StyledToastContainer>
       {toastList.map(({ id, show, message }) => (
