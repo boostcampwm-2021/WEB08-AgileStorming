@@ -34,7 +34,7 @@ const useUserReceiver = () => {
         break;
       case 'NEW':
         showMessage(`${data} 님이 새로 참여하셨습니다.`);
-        forceUserListReload((reload) => !reload);
+        forceUserListReload(new Date().toISOString());
         break;
       case 'INIT':
         const connectedUser: Record<string, boolean> = {};

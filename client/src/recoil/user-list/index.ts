@@ -13,9 +13,9 @@ export const connectedUserState = atom<Record<string, boolean>>({
   default: {},
 });
 
-export const forceReloadUserList = atom<boolean>({
+export const forceReloadUserList = atom<string>({
   key: 'reload',
-  default: false,
+  default: '',
 });
 
 export const queryUserListState = selector({
