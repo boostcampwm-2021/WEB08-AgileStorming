@@ -12,8 +12,8 @@ export interface IHistoryEmitterProps {
 
 export enum eventType {
   ADD_NODE = 'ADD_NODE',
-  DELETE_NODE = 'DELETE_NODE',
   MOVE_NODE = 'MOVE_NODE',
+  DELETE_NODE = 'DELETE_NODE',
   CHANGE_CONTENT = 'CHANGE_CONTENT',
   CHANGE_SPRINT = 'CHANGE_SPRINT',
   CHANGE_ASSIGNEE = 'CHANGE_ASSIGNEE',
@@ -34,9 +34,9 @@ const useHistoryEmitter = () => {
   };
 
   const addNode = ({ nodeFrom, dataTo }: IData) => historyEmitter({ type: eventType.ADD_NODE, payload: { nodeFrom, dataTo } });
-  const deleteNode = ({ nodeFrom, dataFrom }: IData) => historyEmitter({ type: eventType.DELETE_NODE, payload: { nodeFrom, dataFrom } });
   const moveNode = ({ nodeFrom, nodeTo, dataFrom, dataTo }: IData) =>
     historyEmitter({ type: eventType.MOVE_NODE, payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
+  const deleteNode = ({ nodeFrom, dataFrom }: IData) => historyEmitter({ type: eventType.DELETE_NODE, payload: { nodeFrom, dataFrom } });
   const changeContent = ({ nodeFrom, dataFrom, dataTo }: IData) =>
     historyEmitter({ type: eventType.CHANGE_CONTENT, payload: { nodeFrom, dataFrom, dataTo } });
   const changeSprint = ({ nodeFrom, dataFrom, dataTo }: IData) =>
@@ -52,8 +52,8 @@ const useHistoryEmitter = () => {
 
   return {
     addNode,
-    deleteNode,
     moveNode,
+    deleteNode,
     changeContent,
     changeSprint,
     changeAssignee,
