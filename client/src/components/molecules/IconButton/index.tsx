@@ -5,11 +5,13 @@ interface IProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   imgSrc: string;
   altText: string;
+  margin?: string;
+  zIdx?: string;
 }
 
-const IconButton: React.FC<IProps> = ({ onClick, imgSrc, altText }) => {
+const IconButton: React.FC<IProps> = ({ onClick, imgSrc, altText, margin, zIdx }) => {
   return (
-    <TransparentButton onClick={onClick}>
+    <TransparentButton onClick={onClick} margin={margin} zIdx={zIdx}>
       <IconImg imgSrc={imgSrc} altText={altText} />
     </TransparentButton>
   );
