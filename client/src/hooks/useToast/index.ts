@@ -1,20 +1,23 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { toastState } from 'recoil/toast';
 
-interface IUseToast {
-  showMessage: (message: string) => void;
-  hideMessage: () => void;
-}
-
-const useToast = (): IUseToast => {
+const useToast = () => {
   const setToast = useSetRecoilState(toastState);
   const id = useRef(0);
 
   const showMessage = (message: string) => {
     setToast((toastList) => [...toastList, { id: id.current, show: true, message }]);
-    const copyId = id.current;
-    setTimeout(() => hideMessage(copyId), 2000);
+    const timerId = id.current;
+    setTimeout(() => hideMessage(timerId), 2000);
+    id.current = id.current + 1;
+  };
+
+  const showError = (err: Error) => {
+    const message = err.message ?? '오류가 발생했습니다.';
+    setToast((toastList) => [...toastList, { id: id.current, show: true, message }]);
+    const timerId = id.current;
+    setTimeout(() => hideMessage(timerId), 2000);
     id.current = id.current + 1;
   };
 
@@ -33,7 +36,8 @@ const useToast = (): IUseToast => {
 
   return {
     showMessage,
-  } as IUseToast;
+    showError,
+  };
 };
 
 export default useToast;
