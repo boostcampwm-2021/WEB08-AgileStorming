@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import Background from 'components/atoms/Background';
-import { getCenterCoord, MINDMAP_BG_SIZE, numToPx } from 'utils/helpers';
+import { getCenterCoord } from 'utils/helpers';
 
 interface ICoord {
   clientX: number;
@@ -74,12 +74,7 @@ const MindmapBackground: React.FC<IProps> = ({ className, children }) => {
   }, [addListeners, removeListeners]);
 
   return (
-    <Background
-      id={'mindmapBackground'}
-      width={numToPx(MINDMAP_BG_SIZE.WIDTH)}
-      height={numToPx(MINDMAP_BG_SIZE.HEIGHT)}
-      className={className}
-    >
+    <Background id={'mindmapBackground'} className={className} bgSize='over' bgColor='bgWhite'>
       {children}
     </Background>
   );
