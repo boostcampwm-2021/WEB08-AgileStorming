@@ -1,6 +1,5 @@
-import { atom } from 'recoil';
-
-export type levels = 'ROOT' | 'EPIC' | 'STORY' | 'TASK';
+import { atom, selector } from 'recoil';
+import { Levels } from 'utils/helpers';
 
 export interface IMindmapData {
   rootId: number;
@@ -9,17 +8,30 @@ export interface IMindmapData {
 
 export interface IMindNode {
   nodeId: number;
-  level: levels;
+  level: Levels;
   content: string;
   children: Array<number>;
+  backlogId?: string;
+  label?: number[];
+  sprint?: string | undefined;
+  assignee?: string | undefined;
+  createdAt?: string;
+  expectedAt?: string | undefined;
+  closedAt?: string | undefined;
+  expectedTime?: string | undefined;
+  priority?: string | undefined;
+  comment?: [];
 }
 
 export type IMindNodes = Map<number, IMindNode>;
 
-export const getNextMapState = (mindmap: IMindmapData) => {
+export const getNextMapState = (prevState: IMindmapData) => {
+  const nextNodes = new Map(prevState.mindNodes);
+  nextNodes.forEach((value, key, mapObject) => mapObject.set(key, { ...value, children: [...value.children] }));
+
   return {
-    ...mindmap,
-    mindNodes: new Map(mindmap.mindNodes),
+    ...prevState,
+    mindNodes: nextNodes,
   };
 };
 
@@ -48,16 +60,15 @@ const getDummyMindmapData = (): IMindmapData => {
   };
 };
 
-// const initRootId = 0;
-// const initRootNode = {
-//   nodeId: initRootId,
-//   level: 'ROOT' as levels,
-//   content: '',
-//   children: [],
-// };
-
 export const mindmapState = atom<IMindmapData>({
   key: 'mindmapAtom',
-  // default: { rootId: initRootId, mindNodes: new Map([[initRootId, initRootNode]]) },
   default: getDummyMindmapData(),
+});
+
+export const mindmapNodesState = selector({
+  key: 'mindmapNodesState',
+  get: ({ get }) => {
+    const { mindNodes } = get(mindmapState);
+    return mindNodes;
+  },
 });

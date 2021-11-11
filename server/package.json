@@ -11,8 +11,9 @@
     "morgan": "^1.10.0",
     "mysql": "^2.14.1",
     "mysql2": "^2.3.2",
+    "redis": "^3.1.2",
     "reflect-metadata": "^0.1.10",
-    "socket.io": "^4.3.1",
+    "socket.io": "^4.3.2",
     "tsconfig-paths": "^3.11.0",
     "typeorm": "0.2.38",
     "typeorm-seeding": "^1.6.1"

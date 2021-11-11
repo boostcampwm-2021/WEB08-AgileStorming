@@ -1,28 +1,13 @@
-import styled from '@emotion/styled';
+import React, { InputHTMLAttributes } from 'react';
+import { StyledInput, TStyle } from './style';
 
-interface IStyleProps {
+interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+  inputStyle?: TStyle;
   margin?: string;
 }
 
-const Input = styled.input<IStyleProps>`
-  all: unset;
-  box-sizing: border-box;
-  width: 100%;
-  height: 47px;
-  padding: 0rem 1rem;
-  margin: ${(props) => props.margin ?? '0.5rem'};
-  border-radius: 0.5rem;
-  background-color: ${(props) => props.theme.color.bgWhite};
-  border: 1.5px solid ${(props) => props.theme.color.bgWhite};
+const BoxButton: React.FC<IProps> = ({ inputStyle = 'normal', margin = '0', ...props }) => {
+  return <StyledInput inputStyle={inputStyle} margin={margin} autoComplete={'off'} {...props} />;
+};
 
-  color: ${(props) => props.theme.color.black};
-  font-size: ${(props) => props.theme.fontSize.large};
-  font-weight: bold;
-  cursor: text;
-  ${(props) => props.theme.shadow};
-
-  :focus {
-    border: 1.5px solid ${(props) => props.theme.color.primary2};
-  }
-`;
-export default Input;
+export default BoxButton;

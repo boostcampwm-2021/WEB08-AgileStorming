@@ -1,25 +1,20 @@
 import React from 'react';
-import styled from '@emotion/styled';
+import { BackgroundDiv, TSize, TColor } from './style';
 
 interface IProps {
-  width?: string;
-  height?: string;
+  bgSize: TSize;
+  bgColor?: TColor;
+  zIndex?: number;
   children?: React.ReactNode;
   id?: string;
+  className?: string;
 }
 
-const WhiteBackground = styled.div<IProps>`
-  position: relative;
-  background-color: ${(props) => props.theme.color.bgWhite};
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-`;
-
-const Background = ({ width = '100vw', height = '100vh', children, id }: IProps) => {
+const Background: React.FC<IProps> = ({ className, bgColor, bgSize, children, id, zIndex }) => {
   return (
-    <WhiteBackground id={id} width={width} height={height}>
+    <BackgroundDiv id={id} className={className} bgColor={bgColor} bgSize={bgSize} zIndex={zIndex}>
       {children}
-    </WhiteBackground>
+    </BackgroundDiv>
   );
 };
 

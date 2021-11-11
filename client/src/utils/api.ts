@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_SERVER,
+  baseURL: process.env.REACT_APP_SERVER + 'api',
   withCredentials: true,
 });
 
@@ -19,17 +19,26 @@ export const authApi = {
 };
 
 export const project = {
-  get: () => {
-    api.get('/project');
+  get: async () => {
+    const projectList = await api.get('/project');
+    return projectList.data;
   },
-  create: (name: string) =>
-    api.post('/project/create', {
+  create: async (name: string) => {
+    const newProject = await api.post('/project/create', {
       name,
-    }),
+    });
+    return newProject.data;
+  },
   delete: (projectId: string) =>
     api.delete('/project/delete', {
       data: { projectId },
     }),
+  getUserList: async (projectId: string) => {
+    const userList = await api.get('/project/user-list', {
+      params: { projectId },
+    });
+    return userList;
+  },
 };
 
 export const API = {

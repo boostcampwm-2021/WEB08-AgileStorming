@@ -3,3 +3,6 @@ export const createCustomError = (status: number, msg: string) => {
   err.status = status;
   return err;
 };
+
+export * from './redis';
+export { default as socketIO } from './socket';

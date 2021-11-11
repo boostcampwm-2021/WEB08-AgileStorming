@@ -1,50 +1,45 @@
 import { Router, Request, Response, Next } from 'express';
 import { createCustomError } from '../utils';
 import * as projectService from '../services/project';
-import * as authService from '../services/auth';
+import { verifyToken } from '../middlewares/auth';
+import { identifyUser } from '../middlewares/user';
 const router = Router();
 
-interface userToken {
-  id: string;
-}
-
-router.get('/', async (req: Request, res: Response, next: Next) => {
+router.get('/', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
   try {
-    const { token } = req.cookies;
-    if (!token) throw createCustomError(403, 'needs login');
-    const decoded = await authService.verifyJWT(token);
-    const { id } = decoded as userToken;
-    const projectList = await projectService.getUserProject(id);
+    const projectList = await projectService.getUserProject(res.locals.user.id);
     res.send(projectList);
   } catch (e) {
     next(e);
   }
 });
 
-router.post('/create', async (req: Request, res: Response, next: Next) => {
+router.post('/create', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
   try {
-    const { token } = req.cookies;
-    if (!token) throw createCustomError(403, 'needs login');
-    const decoded = await authService.verifyJWT(token);
-    const { id } = decoded as userToken;
     const { name } = req.body;
     if (!name) throw createCustomError(400, 'no project name');
-    await projectService.createProject(name, id);
+    const newProject = await projectService.createProject(name, res.locals.user.id);
+    res.send(newProject);
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.delete('/delete', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
+  try {
+    const { projectId } = req.body;
+    await projectService.deleteProject(res.locals.user.id, projectId);
     res.sendStatus(200);
   } catch (e) {
     next(e);
   }
 });
 
-router.delete('/delete', async (req: Request, res: Response, next: Next) => {
+router.get('/user-list', async (req: Request, res: Response, next: Next) => {
   try {
-    const { token } = req.cookies;
-    if (!token) throw createCustomError(403, 'needs login');
-    const decoded = await authService.verifyJWT(token);
-    const { id } = decoded as userToken;
-    const { projectId } = req.body;
-    await projectService.deleteProject(id, projectId);
-    res.sendStatus(200);
+    const { projectId } = req.query;
+    const projectList = await projectService.getProjectUserList(projectId);
+    res.send(projectList);
   } catch (e) {
     next(e);
   }
