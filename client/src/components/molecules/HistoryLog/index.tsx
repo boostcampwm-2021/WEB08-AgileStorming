@@ -8,18 +8,27 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-interface IPros {
+export interface IDescription {
   modifier: IUser;
-  log: string;
+  type: 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_POSITION' | 'UPDATE_NODE_CONTENT';
+  content: string;
 }
 
-const HistoryLog: React.FC<IPros> = ({ modifier, log }) => {
+interface IProps {
+  description: IDescription | null;
+}
+
+const HistoryLog: React.FC<IProps> = ({ description }) => {
   return (
     <Wrapper>
-      <Profile user={modifier} />
-      <Title titleStyle='xlarge' color='white' margin='0 0 0 0.5rem' lineHeight={2}>
-        {log}
-      </Title>
+      {description ? (
+        <>
+          <Profile user={description.modifier} />
+          <Title titleStyle='xlarge' color='white' margin='0 0 0 0.5rem' lineHeight={2}>
+            {description.type}
+          </Title>
+        </>
+      ) : null}
     </Wrapper>
   );
 };
