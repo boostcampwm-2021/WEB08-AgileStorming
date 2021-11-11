@@ -1,5 +1,5 @@
 import useProjectId from 'hooks/useRoomId';
-import useHistroyReceiver, { IHistoryReceiver } from 'hooks/useHistoryReceiver';
+import useHistoryReceiver, { IHistoryReceiver } from 'hooks/useHistoryReceiver';
 import { useEffect } from 'react';
 import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
 import { getParsedHistory, historyState } from 'recoil/history';
@@ -25,13 +25,19 @@ const initSocket = ({ projectId, setSocket, historyReceiver, userReceiver }: IIn
 
   const { socket } = window;
 
-  socket.on('joined', (userId) => {
-    console.log('joined', userId);
-    userReceiver({ userId, type: 'JOIN' });
+  socket.once('init', (userList: string[]) => {
+    userReceiver({ data: userList, type: 'INIT' });
   });
-  socket.on('left', (userId) => {
-    console.log('left', userId);
-    userReceiver({ userId, type: 'LEFT' });
+
+  socket.on('new', (userId: string) => {
+    userReceiver({ data: userId, type: 'NEW' });
+  });
+
+  socket.on('joined', (userId: string) => {
+    userReceiver({ data: userId, type: 'JOIN' });
+  });
+  socket.on('left', (userId: string) => {
+    userReceiver({ data: userId, type: 'LEFT' });
   });
   socket.on('event', (data) => {
     const history = getParsedHistory(data);
@@ -46,7 +52,7 @@ const useSocketSetup = () => {
   const [{ projectId }, setSocket] = useRecoilState(socketState);
   const [mindmap, setMindmap] = useRecoilState(mindmapState);
   const setHistory = useSetRecoilState(historyState);
-  const historyReceiver = useHistroyReceiver({ mindmap, setMindmap, setHistory });
+  const historyReceiver = useHistoryReceiver({ mindmap, setMindmap, setHistory });
   const userReceiver = useUserReceiver();
 
   useEffect(() => {
