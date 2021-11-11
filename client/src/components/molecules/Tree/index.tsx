@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import Node from 'components/atoms/Node';
+import { Node } from 'components/atoms';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect } from 'utils/helpers';
 import { Path } from '../../molecules';
 import { getNextMapState, IMindmapData, mindmapState } from 'recoil/mindmap';

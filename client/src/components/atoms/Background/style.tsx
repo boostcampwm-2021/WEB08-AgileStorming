@@ -5,22 +5,25 @@ export type TSize = 'full' | 'over';
 
 interface IStyleProps {
   bgColor?: TColor;
-  bgSize?: TSize;
+  bgSize: TSize;
   position?: string;
+  zIndex?: number;
 }
 
 export const BackgroundDiv = styled.div<IStyleProps>`
-  position: ${({ position }) => position ?? 'relative'};
+  ${({ bgSize }) => bgSizeOptions[bgSize]}
+  position: ${({ position }) => position ?? 'absolute'};
   background-color: ${({ theme, bgColor }) => (bgColor ? theme.color[bgColor] : theme.color.bgWhite)};
+  z-index: ${({ zIndex }) => zIndex ?? 0};
 `;
 
 const bgSizeOptions: { [key in TSize]: string } = {
   full: `
-    width: 100%
-    heigth: 100%
+    width: 100%;
+    height: 100%;
     `,
   over: `
-    width: 5000px
-    hegit: 5000px
+    width: 5000px;
+    height: 5000px;
     `,
 };

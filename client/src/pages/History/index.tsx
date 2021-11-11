@@ -1,11 +1,13 @@
+import { Background } from 'components/atoms';
 import { MindmapBackground } from 'components/molecules';
-import { HistoryBar } from 'components/organisms';
+import { HistoryBackground, HistoryBar, Mindmap } from 'components/organisms';
 
 const HistoryPage = () => {
   return (
-    <MindmapBackground>
+    <>
+      <HistoryBackground />
       <HistoryBar />
-    </MindmapBackground>
+    </>
   );
 };
 

@@ -7,3 +7,5 @@ export { default as TransparentButton } from 'components/atoms/TransparentButton
 export { default as ModalBox } from 'components/atoms/ModalBox';
 export { default as ModalOverlay } from 'components/atoms/ModalOverlay';
 export { default as SmallText } from 'components/atoms/SmallText';
+export { default as Background } from 'components/atoms/Background';
+export { default as Node } from 'components/atoms/Node';

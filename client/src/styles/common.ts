@@ -31,7 +31,7 @@ const color: { [key in TColor]: string } = {
   gray2: '#BBBBBB',
   gray3: '#D7D7D7',
   gray4: '#EEEEEE',
-  gray5: '#BBBBBBBB',
+  gray5: '#BBBBBB99',
 };
 
 const calcRem = (px: number) => `${px / 16}rem`;
