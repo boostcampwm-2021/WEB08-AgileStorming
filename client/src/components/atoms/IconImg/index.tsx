@@ -7,7 +7,7 @@ interface IProps {
 }
 
 const StyledIconImg = styled.img`
-  padding: ${(props) => props.theme.padding.normal};
+  padding: ${(props) => props.theme.padding.small};
   :hover {
     cursor: pointer;
     border-radius: 99px;
