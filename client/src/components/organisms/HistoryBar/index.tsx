@@ -24,7 +24,6 @@ const dummyData = [
 const HistoryBar: React.FC = () => {
   const handleCloseHistoryBtnClick = useLinkClick('mindmap');
   const [currentDescription, setCurrentDescription] = useState<IDescription | null>(null);
-  const [lastDe];
 
   const handleHistoryClick = (historyData: IHistoryData, idx: number) => (event: MouseEvent) => {
     const { modifier, type, content, from, to, target, posX, posY } = historyData;
