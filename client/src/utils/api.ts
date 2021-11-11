@@ -33,6 +33,12 @@ export const project = {
     api.delete('/project/delete', {
       data: { projectId },
     }),
+  getUserList: async (projectId: string) => {
+    const userList = await api.get('/project/user-list', {
+      params: { projectId },
+    });
+    return userList;
+  },
 };
 
 export const API = {
