@@ -5,7 +5,12 @@ export interface IHistories {
   histories: IHistory[];
 }
 
-export type IData = unknown;
+export interface IData {
+  nodeFrom?: number;
+  nodeTo?: number;
+  dataFrom?: unknown;
+  dataTo?: unknown;
+}
 
 export interface IHistory {
   type: eventType;
@@ -19,9 +24,15 @@ export const historyState = atom<IHistories>({
   default: { histories: [] },
 });
 
+enum eventArgs {
+  'type' = 1,
+  'project' = 3,
+  'user' = 5,
+  'data' = 7,
+}
 export const getParsedHistory = (data: string[]): IHistory => {
   const stringJson =
-    data.reduce((acc: any, v: any, i: any) => {
+    data.reduce((acc: string, v: string, i: number) => {
       if (!(i % 2)) {
         acc += `"${v}":`;
       } else {

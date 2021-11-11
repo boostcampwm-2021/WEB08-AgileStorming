@@ -34,8 +34,8 @@ const initSocket = ({ projectId, setSocket, historyReceiver, userReceiver }: IIn
     userReceiver({ userId, type: 'LEFT' });
   });
   socket.on('event', (data) => {
-    console.log('event', data);
     const history = getParsedHistory(data);
+    console.log('event', history);
     historyReceiver(history);
   });
   setSocket({ projectId });
