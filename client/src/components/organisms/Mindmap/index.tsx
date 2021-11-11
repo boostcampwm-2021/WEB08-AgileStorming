@@ -1,7 +1,7 @@
 import React from 'react';
 import MindmapTree from 'components/organisms/MindmapTree';
 import { IMindmapData, getNextMapState, IMindNodes } from 'recoil/mindmap';
-import useSocketEmitter, { ISocketEmitter } from 'hooks/useSocketEmit';
+import useHistoryEmitter, { eventType, IHistoryEmitter } from 'hooks/useHistoryEmitter';
 import useDragEvent from 'hooks/useDragEvent';
 import { getRegexNumber, idxToLevel, levelToIdx } from 'utils/helpers';
 
@@ -19,7 +19,7 @@ type INodeInfos = Map<number, INodeInfo>;
 interface IChangeParentProps {
   nextMapData: IMindmapData;
   nodeInfos: INodeInfos;
-  socketEmitter: ISocketEmitter;
+  historyEmitter: IHistoryEmitter;
   draggedElem: HTMLElement;
   droppedElem: HTMLElement;
 }
@@ -64,7 +64,7 @@ const checkMoveCondition = ({ draggedDepth, draggedLevel, newParentLevel, oldPar
   return true;
 };
 
-const changeNodeParent = ({ nextMapData, nodeInfos, socketEmitter, draggedElem, droppedElem }: IChangeParentProps) => {
+const changeNodeParent = ({ nextMapData, nodeInfos, historyEmitter, draggedElem, droppedElem }: IChangeParentProps) => {
   const nextMapNodes = nextMapData.mindNodes;
   const [draggedNodeNum, oldParentNodeNum] = [getNodeNum(draggedElem), getNodeNum(getParentElem(draggedElem))];
   const [newParentNodeNum, newAncestorNodeNum] = [getNodeNum(droppedElem), getNodeNum(getParentElem(droppedElem))];
@@ -81,21 +81,27 @@ const changeNodeParent = ({ nextMapData, nodeInfos, socketEmitter, draggedElem, 
   if (!checkMoveCondition({ draggedDepth, draggedLevel, newParentLevel, oldParentLevelIdx, newParentLevelIdx })) return;
 
   oldParentNode.children = oldParentNode.children.filter((childNodeNum) => childNodeNum !== draggedNodeNum);
-  newParentNode.children.push(draggedNodeNum!);
+  if (!newParentNode.children.includes(draggedNodeNum!)) newParentNode.children.push(draggedNodeNum!);
   const isLevelChanged = newParentLevelIdx + 1 !== draggedLevelIdx;
+  const levelChangeNodes = [];
   if (isLevelChanged) {
     draggedNode.level = idxToLevel(newParentLevelIdx + 1);
     draggedNode.children.forEach((childId) => {
       const childLevel = idxToLevel(newParentLevelIdx + 2);
-      nextMapNodes.get(childId)!.level = childLevel;
+      const childNode = nextMapNodes.get(childId)!;
+      childNode.level = childLevel;
+      levelChangeNodes.push(childNode);
     });
+    levelChangeNodes.push(draggedNode);
   }
 
-  const history = {
-    oldNode: oldParentNode,
-    newNode: newParentNode,
+  const payload = {
+    oldParentNode: oldParentNode,
+    newParentNode: newParentNode,
+    levelChangeNodes: levelChangeNodes,
   };
-  socketEmitter({ eventName: 'change', history: history, nextState: nextMapData });
+
+  historyEmitter({ type: eventType.MOVE_NODE, payload: payload });
 };
 
 const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNodes) => {
@@ -112,30 +118,18 @@ const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNode
 };
 
 const MindMap: React.FC<IProps> = ({ mindmapData }) => {
-  const socketEmitter = useSocketEmitter();
+  const historyEmitter = useHistoryEmitter();
   const nextMapData = getNextMapState(mindmapData);
   const nodeInfos = getNodeInfo(new Map(), mindmapData.rootId, mindmapData.mindNodes);
 
   const handleDropNode = (event: React.MouseEvent, draggedElem: HTMLElement) => {
     event.preventDefault();
     const droppedElem = event.target as HTMLElement;
-    changeNodeParent({ nextMapData, nodeInfos, socketEmitter, draggedElem, droppedElem });
+    changeNodeParent({ nextMapData, nodeInfos, historyEmitter, draggedElem, droppedElem });
   };
-  useDragEvent({ drop: handleDropNode }, ['EPIC', 'STORY', 'ROOT', 'TASK'], 'skyblue');
+  useDragEvent({ drop: handleDropNode }, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'], 'skyblue');
 
   return <MindmapTree mindmapData={mindmapData} />;
 };
 
 export default MindMap;
-
-// <정렬 로직>
-// 각 노드 자식 수, 완료 정보 계산 (O)
-// 자신의 자식으로 못 간다. (O)
-// 깊이가 3을 넘으면 자식으로 못간다. (O)
-// Task가 있는 노드는 이동 후에 깊이 3일때만 이동 가능 (O)
-// 자식끼리 순서 변경 -> y pos 값 필요
-
-// <컴포넌트>
-// event 적용 (O)
-// useMemo 적용
-// 코드 분리 및 리팩토링

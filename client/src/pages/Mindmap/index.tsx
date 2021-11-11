@@ -1,9 +1,11 @@
 import { MindmapTemplate } from 'components/templates';
+import useSocketSetup from 'hooks/useSocketSetup';
 import { useCallback, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { selectedNodeIdState } from 'recoil/node';
 
 const MindmapPage = () => {
+  useSocketSetup();
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
 
   const HandleNodeClick = useCallback(
