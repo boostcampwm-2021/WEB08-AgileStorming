@@ -1,5 +1,9 @@
+interface ICustomError extends Error {
+  status?: number;
+}
+
 export const createCustomError = (status: number, msg: string) => {
-  const err: { [k: string]: any } = new Error(msg);
+  const err: ICustomError = new Error(msg);
   err.status = status;
   return err;
 };
