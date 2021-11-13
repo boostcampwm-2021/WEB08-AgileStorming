@@ -8,5 +8,10 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "extends": ["airbnb-typescript/base", "plugin:@typescript-eslint/recommended"]
+  "extends": ["airbnb-typescript/base", "plugin:@typescript-eslint/recommended", "plugin:import/recommended"],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
 }
