@@ -28,12 +28,19 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.6",
     "nodemon": "^2.0.14",
     "ts-node": "3.3.0",
     "typescript": "3.3.3333"
   },
   "scripts": {
     "start": "nodemon src/index.ts",
-    "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
+    "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "prepare": "cd .. && husky install server/.husky",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix"
   }
 }
