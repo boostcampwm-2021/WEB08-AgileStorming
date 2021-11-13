@@ -10,8 +10,13 @@
   },
   "extends": ["airbnb-typescript/base", "plugin:@typescript-eslint/recommended", "plugin:import/recommended"],
   "settings": {
+    "import/ignore": ["node_modules"],
     "import/resolver": {
       "typescript": {}
     }
+  },
+  "rules": {
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["off"]
   }
 }
