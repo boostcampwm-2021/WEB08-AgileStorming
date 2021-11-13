@@ -5,23 +5,23 @@ import { Mindmap } from './Mindmap';
 export class Task {
   @OneToOne(() => Mindmap, { primary: true })
   @JoinColumn({ name: 'nodeId' })
-  nodeId: Mindmap;
+    nodeId: Mindmap;
 
   @Column()
-  sprint: string;
+    sprint: string;
 
   @Column()
-  priority: string;
+    priority: string;
 
   @Column()
-  inCharge: string;
+    inCharge: string;
 
   @Column({ type: 'datetime' })
-  dueDate: Date;
+    dueDate: Date;
 
   @Column()
-  estimatedTime: string;
+    estimatedTime: string;
 
   @Column()
-  finishedTime: string;
+    finishedTime: string;
 }

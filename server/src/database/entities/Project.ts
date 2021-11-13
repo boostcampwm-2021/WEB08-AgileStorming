@@ -6,21 +6,21 @@ import { Mindmap } from './Mindmap';
 export class Project {
   @PrimaryColumn('varchar')
   @Generated('uuid')
-  id: string;
+    id: string;
 
   @Column()
-  name: string;
+    name: string;
 
   @ManyToOne(() => User, (creator) => creator.projects, { cascade: true })
-  creator: User;
+    creator: User;
 
   @CreateDateColumn()
-  createdAt: Date;
+    createdAt: Date;
 
   @ManyToMany(() => User, (users) => users.id, { cascade: true })
   @JoinTable()
-  users: User[];
+    users: User[];
 
   @OneToMany(() => Mindmap, (mindmap) => mindmap.project, { cascade: true })
-  mindmap: Mindmap[];
+    mindmap: Mindmap[];
 }
