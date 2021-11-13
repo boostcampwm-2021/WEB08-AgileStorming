@@ -1,5 +1,4 @@
 import { Server, Socket } from 'socket.io';
-import _ from 'lodash';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { xread, xadd } from './redis';
@@ -71,8 +70,8 @@ const socketIO = (server, origin) => {
       socket.to(projectId).emit('left', id);
     });
 
-    socket.on('leave', (projectId) => {
-      socket.leave(projectId);
+    socket.on('leave', (targetProjectId) => {
+      socket.leave(targetProjectId);
       socket.disconnect();
     });
 
