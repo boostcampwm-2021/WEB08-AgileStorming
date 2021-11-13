@@ -50,8 +50,8 @@ export const createProject = async (name: string, creator: string) => {
 
 export const deleteProject = async (userId: string, projectId: string) => {
   const user = await findOneUser(userId);
-  const deleteProject = { id: projectId, creator: user };
-  return getConnection().createQueryBuilder().delete().from(Project).where(deleteProject).execute();
+  const projectCondition = { id: projectId, creator: user };
+  return getConnection().createQueryBuilder().delete().from(Project).where(projectCondition).execute();
 };
 
 export const findOneProject = async (id: string) => {

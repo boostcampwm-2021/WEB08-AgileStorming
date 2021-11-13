@@ -11,7 +11,9 @@ export const xread = (stream: string, id: string, callback: (str) => void) => {
 
 const xaddClient = redis.createClient();
 export const xadd = ({ stream, args }: { stream: string; args: string[] }) => {
-  xaddClient.xadd(stream, '*', ...args, (err, stream) => {
+  xaddClient.xadd(stream, '*', ...args, (err, ErrorStream) => {
     if (err) throw err;
+    if (ErrorStream) {
+    }
   });
 };
