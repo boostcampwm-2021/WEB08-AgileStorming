@@ -2,8 +2,11 @@ import io, { Socket } from 'socket.io-client';
 
 export class SocketManager {
   private static instance: SocketManager;
+
   private socketProjectId: string;
+
   public socket: Socket;
+
   constructor(projectId: string) {
     this.socket = io(process.env.REACT_APP_SERVER!, {
       query: {
@@ -36,6 +39,7 @@ export class SocketManager {
 
     SocketManager.instance = this;
   }
+
   static init(projectId: string) {
     if (!SocketManager.instance) {
       return new SocketManager(projectId);

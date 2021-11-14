@@ -9,16 +9,14 @@ import Dropdown from 'components/molecules/Dropdown';
 import useToast from 'hooks/useToast';
 import { IMindNode } from 'recoil/mindmap';
 
-interface IProps {}
-
-export const NodeDetailWrapper: React.FC<IProps> = () => {
+export const NodeDetailWrapper = () => {
   const priorityList = useRecoilValue(priorityListState);
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
   const selectedNode = useRecoilValue(selectedNodeState);
   const { showMessage } = useToast();
 
   const handleCloseButton = () => setSelectedNodeId(null);
-  const handleFocusAlarm = useCallback((msg: string) => (e: React.FocusEvent<HTMLInputElement>) => showMessage(msg), [showMessage]);
+  const handleFocusAlarm = useCallback((msg: string) => () => showMessage(msg), [showMessage]);
 
   const handleBlurNodeDetail = useCallback(
     (info: keyof IMindNode) => (e: React.FocusEvent<HTMLInputElement>) => {

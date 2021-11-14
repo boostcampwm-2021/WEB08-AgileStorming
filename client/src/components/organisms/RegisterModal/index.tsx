@@ -5,7 +5,9 @@ import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
 import { authApi } from 'utils/api';
 
-export interface IRegisterModalProps {}
+export interface IRegisterModalProps {
+  [key: string]: string;
+}
 
 interface INewUser {
   id: string;
@@ -19,7 +21,7 @@ const RegisterModal: React.FC<IRegisterModalProps> = () => {
 
   const handleIdChange = (e: ChangeEvent<HTMLInputElement>) => (newUser.current.id = e.target.value);
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => (newUser.current.name = e.target.value);
-  const handleSubmit = (e: React.MouseEvent) => {
+  const handleSubmit = () => {
     if (newUser.current.id === '' || newUser.current.name === '') {
       showMessage('아이디와 이름을 입력해주세요');
       return;
