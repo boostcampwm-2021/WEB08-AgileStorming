@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import { whiteCloseBtn } from 'img';
 import useLinkClick from 'hooks/useLinkClick';
 import { Wrapper, UpperDiv } from './style';
@@ -25,8 +25,12 @@ const HistoryBar: React.FC = () => {
   const handleCloseHistoryBtnClick = useLinkClick('mindmap');
   const [currentDescription, setCurrentDescription] = useState<IDescription | null>(null);
 
-  const handleHistoryClick = (historyData: IHistoryData, idx: number) => (event: MouseEvent) => {
+  const handleHistoryClick = (historyData: IHistoryData, idx: number) => () => {
     const { modifier, type, content, from, to, target, posX, posY } = historyData;
+    if (idx) {
+    }
+    if (from || to || target || posX || posY) {
+    }
     setCurrentDescription({ modifier, type, content });
   };
 
@@ -47,11 +51,12 @@ const HistoryBar: React.FC = () => {
 
 export default HistoryBar;
 
-const restoreHistory = (historyData: IHistoryData) => {};
+// todo: unusedValue 제거하기
+// const restoreHistory = (historyData: IHistoryData) => {};
 
-const restoreFunctions = {
-  ADD_NODE: ({ from, content, target }: IHistoryData) => {},
-  DELETE_NODE: () => {},
-  UPDATE_NODE_POSITION: ({ from, to, target, content }: IHistoryData) => {},
-  UPDATE_NODE_CONTENT: () => {},
-};
+// const restoreFunctions = {
+//   ADD_NODE: ({ from, content, target }: IHistoryData) => {},
+//   DELETE_NODE: () => {},
+//   UPDATE_NODE_POSITION: ({ from, to, target, content }: IHistoryData) => {},
+//   UPDATE_NODE_CONTENT: () => {},
+// };

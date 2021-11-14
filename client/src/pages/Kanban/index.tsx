@@ -1,4 +1,3 @@
-import React from 'react';
 import CommonLayout from 'components/templates/CommonLayout';
 
 const Kanban = () => {

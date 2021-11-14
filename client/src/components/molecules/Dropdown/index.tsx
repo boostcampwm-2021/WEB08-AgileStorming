@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { DropdownList, StyledInput, TStyle, Wrapper } from './style';
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  onValueChange?: Function;
+  onValueChange?: (arg: string) => void;
   dropdownStyle?: TStyle;
   items?: string[];
   margin?: string;
@@ -13,7 +13,7 @@ const Dropdown: React.FC<IProps> = ({ onValueChange, dropdownStyle = 'normal', i
   const listRef = useRef<HTMLUListElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClickDropdown = (e: React.MouseEvent) => setIsOpen(!isOpen);
+  const handleClickDropdown = () => setIsOpen(!isOpen);
   const handleClickItem = (value: string) => {
     if (activatorRef.current) {
       activatorRef.current.value = value;

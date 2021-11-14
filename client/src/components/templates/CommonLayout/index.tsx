@@ -2,9 +2,9 @@ import React, { Suspense } from 'react';
 import styled from '@emotion/styled';
 import { filterIcon } from 'img';
 import { BoxButton } from 'components/atoms';
-import { NodeDetailWrapper, UserList } from 'components/organisms';
+import { NodeDetailWrapper, UserList , Header } from 'components/organisms';
 import useSocketSetup from 'hooks/useSocketSetup';
-import { Header } from 'components/organisms';
+
 import { Spinner } from 'components/molecules';
 
 export const Template = styled.div`

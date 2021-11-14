@@ -1,11 +1,11 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Node } from 'components/atoms';
+import { Node, Input } from 'components/atoms';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect } from 'utils/helpers';
 import { Path } from '../../molecules';
 import { getNextMapState, IMindmapData, mindmapState } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
-import { Input } from 'components/atoms';
+
 import { NodeContainer, ChildContainer } from './style';
 
 interface ITreeProps {
@@ -24,7 +24,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
   const setMindmapData = useSetRecoilState(mindmapState);
 
   const selectedNodeId = useRecoilValue(selectedNodeIdState);
-  let isSelected = selectedNodeId === nodeId;
+  const isSelected = selectedNodeId === nodeId;
 
   const [coord, setCoord] = useState<TCoord | null>(null);
   const [rect, setRect] = useState<TRect | null>(null);
@@ -48,8 +48,8 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     setRect(calcRect({ parentCoord, currentCoord, gap, type }));
   }, [parentCoord, mindNodes]);
 
-  const removeEmptyTempNode = (content: string) => {
-    if (content) return false;
+  const removeEmptyTempNode = (TempNodeContent: string) => {
+    if (TempNodeContent) return false;
 
     const parent = mindNodes.get(parentId!);
     parent!.children = parent!.children.filter((childId) => childId !== nodeId);
@@ -64,18 +64,18 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
   const addNewNode = () => {};
 
   const handleNodeContentFocusout = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
-    const content = currentTarget.value;
+    const targetContent = currentTarget.value;
 
-    if (removeEmptyTempNode(content)) return;
+    if (removeEmptyTempNode(targetContent)) return;
     addNewNode();
   };
 
   const handleNodeContentEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return;
     event.preventDefault();
-    const content = event.currentTarget.value;
+    const targetContent = event.currentTarget.value;
 
-    if (removeEmptyTempNode(content)) return;
+    if (removeEmptyTempNode(targetContent)) return;
     addNewNode();
   };
 

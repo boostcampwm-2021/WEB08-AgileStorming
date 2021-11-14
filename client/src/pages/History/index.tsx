@@ -1,9 +1,10 @@
 import { HistoryBackground, HistoryBar } from 'components/organisms';
 
-const getHistoryData = () => {};
+// todo 'historyData' is assigned a value but never used
+// const getHistoryData = () => {};
 
 const HistoryPage = () => {
-  const historyData = getHistoryData();
+  // const historyData = getHistoryData();
 
   return (
     <>

@@ -1,14 +1,12 @@
-import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { connectedUserState, userListOpenState, queryUserListState } from 'recoil/user-list';
-import { PopupItemLayout, PopupLayout } from 'components/molecules';
+import { PopupItemLayout, PopupLayout, IconButton, Profile } from 'components/molecules';
 import { BoxButton } from 'components/atoms';
-import { IconButton, Profile } from 'components/molecules';
+
 import { userIcon, share } from 'img';
 import styled from '@emotion/styled';
 import useToast from 'hooks/useToast';
 
-interface IProps {}
 interface IStyledConnectionStatus {
   online: boolean;
 }
@@ -26,7 +24,7 @@ const StyledConnectionStatus = styled.p<IStyledConnectionStatus>`
   margin: 0 0 0 auto;
 `;
 
-export const UserList: React.FC<IProps> = () => {
+export const UserList = () => {
   const [isUserListOpen, setUserListOpen] = useRecoilState(userListOpenState);
   const userList = useRecoilValue(queryUserListState)!;
   const connectedUsers = useRecoilValue(connectedUserState);
