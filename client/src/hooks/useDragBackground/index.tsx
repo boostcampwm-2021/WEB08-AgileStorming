@@ -34,15 +34,15 @@ const useDragBackground = () => {
     if (timer.current) return;
 
     timer.current = setTimeout(
-      (clientX, clientY) => {
+      (nowClientX, nowClientY) => {
         timer.current = null;
 
         if (!lastCoord.current) return;
-        const diffX = lastCoord.current.clientX - clientX;
-        const diffY = lastCoord.current.clientY - clientY;
+        const diffX = lastCoord.current.clientX - nowClientX;
+        const diffY = lastCoord.current.clientY - nowClientY;
 
         window.scrollBy(diffX, diffY);
-        lastCoord.current = { clientX, clientY };
+        lastCoord.current = { clientX: nowClientX, clientY: nowClientY };
       },
       20,
       clientX,
