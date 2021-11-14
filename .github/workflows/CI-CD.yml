@@ -17,4 +17,3 @@ jobs:
           port: ${{ secrets.REMOTE_PORT }}
           script: |
             sh deploy.sh
-            
