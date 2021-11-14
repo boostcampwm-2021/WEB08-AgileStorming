@@ -37,7 +37,7 @@
   "scripts": {
     "start": "nodemon src/index.ts",
     "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
-    "prepare": "cd .. && husky install server/.husky",
+    "prepare": "cd .. && husky install",
     "lint-staged": "lint-staged"
   },
   "lint-staged": {
