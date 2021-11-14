@@ -5,7 +5,7 @@ import { BoxButton, Input, Title } from 'components/atoms';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
 import { authApi } from 'utils/api';
-import { MODAL_TYPES } from '../GlobalModal';
+import { ModalTypes } from '../GlobalModal';
 import { logo } from 'img';
 
 const Login = () => {
@@ -15,7 +15,7 @@ const Login = () => {
   const { showMessage, showError } = useToast();
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => (id.current = e.target.value);
-  const handleClickLogin = async (e: React.MouseEvent) => {
+  const handleClickLogin = () => {
     if (id.current === '') {
       showMessage('아이디를 입력해주세요');
       return;
@@ -31,8 +31,8 @@ const Login = () => {
       .catch((err) => (err.response?.data.msg ? showMessage(err.response?.data.msg) : showError(err)));
   };
 
-  const handleClickRegister = (e: React.MouseEvent) => {
-    showModal({ modalType: MODAL_TYPES.RegisterModal, modalProps: {} });
+  const handleClickRegister = () => {
+    showModal({ modalType: ModalTypes.REGISTER_MODAL, modalProps: {} });
   };
 
   return (

@@ -1,4 +1,4 @@
-import { eventType } from 'hooks/useHistoryEmitter';
+import { EventType } from 'hooks/useHistoryEmitter';
 import { atom } from 'recoil';
 
 export interface IHistories {
@@ -13,7 +13,7 @@ export interface IData {
 }
 
 export interface IHistory {
-  type: eventType;
+  type: EventType;
   projectId: string;
   user: string;
   data: IData;

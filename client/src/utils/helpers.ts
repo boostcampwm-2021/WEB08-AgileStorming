@@ -6,7 +6,7 @@ interface ICoord {
 interface IRect extends ICoord {
   width: number;
   height: number;
-  type: QUATER_SPACE;
+  type: QuarterSpace;
 }
 
 interface IGetTypeParams {
@@ -24,17 +24,17 @@ interface ICalcRectParams {
   parentCoord: TCoord;
   currentCoord: TCoord;
   gap: TGap;
-  type: QUATER_SPACE;
+  type: QuarterSpace;
 }
 
-enum QUATER_SPACE {
+enum QuarterSpace {
   FIRST = 1,
   SECOND,
   THIRD,
   FOURTH,
 }
 
-enum MINDMAP_BG_SIZE {
+enum MindmapBigSize {
   WIDTH = 5000,
   HEIGHT = 5000,
 }
@@ -42,8 +42,8 @@ enum MINDMAP_BG_SIZE {
 const pxToNum = (px: string): number => Number(px.slice(0, -2));
 const numToPx = (num: number): string => num + 'px';
 const getCenterCoord = (width: number, height: number): number[] => [
-  (MINDMAP_BG_SIZE.WIDTH - width) / 2,
-  (MINDMAP_BG_SIZE.HEIGHT - height) / 2,
+  (MindmapBigSize.WIDTH - width) / 2,
+  (MindmapBigSize.HEIGHT - height) / 2,
 ];
 
 const getKoreans = (str: string): [string, RegExpMatchArray] => [str, str.match(/[가-힣]/g) ?? []];
@@ -83,7 +83,7 @@ const getGap = (currentContainer: HTMLElement) => ({
 });
 
 const getType = ({ currentCoord, gap, parentCoord }: IGetTypeParams) =>
-  currentCoord.y + gap.topGap > parentCoord.y ? QUATER_SPACE.FOURTH : QUATER_SPACE.FIRST;
+  currentCoord.y + gap.topGap > parentCoord.y ? QuarterSpace.FOURTH : QuarterSpace.FIRST;
 
 const calcRect = ({ parentCoord, currentCoord, gap, type }: ICalcRectParams): IRect => ({
   x: currentCoord.x - Math.abs(currentCoord.x + gap.leftGap - parentCoord.x),
@@ -116,14 +116,14 @@ export {
   getType,
   getGap,
   getCurrentCoord,
-  QUATER_SPACE,
+  QuarterSpace as QUATER_SPACE,
   getDrawShape,
   getId,
   pxToNum,
   numToPx,
   getCenterCoord,
   getNodeWidth,
-  MINDMAP_BG_SIZE,
+  MindmapBigSize as MINDMAP_BG_SIZE,
   getRegexNumber,
   idxToLevel,
   levelToIdx,

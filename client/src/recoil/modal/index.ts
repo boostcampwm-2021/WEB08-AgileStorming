@@ -1,9 +1,9 @@
 import { atom } from 'recoil';
-import { MODAL_TYPES } from 'components/templates/GlobalModal';
+import { ModalTypes } from 'components/templates/GlobalModal';
 import { IRegisterModalProps } from 'components/organisms/RegisterModal';
 
 export interface IRegisterModal {
-  modalType: typeof MODAL_TYPES.RegisterModal;
+  modalType: typeof ModalTypes.REGISTER_MODAL;
   modalProps: IRegisterModalProps;
 }
 
