@@ -11,7 +11,7 @@ const NewProjectModalWrapper: React.FC<IProps> = ({ addNewProject }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const projectName = useRef<string>('');
   const handleClickPlusButton = () => {
-    setModalVisible((isModalVisible) => !isModalVisible);
+    setModalVisible((prevIsModalVisible) => !prevIsModalVisible);
   };
   const handleClickOverlay = () => {
     setModalVisible(false);

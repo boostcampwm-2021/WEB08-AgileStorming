@@ -1,14 +1,13 @@
-import React from 'react';
 import { useRecoilState } from 'recoil';
 import RegisterModal from 'components/organisms/RegisterModal';
 import { modalState } from 'recoil/modal';
 
-export enum MODAL_TYPES {
-  RegisterModal = 'RegisterModal',
+export enum ModalTypes {
+  REGISTER_MODAL = 'RegisterModal',
 }
 
 const MODAL_COMPONENTS = {
-  [MODAL_TYPES.RegisterModal]: RegisterModal,
+  [ModalTypes.REGISTER_MODAL]: RegisterModal,
 };
 
 export const GlobalModal = () => {

@@ -2,6 +2,11 @@ import * as dotenv from 'dotenv';
 import { ConnectionOptions } from 'typeorm';
 dotenv.config();
 
+type ConnectionOptionsWithSeed = ConnectionOptions & {
+  seeds: string[];
+  factories: string[];
+};
+
 const ormConfig: ConnectionOptionsWithSeed = {
   type: 'mysql',
   host: process.env.DB_HOST,
@@ -21,11 +26,6 @@ const ormConfig: ConnectionOptionsWithSeed = {
   },
   seeds: ['src/database/seeds/**/*.seed.ts'],
   factories: ['src/database/factory/**/*.factory.ts'],
-};
-
-type ConnectionOptionsWithSeed = ConnectionOptions & {
-  seeds: string[];
-  factories: string[];
 };
 
 export default ormConfig;

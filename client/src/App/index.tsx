@@ -3,7 +3,7 @@ import { Global, ThemeProvider } from '@emotion/react';
 import { RecoilRoot } from 'recoil';
 import { LoginPage, KanbanPage, ProjectPage, MindmapPage, CalendarPage, ChartPage, HistoryPage } from 'pages';
 import { common, global } from 'styles';
-import GlobalModal from 'components/templates/GlobalModal';
+import { GlobalModal } from 'components/templates/GlobalModal';
 import { Toast } from 'components/atoms';
 
 const App = () => {

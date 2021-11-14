@@ -16,7 +16,7 @@ const useUserReceiver = () => {
   const setConnectedUser = useSetRecoilState(connectedUserState);
   const forceUserListReload = useSetRecoilState(forceReloadUserList);
   const { showMessage } = useToast();
-  const useUserReceiver = ({ type, data }: IUserRes) => {
+  const userReceiver = ({ type, data }: IUserRes) => {
     switch (type) {
       case 'JOIN':
         setConnectedUser((users) => {
@@ -48,6 +48,6 @@ const useUserReceiver = () => {
     }
   };
 
-  return useUserReceiver;
+  return userReceiver;
 };
 export default useUserReceiver;

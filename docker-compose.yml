@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  client:
+    container_name: react
+    build:
+      context: ./client
+    volumes:
+      - /app/node_modules
+      - ./client/:/app
+      - share:/app/build
+    environment:
+      - REACT_APP_SERVER=${REACT_APP_SERVER}
+      - REACT_APP_CLIENT=${REACT_APP_CLIENT}
+
+  server:
+    container_name: nodejs
+    build:
+      context: ./server
+    volumes:
+      - /app/node_modules
+      - ./server/:/app
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - ORIGIN=${ORIGIN}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+    volumes:
+      - share:/usr/nginx/html
+    ports:
+      - 80:80
+    restart: always
+
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    volumes:
+      - mysql-agilstorm:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+
+  redis:
+    container_name: redis
+    image: redis
+    volumes:
+      - ./server/redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - 6379:6379
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+
+volumes:
+  share:
+  mysql-agilstorm:

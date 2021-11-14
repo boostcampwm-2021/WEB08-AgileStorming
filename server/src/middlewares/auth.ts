@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { Request, Response, Next } from 'express';
-import ERROR_MESSAGE from '../config/error-message';
+import ErrorMessage from '../config/error-message';
 dotenv.config();
 
 interface IToken {
@@ -19,9 +19,9 @@ export const verifyToken = (req: Request, res: Response, next: Next) => {
       res.locals.userId = decoded.id;
       next();
     } else {
-      res.status(401).send(ERROR_MESSAGE.WRONG_TOKEN);
+      res.status(401).send(ErrorMessage.WRONG_TOKEN);
     }
   } catch (err) {
-    res.status(401).send(ERROR_MESSAGE.NO_TOKEN);
+    res.status(401).send(ErrorMessage.NO_TOKEN);
   }
 };

@@ -1,7 +1,6 @@
 import { IconWrapper, Wrapper } from './style';
-import { closeIcon } from 'img';
 import { IconImg } from 'components/atoms';
-import { MouseEvent, MouseEventHandler, useEffect, useRef } from 'react';
+import { MouseEvent, useEffect, useRef } from 'react';
 import { IHistoryData } from 'components/organisms/HistoryBar';
 
 interface IProps {

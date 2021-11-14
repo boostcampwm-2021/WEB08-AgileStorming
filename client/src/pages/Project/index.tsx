@@ -21,8 +21,8 @@ const Project = () => {
   const [projectList, setProjectList] = useState([] as Array<IProject>);
   useEffect(() => {
     const getProjectList = async () => {
-      const projectList = await API.project.get();
-      setProjectList(projectList);
+      const projectListData = await API.project.get();
+      setProjectList(projectListData);
     };
     getProjectList();
     return;

@@ -1,20 +1,20 @@
-import { Entity, Column, PrimaryColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Project } from './Project';
 
 @Entity()
 export class User {
   @PrimaryColumn()
-  id: string;
+    id: string;
 
   @Column()
-  name: string;
+    name: string;
 
   @Column()
-  color: string;
+    color: string;
 
   @Column()
-  icon: string;
+    icon: string;
 
   @OneToMany(() => Project, (project) => project.creator)
-  projects: Project[];
+    projects: Project[];
 }

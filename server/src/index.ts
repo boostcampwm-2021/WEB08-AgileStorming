@@ -19,7 +19,7 @@ const server = http.createServer(app);
 socketIO(server, process.env.ORIGIN);
 
 createConnection(ormConfig)
-  .then(() => console.log(`Database connected`))
+  .then(() => console.log('Database connected'))
   .catch((error) => console.log(error));
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
@@ -35,12 +35,12 @@ app.use(
     credentials: true,
     maxAge: 3600,
     optionsSuccessStatus: 204,
-  })
+  }),
 );
 
 app.use('/api', router);
 
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   if (err.status) {
     return res.status(err.status).json({ msg: err.message });
   }

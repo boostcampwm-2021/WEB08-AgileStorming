@@ -1,4 +1,4 @@
-import { eventType } from 'hooks/useHistoryEmitter';
+import { EventType } from 'hooks/useHistoryEmitter';
 import { SetterOrUpdater } from 'recoil';
 import { IHistories, IHistory } from 'recoil/history';
 import { getNextMapState, IMindmapData, IMindNode } from 'recoil/mindmap';
@@ -26,25 +26,25 @@ export const historyHandler = ({ mindmap, setMindmap, history, isForward }: IHis
     data: { nodeFrom, dataFrom, dataTo },
   } = history;
   const nextMapState = getNextMapState(mindmap);
-  const setChangeNodes = (nextMapState: IMindmapData, nodes: IMindNode[]) => {
-    nodes.forEach((node) => nextMapState.mindNodes.set(node.nodeId, { ...node, children: node.children }));
+  const setChangeNodes = (mapState: IMindmapData, nodes: IMindNode[]) => {
+    nodes.forEach((node) => mapState.mindNodes.set(node.nodeId, { ...node, children: node.children }));
   };
   switch (type) {
-    case eventType.ADD_NODE:
-    case eventType.CHANGE_CONTENT:
-    case eventType.CHANGE_SPRINT:
-    case eventType.CHANGE_ASSIGNEE:
-    case eventType.CHANGE_EXPECTED_AT:
-    case eventType.CHANGE_EXPECTED_TIME:
-    case eventType.CHANGE_PRIORITY:
+    case EventType.ADD_NODE:
+    case EventType.CHANGE_CONTENT:
+    case EventType.CHANGE_SPRINT:
+    case EventType.CHANGE_ASSIGNEE:
+    case EventType.CHANGE_EXPECTED_AT:
+    case EventType.CHANGE_EXPECTED_TIME:
+    case EventType.CHANGE_PRIORITY:
       if (isForward) nextMapState.mindNodes.set(nodeFrom!, dataTo as IMindNode);
       else nextMapState.mindNodes.set(nodeFrom!, dataFrom as IMindNode);
       break;
-    case eventType.MOVE_NODE:
+    case EventType.MOVE_NODE:
       if (isForward) setChangeNodes(nextMapState, dataTo as IMindNode[]);
       else setChangeNodes(nextMapState, dataFrom as IMindNode[]);
       break;
-    case eventType.DELETE_NODE:
+    case EventType.DELETE_NODE:
       if (isForward) nextMapState.mindNodes.delete(nodeFrom!);
       else nextMapState.mindNodes.set(nodeFrom!, dataFrom as IMindNode);
       break;
