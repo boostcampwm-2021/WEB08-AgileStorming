@@ -1,3 +1,4 @@
+export { default as FilterPopup } from 'components/organisms/FilterPopup';
 export { default as ProjectCardContainer } from 'components/templates/ProjectCardContainer';
 export { default as NewProjectCard } from 'components/organisms/NewProjectCard';
 export { default as NodeDetailWrapper } from 'components/organisms/NodeDetailWrapper';

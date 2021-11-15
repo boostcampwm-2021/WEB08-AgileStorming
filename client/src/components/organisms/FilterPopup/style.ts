@@ -17,3 +17,14 @@ export const FilterMenuHeader = styled.div`
     text-underline-position: under;
   }
 `;
+
+export const FilterItem = styled.div`
+  padding: 0.3rem 0;
+  font-weight: bold;
+  border: 2px solid ${({ theme }) => theme.color.white};
+  cursor: pointer;
+
+  :hover {
+    background-color: ${({ theme }) => theme.color.gray4};
+  }
+`;

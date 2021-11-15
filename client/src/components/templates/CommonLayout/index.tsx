@@ -1,11 +1,11 @@
 import { Suspense, useState } from 'react';
 import { filterIcon } from 'img';
 import { BoxButton } from 'components/atoms';
-import { NodeDetailWrapper, UserList, Header } from 'components/organisms';
+import { NodeDetailWrapper, UserList, Header, FilterPopup } from 'components/organisms';
 import useSocketSetup from 'hooks/useSocketSetup';
 
 import { Spinner } from 'components/molecules';
-import FilterPopup from 'components/organisms/FilterPopup';
+
 import { LeftInfo, RightInfo, Template } from './style';
 
 interface IProps {
