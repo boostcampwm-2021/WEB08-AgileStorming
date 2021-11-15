@@ -5,6 +5,7 @@ import { Wrapper, UpperDiv } from './style';
 import { Title } from 'components/atoms';
 import { HistoryLog, IconButton, PlayController, HistoryWindow } from 'components/molecules';
 import { IDescription } from 'components/molecules/HistoryLog';
+import { IUser } from 'types/user';
 
 export interface IHistoryData extends IDescription {
   from: number;
@@ -14,7 +15,7 @@ export interface IHistoryData extends IDescription {
   posY?: number;
 }
 
-const getUser = (id: string) => ({ id: id, icon: whiteCloseBtn, color: 'blue', name: 'lapa' });
+const getUser = (id: string): IUser => ({ id: id, icon: 'cat', color: 'blue', name: 'lapa' });
 const dummyData = [
   { modifier: getUser('lapa'), type: 'UPDATE_NODE_POSITION', from: 7, to: 9, target: 11, content: 'TASK' } as const,
   { modifier: getUser('lapa'), type: 'ADD_NODE', from: 8, target: 19, content: 'TASK' } as const,

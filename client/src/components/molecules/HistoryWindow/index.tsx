@@ -1,5 +1,5 @@
 import { IconWrapper, Wrapper } from './style';
-import { IconImg } from 'components/atoms';
+import { UserIcon } from 'components/atoms';
 import { MouseEvent, useEffect, useRef } from 'react';
 import { IHistoryData } from 'components/organisms/HistoryBar';
 
@@ -21,7 +21,7 @@ const HistoryWindow: React.FC<IProps> = ({ onClick, histories }) => {
       {histories
         ? histories.map((historyData, idx) => (
             <IconWrapper key={idx} color={historyData.modifier.color} onClick={onClick(historyData, idx)}>
-              <IconImg imgSrc={historyData.modifier.icon} altText={`히스토리 ${idx + 1}`} />
+              <UserIcon user={historyData.modifier} />
             </IconWrapper>
           ))
         : null}
