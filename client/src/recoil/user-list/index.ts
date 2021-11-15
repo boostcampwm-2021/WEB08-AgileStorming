@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
 import { socketState } from 'recoil/socket';
-import { IUser } from '../user';
+import { IUser } from 'types/user';
 import { project } from 'utils/api';
 
 export const userListOpenState = atom<boolean>({
