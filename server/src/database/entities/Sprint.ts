@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Project } from './Project';
+import { Task } from './Task';
 
 @Entity()
 export class Sprint {
@@ -17,4 +18,7 @@ export class Sprint {
 
   @ManyToOne(() => Project, (project) => project.sprints, { onDelete: 'CASCADE' })
   project: Project;
+
+  @OneToMany(() => Task, (task) => task.sprint, { onDelete: 'CASCADE' })
+  tasks: Task[];
 }

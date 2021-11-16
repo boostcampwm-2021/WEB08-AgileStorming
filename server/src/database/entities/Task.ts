@@ -1,4 +1,4 @@
-import { Entity, Column, OneToOne, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
+import { Entity, Column, OneToOne, ManyToMany, JoinColumn, JoinTable, ManyToOne } from 'typeorm';
 import { Mindmap } from './Mindmap';
 import { Label } from './Label';
 import { Sprint } from './Sprint';
@@ -24,9 +24,8 @@ export class Task {
   @Column()
   finishedTime: string;
 
-  @ManyToMany(() => Sprint, (sprints) => sprints.id, { cascade: true })
-  @JoinTable()
-  sprints: Sprint[];
+  @ManyToOne(() => Sprint, (sprints) => sprints.id, { cascade: true })
+  sprint: Sprint;
 
   @ManyToMany(() => Label, (labels) => labels.id, { cascade: true })
   @JoinTable()
