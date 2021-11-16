@@ -1,4 +1,4 @@
-import { createNode, updateNode, deleteNode } from '../services/mindmap';
+import { createNode, updateNode, updateNodeParent, deleteNode } from '../services/mindmap';
 import * as eventType from './event-type';
 
 enum EventArgs {
@@ -25,6 +25,7 @@ const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEve
       return;
     },
     UPDATE_NODE_PARENT: ({ nodeFrom, nodeTo, dataTo }) => {
+      updateNodeParent(nodeFrom, nodeTo, (dataTo as eventType.TUpdateNodeParent).nodeId);
       return;
     },
     UPDATE_NODE_SIBLING: ({ nodeFrom, dataTo }) => {
