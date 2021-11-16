@@ -43,7 +43,7 @@ export const project = {
     const info = await api.get('/project/info', {
       params: { projectId },
     });
-    return info;
+    return info.data;
   },
 };
 
