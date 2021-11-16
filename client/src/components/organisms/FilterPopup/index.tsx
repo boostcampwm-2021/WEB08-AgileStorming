@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { FilterMenuHeader, FilterItem, SprintItem } from './style';
 import { useRecoilValue } from 'recoil';
 import { PopupItemLayout, PopupLayout } from 'components/molecules';
-import { queryUserListState } from 'recoil/user-list';
 import { UserIcon } from 'components/atoms';
-import { sprintListState } from 'recoil/project';
 import { ISOtoYYMMDD } from 'utils/form';
+import { labelListState, sprintListState, userListState } from 'recoil/project';
 
 interface IProps {
   onClose: () => void;
@@ -15,15 +14,18 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   const [displayedFilter, setDisplayedFilter] = useState('스프린트');
   const [assigneeFilter, setAssigneeFilter] = useState<string | null>(null); // 추후에 recoil로
   const [sprintFilter, setSprintFilter] = useState<string | null>(null); // 추후에 recoil로
+  const [labelFilter, setLabelFilter] = useState<string | null>(null); // 추후에 recoil로
 
   const sprintList = useRecoilValue(sprintListState);
-  const userList = useRecoilValue(queryUserListState);
+  const userList = useRecoilValue(userListState);
+  const labelList = useRecoilValue(labelListState);
 
   const isSelected = (target: string, selected: string | null) => (target === selected ? 'selected' : '');
 
   const handleFilterSelect = (filter: string) => setDisplayedFilter(filter);
   const handleSetSprintFilter = (sprint: string) => setSprintFilter(sprint === sprintFilter ? null : sprint);
   const handleSetAssigneeFilter = (assignee: string) => setAssigneeFilter(assignee === assigneeFilter ? null : assignee);
+  const handleSetLabelFilter = (label: string) => setLabelFilter(label === labelFilter ? null : label);
 
   const FilterMenu: React.FC<{ menu: string }> = ({ menu }) => (
     <span className={isSelected(menu, displayedFilter)} onClick={() => handleFilterSelect(menu)}>
@@ -32,7 +34,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   );
 
   return (
-    <PopupLayout title={`필터링: ${sprintFilter ?? ''} ${assigneeFilter ?? ''}`} onClose={onClose}>
+    <PopupLayout title={`필터링: ${sprintFilter ?? ''} ${assigneeFilter ?? ''} ${labelFilter ?? ''}`} onClose={onClose}>
       <FilterMenuHeader>
         <FilterMenu menu={'스프린트'} />
         <FilterMenu menu={'담당자'} />
@@ -58,11 +60,15 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       ) : (
         ''
       )}
-      {displayedFilter === '담당자' && userList ? (
+      {displayedFilter === '담당자' ? (
         <PopupItemLayout>
-          {Object.values(userList).map((user) => {
+          {userList.map((user) => {
             return (
-              <FilterItem key={user.id} className={isSelected(user.name, assigneeFilter)} onClick={() => handleSetAssigneeFilter(user.id)}>
+              <FilterItem
+                key={user.id}
+                className={isSelected(user.name, assigneeFilter)}
+                onClick={() => handleSetAssigneeFilter(user.name)}
+              >
                 <UserIcon user={user} />
                 {user.name}
               </FilterItem>
@@ -72,7 +78,19 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       ) : (
         ''
       )}
-      {displayedFilter === '라벨' ? <PopupItemLayout>라벨</PopupItemLayout> : ''}
+      {displayedFilter === '라벨' ? (
+        <PopupItemLayout>
+          {labelList.map((label) => {
+            return (
+              <FilterItem key={label.id} className={isSelected(label.name, labelFilter)} onClick={() => handleSetLabelFilter(label.name)}>
+                {label.name}
+              </FilterItem>
+            );
+          })}
+        </PopupItemLayout>
+      ) : (
+        ''
+      )}
     </PopupLayout>
   );
 };
