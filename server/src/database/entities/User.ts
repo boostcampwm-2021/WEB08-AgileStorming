@@ -1,20 +1,24 @@
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Project } from './Project';
+import { Task } from './Task';
 
 @Entity()
 export class User {
   @PrimaryColumn()
-    id: string;
+  id: string;
 
   @Column()
-    name: string;
+  name: string;
 
   @Column()
-    color: string;
+  color: string;
 
   @Column()
-    icon: string;
+  icon: string;
 
   @OneToMany(() => Project, (project) => project.creator)
-    projects: Project[];
+  projects: Project[];
+
+  @OneToMany(() => Task, (tasks) => tasks.assignee)
+  tasks: Task[];
 }

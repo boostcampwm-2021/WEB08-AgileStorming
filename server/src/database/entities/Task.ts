@@ -2,6 +2,7 @@ import { Entity, Column, OneToOne, ManyToMany, JoinColumn, JoinTable, ManyToOne 
 import { Mindmap } from './Mindmap';
 import { Label } from './Label';
 import { Sprint } from './Sprint';
+import { User } from './User';
 
 @Entity()
 export class Task {
@@ -12,8 +13,8 @@ export class Task {
   @Column()
   priority: string;
 
-  @Column()
-  assignee: string;
+  @ManyToOne(() => User, (assignee) => assignee.tasks, { cascade: true })
+  assignee: User;
 
   @Column({ type: 'datetime' })
   dueDate: Date;
