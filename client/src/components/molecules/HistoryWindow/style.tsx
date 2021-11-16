@@ -8,14 +8,5 @@ export const Wrapper = styled.div`
   overflow: scroll;
   gap: 1rem;
   align-items: center;
-`;
-
-export const IconWrapper = styled.div`
-  background-color: ${({ color }) => color};
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 2rem;
 `;
