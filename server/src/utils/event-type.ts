@@ -27,12 +27,12 @@ export type TUpdateNodeContent = {
 };
 export type TTask = {
   assignee?: number;
-  label?: number[];
+  labels?: number[];
   priority?: string;
   dueDate?: string;
   estimatedTime?: string;
   finishedTime?: string;
-  sprint?: string;
+  sprint?: number;
 };
 export type TUpdateTaskInformation = {
   changed: TTask;
@@ -40,7 +40,7 @@ export type TUpdateTaskInformation = {
 export type TAddSprint = {
   name: string;
   startDate: string;
-  dueDate: string;
+  endDate: string;
 };
 export type TAddLabel = {
   name: string;
