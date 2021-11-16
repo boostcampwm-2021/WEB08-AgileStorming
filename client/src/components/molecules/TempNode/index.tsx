@@ -1,6 +1,6 @@
 import { Node, Input } from 'components/atoms';
 import { INodeProps } from 'components/atoms/Node';
-import React, { FormEvent, MutableRefObject, RefObject } from 'react';
+import React, { FormEvent } from 'react';
 
 interface IProps extends INodeProps {
   onBlur: ({ currentTarget }: FormEvent<HTMLInputElement>) => void;

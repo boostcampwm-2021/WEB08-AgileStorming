@@ -1,8 +1,8 @@
 import { EventType } from 'hooks/useHistoryEmitter';
 import { SetterOrUpdater } from 'recoil';
-import { AddData, IData, IHistories, IHistory, TDataTypes } from 'recoil/history';
+import { AddData, IData, IHistories, IHistory } from 'recoil/history';
 import { getNextMapState, IMindmapData, IMindNode } from 'recoil/mindmap';
-import { idxToLevel, levelToIdx } from 'utils/helpers';
+import { getChildLevel } from 'utils/helpers';
 
 export interface IProps {
   mindmap: IMindmapData;
@@ -22,12 +22,34 @@ export interface IHistoryHandlerProps {
 }
 
 interface IAddNodeProps {
-  mapState: IMindmapData;
+  nextMapState: IMindmapData;
   parentId: number;
   id: number;
   data: IData;
-  mindmapSetter: SetterOrUpdater<IMindmapData>;
+  setMindmap: SetterOrUpdater<IMindmapData>;
 }
+
+const TEMP_NODE_ID = -1;
+
+const addNode = ({ data, nextMapState, parentId, id, setMindmap }: IAddNodeProps) => {
+  const { content, children } = data.dataTo as AddData;
+  const parsedChildren = JSON.parse(children);
+  const parent = nextMapState.mindNodes.get(parentId);
+  const level = getChildLevel(parent!.level);
+
+  const node = { content, level, nodeId: id, children: parsedChildren };
+  const newChildren = [...parent!.children.filter((childId) => childId !== TEMP_NODE_ID), id];
+  const newParent = { ...parent!, children: newChildren };
+
+  nextMapState.mindNodes.set(id, node);
+  nextMapState.mindNodes.set(parentId, newParent);
+  nextMapState.mindNodes.delete(TEMP_NODE_ID);
+  setMindmap(nextMapState);
+};
+
+const setChangeNodes = (mapState: IMindmapData, nodes: IMindNode[]) => {
+  nodes.forEach((node) => mapState.mindNodes.set(node.nodeId, { ...node, children: node.children }));
+};
 
 export const historyHandler = ({ mindmap, setMindmap, history, isForward }: IHistoryHandlerProps) => {
   const {
@@ -35,27 +57,10 @@ export const historyHandler = ({ mindmap, setMindmap, history, isForward }: IHis
     data: { nodeTo, nodeFrom, dataFrom, dataTo },
   } = history;
   const nextMapState = getNextMapState(mindmap);
-  const setChangeNodes = (mapState: IMindmapData, nodes: IMindNode[]) => {
-    nodes.forEach((node) => mapState.mindNodes.set(node.nodeId, { ...node, children: node.children }));
-  };
-
-  const addNode = ({ data, mapState, parentId, id, mindmapSetter }: IAddNodeProps) => {
-    const { content, children } = data.dataTo as AddData;
-    const parsedChildren = JSON.parse(children);
-    const parent = mapState.mindNodes.get(parentId);
-    const level = idxToLevel(levelToIdx(parent!.level) + 1);
-    const node = { content, level, nodeId: id, children: parsedChildren };
-    const newChildren = [...parent!.children.filter((childId) => childId !== -1), id];
-    const newParent = { ...parent!, children: newChildren };
-    nextMapState.mindNodes.set(id, node);
-    nextMapState.mindNodes.set(parentId, newParent);
-    nextMapState.mindNodes.delete(-1);
-    mindmapSetter(nextMapState);
-  };
 
   switch (type) {
     case EventType.ADD_NODE:
-      addNode({ mapState: nextMapState, parentId: nodeFrom!, id: history.id, data: history.data, mindmapSetter: setMindmap });
+      addNode({ nextMapState, parentId: nodeFrom!, id: history.id, data: history.data, setMindmap });
       break;
     case EventType.CHANGE_CONTENT:
     case EventType.CHANGE_SPRINT:
