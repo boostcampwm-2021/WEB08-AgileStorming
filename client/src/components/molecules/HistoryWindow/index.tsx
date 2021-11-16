@@ -1,7 +1,8 @@
-import { IconWrapper, Wrapper } from './style';
-import { UserIcon } from 'components/atoms';
-import { MouseEvent, useEffect, useRef } from 'react';
+import { Wrapper, IconWrapper } from './style';
+import { DragTarget, UserIcon } from 'components/atoms';
+import { MouseEvent } from 'react';
 import { IHistoryData } from 'components/organisms/HistoryBar';
+import useDragBackground from 'hooks/useDragBackground';
 
 interface IProps {
   onClick: (historyData: IHistoryData, idx: number) => (event: MouseEvent) => void;
@@ -9,23 +10,18 @@ interface IProps {
 }
 
 const HistoryWindow: React.FC<IProps> = ({ onClick, histories }) => {
-  const scrollRef = useRef(null);
-
-  useEffect(() => {
-    if (!scrollRef.current) return;
-    (scrollRef.current as HTMLElement).scrollIntoView();
-  }, [scrollRef.current]);
+  const { containerRef, dragRef } = useDragBackground();
 
   return (
-    <Wrapper>
+    <Wrapper ref={containerRef} className='background'>
       {histories
         ? histories.map((historyData, idx) => (
-            <IconWrapper key={idx} color={historyData.modifier.color} onClick={onClick(historyData, idx)}>
-              <UserIcon user={historyData.modifier} />
+            <IconWrapper key={idx} onClick={onClick(historyData, idx)}>
+              <UserIcon user={historyData.user} cursor='pointer' />
             </IconWrapper>
           ))
         : null}
-      <div ref={scrollRef} id='scrollEnd' />
+      <DragTarget ref={dragRef} />
     </Wrapper>
   );
 };

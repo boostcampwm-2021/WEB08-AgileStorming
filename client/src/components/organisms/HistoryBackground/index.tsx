@@ -5,7 +5,7 @@ import { mindmapState } from 'recoil/mindmap';
 import { Mindmap } from '..';
 
 const HistoryBackground = () => {
-  const [containerRef, dragRef] = useDragBackground('mid');
+  const { containerRef, dragRef } = useDragBackground();
   const data = useRecoilValue(mindmapState);
 
   return (
