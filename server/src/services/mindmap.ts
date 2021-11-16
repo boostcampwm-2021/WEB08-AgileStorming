@@ -10,7 +10,7 @@ interface INode {
   children?: string;
 }
 
-const findOneNode = (nodeId: number) => {
+export const findOneNode = (nodeId: number) => {
   const id = nodeId.toString(10);
   return getRepository(Mindmap).findOne({ where: { id } });
 };
