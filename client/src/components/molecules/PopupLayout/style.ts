@@ -10,9 +10,15 @@ interface IStyleProps {
 
 const styleOptions: { [key in TStyle]: string } = {
   normal: `
+      position: relative;
       font-size: ${common.fontSize.small};
+      padding: 0.5rem;
     `,
   modal: `
+      ${common.absoluteCenter}
+      position: fixed;
+      width: 25rem;
+      padding: 0.5rem  1rem  1rem 1rem;
       font-size: ${common.fontSize.normal};
     `,
 };
@@ -39,9 +45,7 @@ export const Layout = styled.div<IStyleProps>`
   ${({ popupStyle }) => styleOptions[popupStyle]}
   ${({ theme }) => theme.shadow};
   margin: ${({ margin }) => margin};
-  position: relative;
   background-color: ${({ theme }) => theme.color.white};
-  padding: 0.5rem;
   border-radius: 0.5rem;
   overflow: hidden;
 `;
