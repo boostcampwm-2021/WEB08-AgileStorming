@@ -1,13 +1,17 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Project } from './Project';
+import { Task } from './Task';
 
 @Entity()
 export class Sprint {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   name: string;
+
+  @Column()
+  color: string;
 
   @Column()
   startDate: string;
@@ -17,4 +21,7 @@ export class Sprint {
 
   @ManyToOne(() => Project, (project) => project.sprints, { onDelete: 'CASCADE' })
   project: Project;
+
+  @OneToMany(() => Task, (task) => task.sprint, { onDelete: 'CASCADE' })
+  tasks: Task[];
 }

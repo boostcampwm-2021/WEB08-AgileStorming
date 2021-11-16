@@ -1,6 +1,10 @@
-import { createNode, updateNode, deleteNode } from '../services/mindmap';
+import { createNode, updateNode, updateNodeParent, deleteNode } from '../services/mindmap';
+import { deleteTask, updateTask } from '../services/task';
+import { createSprint, deleteSprint } from '../services/sprint';
+import { createLabel, deleteLabel } from '../services/label';
+import { createComment, deleteComment } from '../services/comment';
+import * as eventType from './event-type';
 
-type TEventType = 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_CONTENT' | 'MOVE_NODE';
 enum EventArgs {
   'type' = 1,
   'project' = 3,
@@ -8,31 +12,79 @@ enum EventArgs {
   'data' = 7,
 }
 
-const eventFunction = (): Record<TEventType, (...args) => void> => {
+type THistoryEventFunction = (data?: eventType.THistoryEventData, project?: string, user?: number) => Promise<number> | void;
+type TEventFunction = (data?: eventType.TEventData, project?: string, user?: number) => Promise<number> | void;
+
+const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEventFunction> => {
   return {
-    ADD_NODE: (data: string, project: string) => {
-      const { nodeFrom, dataTo } = JSON.parse(data);
-      return createNode(project, nodeFrom, dataTo);
+    ADD_NODE: ({ nodeFrom, dataTo }, project: string) => {
+      return createNode(project, nodeFrom, dataTo as eventType.TAddNodeData);
     },
-    DELETE_NODE: (data: string) => {
-      const { nodeFrom, dataFrom } = JSON.parse(data);
-      deleteNode(nodeFrom, dataFrom.nodeId);
+    DELETE_NODE: ({ nodeFrom, dataFrom }) => {
+      deleteNode(nodeFrom, (dataFrom as eventType.TDeleteNodeData).nodeId);
       return;
     },
-    UPDATE_NODE_CONTENT: (data: string) => {
-      const { nodeFrom, dataTo } = JSON.parse(data);
-      updateNode(nodeFrom, dataTo);
+    MOVE_NODE: ({ nodeTo, dataTo }) => {
+      updateNode(nodeTo, dataTo as eventType.TMoveNodeData);
       return;
     },
-    MOVE_NODE: (data: string) => {
-      if (data) {
-      }
+    UPDATE_NODE_PARENT: ({ nodeFrom, nodeTo, dataTo }) => {
+      const { nodeId, nodeParentType } = dataTo as eventType.TUpdateNodeParent;
+      updateNodeParent(nodeFrom, nodeTo, nodeId);
+      if (nodeParentType !== 'Story') deleteTask(nodeId);
+      return;
+    },
+    UPDATE_NODE_SIBLING: ({ dataTo }) => {
+      const { parentId, children } = dataTo as eventType.TUpdateNodeSibling;
+      updateNode(parentId, { children: JSON.stringify(children) });
+      return;
+    },
+    UPDATE_NODE_CONTENT: ({ nodeFrom, dataTo }) => {
+      updateNode(nodeFrom, dataTo as eventType.TUpdateNodeContent);
+      return;
+    },
+    UPDATE_TASK_INFORMATION: ({ nodeFrom, dataTo }) => {
+      updateTask(nodeFrom, dataTo as eventType.TUpdateTaskInformation);
       return;
     },
   };
 };
 
+const eventFunction = (): Record<eventType.TEventType, TEventFunction> => {
+  return {
+    ADD_SPRINT: (data, project) => {
+      return createSprint(project, data as eventType.TAddSprint);
+    },
+    ADD_LABEL: (data, project) => {
+      return createLabel(project, data as eventType.TAddLabel);
+    },
+    ADD_COMMENT: (data) => {
+      return createComment(data as eventType.TAddComment);
+    },
+    DELETE_SPRINT: (data) => {
+      const { sprintId } = data as eventType.TDeleteSprint;
+      deleteSprint(sprintId);
+      return;
+    },
+    DELETE_LABEL: (data) => {
+      const { labelId } = data as eventType.TDeleteLabel;
+      deleteLabel(labelId);
+      return;
+    },
+    DELETE_COMMENT: (data) => {
+      const { commentId } = data as eventType.TDeleteComment;
+      deleteComment(commentId);
+      return;
+    },
+  };
+};
+
+export const convertHistoryEvent = (args: string[]) => {
+  const [type, project, user, data] = ['type', 'project', 'user', 'data'].map((str) => args[EventArgs[str]]);
+  return historyEventFunction()[type](JSON.parse(data), project, user);
+};
+
 export const convertEvent = (args: string[]) => {
   const [type, project, user, data] = ['type', 'project', 'user', 'data'].map((str) => args[EventArgs[str]]);
-  return eventFunction()[type](data, project, user);
+  return eventFunction()[type](JSON.parse(data), project, user);
 };

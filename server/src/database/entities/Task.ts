@@ -1,27 +1,34 @@
-import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToOne, ManyToMany, JoinColumn, JoinTable, ManyToOne } from 'typeorm';
 import { Mindmap } from './Mindmap';
+import { Label } from './Label';
+import { Sprint } from './Sprint';
+import { User } from './User';
 
 @Entity()
 export class Task {
   @OneToOne(() => Mindmap, { primary: true })
   @JoinColumn({ name: 'nodeId' })
-    nodeId: Mindmap;
+  nodeId: Mindmap;
 
-  @Column()
-    sprint: string;
+  @Column({ nullable: true })
+  priority: string;
 
-  @Column()
-    priority: string;
+  @ManyToOne(() => User, (assignee) => assignee.tasks, { cascade: true })
+  assignee: User;
 
-  @Column()
-    inCharge: string;
+  @Column({ nullable: true })
+  dueDate: string;
 
-  @Column({ type: 'datetime' })
-    dueDate: Date;
+  @Column({ nullable: true })
+  estimatedTime: string;
 
-  @Column()
-    estimatedTime: string;
+  @Column({ nullable: true })
+  finishedTime: string;
 
-  @Column()
-    finishedTime: string;
+  @ManyToOne(() => Sprint, (sprints) => sprints.id, { cascade: true })
+  sprint: Sprint;
+
+  @ManyToMany(() => Label, (labels) => labels.id, { cascade: true })
+  @JoinTable()
+  labels: Label[];
 }

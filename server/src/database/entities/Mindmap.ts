@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Comment } from './Comment';
 import { Project } from './Project';
 
 @Entity()
@@ -9,10 +10,7 @@ export class Mindmap {
   @ManyToOne(() => Project, (project) => project.mindmap, { onDelete: 'CASCADE' })
   project: Project;
 
-  @Column({ default: null })
-  label: string;
-
-  @Column({ default: null })
+  @Column({ default: '[]' })
   children: string;
 
   @Column()
@@ -26,4 +24,7 @@ export class Mindmap {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => Comment, (comment) => comment.node, { cascade: true })
+  comment: Comment[];
 }

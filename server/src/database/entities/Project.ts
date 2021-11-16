@@ -29,7 +29,6 @@ export class Project {
   @OneToMany(() => Sprint, (sprint) => sprint.project, { cascade: true })
   sprints: Sprint[];
 
-  @ManyToMany(() => Label, (label) => label.name, { cascade: true })
-  @JoinTable()
+  @OneToMany(() => Label, (label) => label.project, { cascade: true })
   labels: Label[];
 }

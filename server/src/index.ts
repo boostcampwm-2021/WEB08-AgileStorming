@@ -1,5 +1,6 @@
 import 'reflect-metadata';
-import express from 'express';
+import express, { Error, Request, Response, Next } from 'express';
+
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
@@ -35,12 +36,12 @@ app.use(
     credentials: true,
     maxAge: 3600,
     optionsSuccessStatus: 204,
-  }),
+  })
 );
 
 app.use('/api', router);
 
-app.use(function (err, req, res) {
+app.use(function (err: Error, req: Request, res: Response, next: Next) {
   if (err.status) {
     return res.status(err.status).json({ msg: err.message });
   }
