@@ -57,3 +57,13 @@ export const deleteProject = async (userId: string, projectId: string) => {
 export const findOneProject = async (id: string) => {
   return getRepository(Project).findOne({ where: { id } });
 };
+
+export const getProjectInfo = async (projectId: string) => {
+  return getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoinAndSelect('project.users', 'users')
+    .leftJoinAndSelect('project.sprints', 'sprints')
+    .leftJoinAndSelect('project.labels', 'labels')
+    .where('project.id = :projectId', { projectId })
+    .getOne();
+};

@@ -45,4 +45,14 @@ router.get('/user-list', async (req: Request, res: Response, next: Next) => {
   }
 });
 
+router.get('/:projectId', async (req: Request, res: Response, next: Next) => {
+  try {
+    const { projectId } = req.params;
+    const projectInfo = await projectService.getProjectInfo(projectId);
+    res.send(projectInfo);
+  } catch (e) {
+    next(e);
+  }
+});
+
 export default router;
