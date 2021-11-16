@@ -1,4 +1,8 @@
 import { createNode, updateNode, updateNodeParent, deleteNode } from '../services/mindmap';
+import { updateTask } from '../services/task';
+import { createSprint, deleteSprint } from '../services/sprint';
+import { createLabel, deleteLabel } from '../services/label';
+import { createComment, deleteComment } from '../services/comment';
 import * as eventType from './event-type';
 
 enum EventArgs {
@@ -38,7 +42,7 @@ const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEve
       return;
     },
     UPDATE_TASK_INFORMATION: ({ nodeFrom, dataTo }) => {
-      const { changed } = dataTo as eventType.TUpdateTaskInformation;
+      updateTask(nodeFrom, dataTo as eventType.TUpdateTaskInformation);
       return;
     },
   };
@@ -47,27 +51,27 @@ const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEve
 const eventFunction = (): Record<eventType.TEventType, TEventFunction> => {
   return {
     ADD_SPRINT: (data, project) => {
-      const { name, startDate, dueDate } = data as eventType.TAddSprint;
-      return;
+      return createSprint(project, data as eventType.TAddSprint);
     },
     ADD_LABEL: (data, project) => {
-      const { name } = data as eventType.TAddLabel;
-      return;
+      return createLabel(project, data as eventType.TAddLabel);
     },
-    ADD_COMMENT: (data, project) => {
-      const { nodeId, comment } = data as eventType.TAddComment;
-      return;
+    ADD_COMMENT: (data) => {
+      return createComment(data as eventType.TAddComment);
     },
-    DELETE_SPRINT: (data, project) => {
+    DELETE_SPRINT: (data) => {
       const { sprintId } = data as eventType.TDeleteSprint;
+      deleteSprint(sprintId);
       return;
     },
-    DELETE_LABEL: (data, project) => {
+    DELETE_LABEL: (data) => {
       const { labelId } = data as eventType.TDeleteLabel;
+      deleteLabel(labelId);
       return;
     },
-    DELETE_COMMENT: (data, project) => {
-      const { nodeId, commentId } = data as eventType.TDeleteComment;
+    DELETE_COMMENT: (data) => {
+      const { commentId } = data as eventType.TDeleteComment;
+      deleteComment(commentId);
       return;
     },
   };
