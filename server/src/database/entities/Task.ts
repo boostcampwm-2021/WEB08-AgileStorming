@@ -1,20 +1,13 @@
-import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToOne, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
 import { Mindmap } from './Mindmap';
+import { Label } from './Label';
+import { Sprint } from './Sprint';
 
 @Entity()
 export class Task {
   @OneToOne(() => Mindmap, { primary: true })
   @JoinColumn({ name: 'nodeId' })
   nodeId: Mindmap;
-
-  @Column()
-  sprint: string;
-
-  @Column()
-  label: string;
-
-  @Column()
-  comment: string;
 
   @Column()
   priority: string;
@@ -30,4 +23,12 @@ export class Task {
 
   @Column()
   finishedTime: string;
+
+  @ManyToMany(() => Sprint, (sprints) => sprints.id, { cascade: true })
+  @JoinTable()
+  sprints: Sprint[];
+
+  @ManyToMany(() => Label, (labels) => labels.id, { cascade: true })
+  @JoinTable()
+  labels: Label[];
 }
