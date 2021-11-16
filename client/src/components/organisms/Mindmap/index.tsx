@@ -32,9 +32,6 @@ interface ICheckParentProps {
 
 interface ICheckMoveProps {
   draggedDepth: number;
-  draggedLevel: string;
-  newParentLevel: string;
-  oldParentLevelIdx: number;
   newParentLevelIdx: number;
 }
 
@@ -57,12 +54,10 @@ const checkParentConditon = ({ draggedNodeNum, oldParentNodeNum, newParentNodeNu
   return true;
 };
 
-const checkMoveCondition = ({ draggedDepth, draggedLevel, newParentLevel, oldParentLevelIdx, newParentLevelIdx }: ICheckMoveProps) => {
+const checkMoveCondition = ({ draggedDepth, newParentLevelIdx }: ICheckMoveProps) => {
   const MAX_DEPTH = 3;
-  const isMoveTaskeUpperLevel = draggedLevel === 'TASK' && newParentLevel !== 'STORY';
-  const isMoveParentOfTask = draggedDepth + oldParentLevelIdx === MAX_DEPTH && draggedDepth + newParentLevelIdx !== MAX_DEPTH;
   const isOverDepth = draggedDepth + newParentLevelIdx > MAX_DEPTH;
-  if (isMoveTaskeUpperLevel || isMoveParentOfTask || isOverDepth) return false;
+  if (isOverDepth) return false;
   return true;
 };
 
@@ -74,12 +69,10 @@ const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, updateNodeParent, dr
   const [draggedNode, oldParentNode, newParentNode] = [draggedNodeNum, oldParentNodeNum, newParentNodeNum].map(
     (nodenum) => nextNodes.get(nodenum!)!
   );
-  const [draggedLevel, oldParentLevel, newParentLevel] = [draggedNode, oldParentNode, newParentNode].map((node) => node!.level);
-  const [draggedLevelIdx, oldParentLevelIdx, newParentLevelIdx] = [draggedLevel, oldParentLevel, newParentLevel].map((level) =>
-    levelToIdx(level)
-  );
+  const [draggedLevel, newParentLevel] = [draggedNode, newParentNode].map((node) => node!.level);
+  const [draggedLevelIdx, newParentLevelIdx] = [draggedLevel, newParentLevel].map((level) => levelToIdx(level));
   const draggedDepth = nodeInfos.get(draggedNodeNum!)!.depth;
-  if (!checkMoveCondition({ draggedDepth, draggedLevel, newParentLevel, oldParentLevelIdx, newParentLevelIdx })) return;
+  if (!checkMoveCondition({ draggedDepth, newParentLevelIdx })) return;
 
   oldParentNode.children = oldParentNode.children.filter((childNodeNum) => childNodeNum !== draggedNodeNum);
   if (!newParentNode.children.includes(draggedNodeNum!)) newParentNode.children.push(draggedNodeNum!);
