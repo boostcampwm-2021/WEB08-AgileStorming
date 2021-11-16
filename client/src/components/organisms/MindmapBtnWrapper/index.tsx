@@ -1,11 +1,11 @@
 import { useHistory } from 'react-router-dom';
 import { clock, plusCircle } from 'img';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { getNextMapState, IMindmapData, IMindNode, mindmapState } from 'recoil/mindmap';
 import { getChildLevel } from 'utils/helpers';
 import { BoxButton } from 'components/atoms';
 import useProjectId from 'hooks/useRoomId';
-import { selectedNodeIdState } from 'recoil/node';
+import { selectedNodeIdState, selectedNodeState } from 'recoil/node';
 import { Wrapper } from './style';
 
 interface ITempNodeParams {
@@ -32,16 +32,18 @@ const createTempNode = ({ mindmapData, selectedNodeId }: ITempNodeParams) => {
 
 const MindmapWrapper: React.FC = () => {
   const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeIdState);
+  const selectedNode = useRecoilValue(selectedNodeState);
   const [mindmapData, setMindmapData] = useRecoilState(mindmapState);
-  const hitory = useHistory();
+  const history = useHistory();
   const projectId = useProjectId();
 
   const handleHistoryBtnClick = () => {
-    hitory.push(`/history/${projectId}`);
+    history.push(`/history/${projectId}`);
   };
 
   const handlePlusNodeBtnClick = () => {
     if (selectedNodeId === TEMP_NODE_ID) return;
+    if (selectedNode && selectedNode.level === 'TASK') return;
 
     const newMapState = createTempNode({ mindmapData, selectedNodeId });
     setSelectedNodeId(TEMP_NODE_ID);
