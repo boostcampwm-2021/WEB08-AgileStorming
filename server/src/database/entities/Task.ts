@@ -16,8 +16,8 @@ export class Task {
   @ManyToOne(() => User, (assignee) => assignee.tasks, { cascade: true })
   assignee: User;
 
-  @Column({ type: 'datetime', nullable: true })
-  dueDate: Date;
+  @Column({ nullable: true })
+  dueDate: string;
 
   @Column({ nullable: true })
   estimatedTime: string;
