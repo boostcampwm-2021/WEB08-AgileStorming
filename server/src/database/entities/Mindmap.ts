@@ -9,10 +9,7 @@ export class Mindmap {
   @ManyToOne(() => Project, (project) => project.mindmap, { onDelete: 'CASCADE' })
   project: Project;
 
-  @Column({ default: null })
-  label: string;
-
-  @Column({ default: null })
+  @Column({ default: '[]' })
   children: string;
 
   @Column()
