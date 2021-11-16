@@ -3,18 +3,8 @@ import useLinkClick from 'hooks/useLinkClick';
 import { Wrapper, UpperDiv } from './style';
 import { Title } from 'components/atoms';
 import { HistoryLog, IconButton, PlayController, HistoryWindow } from 'components/molecules';
-import { IUser } from 'types/user';
-import { TDataTypes } from 'recoil/history';
 import { useState } from 'react';
-
-export interface IHistoryData {
-  nodeFrom?: number;
-  nodeTo?: number;
-  dataTo?: TDataTypes;
-  dataFrom?: TDataTypes;
-  user: IUser;
-  type: 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_PARENT' | 'UPDATE_NODE_SIBLING' | 'UPDATE_NODE_CONTENT' | 'UPDATE_NODE_INFORMATION';
-}
+import { IHistoryData } from 'recoil/history';
 
 const dummyUser = {
   id: 'lapa',
@@ -24,51 +14,90 @@ const dummyUser = {
 } as const;
 
 const dummy = [
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
-  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
+  {
+    id: 0,
+    projectId: '0',
+    user: dummyUser,
+    type: 'ADD_NODE',
+    data: { nodeFrom: 1, nodeTo: null, dataFrom: null, dataTo: { content: 'dummy data' } },
+  } as const,
 ];
 
 const HistoryBar: React.FC = () => {
