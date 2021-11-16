@@ -1,5 +1,5 @@
 import { createNode, updateNode, updateNodeParent, deleteNode } from '../services/mindmap';
-import { updateTask } from '../services/task';
+import { deleteTask, updateTask } from '../services/task';
 import { createSprint, deleteSprint } from '../services/sprint';
 import { createLabel, deleteLabel } from '../services/label';
 import { createComment, deleteComment } from '../services/comment';
@@ -29,7 +29,9 @@ const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEve
       return;
     },
     UPDATE_NODE_PARENT: ({ nodeFrom, nodeTo, dataTo }) => {
-      updateNodeParent(nodeFrom, nodeTo, (dataTo as eventType.TUpdateNodeParent).nodeId);
+      const { nodeId, nodeParentType } = dataTo as eventType.TUpdateNodeParent;
+      updateNodeParent(nodeFrom, nodeTo, nodeId);
+      if (nodeParentType !== 'Story') deleteTask(nodeId);
       return;
     },
     UPDATE_NODE_SIBLING: ({ dataTo }) => {

@@ -17,6 +17,7 @@ export type TMoveNodeData = {
 };
 export type TUpdateNodeParent = {
   nodeId: number;
+  nodeParentType: 'Project' | 'Epic' | 'Story';
 };
 export type TUpdateNodeSibling = {
   parentId: number;
