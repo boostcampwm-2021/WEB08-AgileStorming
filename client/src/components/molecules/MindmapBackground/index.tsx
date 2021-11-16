@@ -1,4 +1,4 @@
-import { Background } from 'components/atoms';
+import { Background, DragTarget } from 'components/atoms';
 import useDragBackground from 'hooks/useDragBackground';
 
 interface IProps {
@@ -7,11 +7,12 @@ interface IProps {
 }
 
 const MindmapBackground: React.FC<IProps> = ({ className, children }) => {
-  useDragBackground();
+  const [containerRef, dragRef] = useDragBackground('mid');
 
   return (
-    <Background className={className} bgSize='over' bgColor='bgWhite'>
+    <Background refProp={containerRef} className={className} bgSize='over' bgColor='bgWhite'>
       {children}
+      <DragTarget ref={dragRef} />
     </Background>
   );
 };
