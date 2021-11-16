@@ -51,13 +51,3 @@ const HistoryBar: React.FC = () => {
 };
 
 export default HistoryBar;
-
-// todo: unusedValue 제거하기
-// const restoreHistory = (historyData: IHistoryData) => {};
-
-// const restoreFunctions = {
-//   ADD_NODE: ({ from, content, target }: IHistoryData) => {},
-//   DELETE_NODE: () => {},
-//   UPDATE_NODE_POSITION: ({ from, to, target, content }: IHistoryData) => {},
-//   UPDATE_NODE_CONTENT: () => {},
-// };

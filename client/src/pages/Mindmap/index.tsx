@@ -27,7 +27,7 @@ const MindmapPage = () => {
 
   return (
     <CommonLayout>
-      <MindmapTemplate />;
+      <MindmapTemplate />
     </CommonLayout>
   );
 };
