@@ -11,6 +11,9 @@ export class Sprint {
   name: string;
 
   @Column()
+  color: string;
+
+  @Column()
   startDate: string;
 
   @Column()
