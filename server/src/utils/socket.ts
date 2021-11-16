@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { xread, xadd } from './redis';
-import { convertHistoryEvent } from './event-converter';
+import { convertHistoryEvent, convertEvent } from './event-converter';
 import { getUserHasProject, addUserToProject } from '../services/project';
 
 dotenv.config();
@@ -75,12 +75,17 @@ const socketIO = (server, origin) => {
       socket.disconnect();
     });
 
-    socket.on('event', (type, data) => {
+    socket.on('history-event', (type, data) => {
       xread(projectId, '$', handleNewEvent);
       xadd({
         stream: projectId,
         args: ['type', type, 'projectId', projectId, 'user', id, 'data', data],
       });
+    });
+    socket.on('non-history-event', async (type, data) => {
+      const eventData = ['type', type, 'projectId', projectId, 'user', id, 'data', data];
+      const dbData = await convertEvent(eventData);
+      io.in(projectId).emit('event', eventData, dbData);
     });
   });
 };
