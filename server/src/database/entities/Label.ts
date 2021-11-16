@@ -1,4 +1,5 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne } from 'typeorm';
+import { Project } from './Project';
 
 @Entity()
 export class Label {
@@ -10,4 +11,7 @@ export class Label {
 
   @Column()
   color: string;
+
+  @ManyToOne(() => Project, (project) => project.labels, { onDelete: 'CASCADE' })
+  project: Project;
 }
