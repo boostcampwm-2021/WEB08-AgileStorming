@@ -1,10 +1,10 @@
-import { Entity, PrimaryColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Mindmap } from './Mindmap';
 
 @Entity()
 export class Comment {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   comment: string;
