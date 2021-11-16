@@ -5,22 +5,26 @@ import { LoginPage, KanbanPage, ProjectPage, MindmapPage, CalendarPage, ChartPag
 import { common, global } from 'styles';
 import { GlobalModal } from 'components/templates/GlobalModal';
 import { Toast } from 'components/atoms';
+import { Suspense } from 'react';
+import { Spinner } from 'components/molecules';
 
 const App = () => {
   return (
     <ThemeProvider theme={common}>
       <RecoilRoot>
-        <Global styles={global} />
-        <Switch>
-          <Route path='/' exact component={LoginPage} />
-          <Route path='/project' component={ProjectPage} />
-          <Route path='/mindmap/:projectId' component={MindmapPage} />
-          <Route path='/history/:projectId' component={HistoryPage} />
-          <Route path='/kanban/:projectId' component={KanbanPage} />
-          <Route path='/calendar/:projectId' component={CalendarPage} />
-          <Route path='/chart/:projectId' component={ChartPage} />
-          <Redirect from='*' to='/' />
-        </Switch>
+        <Suspense fallback={<Spinner />}>
+          <Global styles={global} />
+          <Switch>
+            <Route path='/' exact component={LoginPage} />
+            <Route path='/project' component={ProjectPage} />
+            <Route path='/mindmap/:projectId' component={MindmapPage} />
+            <Route path='/history/:projectId' component={HistoryPage} />
+            <Route path='/kanban/:projectId' component={KanbanPage} />
+            <Route path='/calendar/:projectId' component={CalendarPage} />
+            <Route path='/chart/:projectId' component={ChartPage} />
+            <Redirect from='*' to='/' />
+          </Switch>
+        </Suspense>
         <GlobalModal />
         <Toast />
       </RecoilRoot>
