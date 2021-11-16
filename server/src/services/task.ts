@@ -6,13 +6,6 @@ import { findOneNode } from './mindmap';
 import { findOneSprint } from './sprint';
 import { findOneUser } from './user';
 
-type TTask = {
-  priority?: string;
-  dueDate?: string;
-  estimatedTime?: string;
-  finishedTime?: string;
-};
-
 export const findOneTask = async (nodeId: string) => {
   return getRepository(Task).findOne({ relations: ['nodeId'], where: { nodeId } });
 };
@@ -33,42 +26,24 @@ const findOneOrCreate = async (taskId: number) => {
   return findOneTask(taskId.toString(10));
 };
 
-const updateTaskInformation = async (task: Task, newData: TTask) => {
-  const newTask = { ...task, ...newData };
-  return getRepository(Task).save(newTask);
-};
-
-const updateTaskAssignee = async (task: Task, assigneeId: number) => {
-  const assignee = await findOneUser(assigneeId.toString(10));
-  task.assignee = assignee;
-  return getRepository(Task).save(task);
-};
-
-const updateTaskSprint = async (task: Task, sprintId: number) => {
-  const sprint = await findOneSprint(sprintId.toString(10));
-  task.sprint = sprint;
-  return getRepository(Task).save(task);
-};
-
-const updateTaskLabel = async (task: Task, labelIds: number[]) => {
-  const labels = await getRepository(Label).findByIds(labelIds);
-  task.labels = labels;
-  return getRepository(Task).save(task);
-};
-
 export const updateTask = async (nodeFrom: number, { changed }: TUpdateTaskInformation) => {
   const { assignee, labels, sprint, ...info } = changed;
   const task = await findOneOrCreate(nodeFrom);
   if (assignee) {
-    await updateTaskAssignee(task, assignee);
+    const newAssignee = await findOneUser(assignee.toString(10));
+    task.assignee = newAssignee;
   }
   if (labels) {
-    await updateTaskLabel(task, labels);
+    const newLabels = await getRepository(Label).findByIds(labels);
+    task.labels = newLabels;
   }
   if (sprint) {
-    await updateTaskSprint(task, sprint);
+    const newSprint = await findOneSprint(sprint.toString(10));
+    task.sprint = newSprint;
   }
   if (info) {
-    await updateTaskInformation(task, info);
+    const newTask = { ...task, ...info };
+    return getRepository(Task).save(newTask);
   }
+  return getRepository(Task).save(task);
 };
