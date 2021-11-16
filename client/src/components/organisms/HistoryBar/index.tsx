@@ -1,38 +1,82 @@
-import { useState } from 'react';
 import { whiteCloseBtn } from 'img';
 import useLinkClick from 'hooks/useLinkClick';
 import { Wrapper, UpperDiv } from './style';
 import { Title } from 'components/atoms';
 import { HistoryLog, IconButton, PlayController, HistoryWindow } from 'components/molecules';
-import { IDescription } from 'components/molecules/HistoryLog';
 import { IUser } from 'types/user';
+import { TDataTypes } from 'recoil/history';
+import { useState } from 'react';
 
-export interface IHistoryData extends IDescription {
-  from: number;
-  target: number;
-  to?: number;
-  posX?: number;
-  posY?: number;
+export interface IHistoryData {
+  nodeFrom?: number;
+  nodeTo?: number;
+  dataTo?: TDataTypes;
+  dataFrom?: TDataTypes;
+  user: IUser;
+  type: 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_PARENT' | 'UPDATE_NODE_SIBLING' | 'UPDATE_NODE_CONTENT' | 'UPDATE_NODE_INFORMATION';
 }
 
-const getUser = (id: string): IUser => ({ id: id, icon: 'cat', color: 'blue', name: 'lapa' });
-const dummyData = [
-  { modifier: getUser('lapa'), type: 'UPDATE_NODE_POSITION', from: 7, to: 9, target: 11, content: 'TASK' } as const,
-  { modifier: getUser('lapa'), type: 'ADD_NODE', from: 8, target: 19, content: 'TASK' } as const,
-  { modifier: getUser('lapa'), type: 'ADD_NODE', from: 4, target: 18, content: 'TASK' } as const,
+const dummyUser = {
+  id: 'lapa',
+  name: 'lapa',
+  color: 'blue',
+  icon: 'frog',
+} as const;
+
+const dummy = [
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
+  { user: dummyUser, type: 'ADD_NODE', nodeFrom: 1, dataTo: { content: 'dummy data', children: '[]' } } as const,
 ];
 
 const HistoryBar: React.FC = () => {
   const handleCloseHistoryBtnClick = useLinkClick('mindmap');
-  const [currentDescription, setCurrentDescription] = useState<IDescription | null>(null);
+  const [currentHistory, setCurrentHistory] = useState<IHistoryData>(dummy[0]);
 
   const handleHistoryClick = (historyData: IHistoryData, idx: number) => () => {
-    const { modifier, type, content, from, to, target, posX, posY } = historyData;
-    if (idx) {
-    }
-    if (from || to || target || posX || posY) {
-    }
-    setCurrentDescription({ modifier, type, content });
+    setCurrentHistory(historyData);
   };
 
   return (
@@ -44,20 +88,10 @@ const HistoryBar: React.FC = () => {
         <PlayController />
         <IconButton imgSrc={whiteCloseBtn} onClick={handleCloseHistoryBtnClick} altText='히스토리 닫기 버튼'></IconButton>
       </UpperDiv>
-      <HistoryWindow onClick={handleHistoryClick} histories={dummyData} />
-      <HistoryLog description={currentDescription} />
+      <HistoryWindow onClick={handleHistoryClick} histories={dummy} />
+      <HistoryLog history={currentHistory} />
     </Wrapper>
   );
 };
 
 export default HistoryBar;
-
-// todo: unusedValue 제거하기
-// const restoreHistory = (historyData: IHistoryData) => {};
-
-// const restoreFunctions = {
-//   ADD_NODE: ({ from, content, target }: IHistoryData) => {},
-//   DELETE_NODE: () => {},
-//   UPDATE_NODE_POSITION: ({ from, to, target, content }: IHistoryData) => {},
-//   UPDATE_NODE_CONTENT: () => {},
-// };

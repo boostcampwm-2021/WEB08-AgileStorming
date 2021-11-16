@@ -13,7 +13,8 @@ export const Wrapper = styled.div`
 export const UpperDiv = styled.div`
   ${({ theme }) => theme.flex.row};
   justify-content: space-between;
+  align-items: center;
   padding: 0 2rem;
   width: 100%;
-  height: 45px;
+  height: 40px;
 `;
