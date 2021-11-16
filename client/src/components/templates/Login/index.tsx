@@ -5,7 +5,6 @@ import { BoxButton, Input, Title } from 'components/atoms';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
 import { authApi } from 'utils/api';
-import { ModalTypes } from '../GlobalModal';
 import { logo } from 'img';
 
 const Login = () => {
@@ -32,7 +31,7 @@ const Login = () => {
   };
 
   const handleClickRegister = () => {
-    showModal({ modalType: ModalTypes.REGISTER_MODAL, modalProps: {} });
+    showModal({ modalType: 'registerModal', modalProps: {} });
   };
 
   return (

@@ -1,12 +1,17 @@
 import { atom } from 'recoil';
-import { ModalTypes } from 'components/templates/GlobalModal';
 import { IRegisterModalProps } from 'components/organisms/RegisterModal';
+import { ITextInputModalProps } from 'components/organisms/TextInputModal';
 
 export interface IRegisterModal {
-  modalType: typeof ModalTypes.REGISTER_MODAL;
+  modalType: 'registerModal';
   modalProps: IRegisterModalProps;
 }
 
-export type IModal = IRegisterModal;
+export interface ITextInputModal {
+  modalType: 'textInputModal';
+  modalProps: ITextInputModalProps;
+}
+
+export type IModal = IRegisterModal | ITextInputModal;
 
 export const modalState = atom<IModal | null>({ key: 'modalState', default: null });

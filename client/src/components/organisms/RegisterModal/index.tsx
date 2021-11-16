@@ -6,7 +6,7 @@ import useToast from 'hooks/useToast';
 import { authApi } from 'utils/api';
 
 export interface IRegisterModalProps {
-  [key: string]: string;
+  key?: string;
 }
 
 interface INewUser {

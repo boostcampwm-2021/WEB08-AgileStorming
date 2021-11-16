@@ -5,7 +5,7 @@ const useModal = () => {
   const setModal = useSetRecoilState(modalState);
 
   const showModal = ({ modalType, modalProps }: IModal) => {
-    setModal({ modalType, modalProps });
+    setModal({ modalType, modalProps } as IModal);
   };
 
   const hideModal = () => {
