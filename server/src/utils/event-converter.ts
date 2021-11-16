@@ -7,19 +7,19 @@ enum EventArgs {
   'user' = 5,
   'data' = 7,
 }
-type TEventFunction = (data?: eventType.TEventData, project?: string, user?: number) => Promise<number> | void;
+type THistoryEventFunction = (data?: eventType.THistoryEventData, project?: string, user?: number) => Promise<number> | void;
 
-const eventFunction = (): Record<eventType.TEventType, TEventFunction> => {
+const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEventFunction> => {
   return {
     ADD_NODE: ({ nodeFrom, dataTo }, project: string) => {
-      return createNode(project, nodeFrom, dataTo);
+      return createNode(project, nodeFrom, dataTo as eventType.TAddNodeData);
     },
     DELETE_NODE: ({ nodeFrom, dataFrom }) => {
       deleteNode(nodeFrom, (dataFrom as eventType.TDeleteNodeData).nodeId);
       return;
     },
     UPDATE_NODE_CONTENT: ({ nodeFrom, dataTo }) => {
-      updateNode(nodeFrom, dataTo);
+      updateNode(nodeFrom, dataTo as eventType.TUpdateNodeContent);
       return;
     },
     MOVE_NODE: () => {
@@ -28,7 +28,7 @@ const eventFunction = (): Record<eventType.TEventType, TEventFunction> => {
   };
 };
 
-export const convertEvent = (args: string[]) => {
+export const convertHistoryEvent = (args: string[]) => {
   const [type, project, user, data] = ['type', 'project', 'user', 'data'].map((str) => args[EventArgs[str]]);
-  return eventFunction()[type](JSON.parse(data), project, user);
+  return historyEventFunction()[type](JSON.parse(data), project, user);
 };

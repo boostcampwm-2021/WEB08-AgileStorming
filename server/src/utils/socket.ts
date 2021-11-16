@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { xread, xadd } from './redis';
-import { convertEvent } from './event-converter';
+import { convertHistoryEvent } from './event-converter';
 import { getUserHasProject, addUserToProject } from '../services/project';
 
 dotenv.config();
@@ -41,7 +41,7 @@ const socketIO = (server, origin) => {
 
     const handleNewEvent = async (data: Record<number, object>) => {
       const eventData = data[0][1][0][1];
-      const dbData = await convertEvent(eventData);
+      const dbData = await convertHistoryEvent(eventData);
       io.in(projectId).emit('event', eventData, dbData);
     };
 

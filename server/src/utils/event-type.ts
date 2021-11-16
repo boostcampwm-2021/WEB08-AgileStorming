@@ -1,10 +1,3 @@
-export type TEventType = 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_CONTENT' | 'MOVE_NODE';
-export type TEventData = {
-  nodeFrom: number | null;
-  nodeTo: number | null;
-  dataFrom: TDeleteNodeData | TAddNodeData | null;
-  dataTo: Record<string, any>;
-};
 export type TDeleteNodeData = {
   nodeId: number;
   content: string;
@@ -18,7 +11,7 @@ export type TDeleteNodeData = {
 export type TAddNodeData = {
   content: string;
 };
-export type TMoveNodeDate = {
+export type TMoveNodeData = {
   posX?: number;
   posY?: number;
 };
@@ -41,6 +34,13 @@ export type TTask = {
   finishedTime?: string;
   sprint?: string;
 };
-export type TUpdateTaskInfo = {
+export type TUpdateTaskInformation = {
   changed: TTask;
+};
+export type THistoryEventType = 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_CONTENT' | 'MOVE_NODE';
+export type THistoryEventData = {
+  nodeFrom: number | null;
+  nodeTo: number | null;
+  dataFrom: TDeleteNodeData | TMoveNodeData | TUpdateNodeParent | TUpdateNodeSibling | TUpdateNodeContent | TUpdateTaskInformation | null;
+  dataTo: TAddNodeData | TMoveNodeData | TUpdateNodeParent | TUpdateNodeSibling | TUpdateNodeContent | TUpdateTaskInformation | null;
 };
