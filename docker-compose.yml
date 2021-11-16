@@ -29,6 +29,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DATABASE=${DB_DATABASE}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - REDIS_HOST=${REDIS_HOST}
 
   nginx:
     container_name: nginx
@@ -48,6 +49,9 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
 
   redis:
     container_name: redis
