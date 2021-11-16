@@ -1,69 +1,26 @@
-import { EventType } from 'hooks/useHistoryEmitter';
 import { atom } from 'recoil';
-import { Levels } from 'utils/helpers';
-
-export interface IHistories {
-  histories: IHistory[];
-}
-
-export interface IData {
-  nodeFrom?: number | null;
-  nodeTo?: number | null;
-  dataFrom?: TDataTypes | null;
-  dataTo?: TDataTypes | null;
-}
+import { IUser } from 'types/user';
+import { THistoryEventData, THistoryEventType } from 'utils/event-types';
 
 export interface IHistory {
-  type: EventType;
+  history: IHistoryData[];
+}
+
+export interface IHistoryData {
+  id?: number;
   projectId: string;
-  user: string;
-  data: IData;
-  id: number;
+  user: IUser;
+  type: THistoryEventType;
+  data: THistoryEventData;
+  newNodeId?: number;
 }
 
-export interface IAddData {
-  content: string;
-  children: string;
-}
-
-export interface IDeleteData {
-  id: number;
-  content: string;
-  index: number;
-  status: string;
-  posX: number;
-  posY: number;
-  assignee: string;
-  priority: string;
-}
-
-export interface IMoveData {
-  posX: number;
-  posY: number;
-}
-
-export interface IUpdateParentData {
-  nodeId: number;
-  nodeParentType: Levels;
-}
-
-export interface IUpdateChildrenData {
-  parentId: number;
-  children: number[];
-}
-
-export interface IUpdateInfoData {
-  changed: { assignee: string };
-}
-
-export type TDataTypes = IAddData | IDeleteData | IMoveData | IUpdateParentData | IUpdateChildrenData | IUpdateInfoData;
-
-export const historyState = atom<IHistories>({
+export const historyState = atom<IHistory>({
   key: 'historyAtom',
-  default: { histories: [] },
+  default: { history: [] },
 });
 
-export const getParsedHistory = (data: string[], id?: number): IHistory => {
+export const getParsedHistory = (data: string[], newNodeId?: number): IHistoryData => {
   const stringJson =
     data.reduce(
       (acc: string, v: string, i: number) => {
@@ -75,7 +32,7 @@ export const getParsedHistory = (data: string[], id?: number): IHistory => {
         }
         return acc;
       },
-      id ? `{"id": ${id},` : '{'
+      newNodeId ? `{"newNodeId": ${newNodeId},` : '{'
     ) + '}';
   return JSON.parse(stringJson);
 };
