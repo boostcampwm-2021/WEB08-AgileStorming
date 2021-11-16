@@ -11,4 +11,5 @@ export const StyledIcon = styled.span<IStyledIcon>`
   margin: 0.2rem;
   border-radius: 1rem;
   cursor: ${({ cursor }) => cursor ?? 'default'};
+  user-select: none;
 `;
