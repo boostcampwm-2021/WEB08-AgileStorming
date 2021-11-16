@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import { clock, plusCircle } from 'img';
 import { useRecoilState } from 'recoil';
-import { getNextMapState, IMindmapData, mindmapState } from 'recoil/mindmap';
+import { getNextMapState, IMindmapData, IMindNode, mindmapState } from 'recoil/mindmap';
 import { getChildLevel } from 'utils/helpers';
 import { BoxButton } from 'components/atoms';
 import useProjectId from 'hooks/useRoomId';
@@ -17,13 +17,12 @@ const TEMP_NODE_ID = -1;
 
 const createTempNode = ({ mindmapData, selectedNodeId }: ITempNodeParams) => {
   const { rootId, mindNodes } = mindmapData;
-  const parentNode = mindNodes.get(selectedNodeId ?? 0);
-  const level = getChildLevel(parentNode!.level);
+  const parentNode = { ...mindNodes.get(selectedNodeId ?? 0) } as IMindNode;
+  const level = getChildLevel(parentNode!.level!);
 
   const tempNode = { nodeId: TEMP_NODE_ID, level: level, content: '', children: [] };
-
-  parentNode!.children.push(TEMP_NODE_ID);
-  mindNodes.set(parentNode!.nodeId, parentNode!);
+  parentNode!.children = [...parentNode!.children!, TEMP_NODE_ID];
+  mindNodes.set(parentNode!.nodeId!, parentNode!);
   mindNodes.set(TEMP_NODE_ID, tempNode);
 
   const newMapState = getNextMapState({ mindNodes, rootId });
