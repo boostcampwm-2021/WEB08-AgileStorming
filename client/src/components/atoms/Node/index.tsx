@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
 import { Levels, levelToIdx } from 'utils/helpers';
 
-interface IProps {
+export interface INodeProps {
   level: Levels;
   isSelected: boolean;
 }
 
-const Node = styled.p<IProps>`
+const Node = styled.div<INodeProps>`
   background-color: ${({ theme, level }) => theme.nodeBgColors[levelToIdx(level)]};
   color: ${({ theme, level }) => theme.nodeColors[levelToIdx(level)]};
   border-radius: 0.5rem;

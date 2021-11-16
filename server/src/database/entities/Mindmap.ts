@@ -4,26 +4,26 @@ import { Project } from './Project';
 @Entity()
 export class Mindmap {
   @PrimaryGeneratedColumn()
-    id: number;
+  id: number;
 
   @ManyToOne(() => Project, (project) => project.mindmap, { onDelete: 'CASCADE' })
-    project: Project;
+  project: Project;
 
   @Column({ default: null })
-    label: string;
+  label: string;
 
   @Column({ default: null })
-    children: string;
+  children: string;
 
   @Column()
-    content: string;
+  content: string;
 
-  @Column()
-    posX: string;
+  @Column({ default: null })
+  posX: string;
 
-  @Column()
-    posY: string;
+  @Column({ default: null })
+  posY: string;
 
   @CreateDateColumn()
-    createdAt: Date;
+  createdAt: Date;
 }

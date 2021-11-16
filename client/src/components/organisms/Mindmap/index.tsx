@@ -103,7 +103,7 @@ const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, moveNode, draggedEle
     dataTo: changeNodeIds.map((nodeId) => nextNodes.get(nodeId!)),
   };
 
-  moveNode(payload);
+  // moveNode(payload);
 };
 
 const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNodes) => {

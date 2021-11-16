@@ -1,3 +1,5 @@
+import { IData } from 'recoil/history';
+
 interface ICoord {
   x: number;
   y: number;
@@ -110,7 +112,13 @@ const getNewNode = (id: number, level: Levels, content: string) => ({
   comment: [],
 });
 
+const fillPayload = (payload: IData): IData => ({ nodeFrom: null, nodeTo: null, dataFrom: null, dataTo: null, ...payload });
+
+const getChildLevel = (level: Levels): Levels => idxToLevel(levelToIdx(level) + 1);
+
 export {
+  getChildLevel,
+  fillPayload,
   getNewNode,
   calcRect,
   getType,

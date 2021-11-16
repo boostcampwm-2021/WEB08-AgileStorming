@@ -1,12 +1,12 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Node, Input } from 'components/atoms';
+import { Node } from 'components/atoms';
+import { Path, TempNode } from 'components/molecules';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect } from 'utils/helpers';
-import { Path } from '../../molecules';
 import { getNextMapState, IMindmapData, mindmapState } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
-
 import { NodeContainer, ChildContainer } from './style';
+import useHistoryEmitter from 'hooks/useHistoryEmitter';
 
 interface ITreeProps {
   nodeId: number;
@@ -15,12 +15,16 @@ interface ITreeProps {
   parentId?: number;
 }
 
+const TEMP_NODE_ID = -1;
+const ROOT_NODE_ID = 0;
+
 const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId }) => {
-  const isRoot = nodeId === 0;
+  const isRoot = nodeId === ROOT_NODE_ID;
   const { rootId, mindNodes } = mindmapData;
   const node = mindNodes.get(nodeId);
   const { level, content, children } = node!;
 
+  const { addNode } = useHistoryEmitter();
   const setMindmapData = useSetRecoilState(mindmapState);
 
   const selectedNodeId = useRecoilValue(selectedNodeIdState);
@@ -28,8 +32,8 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
 
   const [coord, setCoord] = useState<TCoord | null>(null);
   const [rect, setRect] = useState<TRect | null>(null);
-  const nodeRef = useRef(null);
-  const containerRef = useRef(null);
+  const nodeRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!nodeRef.current || !containerRef.current) return;
@@ -48,26 +52,29 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     setRect(calcRect({ parentCoord, currentCoord, gap, type }));
   }, [parentCoord, mindNodes]);
 
-  const removeEmptyTempNode = (TempNodeContent: string) => {
-    if (TempNodeContent) return false;
-
+  const removeTempNode = () => {
     const parent = mindNodes.get(parentId!);
     parent!.children = parent!.children.filter((childId) => childId !== nodeId);
     mindNodes.set(parentId!, parent!);
     mindNodes.delete(nodeId);
     const newMapData = getNextMapState({ rootId, mindNodes });
     setMindmapData(newMapData);
-
-    return true;
   };
 
-  const addNewNode = () => {};
+  const addNewNode = (nodeContent: string) => {
+    const payload = {
+      nodeFrom: parentId,
+      dataTo: { content: nodeContent, children: JSON.stringify([]) },
+    };
+
+    addNode(payload);
+  };
 
   const handleNodeContentFocusout = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
     const targetContent = currentTarget.value;
 
-    if (removeEmptyTempNode(targetContent)) return;
-    addNewNode();
+    if (targetContent) addNewNode(targetContent);
+    removeTempNode();
   };
 
   const handleNodeContentEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -75,18 +82,26 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     event.preventDefault();
     const targetContent = event.currentTarget.value;
 
-    if (removeEmptyTempNode(targetContent)) return;
-    addNewNode();
+    if (targetContent) addNewNode(targetContent);
+    removeTempNode();
   };
 
   return (
     <NodeContainer id={nodeId + 'container'} ref={containerRef} isRoot={isRoot} draggable='true' className='mindmap-area'>
-      <Node ref={nodeRef} id={nodeId.toString()} level={level} isSelected={isSelected} className='node mindmap-area'>
-        {nodeId === -1 ? (
-          <Input inputStyle='small' autoFocus onBlur={handleNodeContentFocusout} onKeyPress={handleNodeContentEnter} />
-        ) : null}
-        {content}
-      </Node>
+      {nodeId === TEMP_NODE_ID ? (
+        <TempNode
+          refProp={nodeRef}
+          id={nodeId.toString()}
+          isSelected={isSelected}
+          level={level}
+          onBlur={handleNodeContentFocusout}
+          onKeyPress={handleNodeContentEnter}
+        />
+      ) : (
+        <Node ref={nodeRef} id={nodeId.toString()} level={level} isSelected={isSelected} className='node mindmap-area'>
+          {content}
+        </Node>
+      )}
       <ChildContainer>
         {children.map((childrenId) => (
           <Tree key={childrenId} nodeId={childrenId} mindmapData={mindmapData} parentCoord={coord} parentId={nodeId} />
