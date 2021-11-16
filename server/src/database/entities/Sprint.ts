@@ -5,7 +5,7 @@ import { Task } from './Task';
 @Entity()
 export class Sprint {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   name: string;
