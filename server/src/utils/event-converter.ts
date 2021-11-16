@@ -28,7 +28,9 @@ const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEve
       updateNodeParent(nodeFrom, nodeTo, (dataTo as eventType.TUpdateNodeParent).nodeId);
       return;
     },
-    UPDATE_NODE_SIBLING: ({ nodeFrom, dataTo }) => {
+    UPDATE_NODE_SIBLING: ({ dataTo }) => {
+      const { parentId, children } = dataTo as eventType.TUpdateNodeSibling;
+      updateNode(parentId, { children: JSON.stringify(children) });
       return;
     },
     UPDATE_NODE_CONTENT: ({ nodeFrom, dataTo }) => {
