@@ -4,7 +4,7 @@ import { IMindmapData, getNextMapState, IMindNodes } from 'recoil/mindmap';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import useDragEvent from 'hooks/useDragEvent';
 import { getRegexNumber, idxToLevel, levelToIdx } from 'utils/helpers';
-import { IData } from 'recoil/history';
+import { THistoryEventData } from 'utils/event-types';
 
 interface IProps {
   mindmapData: IMindmapData;
@@ -21,7 +21,7 @@ interface IChangeParentProps {
   curNodes: IMindNodes;
   nextNodes: IMindNodes;
   nodeInfos: INodeInfos;
-  updateNodeParent: ({ nodeFrom, nodeTo, dataTo }: IData) => void;
+  updateNodeParent: ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) => void;
   draggedElem: HTMLElement;
   droppedElem: HTMLElement;
 }

@@ -63,8 +63,8 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
 
   const addNewNode = (nodeContent: string) => {
     const payload = {
-      nodeFrom: parentId,
-      dataTo: { content: nodeContent, children: JSON.stringify([]) },
+      nodeFrom: parentId!,
+      dataTo: { content: nodeContent },
     };
 
     addNode(payload);

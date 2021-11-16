@@ -1,5 +1,5 @@
 import { Title } from 'components/atoms';
-import { IHistoryData } from 'components/organisms/HistoryBar';
+import { IHistoryData } from 'recoil/history';
 import { Profile } from '..';
 import { Wrapper } from './style';
 

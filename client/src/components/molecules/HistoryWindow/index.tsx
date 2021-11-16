@@ -1,8 +1,8 @@
 import { Wrapper, IconWrapper } from './style';
 import { DragTarget, UserIcon } from 'components/atoms';
 import { MouseEvent } from 'react';
-import { IHistoryData } from 'components/organisms/HistoryBar';
 import useDragBackground from 'hooks/useDragBackground';
+import { IHistoryData } from 'recoil/history';
 
 interface IProps {
   onClick: (historyData: IHistoryData, idx: number) => (event: MouseEvent) => void;
