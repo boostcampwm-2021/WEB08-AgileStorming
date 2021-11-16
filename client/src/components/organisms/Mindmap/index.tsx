@@ -21,7 +21,7 @@ interface IChangeParentProps {
   curNodes: IMindNodes;
   nextNodes: IMindNodes;
   nodeInfos: INodeInfos;
-  moveNode: ({ nodeFrom, nodeTo, dataFrom, dataTo }: IData) => void;
+  updateNodeParent: ({ nodeFrom, nodeTo, dataTo }: IData) => void;
   draggedElem: HTMLElement;
   droppedElem: HTMLElement;
 }
@@ -66,7 +66,7 @@ const checkMoveCondition = ({ draggedDepth, draggedLevel, newParentLevel, oldPar
   return true;
 };
 
-const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, moveNode, draggedElem, droppedElem }: IChangeParentProps) => {
+const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, updateNodeParent, draggedElem, droppedElem }: IChangeParentProps) => {
   const [draggedNodeNum, oldParentNodeNum] = [getNodeNum(draggedElem), getNodeNum(getParentElem(draggedElem))];
   const [newParentNodeNum, newAncestorNodeNum] = [getNodeNum(droppedElem), getNodeNum(getParentElem(droppedElem))];
   if (!checkParentConditon({ draggedNodeNum, oldParentNodeNum, newParentNodeNum, newAncestorNodeNum })) return;
@@ -103,7 +103,7 @@ const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, moveNode, draggedEle
     dataTo: changeNodeIds.map((nodeId) => nextNodes.get(nodeId!)),
   };
 
-  // moveNode(payload);
+  updateNodeParent(payload as any);
 };
 
 const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNodes) => {
@@ -120,7 +120,7 @@ const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNode
 };
 
 const MindMap: React.FC<IProps> = ({ mindmapData }) => {
-  const { moveNode } = useHistoryEmitter();
+  const { updateNodeParent } = useHistoryEmitter();
   const curNodes = mindmapData.mindNodes;
   const nextNodes = getNextMapState(mindmapData).mindNodes;
   const nodeInfos = getNodeInfo(new Map(), mindmapData.rootId, mindmapData.mindNodes);
@@ -128,7 +128,7 @@ const MindMap: React.FC<IProps> = ({ mindmapData }) => {
   const handleDropNode = (event: React.MouseEvent, draggedElem: HTMLElement) => {
     event.preventDefault();
     const droppedElem = event.target as HTMLElement;
-    changeNodeParent({ curNodes, nextNodes, nodeInfos, moveNode, draggedElem, droppedElem });
+    changeNodeParent({ curNodes, nextNodes, nodeInfos, updateNodeParent, draggedElem, droppedElem });
   };
   useDragEvent({ drop: handleDropNode }, [], 'skyblue');
 

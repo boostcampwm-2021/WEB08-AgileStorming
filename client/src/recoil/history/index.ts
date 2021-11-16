@@ -1,5 +1,6 @@
 import { EventType } from 'hooks/useHistoryEmitter';
 import { atom } from 'recoil';
+import { Levels } from 'utils/helpers';
 
 export interface IHistories {
   histories: IHistory[];
@@ -20,12 +21,12 @@ export interface IHistory {
   id: number;
 }
 
-export interface AddData {
+export interface IAddData {
   content: string;
   children: string;
 }
 
-interface DeleteData {
+export interface IDeleteData {
   id: number;
   content: string;
   index: number;
@@ -36,25 +37,26 @@ interface DeleteData {
   priority: string;
 }
 
-interface MoveData {
+export interface IMoveData {
   posX: number;
   posY: number;
 }
 
-interface UpdateParentData {
-  id: number;
+export interface IUpdateParentData {
+  nodeId: number;
+  nodeParentType: Levels;
 }
 
-interface UpdateChildrenData {
+export interface IUpdateChildrenData {
   parentId: number;
   children: number[];
 }
 
-interface UpdateInfoData {
+export interface IUpdateInfoData {
   changed: { assignee: string };
 }
 
-export type TDataTypes = AddData | DeleteData | MoveData | UpdateParentData | UpdateChildrenData | UpdateInfoData;
+export type TDataTypes = IAddData | IDeleteData | IMoveData | IUpdateParentData | IUpdateChildrenData | IUpdateInfoData;
 
 export const historyState = atom<IHistories>({
   key: 'historyAtom',

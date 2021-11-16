@@ -13,7 +13,7 @@ const useHistoryController = () => {
   const handleMoveForward = () => {
     if (historyIdxRef.current < histories.length - 2) {
       const nextIdx = historyIdxRef.current + 1;
-      historyHandler({ mindmap, setMindmap, history: histories[nextIdx], isForward: true });
+      historyHandler({ setMindmap, history: histories[nextIdx], isForward: true });
       historyIdxRef.current = nextIdx;
     }
   };
@@ -21,7 +21,7 @@ const useHistoryController = () => {
   const handleMoveBackward = () => {
     if (historyIdxRef.current > 0) {
       const prevIdx = historyIdxRef.current - 1;
-      historyHandler({ mindmap, setMindmap, history: histories[prevIdx], isForward: true });
+      historyHandler({ setMindmap, history: histories[prevIdx], isForward: true });
       historyIdxRef.current = prevIdx;
     }
   };

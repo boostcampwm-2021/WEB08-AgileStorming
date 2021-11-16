@@ -21,6 +21,7 @@ export enum EventType {
   CHANGE_EXPECTED_AT = 'CHANGE_EXPECTED_AT',
   CHANGE_EXPECTED_TIME = 'CHANGE_EXPECTED_TIME',
   CHANGE_PRIORITY = 'CHANGE_PRIORITY',
+  UPDATE_NODE_PARENT = 'UPDATE_NODE_PARENT',
 }
 
 const useHistoryEmitter = () => {
@@ -38,6 +39,9 @@ const useHistoryEmitter = () => {
   };
 
   const addNode = ({ nodeFrom, dataTo }: IData) => historyEmitter({ type: EventType.ADD_NODE, payload: { nodeFrom, dataTo } });
+
+  const updateNodeParent = ({ nodeFrom, nodeTo, dataFrom, dataTo }: IData) =>
+    historyEmitter({ type: EventType.UPDATE_NODE_PARENT, payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
 
   const moveNode = ({ nodeFrom, nodeTo, dataFrom, dataTo }: IData) =>
     historyEmitter({ type: EventType.MOVE_NODE, payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
@@ -64,6 +68,7 @@ const useHistoryEmitter = () => {
 
   return {
     addNode,
+    updateNodeParent,
     moveNode,
     deleteNode,
     changeContent,
