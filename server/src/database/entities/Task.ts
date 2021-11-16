@@ -10,19 +10,19 @@ export class Task {
   @JoinColumn({ name: 'nodeId' })
   nodeId: Mindmap;
 
-  @Column()
+  @Column({ nullable: true })
   priority: string;
 
   @ManyToOne(() => User, (assignee) => assignee.tasks, { cascade: true })
   assignee: User;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'datetime', nullable: true })
   dueDate: Date;
 
-  @Column()
+  @Column({ nullable: true })
   estimatedTime: string;
 
-  @Column()
+  @Column({ nullable: true })
   finishedTime: string;
 
   @ManyToOne(() => Sprint, (sprints) => sprints.id, { cascade: true })
