@@ -1,13 +1,10 @@
 import useProjectId from 'hooks/useRoomId';
 import useHistoryReceiver, { IHistoryReceiver } from 'hooks/useHistoryReceiver';
 import { useEffect } from 'react';
-import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
+import { SetterOrUpdater, useRecoilState } from 'recoil';
 import { ISocket, socketState } from 'recoil/socket';
 import io from 'socket.io-client';
 import useUserReceiver, { IUserReceiver } from 'hooks/useUserReceiver';
-import { project } from 'utils/api';
-import { mindmapState } from 'recoil/mindmap';
-import { IMindNode, IMindNodes } from 'types/mindmap';
 import { parseHistoryEvent, parseNonHistoryEvent } from 'utils/parser';
 import { INonHistoryEventData } from 'types/event';
 
@@ -18,23 +15,6 @@ interface IInitProps {
   nonHistoryEventReceiver: (eventData: INonHistoryEventData) => void;
   userReceiver: IUserReceiver;
 }
-
-interface IDataProps extends Partial<IMindNode> {
-  id?: number;
-  createdAt: string;
-}
-
-const getInitInfo = async (newProjectId: string) => {
-  const data = await project.getInfo(newProjectId);
-  const initNodes = new Map(
-    data.mindmap.map((node: IDataProps) => {
-      const { id: nodeId, ...props } = node;
-      return [nodeId, { nodeId, ...props }];
-    })
-  );
-  const rootId = data.mindmap.filter((node: IDataProps) => node.level === 'ROOT')[0].id;
-  return { rootId: rootId, mindNodes: initNodes as IMindNodes };
-};
 
 const initSocket = ({ projectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver }: IInitProps) => {
   window.socket = io(process.env.REACT_APP_SERVER!, {
@@ -74,7 +54,6 @@ const initSocket = ({ projectId, setSocket, historyReceiver, nonHistoryEventRece
 const useSocketSetup = () => {
   const newProjectId = useProjectId();
   const [{ projectId }, setSocket] = useRecoilState(socketState);
-  const setMindmap = useSetRecoilState(mindmapState);
   const { historyReceiver, nonHistoryEventReceiver } = useHistoryReceiver();
   const userReceiver = useUserReceiver();
 
@@ -86,8 +65,6 @@ const useSocketSetup = () => {
           window.socket!.emit('leave', projectId);
           window.socket = null;
         }
-        const initMap = await getInitInfo(newProjectId);
-        setMindmap(initMap);
         initSocket({ projectId: newProjectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver });
       }
     })();

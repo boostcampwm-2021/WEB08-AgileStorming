@@ -1,4 +1,5 @@
 import { ILabel } from './label';
+import { IMindNode } from './mindmap';
 import { ISprint } from './sprint';
 import { IUser } from './user';
 
@@ -8,5 +9,11 @@ export interface IProject {
   labels: ILabel[];
   sprints: ISprint[];
   users: IUser[];
+  mindmap: IMindmapData[];
   createdAt: Date;
+}
+
+interface IMindmapData extends Partial<IMindNode> {
+  id?: number;
+  createdAt: string;
 }
