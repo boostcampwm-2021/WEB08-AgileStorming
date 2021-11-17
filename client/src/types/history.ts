@@ -6,7 +6,7 @@ export type THistoryRowData = [string, ['type', string, 'projectId', string, 'us
 export interface IHistoryData {
   id?: number;
   projectId: string;
-  user: IUser;
+  user: string;
   type: THistoryEventType;
   data: THistoryEventData;
   newNodeId?: number;

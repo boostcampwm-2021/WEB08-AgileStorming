@@ -16,7 +16,7 @@ interface IParams {
 const getNewHistoryData = async ({ projectId, showMessage, setHistoryData }: IParams) => {
   try {
     const historyRowData = await API.history.get(projectId);
-    const historyData: IHistoryData[] = historyRowData.map((data: THistoryRowData) => parseHistory(data));
+    const historyData: IHistoryData[] = historyRowData.map((data: THistoryRowData) => parseHistory(data)).reverse();
     setHistoryData((prev: IHistoryData[]) => [...historyData, ...prev]);
   } catch (err) {
     console.log(err);

@@ -1,4 +1,6 @@
 import { Title } from 'components/atoms';
+import { useRecoilValue } from 'recoil';
+import { queryUserListState } from 'recoil/user-list';
 import { IHistoryData } from 'types/history';
 import { Profile } from '..';
 import { Wrapper } from './style';
@@ -8,11 +10,13 @@ interface IProps {
 }
 
 const HistoryLog: React.FC<IProps> = ({ history }) => {
+  const userList = useRecoilValue(queryUserListState);
+
   return (
     <Wrapper>
-      {history ? (
+      {history && userList ? (
         <>
-          <Profile user={history.user} />
+          <Profile user={userList[history.user]} />
           <Title titleStyle='large' color='white' margin='0 0 0 1rem' lineHeight={2.5}>
             {history.type}
           </Title>
