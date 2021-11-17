@@ -13,7 +13,7 @@ enum EventArgs {
 }
 
 type THistoryEventFunction = (data?: eventType.THistoryEventData, project?: string, user?: number) => Promise<number> | void;
-type TEventFunction = (data?: eventType.TEventData, project?: string, user?: number) => Promise<number> | void;
+type TEventFunction = (data?: eventType.TEventData, project?: string, user?: number) => Promise<number> | Promise<string> | void;
 
 const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEventFunction> => {
   return {
@@ -55,8 +55,9 @@ const eventFunction = (): Record<eventType.TEventType, TEventFunction> => {
     ADD_SPRINT: (data, project) => {
       return createSprint(project, data as eventType.TAddSprint);
     },
-    ADD_LABEL: (data, project) => {
-      return createLabel(project, data as eventType.TAddLabel);
+    ADD_LABEL: async (data, project) => {
+      const { id, name, color } = await createLabel(project, data as eventType.TAddLabel);
+      return JSON.stringify({ id, name, color });
     },
     ADD_COMMENT: (data) => {
       return createComment(data as eventType.TAddComment);
