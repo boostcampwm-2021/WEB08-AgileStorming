@@ -22,6 +22,9 @@ export class Task {
   @Column({ nullable: true })
   estimatedTime: string;
 
+  @Column({ default: 'To Do' })
+  status: string;
+
   @Column({ nullable: true })
   finishedTime: string;
 
