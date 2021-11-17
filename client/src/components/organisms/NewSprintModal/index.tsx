@@ -3,29 +3,37 @@ import { ModalOverlay, Input, SmallText } from 'components/atoms';
 import { PopupLayout, TextButton } from 'components/molecules';
 import useModal from 'hooks/useModal';
 import { TAddSprint } from 'types/event';
-import styled from '@emotion/styled';
+import useToast from 'hooks/useToast';
+import { isHaveEmptyString, isISODate } from 'utils/form';
+import { SplitDiv } from './style';
+import useHistoryEmitter from 'hooks/useHistoryEmitter';
 
 export interface INewSprintModalProps {
   noProps?: string;
 }
 
-export const SplitDiv = styled.div`
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: 47% auto;
-  span {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-`;
-
 const NewSprintModal: React.FC<INewSprintModalProps> = () => {
   const newSprint = useRef<TAddSprint>({ name: '', startDate: '', endDate: '' });
+  const { addSprint } = useHistoryEmitter();
   const { hideModal } = useModal();
+  const { showMessage } = useToast();
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => (newSprint.current.name = e.target.value);
-  const handleSubmit = () => console.log(newSprint);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, key: keyof TAddSprint) => (newSprint.current[key] = e.target.value);
+  const handleSubmit = () => {
+    if (isHaveEmptyString(Object.values(newSprint.current))) {
+      showMessage('값을 모두 입력하세요.');
+      return;
+    }
+    if (!isISODate(newSprint.current.startDate) || !isISODate(newSprint.current.endDate)) {
+      showMessage('YYYY-MM-DD 형식으로 입력하세요.');
+      return;
+    }
+
+    const { name, startDate, endDate } = newSprint.current;
+    addSprint({ name, startDate, endDate });
+    hideModal();
+  };
+
   return (
     <>
       <ModalOverlay visible={true} onClick={hideModal} />
@@ -33,11 +41,11 @@ const NewSprintModal: React.FC<INewSprintModalProps> = () => {
         <SmallText color={'black'} margin={'1rem 0 0 0'}>
           새 스프린트 이름을 입력하세요.
         </SmallText>
-        <Input placeholder={'새 스프린트 이름'} margin={'1rem 0'} onChange={handleNameChange} inputStyle={'gray'} />
+        <Input placeholder={'새 스프린트 이름'} margin={'1rem 0'} onChange={(e) => handleInputChange(e, 'name')} inputStyle={'gray'} />
         <SmallText color={'black'}>시작 날짜와 종료날짜를 입력하세요.</SmallText>
         <SplitDiv>
-          <Input placeholder={'YY-MM-DD'} margin={'1rem 0'} onChange={handleNameChange} inputStyle={'gray'} />
-          <Input placeholder={'YY-MM-DD'} margin={'1rem 0'} onChange={handleNameChange} inputStyle={'gray'} />
+          <Input placeholder={'YYYY-MM-DD'} margin={'1rem 0'} onChange={(e) => handleInputChange(e, 'startDate')} inputStyle={'gray'} />
+          <Input placeholder={'YYYY-MM-DD'} margin={'1rem 0'} onChange={(e) => handleInputChange(e, 'endDate')} inputStyle={'gray'} />
         </SplitDiv>
 
         <TextButton onClick={handleSubmit} text={'생성'} textColor={'red'} textWeight={'bold'} margin={'0 0 0 auto'} />
