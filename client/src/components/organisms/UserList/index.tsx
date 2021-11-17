@@ -1,8 +1,8 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { connectedUserState, userListOpenState, queryUserListState } from 'recoil/user-list';
+import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { connectedUserState, queryUserListState } from 'recoil/user-list';
 import { PopupItemLayout, PopupLayout, IconButton, Profile } from 'components/molecules';
 import { BoxButton } from 'components/atoms';
-
 import { userIcon, share } from 'img';
 import styled from '@emotion/styled';
 import useToast from 'hooks/useToast';
@@ -25,7 +25,7 @@ const StyledConnectionStatus = styled.p<IStyledConnectionStatus>`
 `;
 
 export const UserList = () => {
-  const [isUserListOpen, setUserListOpen] = useRecoilState(userListOpenState);
+  const [isUserListOpen, setUserListOpen] = useState(false);
   const userList = useRecoilValue(queryUserListState)!;
   const connectedUsers = useRecoilValue(connectedUserState);
   const { showMessage } = useToast();
