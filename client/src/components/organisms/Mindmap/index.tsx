@@ -1,10 +1,11 @@
 import React from 'react';
 import MindmapTree from 'components/organisms/MindmapTree';
-import { IMindmapData, getNextMapState, IMindNodes } from 'recoil/mindmap';
+import { getNextMapState } from 'recoil/mindmap';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import useDragEvent from 'hooks/useDragEvent';
 import { getRegexNumber, idxToLevel, levelToIdx } from 'utils/helpers';
-import { THistoryEventData } from 'utils/event-types';
+import { THistoryEventData } from 'types/event';
+import { IMindmapData, IMindNodes } from 'types/mindmap';
 
 interface IProps {
   mindmapData: IMindmapData;

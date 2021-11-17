@@ -1,4 +1,4 @@
-import { THistoryEventData } from './event-types';
+import { THistoryEventData } from 'types/event';
 
 interface ICoord {
   x: number;
@@ -91,10 +91,10 @@ const getNewNode = (id: number, level: Levels, content: string) => ({
   sprint: null,
   assignee: null,
   createdAt: new Date().toISOString(),
-  expectedAt: null,
-  closedAt: null,
-  expectedTime: null,
   priority: null,
+  dueDate: null,
+  estimatedTime: null,
+  finishedTime: null,
   comment: [],
 });
 

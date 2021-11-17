@@ -1,19 +1,5 @@
 import { atom } from 'recoil';
-import { IUser } from 'types/user';
-import { THistoryEventData, THistoryEventType } from 'utils/event-types';
-
-export interface IHistory {
-  history: IHistoryData[];
-}
-
-export interface IHistoryData {
-  id?: number;
-  projectId: string;
-  user: IUser;
-  type: THistoryEventType;
-  data: THistoryEventData;
-  newNodeId?: number;
-}
+import { IHistory, IHistoryData } from 'types/history';
 
 export const historyState = atom<IHistory>({
   key: 'historyAtom',

@@ -4,7 +4,7 @@ import { Wrapper, UpperDiv } from './style';
 import { Title } from 'components/atoms';
 import { HistoryLog, IconButton, PlayController, HistoryWindow } from 'components/molecules';
 import { useState } from 'react';
-import { IHistoryData } from 'recoil/history';
+import { IHistoryData } from 'types/history';
 
 const dummyUser = {
   id: 'lapa',

@@ -1,7 +1,6 @@
 import { Tree } from 'components/molecules';
 import React from 'react';
-
-import { IMindmapData } from 'recoil/mindmap';
+import { IMindmapData } from 'types/mindmap';
 
 interface IProps {
   mindmapData: IMindmapData;

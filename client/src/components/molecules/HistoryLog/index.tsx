@@ -1,5 +1,5 @@
 import { Title } from 'components/atoms';
-import { IHistoryData } from 'recoil/history';
+import { IHistoryData } from 'types/history';
 import { Profile } from '..';
 import { Wrapper } from './style';
 

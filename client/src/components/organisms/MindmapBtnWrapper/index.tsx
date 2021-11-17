@@ -1,12 +1,13 @@
 import { useHistory } from 'react-router-dom';
 import { clock, plusCircle } from 'img';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { getNextMapState, IMindmapData, IMindNode, mindmapState } from 'recoil/mindmap';
+import { getNextMapState, mindmapState } from 'recoil/mindmap';
 import { getChildLevel } from 'utils/helpers';
 import { BoxButton } from 'components/atoms';
 import useProjectId from 'hooks/useRoomId';
 import { selectedNodeIdState, selectedNodeState } from 'recoil/node';
 import { Wrapper } from './style';
+import { IMindmapData, IMindNode } from 'types/mindmap';
 
 interface ITempNodeParams {
   mindmapData: IMindmapData;
