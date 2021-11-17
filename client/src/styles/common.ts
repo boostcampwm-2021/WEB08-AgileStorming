@@ -43,7 +43,7 @@ const fontSize: { [key in TFontSize]: string } = {
   xlarge: calcRem(20),
   xxlarge: calcRem(22),
   xxxlarge: calcRem(24),
-  title: calcRem(50),
+  title: calcRem(36),
 };
 
 const padding: { [key in TSize]: string } = {
