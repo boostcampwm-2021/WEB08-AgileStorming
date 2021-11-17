@@ -40,7 +40,7 @@ export const project = {
     });
     return userList;
   },
-  getInfo: async (projectId: string): Promise<IProject> => {
+  getInfo: async (projectId: string) => {
     const info = await api.get('/project/info', {
       params: { projectId },
     });

@@ -1,7 +1,9 @@
-import { SetterOrUpdater, useSetRecoilState } from 'recoil';
+import { SetterOrUpdater, useRecoilValue, useSetRecoilState } from 'recoil';
 import { getNextMapState, mindmapState } from 'recoil/mindmap';
-import { TAddNodeData, THistoryEventData, TTask, TUpdateNodeContent, TUpdateTaskInformation } from 'types/event';
+import { labelListState, projectIdState } from 'recoil/project';
+import { INonHistoryEventData, TAddNodeData, THistoryEventData, TTask, TUpdateNodeContent, TUpdateTaskInformation } from 'types/event';
 import { IHistory, IHistoryData } from 'types/history';
+import { ILabel } from 'types/label';
 import { IMindmapData, IMindNode } from 'types/mindmap';
 import { getChildLevel } from 'utils/helpers';
 
@@ -106,11 +108,38 @@ export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryH
   }
 };
 
+interface INonHistoryEventHandlerProps {
+  response: INonHistoryEventData;
+  myProjectId: string | null;
+  setLabelList: SetterOrUpdater<ILabel[]>;
+}
+
+const nonHistoryEventHandler = ({ response, myProjectId, setLabelList }: INonHistoryEventHandlerProps) => {
+  const { projectId, type, dbData } = response;
+
+  if (projectId !== myProjectId) {
+    return;
+  }
+
+  switch (type) {
+    case 'ADD_LABEL':
+      setLabelList((prev) => [...prev, dbData as ILabel]);
+      break;
+    default:
+      break;
+  }
+};
+
 const useHistoryReceiver = () => {
+  const myProjectId = useRecoilValue(projectIdState);
   const setMindmap = useSetRecoilState(mindmapState);
+  const setLabelList = useSetRecoilState(labelListState);
+
   const historyReceiver = (historyData: IHistoryData) => {
     historyHandler({ setMindmap, historyData, isForward: true });
   };
-  return historyReceiver;
+  const nonHistoryEventReceiver = (response: INonHistoryEventData) => nonHistoryEventHandler({ response, myProjectId, setLabelList });
+
+  return { historyReceiver, nonHistoryEventReceiver };
 };
 export default useHistoryReceiver;
