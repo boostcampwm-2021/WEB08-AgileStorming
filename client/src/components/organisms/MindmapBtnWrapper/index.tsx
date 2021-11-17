@@ -18,7 +18,7 @@ const TEMP_NODE_ID = -1;
 
 const createTempNode = ({ mindmapData, selectedNodeId }: ITempNodeParams) => {
   const { rootId, mindNodes } = mindmapData;
-  const parentNode = { ...mindNodes.get(selectedNodeId ?? 0) } as IMindNode;
+  const parentNode = { ...mindNodes.get(selectedNodeId ?? rootId) } as IMindNode;
   const level = getChildLevel(parentNode!.level!);
 
   const tempNode = { nodeId: TEMP_NODE_ID, level: level, content: '', children: [] };
