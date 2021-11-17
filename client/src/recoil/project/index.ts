@@ -18,6 +18,11 @@ export const userListState = atom<IUser[]>({
   default: [],
 });
 
+export const connectedUserState = atom<Record<string, boolean>>({
+  key: 'connectedUser',
+  default: {},
+});
+
 export const labelListState = atom<ILabel[]>({
   key: 'labelList',
   default: [],

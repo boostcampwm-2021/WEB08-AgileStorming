@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { xread, xadd } from './redis';
 import { convertHistoryEvent, convertEvent } from './event-converter';
 import { getUserHasProject, addUserToProject } from '../services/project';
+import { findOneUser } from '../services/user';
 
 dotenv.config();
 
@@ -45,9 +46,10 @@ const socketIO = (server, origin) => {
       io.in(projectId).emit('history-event', eventData, dbData);
     };
 
-    const handleNewUser = () => {
+    const handleNewUser = async () => {
       addUserToProject(id, projectId);
-      io.in(projectId).emit('new', id);
+      const newUser = await findOneUser(id);
+      io.in(projectId).emit('new', JSON.stringify(newUser));
     };
 
     socket.join(projectId);
