@@ -1,13 +1,14 @@
 import { useRecoilState } from 'recoil';
 import RegisterModal from 'components/organisms/RegisterModal';
+import { NewSprintModal, TextInputModal } from 'components/organisms';
 import { modalState } from 'recoil/modal';
 
-export enum ModalTypes {
-  REGISTER_MODAL = 'RegisterModal',
-}
+export type TModal = 'registerModal' | 'textInputModal';
 
-const MODAL_COMPONENTS = {
-  [ModalTypes.REGISTER_MODAL]: RegisterModal,
+const modalTypeToComponent = {
+  registerModal: RegisterModal,
+  textInputModal: TextInputModal,
+  newSprintModal: NewSprintModal,
 };
 
 export const GlobalModal = () => {
@@ -16,7 +17,7 @@ export const GlobalModal = () => {
     if (!modalType) {
       return null;
     }
-    const ModalComponent = MODAL_COMPONENTS[modalType];
+    const ModalComponent = modalTypeToComponent[modalType];
     return <ModalComponent {...modalProps} />;
   };
   return <>{renderModal()}</>;

@@ -1,8 +1,11 @@
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { getNextMapState, mindmapState } from 'recoil/mindmap';
-import { TAddNodeData, THistoryEventData, TTask, TUpdateNodeContent, TUpdateTaskInformation } from 'types/event';
+import { labelListState, sprintListState } from 'recoil/project';
+import { INonHistoryEventData, TAddNodeData, THistoryEventData, TTask, TUpdateNodeContent, TUpdateTaskInformation } from 'types/event';
 import { IHistory, IHistoryData } from 'types/history';
+import { ILabel } from 'types/label';
 import { IMindmapData, IMindNode } from 'types/mindmap';
+import { ISprint } from 'types/sprint';
 import { getChildLevel } from 'utils/helpers';
 
 export interface IProps {
@@ -106,11 +109,37 @@ export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryH
   }
 };
 
+interface INonHistoryEventHandlerProps {
+  response: INonHistoryEventData;
+  setLabelList: SetterOrUpdater<ILabel[]>;
+  setSprintList: SetterOrUpdater<ISprint[]>;
+}
+
+const nonHistoryEventHandler = ({ response, setLabelList, setSprintList }: INonHistoryEventHandlerProps) => {
+  const { type, dbData } = response;
+
+  switch (type) {
+    case 'ADD_LABEL':
+      setLabelList((prev) => [...prev, dbData as ILabel]);
+      break;
+    case 'ADD_SPRINT':
+      setSprintList((prev) => [...prev, dbData as ISprint]);
+      break;
+    default:
+      break;
+  }
+};
+
 const useHistoryReceiver = () => {
   const setMindmap = useSetRecoilState(mindmapState);
+  const setLabelList = useSetRecoilState(labelListState);
+  const setSprintList = useSetRecoilState(sprintListState);
+
   const historyReceiver = (historyData: IHistoryData) => {
     historyHandler({ setMindmap, historyData, isForward: true });
   };
-  return historyReceiver;
+  const nonHistoryEventReceiver = (response: INonHistoryEventData) => nonHistoryEventHandler({ response, setLabelList, setSprintList });
+
+  return { historyReceiver, nonHistoryEventReceiver };
 };
 export default useHistoryReceiver;

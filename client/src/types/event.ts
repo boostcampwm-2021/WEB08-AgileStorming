@@ -1,3 +1,7 @@
+import { ILabel } from './label';
+import { ISprint } from './sprint';
+import { IUser } from './user';
+
 export type TDeleteNodeData = {
   nodeId: number;
   content: string;
@@ -79,3 +83,12 @@ export type THistoryEventData = {
 
 export type TEventType = 'ADD_SPRINT' | 'ADD_LABEL' | 'ADD_COMMENT' | 'DELETE_SPRINT' | 'DELETE_LABEL' | 'DELETE_COMMENT';
 export type TEventData = TAddSprint | TAddLabel | TAddComment | TDeleteSprint | TDeleteLabel | TDeleteComment;
+
+export interface INonHistoryEventData {
+  id?: number;
+  projectId: string;
+  user: IUser;
+  type: TEventType;
+  data: TEventData;
+  dbData?: number | ILabel | ISprint;
+}

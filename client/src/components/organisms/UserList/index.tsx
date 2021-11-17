@@ -1,11 +1,11 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { connectedUserState, userListOpenState, queryUserListState } from 'recoil/user-list';
+import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { PopupItemLayout, PopupLayout, IconButton, Profile } from 'components/molecules';
 import { BoxButton } from 'components/atoms';
-
 import { userIcon, share } from 'img';
 import styled from '@emotion/styled';
 import useToast from 'hooks/useToast';
+import { connectedUserState, userListState } from 'recoil/project';
 
 interface IStyledConnectionStatus {
   online: boolean;
@@ -25,29 +25,26 @@ const StyledConnectionStatus = styled.p<IStyledConnectionStatus>`
 `;
 
 export const UserList = () => {
-  const [isUserListOpen, setUserListOpen] = useRecoilState(userListOpenState);
-  const userList = useRecoilValue(queryUserListState)!;
+  const [isUserListOpen, setUserListOpen] = useState(false);
+  const userList = useRecoilValue(userListState)!;
   const connectedUsers = useRecoilValue(connectedUserState);
   const { showMessage } = useToast();
-  const handleClickCloseBtn = () => {
-    setUserListOpen(false);
-  };
-  const handleClickBoxBtn = () => {
-    setUserListOpen(true);
-  };
+
+  const handleClickCloseBtn = () => setUserListOpen(false);
+  const handleClickBoxBtn = () => setUserListOpen(true);
   const handleClickShareBtn = () => {
     navigator.clipboard.writeText(window.location.href);
     showMessage('공유 링크가 클립보드에 복사되었습니다.');
   };
   return isUserListOpen ? (
     <PopupLayout
-      title={`공유됨: ${Object.keys(userList).length} 명`}
+      title={`공유됨: ${userList.length} 명`}
       onClose={handleClickCloseBtn}
       popupStyle='normal'
       extraBtn={<IconButton zIdx={'1'} onClick={handleClickShareBtn} imgSrc={share} altText='공유하기 버튼' />}
     >
       <PopupItemLayout>
-        {Object.values(userList).map((user) => {
+        {userList.map((user) => {
           return (
             <StyledUserInfoBox key={user.id}>
               <Profile user={user} />

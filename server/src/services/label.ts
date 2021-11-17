@@ -11,7 +11,7 @@ export const createLabel = async (projectId: string, labelInfo: TAddLabel) => {
   const project = await findOneProject(projectId);
   const color = await getRepository(Color).createQueryBuilder().orderBy('RAND()').getOne();
   const newLabel = await getRepository(Label).save({ ...labelInfo, color: color.rgb, project });
-  return newLabel.id;
+  return newLabel;
 };
 export const deleteLabel = async (labelId: number) => {
   return getRepository(Label).createQueryBuilder().delete().where({ id: labelId }).execute();

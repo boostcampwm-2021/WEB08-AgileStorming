@@ -19,12 +19,37 @@ export const FilterMenuHeader = styled.div`
 `;
 
 export const FilterItem = styled.div`
-  padding: 0.3rem 0;
   font-weight: bold;
-  border: 2px solid ${({ theme }) => theme.color.white};
+  padding: 0.3rem 0.1rem;
+  border-radius: 0.2rem;
   cursor: pointer;
 
   :hover {
+    color: ${({ theme }) => theme.color.black};
     background-color: ${({ theme }) => theme.color.gray4};
+  }
+`;
+
+export const FilterButton = styled.div`
+  ${({ theme }) => theme.flex.center};
+  padding: 0.1rem 0;
+  margin-top: 0.1rem;
+  border: 2px dotted ${({ theme }) => theme.color.black};
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  :hover {
+    color: ${({ theme }) => theme.color.black};
+    background-color: ${({ theme }) => theme.color.gray4};
+  }
+`;
+
+export const SprintItem = styled.div`
+  display: grid;
+  grid-template-columns: 7.5% 32.5% 60%;
+  span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `;

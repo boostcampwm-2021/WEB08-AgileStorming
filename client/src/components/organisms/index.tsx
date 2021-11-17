@@ -1,6 +1,7 @@
 export { default as FilterPopup } from 'components/organisms/FilterPopup';
 export { default as ProjectCardContainer } from 'components/templates/ProjectCardContainer';
 export { default as NewProjectCard } from 'components/organisms/NewProjectCard';
+export { default as NewSprintModal } from 'components/organisms/NewSprintModal';
 export { default as NodeDetailWrapper } from 'components/organisms/NodeDetailWrapper';
 export { default as ProjectCard } from 'components/organisms/ProjectCard';
 export { default as TextInputModal } from 'components/organisms/TextInputModal';

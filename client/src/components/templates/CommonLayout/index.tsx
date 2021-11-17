@@ -7,6 +7,7 @@ import useSocketSetup from 'hooks/useSocketSetup';
 import { Spinner } from 'components/molecules';
 
 import { LeftInfo, RightInfo, Template } from './style';
+import useProject from 'hooks/useProject';
 
 interface IProps {
   children?: React.ReactNode;
@@ -17,6 +18,7 @@ const CommonLayout: React.FC<IProps> = ({ children }) => {
   const [DisplayFilter, setDisplayFilter] = useState(false);
   const handleFilterButton = () => setDisplayFilter(true);
   const handleClickFilterPopupClose = () => setDisplayFilter(false);
+  useProject();
 
   return (
     <Template>

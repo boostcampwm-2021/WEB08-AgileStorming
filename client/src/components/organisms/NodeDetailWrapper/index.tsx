@@ -9,11 +9,15 @@ import Dropdown from 'components/molecules/Dropdown';
 import useToast from 'hooks/useToast';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import { IMindNode } from 'types/mindmap';
+import { sprintListState, userListState } from 'recoil/project';
 
 export const NodeDetailWrapper = () => {
   const priorityList = useRecoilValue(priorityListState);
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
   const selectedNode = useRecoilValue(selectedNodeState);
+  const sprintList = useRecoilValue(sprintListState);
+  const userList = useRecoilValue(userListState);
+
   const { showMessage } = useToast();
   const { updateNodeContent, updateTaskInformation } = useHistoryEmitter();
 
@@ -104,7 +108,7 @@ export const NodeDetailWrapper = () => {
         <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
           <Dropdown
             id='sprint'
-            items={['스프린트1', '스프린트2']}
+            items={sprintList?.map((sprint) => sprint.name)}
             placeholder={selectedNode.sprint ? selectedNode.sprint + '' : ''}
             onValueChange={handleChangeNodeDetail('sprint')}
             dropdownStyle='small'
@@ -113,7 +117,7 @@ export const NodeDetailWrapper = () => {
         <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
           <Dropdown
             id='assignee'
-            items={['통키', '파피']}
+            items={userList.map((user) => user.name)}
             placeholder={selectedNode.assignee ? selectedNode.assignee + '' : ''}
             onValueChange={handleChangeNodeDetail('assignee')}
             dropdownStyle='small'
