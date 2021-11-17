@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const Template = styled.div`
-  position: fixed;
+  position: relative;
   width: 100%;
   height: 100vh;
   background-color: ${({ theme }) => theme.color.bgWhite};
