@@ -28,7 +28,7 @@ export class Task {
   @Column({ nullable: true })
   finishedTime: string;
 
-  @ManyToOne(() => Sprint, (sprints) => sprints.id, { cascade: true })
+  @ManyToOne(() => Sprint, (sprints) => sprints.id, { onDelete: 'SET NULL' })
   sprint: Sprint;
 
   @ManyToMany(() => Label, (labels) => labels.id, { cascade: true })
