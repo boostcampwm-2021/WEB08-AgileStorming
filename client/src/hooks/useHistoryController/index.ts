@@ -6,14 +6,14 @@ import { mindmapState } from 'recoil/mindmap';
 
 const useHistoryController = () => {
   const [mindmap, setMindmap] = useRecoilState(mindmapState);
-  const { histories } = useRecoilValue(historyState);
-  const historyIdxRef = useRef(histories.length - 1);
+  const { history } = useRecoilValue(historyState);
+  const historyIdxRef = useRef(history.length - 1);
   const lastMindmapRef = useRef(mindmap);
 
   const handleMoveForward = () => {
-    if (historyIdxRef.current < histories.length - 2) {
+    if (historyIdxRef.current < history.length - 2) {
       const nextIdx = historyIdxRef.current + 1;
-      historyHandler({ mindmap, setMindmap, history: histories[nextIdx], isForward: true });
+      historyHandler({ setMindmap, historyData: history[nextIdx], isForward: true });
       historyIdxRef.current = nextIdx;
     }
   };
@@ -21,7 +21,7 @@ const useHistoryController = () => {
   const handleMoveBackward = () => {
     if (historyIdxRef.current > 0) {
       const prevIdx = historyIdxRef.current - 1;
-      historyHandler({ mindmap, setMindmap, history: histories[prevIdx], isForward: true });
+      historyHandler({ setMindmap, historyData: history[prevIdx], isForward: true });
       historyIdxRef.current = prevIdx;
     }
   };

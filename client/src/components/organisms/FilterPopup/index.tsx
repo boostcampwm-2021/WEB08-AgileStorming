@@ -25,8 +25,6 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
     </span>
   );
 
-  console.log(userList);
-
   return (
     <PopupLayout title={`필터링: ${assigneeFilter ?? ''}`} onClose={onClose}>
       <FilterMenuHeader>

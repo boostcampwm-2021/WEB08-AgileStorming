@@ -3,10 +3,11 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Node } from 'components/atoms';
 import { Path, TempNode } from 'components/molecules';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect } from 'utils/helpers';
-import { getNextMapState, IMindmapData, mindmapState } from 'recoil/mindmap';
+import { getNextMapState, mindmapState } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
 import { NodeContainer, ChildContainer } from './style';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
+import { IMindmapData } from 'types/mindmap';
 
 interface ITreeProps {
   nodeId: number;
@@ -63,8 +64,8 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
 
   const addNewNode = (nodeContent: string) => {
     const payload = {
-      nodeFrom: parentId,
-      dataTo: { content: nodeContent, children: JSON.stringify([]) },
+      nodeFrom: parentId!,
+      dataTo: { content: nodeContent },
     };
 
     addNode(payload);

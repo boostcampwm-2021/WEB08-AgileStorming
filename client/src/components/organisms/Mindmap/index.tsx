@@ -1,10 +1,11 @@
 import React from 'react';
 import MindmapTree from 'components/organisms/MindmapTree';
-import { IMindmapData, getNextMapState, IMindNodes } from 'recoil/mindmap';
+import { getNextMapState } from 'recoil/mindmap';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import useDragEvent from 'hooks/useDragEvent';
 import { getRegexNumber, idxToLevel, levelToIdx } from 'utils/helpers';
-import { IData } from 'recoil/history';
+import { THistoryEventData } from 'types/event';
+import { IMindmapData, IMindNodes } from 'types/mindmap';
 
 interface IProps {
   mindmapData: IMindmapData;
@@ -21,7 +22,7 @@ interface IChangeParentProps {
   curNodes: IMindNodes;
   nextNodes: IMindNodes;
   nodeInfos: INodeInfos;
-  moveNode: ({ nodeFrom, nodeTo, dataFrom, dataTo }: IData) => void;
+  updateNodeParent: ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) => void;
   draggedElem: HTMLElement;
   droppedElem: HTMLElement;
 }
@@ -32,9 +33,6 @@ interface ICheckParentProps {
 
 interface ICheckMoveProps {
   draggedDepth: number;
-  draggedLevel: string;
-  newParentLevel: string;
-  oldParentLevelIdx: number;
   newParentLevelIdx: number;
 }
 
@@ -57,16 +55,14 @@ const checkParentConditon = ({ draggedNodeNum, oldParentNodeNum, newParentNodeNu
   return true;
 };
 
-const checkMoveCondition = ({ draggedDepth, draggedLevel, newParentLevel, oldParentLevelIdx, newParentLevelIdx }: ICheckMoveProps) => {
+const checkMoveCondition = ({ draggedDepth, newParentLevelIdx }: ICheckMoveProps) => {
   const MAX_DEPTH = 3;
-  const isMoveTaskeUpperLevel = draggedLevel === 'TASK' && newParentLevel !== 'STORY';
-  const isMoveParentOfTask = draggedDepth + oldParentLevelIdx === MAX_DEPTH && draggedDepth + newParentLevelIdx !== MAX_DEPTH;
   const isOverDepth = draggedDepth + newParentLevelIdx > MAX_DEPTH;
-  if (isMoveTaskeUpperLevel || isMoveParentOfTask || isOverDepth) return false;
+  if (isOverDepth) return false;
   return true;
 };
 
-const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, moveNode, draggedElem, droppedElem }: IChangeParentProps) => {
+const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, updateNodeParent, draggedElem, droppedElem }: IChangeParentProps) => {
   const [draggedNodeNum, oldParentNodeNum] = [getNodeNum(draggedElem), getNodeNum(getParentElem(draggedElem))];
   const [newParentNodeNum, newAncestorNodeNum] = [getNodeNum(droppedElem), getNodeNum(getParentElem(droppedElem))];
   if (!checkParentConditon({ draggedNodeNum, oldParentNodeNum, newParentNodeNum, newAncestorNodeNum })) return;
@@ -74,12 +70,10 @@ const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, moveNode, draggedEle
   const [draggedNode, oldParentNode, newParentNode] = [draggedNodeNum, oldParentNodeNum, newParentNodeNum].map(
     (nodenum) => nextNodes.get(nodenum!)!
   );
-  const [draggedLevel, oldParentLevel, newParentLevel] = [draggedNode, oldParentNode, newParentNode].map((node) => node!.level);
-  const [draggedLevelIdx, oldParentLevelIdx, newParentLevelIdx] = [draggedLevel, oldParentLevel, newParentLevel].map((level) =>
-    levelToIdx(level)
-  );
+  const [draggedLevel, newParentLevel] = [draggedNode, newParentNode].map((node) => node!.level);
+  const [draggedLevelIdx, newParentLevelIdx] = [draggedLevel, newParentLevel].map((level) => levelToIdx(level));
   const draggedDepth = nodeInfos.get(draggedNodeNum!)!.depth;
-  if (!checkMoveCondition({ draggedDepth, draggedLevel, newParentLevel, oldParentLevelIdx, newParentLevelIdx })) return;
+  if (!checkMoveCondition({ draggedDepth, newParentLevelIdx })) return;
 
   oldParentNode.children = oldParentNode.children.filter((childNodeNum) => childNodeNum !== draggedNodeNum);
   if (!newParentNode.children.includes(draggedNodeNum!)) newParentNode.children.push(draggedNodeNum!);
@@ -103,7 +97,7 @@ const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, moveNode, draggedEle
     dataTo: changeNodeIds.map((nodeId) => nextNodes.get(nodeId!)),
   };
 
-  // moveNode(payload);
+  updateNodeParent(payload as any);
 };
 
 const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNodes) => {
@@ -120,7 +114,7 @@ const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNode
 };
 
 const MindMap: React.FC<IProps> = ({ mindmapData }) => {
-  const { moveNode } = useHistoryEmitter();
+  const { updateNodeParent } = useHistoryEmitter();
   const curNodes = mindmapData.mindNodes;
   const nextNodes = getNextMapState(mindmapData).mindNodes;
   const nodeInfos = getNodeInfo(new Map(), mindmapData.rootId, mindmapData.mindNodes);
@@ -128,7 +122,7 @@ const MindMap: React.FC<IProps> = ({ mindmapData }) => {
   const handleDropNode = (event: React.MouseEvent, draggedElem: HTMLElement) => {
     event.preventDefault();
     const droppedElem = event.target as HTMLElement;
-    changeNodeParent({ curNodes, nextNodes, nodeInfos, moveNode, draggedElem, droppedElem });
+    changeNodeParent({ curNodes, nextNodes, nodeInfos, updateNodeParent, draggedElem, droppedElem });
   };
   useDragEvent({ drop: handleDropNode }, [], 'skyblue');
 

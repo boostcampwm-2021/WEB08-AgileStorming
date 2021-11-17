@@ -1,67 +1,12 @@
-import { EventType } from 'hooks/useHistoryEmitter';
 import { atom } from 'recoil';
+import { IHistory, IHistoryData } from 'types/history';
 
-export interface IHistories {
-  histories: IHistory[];
-}
-
-export interface IData {
-  nodeFrom?: number | null;
-  nodeTo?: number | null;
-  dataFrom?: TDataTypes | null;
-  dataTo?: TDataTypes | null;
-}
-
-export interface IHistory {
-  type: EventType;
-  projectId: string;
-  user: string;
-  data: IData;
-  id: number;
-}
-
-export interface AddData {
-  content: string;
-  children: string;
-}
-
-interface DeleteData {
-  id: number;
-  content: string;
-  index: number;
-  status: string;
-  posX: number;
-  posY: number;
-  assignee: string;
-  priority: string;
-}
-
-interface MoveData {
-  posX: number;
-  posY: number;
-}
-
-interface UpdateParentData {
-  id: number;
-}
-
-interface UpdateChildrenData {
-  parentId: number;
-  children: number[];
-}
-
-interface UpdateInfoData {
-  changed: { assignee: string };
-}
-
-export type TDataTypes = AddData | DeleteData | MoveData | UpdateParentData | UpdateChildrenData | UpdateInfoData;
-
-export const historyState = atom<IHistories>({
+export const historyState = atom<IHistory>({
   key: 'historyAtom',
-  default: { histories: [] },
+  default: { history: [] },
 });
 
-export const getParsedHistory = (data: string[], id?: number): IHistory => {
+export const getParsedHistory = (data: string[], newNodeId?: number): IHistoryData => {
   const stringJson =
     data.reduce(
       (acc: string, v: string, i: number) => {
@@ -73,7 +18,7 @@ export const getParsedHistory = (data: string[], id?: number): IHistory => {
         }
         return acc;
       },
-      id ? `{"id": ${id},` : '{'
+      newNodeId ? `{"newNodeId": ${newNodeId},` : '{'
     ) + '}';
   return JSON.parse(stringJson);
 };

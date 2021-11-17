@@ -1,29 +1,5 @@
 import { atom, selector } from 'recoil';
-import { Levels } from 'utils/helpers';
-
-export interface IMindmapData {
-  rootId: number;
-  mindNodes: IMindNodes;
-}
-
-export interface IMindNode {
-  nodeId: number;
-  level: Levels;
-  content: string;
-  children: Array<number>;
-  backlogId?: string;
-  label?: number[];
-  sprint?: string | undefined;
-  assignee?: string | undefined;
-  createdAt?: string;
-  expectedAt?: string | undefined;
-  closedAt?: string | undefined;
-  expectedTime?: string | undefined;
-  priority?: string | undefined;
-  comment?: [];
-}
-
-export type IMindNodes = Map<number, IMindNode>;
+import { IMindmapData } from 'types/mindmap';
 
 export const getNextMapState = (prevState: IMindmapData) => {
   const nextNodes = new Map(prevState.mindNodes);

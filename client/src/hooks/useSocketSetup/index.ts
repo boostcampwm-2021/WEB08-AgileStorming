@@ -1,9 +1,8 @@
 import useProjectId from 'hooks/useRoomId';
 import useHistoryReceiver, { IHistoryReceiver } from 'hooks/useHistoryReceiver';
 import { useEffect } from 'react';
-import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
-import { getParsedHistory, historyState } from 'recoil/history';
-import { mindmapState } from 'recoil/mindmap';
+import { SetterOrUpdater, useRecoilState } from 'recoil';
+import { getParsedHistory } from 'recoil/history';
 import { ISocket, socketState } from 'recoil/socket';
 import io from 'socket.io-client';
 import useUserReceiver, { IUserReceiver } from 'hooks/useUserReceiver';
@@ -39,8 +38,8 @@ const initSocket = ({ projectId, setSocket, historyReceiver, userReceiver }: IIn
   socket.on('left', (userId: string) => {
     userReceiver({ data: userId, type: 'LEFT' });
   });
-  socket.on('event', (data, id) => {
-    const history = getParsedHistory(data, id);
+  socket.on('event', (data, dbData) => {
+    const history = getParsedHistory(data, dbData);
     console.log('event', history);
     historyReceiver(history);
   });
@@ -50,9 +49,7 @@ const initSocket = ({ projectId, setSocket, historyReceiver, userReceiver }: IIn
 const useSocketSetup = () => {
   const newProjectId = useProjectId();
   const [{ projectId }, setSocket] = useRecoilState(socketState);
-  const [mindmap, setMindmap] = useRecoilState(mindmapState);
-  const setHistory = useSetRecoilState(historyState);
-  const historyReceiver = useHistoryReceiver({ mindmap, setMindmap, setHistory });
+  const historyReceiver = useHistoryReceiver();
   const userReceiver = useUserReceiver();
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { IData } from 'recoil/history';
+import { THistoryEventData } from 'types/event';
 
 interface ICoord {
   x: number;
@@ -91,14 +91,20 @@ const getNewNode = (id: number, level: Levels, content: string) => ({
   sprint: null,
   assignee: null,
   createdAt: new Date().toISOString(),
-  expectedAt: null,
-  closedAt: null,
-  expectedTime: null,
   priority: null,
+  dueDate: null,
+  estimatedTime: null,
+  finishedTime: null,
   comment: [],
 });
 
-const fillPayload = (payload: IData): IData => ({ nodeFrom: null, nodeTo: null, dataFrom: null, dataTo: null, ...payload });
+const fillPayload = (payload: THistoryEventData): THistoryEventData => ({
+  nodeFrom: null,
+  nodeTo: null,
+  dataFrom: null,
+  dataTo: null,
+  ...payload,
+});
 
 const getChildLevel = (level: Levels): Levels => idxToLevel(levelToIdx(level) + 1);
 

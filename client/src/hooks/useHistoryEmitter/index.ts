@@ -1,5 +1,5 @@
 import useToast from 'hooks/useToast';
-import { IData } from 'recoil/history';
+import { THistoryEventData, THistoryEventType } from 'types/event';
 import { fillPayload } from 'utils/helpers';
 
 export interface IHistoryEmitter {
@@ -7,20 +7,8 @@ export interface IHistoryEmitter {
 }
 
 export interface IHistoryEmitterProps {
-  type: EventType;
-  payload: IData;
-}
-
-export enum EventType {
-  ADD_NODE = 'ADD_NODE',
-  MOVE_NODE = 'MOVE_NODE',
-  DELETE_NODE = 'DELETE_NODE',
-  CHANGE_CONTENT = 'CHANGE_CONTENT',
-  CHANGE_SPRINT = 'CHANGE_SPRINT',
-  CHANGE_ASSIGNEE = 'CHANGE_ASSIGNEE',
-  CHANGE_EXPECTED_AT = 'CHANGE_EXPECTED_AT',
-  CHANGE_EXPECTED_TIME = 'CHANGE_EXPECTED_TIME',
-  CHANGE_PRIORITY = 'CHANGE_PRIORITY',
+  type: THistoryEventType;
+  payload: THistoryEventData;
 }
 
 const useHistoryEmitter = () => {
@@ -31,47 +19,39 @@ const useHistoryEmitter = () => {
       showMessage('서버와의 연결이 불안정합니다');
       return;
     }
-
+    console.log(type, payload);
     payload = fillPayload(payload);
-
-    window.socket.emit('event', type, JSON.stringify(payload));
+    window.socket.emit('history-event', type, JSON.stringify(payload));
   };
 
-  const addNode = ({ nodeFrom, dataTo }: IData) => historyEmitter({ type: EventType.ADD_NODE, payload: { nodeFrom, dataTo } });
+  const addNode = ({ nodeFrom, dataTo }: THistoryEventData) => historyEmitter({ type: 'ADD_NODE', payload: { nodeFrom, dataTo } });
 
-  const moveNode = ({ nodeFrom, nodeTo, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: EventType.MOVE_NODE, payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
+  const deleteNode = ({ nodeFrom, dataFrom }: THistoryEventData) =>
+    historyEmitter({ type: 'DELETE_NODE', payload: { nodeFrom, dataFrom } });
 
-  const deleteNode = ({ nodeFrom, dataFrom }: IData) => historyEmitter({ type: EventType.DELETE_NODE, payload: { nodeFrom, dataFrom } });
+  const moveNode = ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) =>
+    historyEmitter({ type: 'MOVE_NODE', payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
 
-  const changeContent = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: EventType.CHANGE_CONTENT, payload: { nodeFrom, dataFrom, dataTo } });
+  const updateNodeParent = ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) =>
+    historyEmitter({ type: 'UPDATE_NODE_PARENT', payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
 
-  const changeSprint = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: EventType.CHANGE_SPRINT, payload: { nodeFrom, dataFrom, dataTo } });
+  const updateNodeSibling = ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) =>
+    historyEmitter({ type: 'UPDATE_NODE_SIBLING', payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
 
-  const changeAssignee = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: EventType.CHANGE_ASSIGNEE, payload: { nodeFrom, dataFrom, dataTo } });
+  const updateNodeContent = ({ nodeFrom, dataFrom, dataTo }: THistoryEventData) =>
+    historyEmitter({ type: 'UPDATE_NODE_CONTENT', payload: { nodeFrom, dataFrom, dataTo } });
 
-  const changeExpectedAt = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: EventType.CHANGE_EXPECTED_AT, payload: { nodeFrom, dataFrom, dataTo } });
-
-  const changeExpectedTime = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: EventType.CHANGE_EXPECTED_TIME, payload: { nodeFrom, dataFrom, dataTo } });
-
-  const changePriority = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: EventType.CHANGE_PRIORITY, payload: { nodeFrom, dataFrom, dataTo } });
+  const updateTaskInformation = ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) =>
+    historyEmitter({ type: 'UPDATE_TASK_INFORMATION', payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
 
   return {
     addNode,
-    moveNode,
     deleteNode,
-    changeContent,
-    changeSprint,
-    changeAssignee,
-    changeExpectedAt,
-    changeExpectedTime,
-    changePriority,
+    moveNode,
+    updateNodeParent,
+    updateNodeSibling,
+    updateNodeContent,
+    updateTaskInformation,
   };
 };
 
