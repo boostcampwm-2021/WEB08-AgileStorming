@@ -30,6 +30,7 @@ const headerStyleOptions: { [key in TStyle]: string } = {
   modal: `
         color: ${common.color.white};
         font-size: ${common.fontSize.large};
+        padding-top:0.2rem;
         padding-bottom:1rem;
       `,
 };
@@ -37,6 +38,7 @@ const headerStyleOptions: { [key in TStyle]: string } = {
 const headerBackGroundStyleOptions: { [key in TStyle]: string } = {
   normal: ``,
   modal: `
+    height: 2.5rem;  
     background-color: ${common.color.primary1};
     `,
 };
@@ -56,7 +58,6 @@ export const PopupHeaderBackGround = styled.div<IStyleProps>`
   top: 0;
   left: 0;
   width: 100%;
-  height: 2.5rem;
 `;
 
 export const PopupHeader = styled.div<IStyleProps>`
