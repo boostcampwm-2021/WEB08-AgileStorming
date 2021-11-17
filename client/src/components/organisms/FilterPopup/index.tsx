@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import { FilterMenuHeader, FilterItem, SprintItem } from './style';
+import { useRef, useState } from 'react';
+import { FilterMenuHeader, FilterItem, SprintItem, FilterButton } from './style';
 import { useRecoilValue } from 'recoil';
 import { PopupItemLayout, PopupLayout } from 'components/molecules';
 import { ColorIcon, UserIcon } from 'components/atoms';
 import { ISOtoYYMMDD } from 'utils/form';
 import { labelListState, sprintListState, userListState } from 'recoil/project';
+import { plus } from 'img';
+import useModal from 'hooks/useModal';
+import useHistoryEmitter from 'hooks/useHistoryEmitter';
 
 interface IProps {
   onClose: () => void;
@@ -20,12 +23,39 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   const userList = useRecoilValue(userListState);
   const labelList = useRecoilValue(labelListState);
 
+  const { showModal, hideModal } = useModal();
+  const { addLabel } = useHistoryEmitter();
+
+  const newLabelName = useRef<string>('');
+
   const isSelected = (target: string, selected: string | null) => (target === selected ? 'selected' : '');
 
   const handleFilterSelect = (filter: string) => setDisplayedFilter(filter);
   const handleSetSprintFilter = (sprint: string) => setSprintFilter(sprint === sprintFilter ? null : sprint);
   const handleSetAssigneeFilter = (assignee: string) => setAssigneeFilter(assignee === assigneeFilter ? null : assignee);
   const handleSetLabelFilter = (label: string) => setLabelFilter(label === labelFilter ? null : label);
+
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>, ref: React.MutableRefObject<string>) =>
+    (ref.current = event.target.value);
+  const handleClickEvent = () => {
+    if (!newLabelName.current) return;
+    addLabel({ name: newLabelName.current });
+    newLabelName.current = '';
+    hideModal();
+  };
+
+  const handleClickAddLabel = () => {
+    showModal({
+      modalType: 'textInputModal',
+      modalProps: {
+        title: '새 라벨 생성',
+        text: '새로운 라벨 이름을 입력해주세요.',
+        placeholder: '라벨 이름',
+        onChangeInput: (e) => handleChangeInput(e, newLabelName),
+        onClickSubmitButton: handleClickEvent,
+      },
+    });
+  };
 
   const FilterMenu: React.FC<{ menu: string }> = ({ menu }) => (
     <span className={isSelected(menu, displayedFilter)} onClick={() => handleFilterSelect(menu)}>
@@ -57,6 +87,9 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
               </FilterItem>
             );
           })}
+          <FilterButton>
+            <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
+          </FilterButton>
         </PopupItemLayout>
       ) : (
         ''
@@ -89,6 +122,9 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
               </FilterItem>
             );
           })}
+          <FilterButton onClick={handleClickAddLabel}>
+            <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
+          </FilterButton>
         </PopupItemLayout>
       ) : (
         ''
