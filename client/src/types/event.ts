@@ -10,6 +10,7 @@ export type TDeleteNodeData = {
 };
 export type TAddNodeData = {
   content: string;
+  level: string;
 };
 export type TMoveNodeData = {
   posX?: string;

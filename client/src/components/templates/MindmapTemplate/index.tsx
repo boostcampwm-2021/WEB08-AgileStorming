@@ -5,9 +5,10 @@ import { Mindmap, MindmapBtnWrapper } from 'components/organisms';
 
 const MindmapTemplate: React.FC = () => {
   const mindmapData = useRecoilValue(mindmapState);
+  const isLoaded = !!(mindmapData.rootId !== -1);
   return (
     <MindmapBackground className='mindmap-area background'>
-      <Mindmap mindmapData={mindmapData} />
+      {isLoaded && <Mindmap mindmapData={mindmapData} />}
       <MindmapBtnWrapper />
     </MindmapBackground>
   );

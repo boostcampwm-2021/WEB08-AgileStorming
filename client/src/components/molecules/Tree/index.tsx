@@ -17,11 +17,10 @@ interface ITreeProps {
 }
 
 const TEMP_NODE_ID = -1;
-const ROOT_NODE_ID = 0;
 
 const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId }) => {
-  const isRoot = nodeId === ROOT_NODE_ID;
   const { rootId, mindNodes } = mindmapData;
+  const isRoot = nodeId === rootId;
   const node = mindNodes.get(nodeId);
   const { level, content, children } = node!;
 
@@ -65,7 +64,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
   const addNewNode = (nodeContent: string) => {
     const payload = {
       nodeFrom: parentId!,
-      dataTo: { content: nodeContent },
+      dataTo: { content: nodeContent, level: level },
     };
 
     addNode(payload);

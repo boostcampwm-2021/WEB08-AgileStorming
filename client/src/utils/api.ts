@@ -39,6 +39,12 @@ export const project = {
     });
     return userList;
   },
+  getInfo: async (projectId: string) => {
+    const info = await api.get('/project/info', {
+      params: { projectId },
+    });
+    return info;
+  },
 };
 
 export const API = {

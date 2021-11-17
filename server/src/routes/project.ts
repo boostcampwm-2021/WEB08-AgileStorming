@@ -45,10 +45,11 @@ router.get('/user-list', async (req: Request, res: Response, next: Next) => {
   }
 });
 
-router.get('/:projectId', async (req: Request, res: Response, next: Next) => {
+router.get('/info', async (req: Request, res: Response, next: Next) => {
   try {
-    const { projectId } = req.params;
+    const { projectId } = req.query;
     const projectInfo = await projectService.getProjectInfo(projectId);
+    projectInfo.mindmap.forEach((node) => (node.children = JSON.parse(node.children)));
     res.send(projectInfo);
   } catch (e) {
     next(e);

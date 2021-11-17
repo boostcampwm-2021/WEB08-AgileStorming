@@ -44,7 +44,7 @@ export const addUserToProject = async (userId: string, projectId: string) => {
 export const createProject = async (name: string, creator: string) => {
   const user = await findOneUser(creator);
   const newProject = await getRepository(Project).save({ name, creator: user, users: [user] });
-  createNode(newProject.id, null, { content: name, posX: '0', posY: '0', children: JSON.stringify([]) });
+  createNode(newProject.id, null, { level: 'ROOT', content: name, posX: '0', posY: '0', children: JSON.stringify([]) });
   return newProject;
 };
 
@@ -64,6 +64,7 @@ export const getProjectInfo = async (projectId: string) => {
     .leftJoinAndSelect('project.users', 'users')
     .leftJoinAndSelect('project.sprints', 'sprints')
     .leftJoinAndSelect('project.labels', 'labels')
+    .leftJoinAndSelect('project.mindmap', 'mindmap')
     .where('project.id = :projectId', { projectId })
     .getOne();
 };

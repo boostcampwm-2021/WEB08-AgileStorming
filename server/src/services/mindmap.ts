@@ -3,6 +3,7 @@ import { Mindmap } from '../database/entities/Mindmap';
 import { findOneProject } from './project';
 
 interface INode {
+  level?: string;
   label?: string;
   content?: string;
   posX?: string;
