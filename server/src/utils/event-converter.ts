@@ -52,8 +52,9 @@ const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEve
 
 const eventFunction = (): Record<eventType.TEventType, TEventFunction> => {
   return {
-    ADD_SPRINT: (data, project) => {
-      return createSprint(project, data as eventType.TAddSprint);
+    ADD_SPRINT: async (data, project) => {
+      const { id, name, color, startDate, endDate } = await createSprint(project, data as eventType.TAddSprint);
+      return JSON.stringify({ id, name, color, startDate, endDate });
     },
     ADD_LABEL: async (data, project) => {
       const { id, name, color } = await createLabel(project, data as eventType.TAddLabel);

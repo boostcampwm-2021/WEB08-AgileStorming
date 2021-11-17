@@ -11,7 +11,7 @@ export const createSprint = async (projectId: string, sprintInfo: TAddSprint) =>
   const project = await findOneProject(projectId);
   const color = await getRepository(Color).createQueryBuilder().orderBy('RAND()').getOne();
   const newSprint = await getRepository(Sprint).save({ ...sprintInfo, project, color: color.rgb });
-  return newSprint.id;
+  return newSprint;
 };
 export const deleteSprint = async (sprintId: number) => {
   return getRepository(Sprint).createQueryBuilder().delete().where({ id: sprintId }).execute();
