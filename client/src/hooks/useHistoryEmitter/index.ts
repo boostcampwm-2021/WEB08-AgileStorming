@@ -1,5 +1,5 @@
 import useToast from 'hooks/useToast';
-import { TAddLabel, TEventData, TEventType, THistoryEventData, THistoryEventType } from 'types/event';
+import { TAddLabel, TAddSprint, TEventData, TEventType, THistoryEventData, THistoryEventType } from 'types/event';
 import { fillPayload } from 'utils/helpers';
 
 export interface IHistoryEmitter {
@@ -60,6 +60,8 @@ const useHistoryEmitter = () => {
 
   //* non-history-event
   const addLabel = ({ name }: TAddLabel) => nonHistoryEmitter({ type: 'ADD_LABEL', payload: { name } });
+  const addSprint = ({ name, startDate, endDate }: TAddSprint) =>
+    nonHistoryEmitter({ type: 'ADD_SPRINT', payload: { name, startDate, endDate } });
 
   return {
     addNode,
@@ -70,6 +72,7 @@ const useHistoryEmitter = () => {
     updateNodeContent,
     updateTaskInformation,
     addLabel,
+    addSprint,
   };
 };
 
