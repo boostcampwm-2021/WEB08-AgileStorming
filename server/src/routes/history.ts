@@ -5,7 +5,8 @@ const router = Router();
 router.get('/:projectId', async (req: Request, res: Response) => {
   try {
     const { projectId } = req.params;
-    const { rangeFrom, count } = req.body;
+    const { rangeFrom, count } = req.query;
+
     const history: Array<string | string[]> = await xrevrange({ projectId, from: rangeFrom ?? '+', to: '-', count: count ?? 30 });
     res.status(200).send(history);
   } catch (e) {

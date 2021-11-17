@@ -6,6 +6,8 @@ const api = axios.create({
   withCredentials: true,
 });
 
+const HISTORY_COUNT_TO_GET = 15;
+
 export const authApi = {
   login: (id: string) =>
     api.post('/auth/login', {
@@ -48,6 +50,16 @@ export const project = {
   },
 };
 
+export const history = {
+  get: async (projectId: string, rangeFrom?: string) => {
+    const historyResponse = await api.get(`/history/${projectId}`, { params: { count: HISTORY_COUNT_TO_GET, rangeFrom } });
+
+    if (historyResponse.status !== 200) throw new Error(historyResponse.statusText);
+    return historyResponse.data;
+  },
+};
+
 export const API = {
   project,
+  history,
 };
