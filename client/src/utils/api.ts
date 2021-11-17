@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IProject } from 'types/project';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_SERVER + 'api',
@@ -39,7 +40,7 @@ export const project = {
     });
     return userList;
   },
-  getInfo: async (projectId: string) => {
+  getInfo: async (projectId: string): Promise<IProject> => {
     const info = await api.get('/project/info', {
       params: { projectId },
     });
