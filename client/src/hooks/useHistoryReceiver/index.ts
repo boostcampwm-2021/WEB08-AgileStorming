@@ -1,45 +1,45 @@
-import { EventType } from 'hooks/useHistoryEmitter';
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
-import { IAddData, historyState, IData, IHistories, IHistory } from 'recoil/history';
-import { getNextMapState, IMindmapData, IMindNode, mindmapState } from 'recoil/mindmap';
+import { getNextMapState, mindmapState } from 'recoil/mindmap';
+import { TAddNodeData, THistoryEventData, TTask, TUpdateNodeContent, TUpdateTaskInformation } from 'types/event';
+import { IHistory, IHistoryData } from 'types/history';
+import { IMindmapData, IMindNode } from 'types/mindmap';
 import { getChildLevel } from 'utils/helpers';
 
 export interface IProps {
   mindmap: IMindmapData;
   setMindmap: SetterOrUpdater<IMindmapData>;
-  setHistory: SetterOrUpdater<IHistories>;
+  setHistory: SetterOrUpdater<IHistory>;
 }
 
 export interface IHistoryReceiver {
-  (history: IHistory): void;
+  (history: IHistoryData): void;
 }
 
 export interface IHistoryHandlerProps {
   setMindmap: SetterOrUpdater<IMindmapData>;
-  history: IHistory;
+  historyData: IHistoryData;
   isForward: boolean;
 }
 
 interface IAddNodeProps {
   nextMapState: IMindmapData;
   parentId: number;
-  id: number;
-  data: IData;
+  newId: number;
+  data: THistoryEventData;
 }
 
 const TEMP_NODE_ID = -1;
 
-const addNode = ({ data, nextMapState, parentId, id }: IAddNodeProps) => {
-  const { content, children } = data.dataTo as IAddData;
-  const parsedChildren = JSON.parse(children);
+const addNode = ({ data, nextMapState, parentId, newId }: IAddNodeProps) => {
+  const { content } = data.dataTo as TAddNodeData;
   const parent = nextMapState.mindNodes.get(parentId);
   const level = getChildLevel(parent!.level);
 
-  const node = { content, level, nodeId: id, children: parsedChildren };
-  const newChildren = [...parent!.children.filter((childId) => childId !== TEMP_NODE_ID), id];
+  const newNode = { content, level, nodeId: newId, children: [] };
+  const newChildren = [...parent!.children.filter((childId) => childId !== TEMP_NODE_ID), newId];
   const newParent = { ...parent!, children: newChildren };
 
-  nextMapState.mindNodes.set(id, node);
+  nextMapState.mindNodes.set(newId, newNode);
   nextMapState.mindNodes.set(parentId, newParent);
   nextMapState.mindNodes.delete(TEMP_NODE_ID);
 };
@@ -48,32 +48,28 @@ const setChangeNodes = (mapState: IMindmapData, nodes: IMindNode[]) => {
   nodes.forEach((node) => mapState.mindNodes.set(node.nodeId, { ...node, children: node.children }));
 };
 
-export const historyHandler = ({ setMindmap, history, isForward }: IHistoryHandlerProps) => {
+export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryHandlerProps) => {
   const {
     type,
-    data: { nodeTo, nodeFrom, dataFrom, dataTo },
-  } = history;
+    data: { nodeFrom, dataFrom, dataTo },
+    newNodeId,
+  } = historyData;
 
   switch (type) {
-    case EventType.ADD_NODE:
+    case 'ADD_NODE':
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
-        addNode({ nextMapState, parentId: nodeFrom!, id: history.id, data: history.data });
+        if (isForward) addNode({ nextMapState, parentId: nodeFrom!, newId: newNodeId!, data: historyData.data });
         return nextMapState;
       });
       break;
-    case EventType.CHANGE_CONTENT:
-    case EventType.CHANGE_SPRINT:
-    case EventType.CHANGE_ASSIGNEE:
-    case EventType.CHANGE_EXPECTED_AT:
-    case EventType.CHANGE_EXPECTED_TIME:
-    case EventType.CHANGE_PRIORITY:
-      // if (isForward) nextMapState.mindNodes.set(nodeFrom!, dataTo as IMindNode);
+    case 'DELETE_NODE':
+      // if (isForward) nextMapState.mindNodes.delete(nodeFrom!);
       // else nextMapState.mindNodes.set(nodeFrom!, dataFrom as IMindNode);
       break;
-    case EventType.MOVE_NODE:
+    case 'MOVE_NODE':
       break;
-    case EventType.UPDATE_NODE_PARENT:
+    case 'UPDATE_NODE_PARENT':
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
         if (isForward) setChangeNodes(nextMapState, dataTo as any);
@@ -81,9 +77,29 @@ export const historyHandler = ({ setMindmap, history, isForward }: IHistoryHandl
         return nextMapState;
       });
       break;
-    case EventType.DELETE_NODE:
-      // if (isForward) nextMapState.mindNodes.delete(nodeFrom!);
-      // else nextMapState.mindNodes.set(nodeFrom!, dataFrom as IMindNode);
+    case 'UPDATE_NODE_SIBLING':
+      break;
+    case 'UPDATE_NODE_CONTENT':
+      setMindmap((prev) => {
+        const nextMapState = getNextMapState(prev);
+        const targetNode = nextMapState.mindNodes.get(nodeFrom!)!;
+        nextMapState.mindNodes.set(nodeFrom!, {
+          ...targetNode,
+          ...((isForward ? dataTo : dataFrom) as TUpdateNodeContent),
+        });
+        return nextMapState;
+      });
+      break;
+    case 'UPDATE_TASK_INFORMATION':
+      setMindmap((prev) => {
+        const nextMapState = getNextMapState(prev);
+        const targetNode = nextMapState.mindNodes.get(nodeFrom!)!;
+        nextMapState.mindNodes.set(nodeFrom!, {
+          ...targetNode,
+          ...(((isForward ? dataTo : dataFrom) as TUpdateTaskInformation).changed as TTask),
+        });
+        return nextMapState;
+      });
       break;
     default:
       break;
@@ -92,10 +108,8 @@ export const historyHandler = ({ setMindmap, history, isForward }: IHistoryHandl
 
 const useHistoryReceiver = () => {
   const setMindmap = useSetRecoilState(mindmapState);
-  const setHistory = useSetRecoilState(historyState);
-  const historyReceiver = (history: IHistory) => {
-    historyHandler({ setMindmap, history, isForward: true });
-    setHistory((prev) => ({ histories: [...prev.histories, history] }));
+  const historyReceiver = (historyData: IHistoryData) => {
+    historyHandler({ setMindmap, historyData, isForward: true });
   };
   return historyReceiver;
 };
