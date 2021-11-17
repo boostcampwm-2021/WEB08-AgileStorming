@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { queryUserListState } from 'recoil/user-list';
+import { userListState } from 'recoil/project';
 import { IMindNode } from 'types/mindmap';
 import { Title, SmallText, UserIcon, Wrapper } from 'components/atoms';
 import { TaskInfo } from 'components/molecules';
@@ -12,8 +12,8 @@ interface IProps {
 }
 
 const TaskCard: React.FC<IProps> = ({ taskInfo, onDoubleClickTask, onMouseDownTask }) => {
-  const userList = useRecoilValue(queryUserListState)!;
-  const user = userList[taskInfo.assignee!];
+  const userList = useRecoilValue(userListState)!;
+  const user = userList.find((users) => users.id === taskInfo.assignee)!;
   return (
     <StyledTaskCard onDoubleClick={onDoubleClickTask} onMouseDown={onMouseDownTask}>
       <Title titleStyle={'normal'}>{taskInfo.content}</Title>

@@ -32,7 +32,7 @@ export type TUpdateNodeContent = {
   content: string;
 };
 export type TTask = {
-  assignee?: number;
+  assignee?: string;
   labels?: number[];
   priority?: string;
   dueDate?: string;
