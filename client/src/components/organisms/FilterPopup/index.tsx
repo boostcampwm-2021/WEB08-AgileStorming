@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FilterMenuHeader, FilterItem, SprintItem } from './style';
 import { useRecoilValue } from 'recoil';
 import { PopupItemLayout, PopupLayout } from 'components/molecules';
-import { UserIcon } from 'components/atoms';
+import { ColorIcon, UserIcon } from 'components/atoms';
 import { ISOtoYYMMDD } from 'utils/form';
 import { labelListState, sprintListState, userListState } from 'recoil/project';
 
@@ -50,6 +50,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
                 onClick={() => handleSetSprintFilter(sprint.name)}
               >
                 <SprintItem>
+                  <ColorIcon color={sprint.color} />
                   <span>{sprint.name}</span>
                   <span>{`${ISOtoYYMMDD(sprint.startDate)}~${ISOtoYYMMDD(sprint.endDate)}`}</span>
                 </SprintItem>
@@ -83,6 +84,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
           {labelList.map((label) => {
             return (
               <FilterItem key={label.id} className={isSelected(label.name, labelFilter)} onClick={() => handleSetLabelFilter(label.name)}>
+                <ColorIcon color={label.color} />
                 {label.name}
               </FilterItem>
             );

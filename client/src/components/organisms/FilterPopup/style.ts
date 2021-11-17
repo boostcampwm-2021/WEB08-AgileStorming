@@ -33,7 +33,7 @@ export const FilterItem = styled.div`
 
 export const SprintItem = styled.div`
   display: grid;
-  grid-template-columns: 42% 58%;
+  grid-template-columns: 7.5% 32.5% 60%;
   span {
     overflow: hidden;
     white-space: nowrap;
