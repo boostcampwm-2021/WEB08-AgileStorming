@@ -35,15 +35,15 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   const handleSetAssigneeFilter = (assignee: string) => setAssigneeFilter(assignee === assigneeFilter ? null : assignee);
   const handleSetLabelFilter = (label: string) => setLabelFilter(label === labelFilter ? null : label);
 
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>, ref: React.MutableRefObject<string>) =>
+  const handleClickAddSprint = () => showModal({ modalType: 'newSprintModal', modalProps: {} });
+  const handleChangeLabelInput = (event: React.ChangeEvent<HTMLInputElement>, ref: React.MutableRefObject<string>) =>
     (ref.current = event.target.value);
-  const handleClickEvent = () => {
+  const handleClickLabelSubmitEvent = () => {
     if (!newLabelName.current) return;
     addLabel({ name: newLabelName.current });
     newLabelName.current = '';
     hideModal();
   };
-
   const handleClickAddLabel = () => {
     showModal({
       modalType: 'textInputModal',
@@ -51,8 +51,8 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
         title: '새 라벨 생성',
         text: '새로운 라벨 이름을 입력해주세요.',
         placeholder: '라벨 이름',
-        onChangeInput: (e) => handleChangeInput(e, newLabelName),
-        onClickSubmitButton: handleClickEvent,
+        onChangeInput: (e) => handleChangeLabelInput(e, newLabelName),
+        onClickSubmitButton: handleClickLabelSubmitEvent,
       },
     });
   };
@@ -87,7 +87,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
               </FilterItem>
             );
           })}
-          <FilterButton>
+          <FilterButton onClick={handleClickAddSprint}>
             <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
           </FilterButton>
         </PopupItemLayout>
