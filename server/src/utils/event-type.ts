@@ -2,7 +2,7 @@ export type TDeleteNodeData = {
   nodeId: number;
   content: string;
   index: number;
-  status?: string;
+  status?: 'To Do' | 'In Progress' | 'Done';
   posX?: string;
   posY?: string;
   assignee?: number;
@@ -33,6 +33,7 @@ export type TTask = {
   priority?: string;
   dueDate?: string;
   estimatedTime?: string;
+  status?: 'To Do' | 'In Progress' | 'Done';
   finishedTime?: string;
   sprint?: number;
 };
