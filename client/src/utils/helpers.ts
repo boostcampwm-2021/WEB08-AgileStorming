@@ -115,10 +115,8 @@ const setTreeLevel = (mindNodes: IMindNodes, nodeId: number, depth: number) => {
   node.level = idxToLevel(depth);
   node.children.forEach((childId) => setTreeLevel(mindNodes, childId, depth + 1));
 };
-const getUser = (userId: string | undefined, userList: IUser[]) => userList.find((user) => user.id === userId);
 
 export {
-  getUser,
   getChildLevel,
   fillPayload,
   getNewNode,

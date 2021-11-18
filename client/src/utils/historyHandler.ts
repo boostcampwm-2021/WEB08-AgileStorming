@@ -1,8 +1,8 @@
 import { SetterOrUpdater } from 'recoil';
 import { getNextMapState } from 'recoil/mindmap';
-import { IMindmapData, IMindNodes } from 'types/mindmap';
+import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
 import { IHistoryData } from 'types/history';
-import { Levels } from 'utils/helpers';
+import { getChildLevel } from 'utils/helpers';
 import {
   TAddNodeData,
   TDeleteNodeData,
@@ -25,7 +25,6 @@ interface IParams {
 export const restoreHistory = (params: IParams) => {
   const { history, isForward, setHistoryMapData, setHistoryData, historyData, historyMapData } = params;
   const historyMap = historyMapData.mindNodes;
-  // historyHandler({ setMindmap: setHistoryMapData, historyData: history, isForward });
 
   switch (history.type) {
     case 'ADD_NODE':
@@ -107,13 +106,13 @@ const addNode = ({ history, historyMap }: IAddNodeParams) => {
   const parent = historyMap.get(parentId)!;
   const nodeId = history.data.dataTo ? (history.data.dataTo as TAddNodeData).nodeId! : (history.data.dataFrom as TDeleteNodeData).nodeId!;
 
-  const { level, content } = history.data.dataTo as TAddNodeData;
+  const { content } = history.data.dataTo as TAddNodeData;
   const newNode = history.data.dataTo
-    ? { level: level as Levels, content, children: [], nodeId }
+    ? { content, children: [], nodeId, level: getChildLevel(parent.level) }
     : { ...(history.data.dataFrom as TDeleteNodeData) };
-
+  console.log([...parent!.children, nodeId]);
   historyMap.set(parentId, { ...parent!, children: [...parent!.children, nodeId] });
-  historyMap.set(nodeId, newNode);
+  historyMap.set(nodeId, newNode as IMindNode);
 };
 
 interface IUpdateNodeContentParams {
@@ -158,13 +157,14 @@ const deleteNode = ({ history, historyMap, historyData, setHistoryData }: IDelet
   const newChildren = history.data.dataFrom ? parent.children.filter((cid) => cid !== childId) : parent.children.slice(0, -1);
 
   historyMap.set(parentId, { ...parent, children: newChildren });
-
-  if (!(history.data.dataTo! as TAddNodeData).nodeId) {
+  console.log(history.data);
+  if (history.data.dataTo && !(history.data.dataTo! as TAddNodeData).nodeId) {
     const newDataTo = { ...history.data.dataTo, nodeId: childId };
     const newHistory = { ...history!, data: { ...history.data, dataTo: newDataTo } };
     const newList = [...historyData!];
     const index = newList.findIndex((d) => d.historyId === newHistory.historyId);
-    newList.splice(index, 1, newHistory as IHistoryData);
+    console.log('-----', newDataTo);
+    newList.splice(index - 1, 1, newHistory as IHistoryData);
 
     setHistoryData!(newList);
   }
@@ -209,7 +209,6 @@ interface IUpdateNodeInformationParams {
 
 const updateNodeInformation = ({ id, data, historyMap }: IUpdateNodeInformationParams) => {
   const node = historyMap.get(id)!;
-  node.assignee = data.changed.assignee;
 
-  historyMap.set(id, node);
+  historyMap.set(id, { ...node, ...data.changed });
 };

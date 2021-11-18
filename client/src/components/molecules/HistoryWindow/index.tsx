@@ -6,7 +6,6 @@ import { IHistoryData } from 'types/history';
 import { useRecoilValue } from 'recoil';
 import { historyDataState } from 'recoil/history';
 import { userListState } from 'recoil/project';
-import { getUser } from 'utils/helpers';
 
 interface IProps {
   onClick: (historyData: IHistoryData, idx: number) => (event: MouseEvent) => void;
@@ -26,9 +25,9 @@ const HistoryWindow: React.FC<IProps> = ({ onClick, currentHistory }) => {
               key={idx}
               onClick={onClick(historyDataPiece, idx)}
               isSelected={historyDataPiece.historyId === currentHistory.historyId}
-              color={getUser(historyDataPiece.user, userList)!.color}
+              color={userList[historyDataPiece.user].color}
             >
-              <UserIcon user={getUser(historyDataPiece.user, userList)!} cursor='pointer' />
+              <UserIcon user={userList[historyDataPiece.user]} cursor='pointer' />
             </IconWrapper>
           ))
         : null}
