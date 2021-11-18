@@ -14,7 +14,7 @@ interface ITempNodeParams {
   selectedNodeId: number | null;
 }
 
-const TEMP_NODE_ID = -1;
+const TEMP_NODE_ID = -2;
 
 const createTempNode = ({ mindmapData, selectedNodeId }: ITempNodeParams) => {
   const { rootId, mindNodes } = mindmapData;

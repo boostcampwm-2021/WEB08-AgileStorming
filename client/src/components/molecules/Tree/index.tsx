@@ -16,7 +16,7 @@ interface ITreeProps {
   parentId?: number;
 }
 
-const TEMP_NODE_ID = -1;
+const TEMP_NODE_ID = -2;
 
 const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId }) => {
   const { rootId, mindNodes } = mindmapData;

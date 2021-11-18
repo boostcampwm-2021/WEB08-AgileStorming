@@ -28,14 +28,14 @@ export type TUpdateNodeContent = {
   content: string;
 };
 export type TTask = {
-  assignee?: number;
+  assigneeId?: number;
   labels?: number[];
   priority?: string;
   dueDate?: string;
   estimatedTime?: string;
   status?: 'To Do' | 'In Progress' | 'Done';
   finishedTime?: string;
-  sprint?: number;
+  sprintId?: number;
 };
 export type TUpdateTaskInformation = {
   changed: TTask;

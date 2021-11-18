@@ -1,4 +1,4 @@
-import { getConnection, getRepository } from 'typeorm';
+import { getConnection, getManager, getRepository } from 'typeorm';
 import { Project } from '../database/entities/Project';
 import { createNode } from './mindmap';
 import { findOneUser } from './user';
@@ -64,8 +64,19 @@ export const getProjectInfo = async (projectId: string) => {
     .leftJoinAndSelect('project.users', 'users')
     .leftJoinAndSelect('project.sprints', 'sprints')
     .leftJoinAndSelect('project.labels', 'labels')
-    .leftJoinAndSelect('project.mindmap', 'mindmap')
-    .leftJoinAndSelect('mindmap.task', 'task')
+
     .where('project.id = :projectId', { projectId })
     .getOne();
+};
+
+export const getProjectNodeInfo = async (ProjectId: string) => {
+  return getManager().query(
+    `
+  SELECT *
+  FROM mindmap
+  LEFT JOIN task
+  ON mindmap.id = task.taskId
+  WHERE mindmap.projectId = ? ;`,
+    [ProjectId]
+  );
 };

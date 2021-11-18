@@ -7,8 +7,8 @@ import { User } from './User';
 @Entity()
 export class Task {
   @OneToOne(() => Mindmap, (mindmap) => mindmap.task, { primary: true, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'nodeId' })
-  nodeId: Mindmap;
+  @JoinColumn({ name: 'taskId' })
+  taskId: Mindmap;
 
   @Column({ nullable: true })
   priority: string;

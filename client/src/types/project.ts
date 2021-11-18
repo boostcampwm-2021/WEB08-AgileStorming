@@ -13,7 +13,7 @@ export interface IProject {
   createdAt: Date;
 }
 
-interface IMindmapData extends Partial<IMindNode> {
+export interface IMindmapData extends Partial<IMindNode> {
   id?: number;
   createdAt: string;
 }

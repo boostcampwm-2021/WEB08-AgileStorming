@@ -15,7 +15,7 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, onDoubleClickTask, onMouseDownTa
   const userList = useRecoilValue(userListState)!;
   const sprintList = useRecoilValue(sprintListState)!;
   const labelList = useRecoilValue(labelListState)!;
-  const user = taskInfo.assignee ? userList[taskInfo.assignee] : undefined;
+  const user = taskInfo.assigneeId ? userList[taskInfo.assigneeId] : undefined;
   return (
     <StyledTaskCard onDoubleClick={onDoubleClickTask} onMouseDown={onMouseDownTask}>
       <Title titleStyle={'normal'}>{taskInfo.content}</Title>
@@ -30,7 +30,7 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, onDoubleClickTask, onMouseDownTa
           ))}
         </StyledCardInfoLeft>
         <StyledCardInfoRight>
-          <TaskInfo title={'스프린트: '} content={taskInfo.sprint ? sprintList[taskInfo.sprint].name : ''}></TaskInfo>
+          <TaskInfo title={'스프린트: '} content={taskInfo.sprintId ? sprintList[taskInfo.sprintId].name : ''}></TaskInfo>
           <TaskInfo title={'예상 소요 시간: '} content={taskInfo.estimatedTime ?? ''}>
             {taskInfo.estimatedTime ?? (
               <SmallText color={'black'} margin={'0 0 0 3px'}>
@@ -45,4 +45,8 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, onDoubleClickTask, onMouseDownTa
   );
 };
 
-export default TaskCard;
+const isPropsEqual = (prev: IProps, curr: IProps) => JSON.stringify(prev.taskInfo) === JSON.stringify(curr.taskInfo);
+const TaskCardMemo = React.memo(TaskCard, isPropsEqual);
+export default TaskCardMemo;
+
+// export default TaskCard;

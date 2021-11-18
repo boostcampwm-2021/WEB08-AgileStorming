@@ -26,7 +26,7 @@ const StyledTitle = styled.div`
   align-self: flex-start;
   text-align: center;
   top: 0%;
-  width: 30vw;
+  width: 28vw;
   padding: 2vh;
   background-color: ${({ theme }) => theme.color.primary1};
   font-size: ${({ theme }) => theme.fontSize.title};
@@ -77,7 +77,7 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status }) => {
     const elemBelow = document.elementFromPoint(event.clientX, event.clientY)! as HTMLElement;
     const container = elemBelow.closest('.CardContainer')! as HTMLDivElement;
     const currentTask = mindNodes.get(nodeId)!;
-    if (currentTask.status !== container.dataset.status) {
+    if (container && currentTask.status !== container.dataset.status) {
       updateTaskInformation({
         nodeFrom: nodeId,
         nodeTo: nodeId,

@@ -22,7 +22,7 @@ const useProject = () => {
     if (roomId === projectId) {
       return;
     }
-    const projectInfo = await project.getInfo(roomId);
+    const { projectInfo, projectNodeInfo } = await project.getInfo(roomId);
 
     setProjectId(roomId);
 
@@ -39,12 +39,12 @@ const useProject = () => {
     setLabelList(labelList);
 
     const initNodes = new Map(
-      projectInfo.mindmap.map((node) => {
+      projectNodeInfo.map((node) => {
         const { id: nodeId, ...props } = node;
         return [nodeId, { nodeId, ...props }];
       })
     );
-    const rootId = projectInfo.mindmap.filter((node) => node.level === 'ROOT')[0].id;
+    const rootId = projectNodeInfo.filter((node) => node.level === 'ROOT')[0].id;
     setMindmap({ rootId: rootId as number, mindNodes: initNodes as IMindNodes });
   };
 
