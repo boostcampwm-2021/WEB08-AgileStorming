@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Label, PopupItemLayout, PopupLayout } from 'components/molecules';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedNodeState, selectedNodeIdState } from 'recoil/node';
@@ -21,83 +21,81 @@ export const NodeDetailWrapper = () => {
   const { showMessage } = useToast();
   const { updateNodeContent, updateTaskInformation } = useHistoryEmitter();
 
+  const priorityDropdownItem: Record<string, string> = {};
+  priorityList.forEach((priority) => (priorityDropdownItem[priority] = priority));
+
+  const sprintDropdownItem: Record<number, string> = {};
+  sprintList.forEach((sprint) => (sprintDropdownItem[sprint.id] = sprint.name));
+
+  const uerDropdownItem: Record<string, string> = {};
+  userList.forEach((user) => (uerDropdownItem[user.id] = user.name));
+
   const handleCloseButton = () => setSelectedNodeId(null);
-  const handleFocusAlarm = useCallback((msg: string) => () => showMessage(msg), [showMessage]);
 
-  const handleBlurNodeDetail = useCallback(
-    (info: keyof IMindNode) => (e: React.FocusEvent<HTMLInputElement>) => {
-      if (e.target.value === selectedNode?.[info]) {
-        return;
-      }
-      const { nodeId, content } = selectedNode!;
-      updateNodeContent({ nodeFrom: nodeId, dataFrom: { content: content }, dataTo: { content: e.target.value } });
-      showMessage(`${info} ${e.target.value}로 변경.`);
-    },
-    [selectedNode, showMessage]
-  );
+  const handleFocusAlarm = (msg: string) => () => showMessage(msg);
 
-  const handleChangeNodeDetail = useCallback(
-    (info: keyof IMindNode) => (value: string) => {
-      const prevValue = selectedNode?.[info];
-      if (value === prevValue) {
-        return;
-      }
+  const handleBlurNodeDetail = (info: keyof IMindNode) => (e: React.FocusEvent<HTMLInputElement>) => {
+    if (e.target.value === selectedNode?.[info]) {
+      return;
+    }
+    const { nodeId, content } = selectedNode!;
+    updateNodeContent({ nodeFrom: nodeId, dataFrom: { content: content }, dataTo: { content: e.target.value } });
+    showMessage(`${info} ${e.target.value}로 변경.`);
+  };
+
+  const handleChangeNodeDetail = (info: keyof IMindNode) => (value: number | string) => {
+    const prevValue = selectedNode?.[info];
+    if (value === prevValue) {
+      return;
+    }
+    updateTaskInformation({
+      nodeFrom: selectedNode!.nodeId,
+      dataFrom: { changed: { [info]: prevValue } },
+      dataTo: { changed: { [info]: value } },
+    });
+    showMessage(`${info} ${value}로 변경.`);
+  };
+
+  const handleBlurDueDate = ({ target }: React.FocusEvent<HTMLInputElement>) => {
+    if (!target.value) {
+      return;
+    }
+    if (!isISODate(target.value)) {
+      showMessage('YYYY-MM-DD 형식으로 입력하세요.');
+      return;
+    }
+    const prevValue = selectedNode!.dueDate;
+    if (target.value !== prevValue) {
       updateTaskInformation({
         nodeFrom: selectedNode!.nodeId,
-        dataFrom: { changed: { [info]: prevValue } },
-        dataTo: { changed: { [info]: value } },
+        dataFrom: { changed: { dueDate: prevValue } },
+        dataTo: { changed: { dueDate: target.value } },
       });
-      showMessage(`${info} ${value}로 변경.`);
-    },
-    [selectedNode, showMessage]
-  );
+      showMessage(`마감 날짜 ${target.value}으로 변경.`);
+      return;
+    }
+  };
 
-  const handleBlurDueDate = useCallback(
-    ({ target }: React.FocusEvent<HTMLInputElement>) => {
-      if (!target.value) {
-        return;
-      }
-      if (!isISODate(target.value)) {
-        showMessage('YYYY-MM-DD 형식으로 입력하세요.');
-        return;
-      }
-      const prevValue = selectedNode?.dueDate;
-      if (target.value !== prevValue) {
-        updateTaskInformation({
-          nodeFrom: selectedNode!.nodeId,
-          dataFrom: { changed: { dueDate: prevValue } },
-          dataTo: { changed: { dueDate: target.value } },
-        });
-        showMessage(`마감 날짜 ${target.value}으로 변경.`);
-        return;
-      }
-    },
-    [selectedNode, showMessage]
-  );
-
-  const handleBlurEstimatedTime = useCallback(
-    ({ target }: React.FocusEvent<HTMLInputElement>) => {
-      if (!target.value) {
-        return;
-      }
-      if (!isPositiveNumber(target.value)) {
-        showMessage('숫자만 입력하세요. 단위는 시(hour)입니다.');
-        return;
-      }
-      const newEstimatedTime = target.value + '시간';
-      const prevValue = selectedNode?.estimatedTime;
-      if (newEstimatedTime !== prevValue) {
-        updateTaskInformation({
-          nodeFrom: selectedNode!.nodeId,
-          dataFrom: { changed: { estimatedTime: prevValue } },
-          dataTo: { changed: { estimatedTime: newEstimatedTime } },
-        });
-        showMessage(`예상 소요 시간 ${newEstimatedTime}으로 변경.`);
-        return;
-      }
-    },
-    [selectedNode, showMessage]
-  );
+  const handleBlurEstimatedTime = ({ target }: React.FocusEvent<HTMLInputElement>) => {
+    if (!target.value) {
+      return;
+    }
+    if (!isPositiveNumber(target.value)) {
+      showMessage('숫자만 입력하세요. 단위는 시(hour)입니다.');
+      return;
+    }
+    const newEstimatedTime = target.value + '시간';
+    const prevValue = selectedNode?.estimatedTime;
+    if (newEstimatedTime !== prevValue) {
+      updateTaskInformation({
+        nodeFrom: selectedNode!.nodeId,
+        dataFrom: { changed: { estimatedTime: prevValue } },
+        dataTo: { changed: { estimatedTime: newEstimatedTime } },
+      });
+      showMessage(`예상 소요 시간 ${newEstimatedTime}으로 변경.`);
+      return;
+    }
+  };
 
   return selectedNode ? (
     <PopupLayout title={selectedNode.backlogId} onClose={handleCloseButton} popupStyle='normal'>
@@ -108,8 +106,8 @@ export const NodeDetailWrapper = () => {
         <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
           <Dropdown
             id='sprint'
-            items={Object.values(sprintList)?.map((sprint) => sprint.name)}
-            placeholder={selectedNode.sprint ? selectedNode.sprint + '' : ''}
+            items={sprintDropdownItem}
+            placeholder={selectedNode.sprint ? sprintList[selectedNode.sprint].name : ''}
             onValueChange={handleChangeNodeDetail('sprint')}
             dropdownStyle='small'
           />
@@ -117,8 +115,8 @@ export const NodeDetailWrapper = () => {
         <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
           <Dropdown
             id='assignee'
-            items={Object.values(userList).map((user) => user.name)}
-            placeholder={selectedNode.assignee ? selectedNode.assignee + '' : ''}
+            items={uerDropdownItem}
+            placeholder={selectedNode.assignee ? userList[selectedNode.assignee].name : ''}
             onValueChange={handleChangeNodeDetail('assignee')}
             dropdownStyle='small'
           />
@@ -146,7 +144,7 @@ export const NodeDetailWrapper = () => {
         <Label label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>
           <Dropdown
             id='priority'
-            items={priorityList}
+            items={priorityDropdownItem}
             placeholder={selectedNode.priority}
             onValueChange={handleChangeNodeDetail('priority')}
             dropdownStyle='small'
