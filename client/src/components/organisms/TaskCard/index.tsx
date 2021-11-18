@@ -15,7 +15,7 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, onDoubleClickTask, onMouseDownTa
   const userList = useRecoilValue(userListState)!;
   const sprintList = useRecoilValue(sprintListState)!;
   const labelList = useRecoilValue(labelListState)!;
-  const user = userList.find((users) => users.id === taskInfo.assignee)!;
+  const user = userList[taskInfo.assignee!];
   return (
     <StyledTaskCard onDoubleClick={onDoubleClickTask} onMouseDown={onMouseDownTask}>
       <Title titleStyle={'normal'}>{taskInfo.content}</Title>
@@ -26,11 +26,11 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, onDoubleClickTask, onMouseDownTa
           </TaskInfo>
           <TaskInfo title={'중요도: '} content={taskInfo.priority!}></TaskInfo>
           {taskInfo.labels?.map((labelId) => (
-            <LabelIcon key={labelId} label={labelList.find((l) => l.id === labelId)!}></LabelIcon>
+            <LabelIcon key={labelId} label={labelList[labelId!]}></LabelIcon>
           ))}
         </StyledCardInfoLeft>
         <StyledCardInfoRight>
-          <TaskInfo title={'스프린트: '} content={taskInfo.sprint ? sprintList.find((s) => s.id === taskInfo.sprint)!.name : ''}></TaskInfo>
+          <TaskInfo title={'스프린트: '} content={taskInfo.sprint ? sprintList[taskInfo.sprint].name : ''}></TaskInfo>
           <TaskInfo title={'예상 소요 시간: '} content={taskInfo.estimatedTime ?? ''}>
             {taskInfo.estimatedTime ?? (
               <SmallText color={'black'} margin={'0 0 0 3px'}>
