@@ -6,6 +6,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedNodeIdState } from 'recoil/node';
 import { mindmapState } from 'recoil/mindmap';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
+// import useToast from 'hooks/useToast';
+// import { userState } from 'recoil/user';
 
 const StyledTaskCardContainer = styled.div`
   ${(props) => props.theme.flex.column}
@@ -41,6 +43,8 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status }) => {
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
   const { mindNodes } = useRecoilValue(mindmapState);
   const { updateTaskInformation } = useHistoryEmitter();
+  // const { showMessage } = useToast();
+  // const { id } = useRecoilValue(userState);
   const handleOnDoubleClickTask = (nodeId: number) => {
     setSelectedNodeId(nodeId);
   };
@@ -86,6 +90,10 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status }) => {
   };
   const drag = (e: React.MouseEvent<HTMLElement>, currentTarget: HTMLElement, nodeId: number) => {
     if (e.buttons !== 1) return;
+    // if (id !== mindNodes.get(nodeId)?.assignee) {
+    //   showMessage('자신에게 할당된 Task만 이동할 수 있습니다.');
+    //   return;
+    // }
     const clone = currentTarget.cloneNode(true) as HTMLElement;
     clone.style.position = 'absolute';
     clone.style.zIndex = '1000';
