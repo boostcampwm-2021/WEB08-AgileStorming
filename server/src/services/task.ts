@@ -19,6 +19,13 @@ export const deleteTask = async (taskId: number) => {
   return getRepository(Task).createQueryBuilder('task').leftJoin('task.taskId', 'taskId').delete().where({ taskId: taskId }).execute();
 };
 
+export const deleteChildTasks = async (storyId: number) => {
+  const storyNode = await findOneNode(storyId);
+  const taskNodes = JSON.parse(storyNode.children);
+  taskNodes.forEach((taskId) => deleteTask(taskId));
+  return taskNodes;
+};
+
 const findOneOrCreate = async (taskId: number) => {
   const task = await findOneTask(taskId.toString(10));
   if (task !== undefined) return task;
