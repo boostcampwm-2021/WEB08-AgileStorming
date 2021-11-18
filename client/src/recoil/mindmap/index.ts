@@ -11,11 +11,11 @@ export const getNextMapState = (prevState: IMindmapData) => {
   };
 };
 
-const TEMP_NODE_ID = -1;
+const ROOT_NODE_ID = -1;
 
 export const mindmapState = atom<IMindmapData>({
   key: 'mindmapAtom',
-  default: { rootId: TEMP_NODE_ID, mindNodes: new Map() },
+  default: { rootId: ROOT_NODE_ID, mindNodes: new Map() },
 });
 
 export const mindmapNodesState = selector({
@@ -31,5 +31,18 @@ export const taskState = selector({
   get: ({ get }) => {
     const { mindNodes } = get(mindmapState);
     return Array.from(mindNodes.values()).filter((node) => node.level === 'TASK');
+  },
+});
+
+export const historyMapDataState = atom<IMindmapData | null>({
+  key: 'historyMapAtom',
+  default: null,
+});
+
+export const historyMapState = selector({
+  key: 'historyNodesState',
+  get: ({ get }) => {
+    const { mindNodes } = get(historyMapDataState)!;
+    return mindNodes;
   },
 });
