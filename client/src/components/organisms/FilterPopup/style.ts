@@ -3,8 +3,9 @@ import styled from '@emotion/styled';
 export const FilterMenuHeader = styled.div`
   ${(props) => props.theme.flex.rowCenter};
   gap: 1rem;
-  margin: 0.3rem 0;
+  margin-top: 0.3rem;
   font-weight: bold;
+  line-height: 0.8;
   color: ${({ theme }) => theme.color.gray1};
 
   span {
