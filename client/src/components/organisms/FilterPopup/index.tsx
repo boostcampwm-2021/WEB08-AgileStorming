@@ -16,8 +16,8 @@ interface IProps {
 const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   const [displayedFilter, setDisplayedFilter] = useState('스프린트');
   const [assigneeFilter, setAssigneeFilter] = useState<string | null>(null); // 추후에 recoil로
-  const [sprintFilter, setSprintFilter] = useState<string | null>(null); // 추후에 recoil로
-  const [labelFilter, setLabelFilter] = useState<string | null>(null); // 추후에 recoil로
+  const [sprintFilter, setSprintFilter] = useState<number | null>(null); // 추후에 recoil로
+  const [labelFilter, setLabelFilter] = useState<number | null>(null); // 추후에 recoil로
 
   const sprintList = useRecoilValue(sprintListState);
   const userList = useRecoilValue(userListState);
@@ -28,12 +28,12 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
 
   const newLabelName = useRef<string>('');
 
-  const isSelected = (target: string, selected: string | null) => (target === selected ? 'selected' : '');
+  const isSelected = (target: number | string, selected: number | string | null) => (target === selected ? 'selected' : '');
 
   const handleFilterSelect = (filter: string) => setDisplayedFilter(filter);
-  const handleSetSprintFilter = (sprint: string) => setSprintFilter(sprint === sprintFilter ? null : sprint);
+  const handleSetSprintFilter = (sprint: number) => setSprintFilter(sprint === sprintFilter ? null : sprint);
   const handleSetAssigneeFilter = (assignee: string) => setAssigneeFilter(assignee === assigneeFilter ? null : assignee);
-  const handleSetLabelFilter = (label: string) => setLabelFilter(label === labelFilter ? null : label);
+  const handleSetLabelFilter = (label: number) => setLabelFilter(label === labelFilter ? null : label);
 
   const handleClickAddSprint = () => showModal({ modalType: 'newSprintModal', modalProps: {} });
   const handleChangeLabelInput = (event: React.ChangeEvent<HTMLInputElement>, ref: React.MutableRefObject<string>) =>
@@ -64,7 +64,12 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   );
 
   return (
-    <PopupLayout title={`필터링: ${sprintFilter ?? ''} ${assigneeFilter ?? ''} ${labelFilter ?? ''}`} onClose={onClose}>
+    <PopupLayout
+      title={`필터링: ${sprintFilter ? sprintList[sprintFilter].name : ''} ${assigneeFilter ? userList[assigneeFilter].name : ''} ${
+        labelFilter ? labelList[labelFilter].name : ''
+      }`}
+      onClose={onClose}
+    >
       <FilterMenuHeader>
         <FilterMenu menu={'스프린트'} />
         <FilterMenu menu={'담당자'} />
@@ -74,14 +79,10 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
         <PopupItemLayout>
           {Object.values(sprintList).map((sprint) => {
             return (
-              <FilterItem
-                key={sprint.id}
-                className={isSelected(sprint.name, sprintFilter)}
-                onClick={() => handleSetSprintFilter(sprint.name)}
-              >
+              <FilterItem key={sprint.id} className={isSelected(sprint.id, sprintFilter)} onClick={() => handleSetSprintFilter(sprint.id)}>
                 <SprintItem>
                   <ColorIcon color={sprint.color} />
-                  <span>{sprint.name}</span>
+                  <span>{sprintList[sprint.id].name}</span>
                   <span>{`${ISOtoYYMMDD(sprint.startDate)}~${ISOtoYYMMDD(sprint.endDate)}`}</span>
                 </SprintItem>
               </FilterItem>
@@ -98,13 +99,9 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
         <PopupItemLayout>
           {Object.values(userList).map((user) => {
             return (
-              <FilterItem
-                key={user.id}
-                className={isSelected(user.name, assigneeFilter)}
-                onClick={() => handleSetAssigneeFilter(user.name)}
-              >
+              <FilterItem key={user.id} className={isSelected(user.id, assigneeFilter)} onClick={() => handleSetAssigneeFilter(user.id)}>
                 <UserIcon user={user} />
-                {user.name}
+                {userList[user.id].name}
               </FilterItem>
             );
           })}
@@ -116,9 +113,9 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
         <PopupItemLayout>
           {Object.values(labelList).map((label) => {
             return (
-              <FilterItem key={label.id} className={isSelected(label.name, labelFilter)} onClick={() => handleSetLabelFilter(label.name)}>
+              <FilterItem key={label.id} className={isSelected(label.id, labelFilter)} onClick={() => handleSetLabelFilter(label.id)}>
                 <ColorIcon color={label.color} />
-                {label.name}
+                {labelList[label.id].name}
               </FilterItem>
             );
           })}
