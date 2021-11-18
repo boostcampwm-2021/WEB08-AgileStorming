@@ -15,14 +15,14 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, onDoubleClickTask, onMouseDownTa
   const userList = useRecoilValue(userListState)!;
   const sprintList = useRecoilValue(sprintListState)!;
   const labelList = useRecoilValue(labelListState)!;
-  const user = userList[taskInfo.assignee!];
+  const user = taskInfo.assignee ? userList[taskInfo.assignee] : undefined;
   return (
     <StyledTaskCard onDoubleClick={onDoubleClickTask} onMouseDown={onMouseDownTask}>
       <Title titleStyle={'normal'}>{taskInfo.content}</Title>
       <Wrapper flex={'row'}>
         <StyledCardInfoLeft>
           <TaskInfo title={'담당자: '} content={user ? user.name : ''}>
-            {user !== undefined ?? <UserIcon user={user} />}
+            {user !== undefined ? <UserIcon user={user} /> : ''}
           </TaskInfo>
           <TaskInfo title={'중요도: '} content={taskInfo.priority!}></TaskInfo>
           {taskInfo.labels?.map((labelId) => (
