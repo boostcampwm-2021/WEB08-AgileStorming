@@ -5,7 +5,8 @@ import useDragBackground from 'hooks/useDragBackground';
 import { IHistoryData } from 'types/history';
 import { useRecoilValue } from 'recoil';
 import { historyDataState } from 'recoil/history';
-import { queryUserListState } from 'recoil/user-list';
+import { userListState } from 'recoil/project';
+import { getUser } from 'utils/helpers';
 
 interface IProps {
   onClick: (historyData: IHistoryData, idx: number) => (event: MouseEvent) => void;
@@ -14,16 +15,14 @@ interface IProps {
 const HistoryWindow: React.FC<IProps> = ({ onClick }) => {
   const { containerRef, dragRef } = useDragBackground();
   const historyData = useRecoilValue(historyDataState);
-  const userList = useRecoilValue(queryUserListState);
-
-  console.log(historyData);
+  const userList = useRecoilValue(userListState);
 
   return (
     <Wrapper ref={containerRef} className='background'>
       {historyData && userList
         ? historyData.map((historyDataPiece, idx) => (
             <IconWrapper key={idx} onClick={onClick(historyDataPiece, idx)}>
-              <UserIcon user={userList[historyDataPiece.user]} cursor='pointer' />
+              <UserIcon user={getUser(historyDataPiece.user, userList)!} cursor='pointer' />
             </IconWrapper>
           ))
         : null}

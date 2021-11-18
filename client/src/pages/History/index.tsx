@@ -3,9 +3,10 @@ import useProjectId from 'hooks/useRoomId';
 import useToast from 'hooks/useToast';
 import { useEffect } from 'react';
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
-import { historyDataState, parseHistory } from 'recoil/history';
+import { historyDataState } from 'recoil/history';
 import { IHistoryData, THistoryRowData } from 'types/history';
 import { API } from 'utils/api';
+import { parseHistory } from 'utils/parser';
 
 interface IParams {
   projectId: string;

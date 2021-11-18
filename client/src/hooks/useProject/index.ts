@@ -45,6 +45,7 @@ const useProject = () => {
         return [nodeId, { nodeId, ...props }];
       })
     ) as IMindNodes;
+
     const rootId = projectInfo.rootId;
     setTreeLevel(initNodes, rootId, 0);
     setMindmap({ rootId: rootId, mindNodes: initNodes });
