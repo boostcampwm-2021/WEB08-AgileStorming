@@ -6,7 +6,7 @@ import { taskState } from 'recoil/mindmap';
 
 const Kanban = () => {
   const taskNodes = useRecoilValue(taskState);
-  const toDoTasks = taskNodes.filter((task) => task.status === 'To Do');
+  const toDoTasks = taskNodes.filter((task) => !task.status || task.status === 'To Do');
   const inProgressTasks = taskNodes.filter((task) => task.status === 'In Progress');
   const doneTasks = taskNodes.filter((task) => task.status === 'Done');
   return (
