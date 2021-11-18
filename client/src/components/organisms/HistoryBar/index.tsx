@@ -8,8 +8,8 @@ import { IHistoryData } from 'types/history';
 import { SetterOrUpdater, useResetRecoilState, useRecoilState } from 'recoil';
 import { historyDataState } from 'recoil/history';
 import { getNextMapState, historyMapDataState } from 'recoil/mindmap';
-import { IMindmapData } from 'types/mindmap';
-import { TAddNodeData, THistoryEventData } from 'types/event';
+import { IMindmapData, IMindNodes } from 'types/mindmap';
+import { TAddNodeData, TDeleteNodeData, THistoryEventData, TMoveNodeData, TUpdateNodeContent } from 'types/event';
 import { Levels } from 'utils/helpers';
 // import { historyHandler } from 'hooks/useHistoryReceiver';
 
@@ -64,45 +64,47 @@ interface IParams {
 
 const restoreHistory = (params: IParams) => {
   const { history, isForward, setHistoryMapData, setHistoryData, historyData, historyMapData } = params;
-  const { nodeFrom, nodeTo } = history.data;
+  const historyMap = historyMapData.mindNodes;
   // historyHandler({ setMindmap: setHistoryMapData, historyData: history, isForward });
 
   switch (history.type) {
     case 'ADD_NODE':
       if (isForward)
         addNode({
-          data: history.data!,
-          mapData: historyMapData,
-          parentId: nodeFrom!,
-          newId: (history.data.dataTo! as TAddNodeData).nodeId!,
+          history,
+          historyMap,
         });
       else
-        reverseAddNode({
-          data: history.data!,
-          mapData: historyMapData,
-          parentId: nodeFrom!,
-          newId: (history.data.dataTo! as TAddNodeData).nodeId!,
-          setHistoryData,
+        deleteNode({
           history,
+          historyMap,
+          setHistoryData,
           historyData,
         });
 
       break;
     case 'DELETE_NODE':
-      // const DeleteBackwardFactors = {
-      //   data: history.data!,
-      //   mindNodes: historyMapData!.mindNodes,
-      //   parentId: nodeFrom!,
-      //   newId: (history.data.dataFrom! as TDeleteNodeData).nodeId,
-      // };
-
-      if (isForward) {
-      } else {
+      if (isForward) deleteNode({ history, historyMap });
+      else {
       }
       break;
     case 'MOVE_NODE':
+      if (isForward) moveNode({ data: history.data.dataTo as TMoveNodeData, id: history.data.nodeFrom!, historyMap });
+      else moveNode({ data: history.data.dataFrom as TMoveNodeData, id: history.data.nodeFrom!, historyMap });
       break;
     case 'UPDATE_NODE_CONTENT':
+      if (isForward)
+        updateNodeContent({
+          id: history.data.nodeFrom!,
+          content: (history.data.dataTo! as TUpdateNodeContent).content,
+          historyMap,
+        });
+      else
+        updateNodeContent({
+          id: history.data.nodeTo!,
+          content: (history.data.dataFrom! as TUpdateNodeContent).content,
+          historyMap,
+        });
       break;
     case 'UPDATE_NODE_PARENT':
       break;
@@ -118,34 +120,71 @@ const restoreHistory = (params: IParams) => {
 };
 
 interface IAddNodeParams {
-  data: THistoryEventData;
-  mapData: IMindmapData;
-  parentId: number;
-  newId: number;
+  history: IHistoryData;
+  historyMap: IMindNodes;
+}
+
+const addNode = ({ history, historyMap }: IAddNodeParams) => {
+  const parentId = history.data.nodeFrom!;
+  const parent = historyMap.get(parentId)!;
+  const nodeId = history.data.dataTo ? (history.data.dataTo as TAddNodeData).nodeId! : (history.data.dataFrom as TDeleteNodeData).nodeId!;
+
+  const { level, content } = history.data.dataTo as TAddNodeData;
+  const newNode = history.data.dataTo
+    ? { level: level as Levels, content, children: [], nodeId }
+    : { ...(history.data.dataFrom as TDeleteNodeData) };
+
+  historyMap.set(parentId, { ...parent!, children: [...parent!.children, nodeId] });
+  historyMap.set(nodeId, newNode);
+};
+
+interface IUpdateNodeContentParams {
+  id: number;
+  content: string;
+  historyMap: IMindNodes;
+}
+
+const updateNodeContent = ({ id, content, historyMap }: IUpdateNodeContentParams) => {
+  const node = historyMap.get(id);
+  node!.content = content;
+
+  historyMap.set(id, node!);
+};
+
+interface IMoveNodeParams {
+  data: TMoveNodeData;
+  id: number;
+  historyMap: IMindNodes;
+}
+
+const moveNode = ({ data, id, historyMap }: IMoveNodeParams) => {
+  const node = historyMap.get(id);
+  node!.posX = data.posX;
+  node!.posY = data.posY;
+
+  historyMap.set(id, node!);
+};
+
+interface IDeleteNodeParams {
+  history: IHistoryData;
+  historyMap: IMindNodes;
   setHistoryData?: SetterOrUpdater<IHistoryData[]>;
-  history?: IHistoryData;
   historyData?: IHistoryData[];
 }
 
-const addNode = ({ data, mapData, parentId, newId }: IAddNodeParams) => {
-  const { level, content } = data.dataTo as TAddNodeData;
-  const historyMap = mapData.mindNodes;
-  const parent = historyMap.get(parentId);
-  historyMap.set(parentId, { ...parent!, children: [...parent!.children, newId] });
-  historyMap.set(newId, { nodeId: newId, level: level as Levels, content, children: [] });
-};
+const deleteNode = ({ history, historyMap, historyData, setHistoryData }: IDeleteNodeParams) => {
+  const parentId = history.data.nodeFrom!;
+  const parent = historyMap.get(parentId)!;
 
-const reverseAddNode = ({ data, mapData, parentId, newId, setHistoryData, history, historyData }: IAddNodeParams) => {
-  const historyMap = mapData.mindNodes;
-  const parent = historyMap.get(parentId);
-  const childId = parent?.children[parent.children.length - 1];
+  const childId = history.data.dataFrom ? (history.data.dataFrom as TDeleteNodeData).nodeId : parent.children[parent.children.length - 1];
+  const newChildren = history.data.dataFrom ? parent.children.filter((cid) => cid !== childId) : parent.children.slice(0, -1);
 
-  historyMap.set(parentId, { ...parent!, children: parent!.children.slice(0, -1) });
+  historyMap.set(parentId, { ...parent, children: newChildren });
 
-  if (!newId) {
+  if (!(history.data.dataTo! as TAddNodeData).nodeId) {
     const pureHistory = JSON.parse(JSON.stringify(history));
     const newDataTo = { ...pureHistory.data.dataTo, nodeId: childId };
-    const newHistory = { ...pureHistory!, data: { ...data, dataTo: newDataTo } };
+    const newHistory = { ...pureHistory!, data: { ...history.data, dataTo: newDataTo } };
     const newList = historyData!.map((d) => JSON.parse(JSON.stringify(d)));
     const index = newList.findIndex((d) => d.historyId === newHistory.historyId);
     newList.splice(index, 1, newHistory as IHistoryData);

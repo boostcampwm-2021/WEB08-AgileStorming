@@ -16,4 +16,6 @@ export interface IMindNode extends TTask {
   backlogId?: string;
   createdAt?: string;
   comment?: [];
+  posX?: string;
+  posY?: string;
 }

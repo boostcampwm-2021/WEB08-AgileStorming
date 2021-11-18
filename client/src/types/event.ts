@@ -1,3 +1,4 @@
+import { Levels } from 'utils/helpers';
 import { ILabel } from './label';
 import { ISprint } from './sprint';
 import { IUser } from './user';
@@ -11,6 +12,8 @@ export type TDeleteNodeData = {
   posY?: string;
   assignee?: number;
   priority?: string;
+  children: number[];
+  level: Levels;
 };
 export type TAddNodeData = {
   content: string;
