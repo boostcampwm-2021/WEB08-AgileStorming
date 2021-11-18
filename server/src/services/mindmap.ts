@@ -19,6 +19,7 @@ export const findOneNode = (nodeId: number) => {
 export const getMindMap = async (projectId: string) => {
   return getRepository(Mindmap)
     .createQueryBuilder('mindmap')
+    .leftJoinAndSelect('mindmap.task', 'task')
     .innerJoinAndSelect('mindmap.project', 'project')
     .where('project.id = :projectId', { projectId })
     .getMany();

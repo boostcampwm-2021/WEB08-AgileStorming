@@ -65,6 +65,7 @@ export const getProjectInfo = async (projectId: string) => {
     .leftJoinAndSelect('project.sprints', 'sprints')
     .leftJoinAndSelect('project.labels', 'labels')
     .leftJoinAndSelect('project.mindmap', 'mindmap')
+    .leftJoinAndSelect('mindmap.task', 'task')
     .where('project.id = :projectId', { projectId })
     .getOne();
 };
