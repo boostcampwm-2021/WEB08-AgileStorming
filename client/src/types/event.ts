@@ -14,6 +14,7 @@ export type TDeleteNodeData = {
 };
 export type TAddNodeData = {
   content: string;
+  nodeId?: number;
 };
 export type TMoveNodeData = {
   posX?: string;
