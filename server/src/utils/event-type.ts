@@ -10,7 +10,6 @@ export type TDeleteNodeData = {
 };
 export type TAddNodeData = {
   content: string;
-  level: string;
 };
 export type TMoveNodeData = {
   posX?: string;
@@ -18,7 +17,8 @@ export type TMoveNodeData = {
 };
 export type TUpdateNodeParent = {
   nodeId: number;
-  nodeParentType: 'PROJECT' | 'EPIC' | 'STORY';
+  nodeType: 'EPIC' | 'STORY' | 'TASK';
+  nodeParentType: 'ROOT' | 'EPIC' | 'STORY';
 };
 export type TUpdateNodeSibling = {
   parentId: number;
