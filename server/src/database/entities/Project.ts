@@ -26,6 +26,12 @@ export class Project {
   @OneToMany(() => Mindmap, (mindmap) => mindmap.project, { cascade: true })
   mindmap: Mindmap[];
 
+  @Column({
+    name: 'rootId',
+    default: -1,
+  })
+  rootId: number;
+
   @OneToMany(() => Sprint, (sprint) => sprint.project, { cascade: true })
   sprints: Sprint[];
 

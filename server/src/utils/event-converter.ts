@@ -1,5 +1,5 @@
 import { createNode, updateNode, updateNodeParent, deleteNode } from '../services/mindmap';
-import { deleteTask, updateTask } from '../services/task';
+import { deleteChildTasks, deleteTask, updateTask } from '../services/task';
 import { createSprint, deleteSprint } from '../services/sprint';
 import { createLabel, deleteLabel } from '../services/label';
 import { createComment, deleteComment } from '../services/comment';
@@ -29,9 +29,10 @@ const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEve
       return;
     },
     UPDATE_NODE_PARENT: ({ nodeFrom, nodeTo, dataTo }) => {
-      const { nodeId, nodeParentType } = dataTo as eventType.TUpdateNodeParent;
+      const { nodeId, nodeType, nodeParentType } = dataTo as eventType.TUpdateNodeParent;
       updateNodeParent(nodeFrom, nodeTo, nodeId);
-      if (nodeParentType !== 'STORY') deleteTask(nodeId);
+      if (nodeType === 'TASK' && nodeParentType !== 'STORY') deleteTask(nodeId);
+      if (nodeType === 'STORY' && nodeParentType !== 'EPIC') deleteChildTasks(nodeId);
       return;
     },
     UPDATE_NODE_SIBLING: ({ dataTo }) => {
