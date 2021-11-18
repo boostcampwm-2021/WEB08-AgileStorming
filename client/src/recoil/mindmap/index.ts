@@ -1,6 +1,8 @@
 import { atom, selector } from 'recoil';
 import { IMindmapData } from 'types/mindmap';
 
+const ROOT_NODE_ID = -1;
+
 export const getNextMapState = (prevState: IMindmapData) => {
   const nextNodes = new Map(prevState.mindNodes!);
   nextNodes.forEach((value, key, mapObject) => mapObject.set(key, { ...value, children: [...value.children] }));
@@ -10,8 +12,6 @@ export const getNextMapState = (prevState: IMindmapData) => {
     mindNodes: nextNodes,
   };
 };
-
-const ROOT_NODE_ID = -1;
 
 export const mindmapState = atom<IMindmapData>({
   key: 'mindmapAtom',
@@ -34,9 +34,9 @@ export const taskState = selector({
   },
 });
 
-export const historyMapDataState = atom<IMindmapData | null>({
+export const historyMapDataState = atom<IMindmapData>({
   key: 'historyMapAtom',
-  default: null,
+  default: { rootId: ROOT_NODE_ID, mindNodes: new Map() },
 });
 
 export const historyMapState = selector({

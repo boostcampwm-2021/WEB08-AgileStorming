@@ -25,7 +25,7 @@ const HistoryBackground = () => {
     <>
       <Background refProp={containerRef} bgSize='over' bgColor='gray5' className='background' />
       <Background bgSize='over' zIndex={UNDER_ELEMENT}>
-        {historyMapData ? (
+        {historyMapData.mindNodes.size ? (
           <>
             <Mindmap mindmapData={historyMapData} />
             <DragTarget ref={dragRef} />
