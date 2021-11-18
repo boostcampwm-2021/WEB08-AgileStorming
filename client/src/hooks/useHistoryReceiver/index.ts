@@ -12,7 +12,7 @@ import {
 } from 'types/event';
 import { IHistoryData } from 'types/history';
 import { ILabel } from 'types/label';
-import { IMindmapData } from 'types/mindmap';
+import { IMindmapData, IMindNodes } from 'types/mindmap';
 import { ISprint } from 'types/sprint';
 import { getChildLevel, levelToIdx, setTreeLevel } from 'utils/helpers';
 
@@ -27,7 +27,7 @@ export interface IHistoryHandlerProps {
 }
 
 interface IAddNodeProps {
-  nextMapState: IMindmapData;
+  mindNodes: IMindNodes;
   parentId: number;
   newId: number;
   data: THistoryEventData;
@@ -42,18 +42,18 @@ interface IUpdateNodeParent {
 
 const TEMP_NODE_ID = -2;
 
-const addNode = ({ data, nextMapState, parentId, newId }: IAddNodeProps) => {
+const addNode = ({ data, mindNodes, parentId, newId }: IAddNodeProps) => {
   const { content } = data.dataTo as TAddNodeData;
-  const parent = nextMapState.mindNodes.get(parentId);
+  const parent = mindNodes.get(parentId);
   const level = getChildLevel(parent!.level);
 
   const newNode = { content, level, nodeId: newId, children: [] };
   const newChildren = [...parent!.children.filter((childId) => childId !== TEMP_NODE_ID), newId];
   const newParent = { ...parent!, children: newChildren };
 
-  nextMapState.mindNodes.set(newId, newNode);
-  nextMapState.mindNodes.set(parentId, newParent);
-  nextMapState.mindNodes.delete(TEMP_NODE_ID);
+  mindNodes.set(newId, newNode);
+  mindNodes.set(parentId, newParent);
+  mindNodes.delete(TEMP_NODE_ID);
 };
 
 const updateNodeParent = ({ nextMapState: { mindNodes }, oldParentId, newParentId, data: { nodeId } }: IUpdateNodeParent) => {
@@ -75,11 +75,14 @@ export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryH
 
   switch (type) {
     case 'ADD_NODE':
-      setMindmap((prev) => {
-        const nextMapState = getNextMapState(prev);
-        if (isForward) addNode({ nextMapState, parentId: nodeFrom!, newId: newNodeId!, data: historyData.data });
-        return nextMapState;
-      });
+      if (isForward)
+        setMindmap((prev) => {
+          const nextMapState = getNextMapState(prev);
+          if (isForward) addNode({ mindNodes: nextMapState.mindNodes, parentId: nodeFrom!, newId: newNodeId!, data: historyData.data });
+          return nextMapState;
+        });
+      else {
+      }
       break;
     case 'DELETE_NODE':
       break;
