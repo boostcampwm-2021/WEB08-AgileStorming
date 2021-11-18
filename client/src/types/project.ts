@@ -10,6 +10,7 @@ export interface IProject {
   sprints: ISprint[];
   users: IUser[];
   mindmap: IMindmapData[];
+  rootId: number;
   createdAt: Date;
 }
 

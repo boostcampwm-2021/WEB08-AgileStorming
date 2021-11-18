@@ -23,9 +23,6 @@ export class Mindmap {
   @Column({ default: null })
   posY: string;
 
-  @Column()
-  level: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
