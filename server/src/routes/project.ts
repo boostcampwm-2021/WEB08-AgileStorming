@@ -49,8 +49,10 @@ router.get('/info', async (req: Request, res: Response, next: Next) => {
   try {
     const { projectId } = req.query;
     const projectInfo = await projectService.getProjectInfo(projectId);
-    projectInfo.mindmap.forEach((node) => (node.children = JSON.parse(node.children)));
-    res.send(projectInfo);
+    const projectNodeInfo = await projectService.getProjectNodeInfo(projectId);
+
+    projectNodeInfo.forEach((node) => (node.children = JSON.parse(node.children)));
+    res.send({ projectInfo, projectNodeInfo });
   } catch (e) {
     next(e);
   }
