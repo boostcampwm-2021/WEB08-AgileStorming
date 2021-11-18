@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import { FilterMenuHeader, FilterItem, SprintItem, FilterButton } from './style';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { PopupItemLayout, PopupLayout } from 'components/molecules';
 import { ColorIcon, UserIcon } from 'components/atoms';
 import { ISOtoYYMMDD } from 'utils/form';
-import { labelListState, sprintListState, userListState } from 'recoil/project';
+import { assigneeFilterState, labelFilterState, labelListState, sprintFilterState, sprintListState, userListState } from 'recoil/project';
 import { plus } from 'img';
 import useModal from 'hooks/useModal';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
@@ -15,10 +15,10 @@ interface IProps {
 
 const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   const [displayedFilter, setDisplayedFilter] = useState('스프린트');
-  const [assigneeFilter, setAssigneeFilter] = useState<string | null>(null); // 추후에 recoil로
-  const [sprintFilter, setSprintFilter] = useState<number | null>(null); // 추후에 recoil로
-  const [labelFilter, setLabelFilter] = useState<number | null>(null); // 추후에 recoil로
 
+  const [assigneeFilter, setAssigneeFilter] = useRecoilState(assigneeFilterState);
+  const [sprintFilter, setSprintFilter] = useRecoilState(sprintFilterState);
+  const [labelFilter, setLabelFilter] = useRecoilState(labelFilterState);
   const sprintList = useRecoilValue(sprintListState);
   const userList = useRecoilValue(userListState);
   const labelList = useRecoilValue(labelListState);

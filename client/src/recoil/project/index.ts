@@ -1,29 +1,87 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
+import { mindmapNodesState } from 'recoil/mindmap';
 import { ILabel } from 'types/label';
+import { IMindNode } from 'types/mindmap';
 import { ISprint } from 'types/sprint';
 import { IUser } from 'types/user';
 
-export const projectIdState = atom<string | null>({
+const projectIdState = atom<string | null>({
   key: 'projectIdAtom',
   default: null,
 });
 
-export const sprintListState = atom<Record<number, ISprint>>({
+const sprintListState = atom<Record<number, ISprint>>({
   key: 'sprintList',
   default: {},
 });
 
-export const userListState = atom<Record<string, IUser>>({
+const userListState = atom<Record<string, IUser>>({
   key: 'userList',
   default: {},
 });
 
-export const connectedUserState = atom<Record<string, boolean>>({
+const connectedUserState = atom<Record<string, boolean>>({
   key: 'connectedUser',
   default: {},
 });
 
-export const labelListState = atom<Record<number, ILabel>>({
+const labelListState = atom<Record<number, ILabel>>({
   key: 'labelList',
   default: {},
 });
+
+const assigneeFilterState = atom<string | null>({
+  key: 'assigneeFilter',
+  default: null,
+});
+
+const sprintFilterState = atom<number | null>({
+  key: 'sprintFilter',
+  default: null,
+});
+
+const labelFilterState = atom<number | null>({
+  key: 'labelFilter',
+  default: null,
+});
+
+const filteredTaskState = selector<Record<number, IMindNode>>({
+  key: 'filteredTask',
+  get: ({ get }) => {
+    const nodes = get(mindmapNodesState);
+    const assigneeFilter = get(assigneeFilterState);
+    const sprintFilter = get(sprintFilterState);
+    const labelFilter = get(labelFilterState);
+    const filteredTask: Record<number, IMindNode> = {};
+
+    nodes.forEach((node) => {
+      if (node.level !== 'TASK') {
+        return;
+      }
+      if (assigneeFilter && node.assigneeId !== assigneeFilter) {
+        return;
+      }
+      if (sprintFilter && node.sprintId !== sprintFilter) {
+        return;
+      }
+      if (labelFilter && !node.labels?.includes(labelFilter)) {
+        return;
+      }
+      filteredTask[node.nodeId] = node;
+    });
+
+    return filteredTask;
+  },
+});
+
+export {
+  projectIdState,
+  sprintListState,
+  userListState,
+  connectedUserState,
+  labelListState,
+  assigneeFilterState,
+  sprintFilterState,
+  labelFilterState,
+  filteredTaskState,
+};
