@@ -35,7 +35,7 @@ const useUserReceiver = () => {
         break;
       case 'NEW':
         const newUser: IUser = JSON.parse(data as string);
-        setUserList((prev) => [...prev, newUser]);
+        setUserList((prev) => ({ ...prev, [newUser.id]: newUser }));
         showMessage(`${newUser.name} 님이 새로 참여하셨습니다.`);
         break;
       case 'INIT':

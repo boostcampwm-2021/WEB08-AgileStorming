@@ -108,7 +108,7 @@ export const NodeDetailWrapper = () => {
         <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
           <Dropdown
             id='sprint'
-            items={sprintList?.map((sprint) => sprint.name)}
+            items={Object.values(sprintList)?.map((sprint) => sprint.name)}
             placeholder={selectedNode.sprint ? selectedNode.sprint + '' : ''}
             onValueChange={handleChangeNodeDetail('sprint')}
             dropdownStyle='small'
@@ -117,7 +117,7 @@ export const NodeDetailWrapper = () => {
         <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
           <Dropdown
             id='assignee'
-            items={userList.map((user) => user.name)}
+            items={Object.values(userList).map((user) => user.name)}
             placeholder={selectedNode.assignee ? selectedNode.assignee + '' : ''}
             onValueChange={handleChangeNodeDetail('assignee')}
             dropdownStyle='small'

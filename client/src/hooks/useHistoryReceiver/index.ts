@@ -111,8 +111,8 @@ export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryH
 
 interface INonHistoryEventHandlerProps {
   response: INonHistoryEventData;
-  setLabelList: SetterOrUpdater<ILabel[]>;
-  setSprintList: SetterOrUpdater<ISprint[]>;
+  setLabelList: SetterOrUpdater<Record<number, ILabel>>;
+  setSprintList: SetterOrUpdater<Record<number, ISprint>>;
 }
 
 const nonHistoryEventHandler = ({ response, setLabelList, setSprintList }: INonHistoryEventHandlerProps) => {
@@ -120,10 +120,12 @@ const nonHistoryEventHandler = ({ response, setLabelList, setSprintList }: INonH
 
   switch (type) {
     case 'ADD_LABEL':
-      setLabelList((prev) => [...prev, dbData as ILabel]);
+      const newLabel = dbData as ILabel;
+      setLabelList((prev) => ({ ...prev, [newLabel.id]: newLabel }));
       break;
     case 'ADD_SPRINT':
-      setSprintList((prev) => [...prev, dbData as ISprint]);
+      const newSprint = dbData as ISprint;
+      setSprintList((prev) => ({ ...prev, [newSprint.id]: newSprint }));
       break;
     default:
       break;
