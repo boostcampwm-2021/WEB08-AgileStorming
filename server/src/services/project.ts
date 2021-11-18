@@ -75,7 +75,7 @@ export const getProjectNodeInfo = async (ProjectId: string) => {
   SELECT *
   FROM mindmap
   LEFT JOIN task
-  ON mindmap.id = task.nodeId
+  ON mindmap.id = task.taskId
   WHERE mindmap.projectId = ? ;`,
     [ProjectId]
   );

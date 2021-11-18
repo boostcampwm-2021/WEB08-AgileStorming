@@ -25,7 +25,6 @@ const createTempNode = ({ mindmapData, selectedNodeId }: ITempNodeParams) => {
   parentNode!.children = [...parentNode!.children!, TEMP_NODE_ID];
   mindNodes.set(parentNode!.nodeId!, parentNode!);
   mindNodes.set(TEMP_NODE_ID, tempNode);
-  console.log(parentNode);
 
   const newMapState = getNextMapState({ mindNodes, rootId });
 

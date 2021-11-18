@@ -49,6 +49,7 @@ export const NodeDetailWrapper = () => {
     if (value === prevValue) {
       return;
     }
+
     updateTaskInformation({
       nodeFrom: selectedNode!.nodeId,
       dataFrom: { changed: { [info]: prevValue } },
@@ -98,9 +99,15 @@ export const NodeDetailWrapper = () => {
   };
 
   return selectedNode ? (
-    <PopupLayout title={selectedNode.backlogId} onClose={handleCloseButton} popupStyle='normal'>
+    <PopupLayout title={String(selectedNode.nodeId)} onClose={handleCloseButton} popupStyle='normal'>
       <PopupItemLayout title={'내용'}>
-        <Input defaultValue={selectedNode.content} onBlur={handleBlurNodeDetail('content')} inputStyle='gray' margin='0.2rem 0 0 0'></Input>
+        <Input
+          key={selectedNode.content}
+          defaultValue={selectedNode.content}
+          onBlur={handleBlurNodeDetail('content')}
+          inputStyle='gray'
+          margin='0.2rem 0 0 0'
+        ></Input>
       </PopupItemLayout>
       {selectedNode.level === 'TASK' ? (
         <PopupItemLayout title={'세부사항'}>

@@ -32,6 +32,6 @@ export class Mindmap {
   @OneToMany(() => Comment, (comment) => comment.node, { cascade: true })
   comment: Comment[];
 
-  @OneToOne(() => Task, (task) => task.nodeId, { cascade: true, nullable: true })
+  @OneToOne(() => Task, (task) => task.taskId, { cascade: true, nullable: true })
   task: Task;
 }
