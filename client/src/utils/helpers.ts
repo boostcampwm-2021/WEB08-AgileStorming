@@ -1,4 +1,5 @@
 import { THistoryEventData } from 'types/event';
+import { IMindNodes } from 'types/mindmap';
 
 interface ICoord {
   x: number;
@@ -108,6 +109,12 @@ const fillPayload = (payload: THistoryEventData): THistoryEventData => ({
 
 const getChildLevel = (level: Levels): Levels => idxToLevel(levelToIdx(level) + 1);
 
+const setTreeLevel = (mindNodes: IMindNodes, nodeId: number, depth: number) => {
+  const node = mindNodes.get(nodeId)!;
+  node.level = idxToLevel(depth);
+  node.children.forEach((childId) => setTreeLevel(mindNodes, childId, depth + 1));
+};
+
 export {
   getChildLevel,
   fillPayload,
@@ -124,6 +131,7 @@ export {
   getRegexNumber,
   idxToLevel,
   levelToIdx,
+  setTreeLevel,
 };
 export type TRect = IRect;
 export type TCoord = ICoord;

@@ -1,12 +1,20 @@
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import { getNextMapState, mindmapState } from 'recoil/mindmap';
 import { labelListState, sprintListState } from 'recoil/project';
-import { INonHistoryEventData, TAddNodeData, THistoryEventData, TTask, TUpdateNodeContent, TUpdateTaskInformation } from 'types/event';
+import {
+  INonHistoryEventData,
+  TAddNodeData,
+  THistoryEventData,
+  TTask,
+  TUpdateNodeContent,
+  TUpdateNodeParent,
+  TUpdateTaskInformation,
+} from 'types/event';
 import { IHistory, IHistoryData } from 'types/history';
 import { ILabel } from 'types/label';
 import { IMindmapData, IMindNode } from 'types/mindmap';
 import { ISprint } from 'types/sprint';
-import { getChildLevel } from 'utils/helpers';
+import { getChildLevel, levelToIdx, setTreeLevel } from 'utils/helpers';
 
 export interface IProps {
   mindmap: IMindmapData;
@@ -31,7 +39,14 @@ interface IAddNodeProps {
   data: THistoryEventData;
 }
 
-const TEMP_NODE_ID = -1;
+interface IUpdateNodeParent {
+  nextMapState: IMindmapData;
+  oldParentId: number;
+  newParentId: number;
+  data: TUpdateNodeParent;
+}
+
+const TEMP_NODE_ID = -2;
 
 const addNode = ({ data, nextMapState, parentId, newId }: IAddNodeProps) => {
   const { content } = data.dataTo as TAddNodeData;
@@ -47,14 +62,20 @@ const addNode = ({ data, nextMapState, parentId, newId }: IAddNodeProps) => {
   nextMapState.mindNodes.delete(TEMP_NODE_ID);
 };
 
-const setChangeNodes = (mapState: IMindmapData, nodes: IMindNode[]) => {
-  nodes.forEach((node) => mapState.mindNodes.set(node.nodeId, { ...node, children: node.children }));
+const updateNodeParent = ({ nextMapState: { mindNodes }, oldParentId, newParentId, data: { nodeId } }: IUpdateNodeParent) => {
+  const oldParentNode = mindNodes.get(oldParentId)!;
+  oldParentNode.children = oldParentNode.children.filter((childId) => childId !== nodeId);
+  const newParentNode = mindNodes.get(newParentId)!;
+  newParentNode.children = [...newParentNode.children, nodeId];
+  const childNode = mindNodes.get(nodeId)!;
+  childNode.level = getChildLevel(newParentNode.level);
+  setTreeLevel(mindNodes, nodeId, levelToIdx(childNode.level));
 };
 
 export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryHandlerProps) => {
   const {
     type,
-    data: { nodeFrom, dataFrom, dataTo },
+    data: { nodeFrom, nodeTo, dataFrom, dataTo },
     newNodeId,
   } = historyData;
 
@@ -67,16 +88,15 @@ export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryH
       });
       break;
     case 'DELETE_NODE':
-      // if (isForward) nextMapState.mindNodes.delete(nodeFrom!);
-      // else nextMapState.mindNodes.set(nodeFrom!, dataFrom as IMindNode);
       break;
     case 'MOVE_NODE':
       break;
     case 'UPDATE_NODE_PARENT':
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
-        if (isForward) setChangeNodes(nextMapState, dataTo as any);
-        else setChangeNodes(nextMapState, dataFrom as any);
+        const data = dataTo as TUpdateNodeParent;
+        if (isForward) updateNodeParent({ nextMapState, oldParentId: nodeFrom!, newParentId: nodeTo!, data });
+        else updateNodeParent({ nextMapState, oldParentId: nodeTo!, newParentId: nodeFrom!, data });
         return nextMapState;
       });
       break;

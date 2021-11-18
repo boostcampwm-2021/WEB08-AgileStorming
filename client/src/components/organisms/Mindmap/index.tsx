@@ -71,33 +71,24 @@ const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, updateNodeParent, dr
     (nodenum) => nextNodes.get(nodenum!)!
   );
   const [draggedLevel, newParentLevel] = [draggedNode, newParentNode].map((node) => node!.level);
-  const [draggedLevelIdx, newParentLevelIdx] = [draggedLevel, newParentLevel].map((level) => levelToIdx(level));
+  const newParentLevelIdx = levelToIdx(newParentLevel);
   const draggedDepth = nodeInfos.get(draggedNodeNum!)!.depth;
   if (!checkMoveCondition({ draggedDepth, newParentLevelIdx })) return;
 
   oldParentNode.children = oldParentNode.children.filter((childNodeNum) => childNodeNum !== draggedNodeNum);
   if (!newParentNode.children.includes(draggedNodeNum!)) newParentNode.children.push(draggedNodeNum!);
-  const isLevelChanged = newParentLevelIdx + 1 !== draggedLevelIdx;
-  const changeNodeIds = [oldParentNodeNum, newParentNodeNum];
-  if (isLevelChanged) {
-    draggedNode.level = idxToLevel(newParentLevelIdx + 1);
-    draggedNode.children.forEach((childId) => {
-      const childLevel = idxToLevel(newParentLevelIdx + 2);
-      const childNode = nextNodes.get(childId)!;
-      childNode.level = childLevel;
-      changeNodeIds.push(childNode.nodeId);
-    });
-    changeNodeIds.push(draggedNode.nodeId);
-  }
 
   const payload = {
     nodeFrom: oldParentNodeNum!,
     nodeTo: newParentNodeNum!,
-    dataFrom: changeNodeIds.map((nodeId) => curNodes.get(nodeId!)),
-    dataTo: changeNodeIds.map((nodeId) => nextNodes.get(nodeId!)),
-  };
+    dataTo: {
+      nodeId: draggedNodeNum,
+      nodeType: draggedLevel,
+      nodeParentType: newParentLevel,
+    },
+  } as THistoryEventData;
 
-  updateNodeParent(payload as any);
+  updateNodeParent(payload);
 };
 
 const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNodes) => {
