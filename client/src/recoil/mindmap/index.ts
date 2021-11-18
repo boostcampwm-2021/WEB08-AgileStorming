@@ -25,3 +25,11 @@ export const mindmapNodesState = selector({
     return mindNodes;
   },
 });
+
+export const taskState = selector({
+  key: 'taskState',
+  get: ({ get }) => {
+    const { mindNodes } = get(mindmapState);
+    return Array.from(mindNodes.values()).filter((node) => node.level === 'TASK');
+  },
+});

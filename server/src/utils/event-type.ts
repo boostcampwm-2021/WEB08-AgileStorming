@@ -2,7 +2,7 @@ export type TDeleteNodeData = {
   nodeId: number;
   content: string;
   index: number;
-  status?: string;
+  status?: 'To Do' | 'In Progress' | 'Done';
   posX?: string;
   posY?: string;
   assignee?: number;
@@ -18,7 +18,7 @@ export type TMoveNodeData = {
 };
 export type TUpdateNodeParent = {
   nodeId: number;
-  nodeParentType: 'Project' | 'Epic' | 'Story';
+  nodeParentType: 'PROJECT' | 'EPIC' | 'STORY';
 };
 export type TUpdateNodeSibling = {
   parentId: number;
@@ -33,6 +33,7 @@ export type TTask = {
   priority?: string;
   dueDate?: string;
   estimatedTime?: string;
+  status?: 'To Do' | 'In Progress' | 'Done';
   finishedTime?: string;
   sprint?: number;
 };

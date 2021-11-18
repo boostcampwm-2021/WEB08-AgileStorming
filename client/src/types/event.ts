@@ -32,11 +32,12 @@ export type TUpdateNodeContent = {
   content: string;
 };
 export type TTask = {
-  assignee?: number;
+  assignee?: string;
   labels?: number[];
   priority?: string;
   dueDate?: string;
   estimatedTime?: string;
+  status?: 'To Do' | 'In Progress' | 'Done';
   finishedTime?: string;
   sprint?: number;
 };

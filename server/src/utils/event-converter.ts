@@ -31,7 +31,7 @@ const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEve
     UPDATE_NODE_PARENT: ({ nodeFrom, nodeTo, dataTo }) => {
       const { nodeId, nodeParentType } = dataTo as eventType.TUpdateNodeParent;
       updateNodeParent(nodeFrom, nodeTo, nodeId);
-      if (nodeParentType !== 'Story') deleteTask(nodeId);
+      if (nodeParentType !== 'STORY') deleteTask(nodeId);
       return;
     },
     UPDATE_NODE_SIBLING: ({ dataTo }) => {
