@@ -10,6 +10,7 @@ import useToast from 'hooks/useToast';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import { IMindNode } from 'types/mindmap';
 import { sprintListState, userListState } from 'recoil/project';
+import { TTask } from 'types/event';
 
 export const NodeDetailWrapper = () => {
   const priorityList = useRecoilValue(priorityListState);
@@ -25,10 +26,10 @@ export const NodeDetailWrapper = () => {
   priorityList.forEach((priority) => (priorityDropdownItem[priority] = priority));
 
   const sprintDropdownItem: Record<number, string> = {};
-  sprintList.forEach((sprint) => (sprintDropdownItem[sprint.id] = sprint.name));
+  Object.values(sprintList).forEach((sprint) => (sprintDropdownItem[sprint.id] = sprint.name));
 
   const uerDropdownItem: Record<string, string> = {};
-  userList.forEach((user) => (uerDropdownItem[user.id] = user.name));
+  Object.values(userList).forEach((user) => (uerDropdownItem[user.id] = user.name));
 
   const handleCloseButton = () => setSelectedNodeId(null);
 
@@ -43,8 +44,8 @@ export const NodeDetailWrapper = () => {
     showMessage(`${info} ${e.target.value}로 변경.`);
   };
 
-  const handleChangeNodeDetail = (info: keyof IMindNode) => (value: number | string) => {
-    const prevValue = selectedNode?.[info];
+  const handleChangeNodeDetail = (info: keyof TTask) => (value: number | string) => {
+    const prevValue = selectedNode![info];
     if (value === prevValue) {
       return;
     }
@@ -53,7 +54,6 @@ export const NodeDetailWrapper = () => {
       dataFrom: { changed: { [info]: prevValue } },
       dataTo: { changed: { [info]: value } },
     });
-    showMessage(`${info} ${value}로 변경.`);
   };
 
   const handleBlurDueDate = ({ target }: React.FocusEvent<HTMLInputElement>) => {
@@ -85,7 +85,7 @@ export const NodeDetailWrapper = () => {
       return;
     }
     const newEstimatedTime = target.value + '시간';
-    const prevValue = selectedNode?.estimatedTime;
+    const prevValue = selectedNode!.estimatedTime;
     if (newEstimatedTime !== prevValue) {
       updateTaskInformation({
         nodeFrom: selectedNode!.nodeId,
@@ -102,55 +102,59 @@ export const NodeDetailWrapper = () => {
       <PopupItemLayout title={'내용'}>
         <Input defaultValue={selectedNode.content} onBlur={handleBlurNodeDetail('content')} inputStyle='gray' margin='0.2rem 0 0 0'></Input>
       </PopupItemLayout>
-      <PopupItemLayout title={'세부사항'}>
-        <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
-          <Dropdown
-            id='sprint'
-            items={sprintDropdownItem}
-            placeholder={selectedNode.sprint ? sprintList[selectedNode.sprint].name : ''}
-            onValueChange={handleChangeNodeDetail('sprint')}
-            dropdownStyle='small'
-          />
-        </Label>
-        <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
-          <Dropdown
-            id='assignee'
-            items={uerDropdownItem}
-            placeholder={selectedNode.assignee ? userList[selectedNode.assignee].name : ''}
-            onValueChange={handleChangeNodeDetail('assignee')}
-            dropdownStyle='small'
-          />
-        </Label>
-        <Label label='마감 날짜' labelStyle='small' ratio={0.5} htmlFor='dueDate'>
-          <Input
-            id='dueDate'
-            placeholder={selectedNode.dueDate}
-            onFocus={handleFocusAlarm('YYYY-MM-DD 형식으로 입력하세요.')}
-            onBlur={handleBlurDueDate}
-            inputStyle='small'
-            margin='0.1rem 0'
-          />
-        </Label>
-        <Label label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
-          <Input
-            id='estimatedTime'
-            placeholder={selectedNode.estimatedTime}
-            onFocus={handleFocusAlarm('숫자만 입력하세요. 단위는 시(hour)입니다.')}
-            onBlur={handleBlurEstimatedTime}
-            inputStyle='small'
-            margin='0.1rem 0'
-          />
-        </Label>
-        <Label label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>
-          <Dropdown
-            id='priority'
-            items={priorityDropdownItem}
-            placeholder={selectedNode.priority}
-            onValueChange={handleChangeNodeDetail('priority')}
-            dropdownStyle='small'
-          />
-        </Label>
-      </PopupItemLayout>
+      {selectedNode.level === 'TASK' ? (
+        <PopupItemLayout title={'세부사항'}>
+          <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
+            <Dropdown
+              id='sprint'
+              items={sprintDropdownItem}
+              placeholder={selectedNode.sprintId ? sprintList[selectedNode.sprintId].name : ''}
+              onValueChange={handleChangeNodeDetail('sprintId')}
+              dropdownStyle='small'
+            />
+          </Label>
+          <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
+            <Dropdown
+              id='assignee'
+              items={uerDropdownItem}
+              placeholder={selectedNode.assigneeId ? userList[selectedNode.assigneeId].name : ''}
+              onValueChange={handleChangeNodeDetail('assigneeId')}
+              dropdownStyle='small'
+            />
+          </Label>
+          <Label label='마감 날짜' labelStyle='small' ratio={0.5} htmlFor='dueDate'>
+            <Input
+              id='dueDate'
+              placeholder={selectedNode.dueDate}
+              onFocus={handleFocusAlarm('YYYY-MM-DD 형식으로 입력하세요.')}
+              onBlur={handleBlurDueDate}
+              inputStyle='small'
+              margin='0.1rem 0'
+            />
+          </Label>
+          <Label label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
+            <Input
+              id='estimatedTime'
+              placeholder={selectedNode.estimatedTime}
+              onFocus={handleFocusAlarm('숫자만 입력하세요. 단위는 시(hour)입니다.')}
+              onBlur={handleBlurEstimatedTime}
+              inputStyle='small'
+              margin='0.1rem 0'
+            />
+          </Label>
+          <Label label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>
+            <Dropdown
+              id='priority'
+              items={priorityDropdownItem}
+              placeholder={selectedNode.priority}
+              onValueChange={handleChangeNodeDetail('priority')}
+              dropdownStyle='small'
+            />
+          </Label>
+        </PopupItemLayout>
+      ) : (
+        ''
+      )}
       <PopupItemLayout title={'라벨'}>라벨정보</PopupItemLayout>
     </PopupLayout>
   ) : null;
