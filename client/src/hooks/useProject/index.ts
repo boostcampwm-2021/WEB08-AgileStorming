@@ -8,6 +8,7 @@ import { IMindNodes } from 'types/mindmap';
 import { ISprint } from 'types/sprint';
 import { IUser } from 'types/user';
 import { project } from 'utils/api';
+import { setTreeLevel } from 'utils/helpers';
 
 const useProject = () => {
   const [projectId, setProjectId] = useRecoilState(projectIdState);
@@ -43,9 +44,10 @@ const useProject = () => {
         const { id: nodeId, ...props } = node;
         return [nodeId, { nodeId, ...props }];
       })
-    );
-    const rootId = projectNodeInfo.filter((node) => node.level === 'ROOT')[0].id;
-    setMindmap({ rootId: rootId as number, mindNodes: initNodes as IMindNodes });
+    ) as IMindNodes;
+    const rootId = projectInfo.rootId;
+    setTreeLevel(initNodes, rootId, 0);
+    setMindmap({ rootId: rootId, mindNodes: initNodes });
   };
 
   useEffect(() => {

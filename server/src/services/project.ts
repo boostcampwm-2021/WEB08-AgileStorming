@@ -71,7 +71,6 @@ export const getProjectInfo = async (projectId: string) => {
     .leftJoinAndSelect('project.users', 'users')
     .leftJoinAndSelect('project.sprints', 'sprints')
     .leftJoinAndSelect('project.labels', 'labels')
-
     .where('project.id = :projectId', { projectId })
     .getOne();
 };
