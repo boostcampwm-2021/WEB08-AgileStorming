@@ -1,6 +1,6 @@
+import { Levels } from 'utils/helpers';
 import { ILabel } from './label';
 import { ISprint } from './sprint';
-import { IUser } from './user';
 
 export type TDeleteNodeData = {
   nodeId: number;
@@ -11,9 +11,12 @@ export type TDeleteNodeData = {
   posY?: string;
   assignee?: number;
   priority?: string;
+  children: number[];
+  level: Levels;
 };
 export type TAddNodeData = {
   content: string;
+  nodeId?: number;
 };
 export type TMoveNodeData = {
   posX?: string;
@@ -88,7 +91,7 @@ export type TEventData = TAddSprint | TAddLabel | TAddComment | TDeleteSprint | 
 export interface INonHistoryEventData {
   id?: number;
   projectId: string;
-  user: IUser;
+  user: string;
   type: TEventType;
   data: TEventData;
   dbData?: number | ILabel | ISprint;

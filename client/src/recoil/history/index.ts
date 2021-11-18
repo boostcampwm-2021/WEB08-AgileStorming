@@ -1,7 +1,12 @@
 import { atom } from 'recoil';
-import { IHistory } from 'types/history';
+import { IHistoryData } from 'types/history';
 
-export const historyState = atom<IHistory>({
-  key: 'historyAtom',
-  default: { history: [] },
+export const historyDataState = atom<IHistoryData[]>({
+  key: 'historyDataAtom',
+  default: [],
+});
+
+export const farthestHistoryIdState = atom<string | undefined>({
+  key: 'farthestHistoryAtom',
+  default: undefined,
 });

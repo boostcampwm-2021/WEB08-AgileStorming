@@ -1,4 +1,5 @@
-import { IHistoryData } from 'types/history';
+import { THistoryEventType } from 'types/event';
+import { IHistoryData, THistoryRowData } from 'types/history';
 
 export const parseHistoryEvent = (data: string[], newNodeId?: number): IHistoryData => {
   const stringJson =
@@ -33,3 +34,11 @@ export const parseNonHistoryEvent = (data: string[], dbData?: string) => {
     ) + '}';
   return JSON.parse(stringJson);
 };
+
+export const parseHistory = (rowData: THistoryRowData) => ({
+  historyId: Number(rowData[0].split('-')[0]),
+  type: rowData[1][1] as THistoryEventType,
+  projectId: rowData[1][3],
+  user: rowData[1][5],
+  data: JSON.parse(rowData[1][7]),
+});

@@ -3,7 +3,7 @@ import MindmapTree from 'components/organisms/MindmapTree';
 import { getNextMapState } from 'recoil/mindmap';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import useDragEvent from 'hooks/useDragEvent';
-import { getRegexNumber, idxToLevel, levelToIdx } from 'utils/helpers';
+import { getRegexNumber, levelToIdx } from 'utils/helpers';
 import { THistoryEventData } from 'types/event';
 import { IMindmapData, IMindNodes } from 'types/mindmap';
 
@@ -62,7 +62,7 @@ const checkMoveCondition = ({ draggedDepth, newParentLevelIdx }: ICheckMoveProps
   return true;
 };
 
-const changeNodeParent = ({ curNodes, nextNodes, nodeInfos, updateNodeParent, draggedElem, droppedElem }: IChangeParentProps) => {
+const changeNodeParent = ({ nextNodes, nodeInfos, updateNodeParent, draggedElem, droppedElem }: IChangeParentProps) => {
   const [draggedNodeNum, oldParentNodeNum] = [getNodeNum(draggedElem), getNodeNum(getParentElem(draggedElem))];
   const [newParentNodeNum, newAncestorNodeNum] = [getNodeNum(droppedElem), getNodeNum(getParentElem(droppedElem))];
   if (!checkParentConditon({ draggedNodeNum, oldParentNodeNum, newParentNodeNum, newAncestorNodeNum })) return;

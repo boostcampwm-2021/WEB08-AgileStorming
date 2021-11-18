@@ -1,5 +1,6 @@
 import { THistoryEventData } from 'types/event';
 import { IMindNodes } from 'types/mindmap';
+import { IUser } from 'types/user';
 
 interface ICoord {
   x: number;
