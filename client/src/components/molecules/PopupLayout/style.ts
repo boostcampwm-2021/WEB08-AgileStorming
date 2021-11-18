@@ -20,6 +20,7 @@ const styleOptions: { [key in TStyle]: string } = {
       width: 25rem;
       padding: 0.5rem  1rem  1rem 1rem;
       font-size: ${common.fontSize.normal};
+      z-index: 3;
     `,
 };
 
