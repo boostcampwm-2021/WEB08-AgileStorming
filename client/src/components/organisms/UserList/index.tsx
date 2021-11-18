@@ -38,13 +38,13 @@ export const UserList = () => {
   };
   return isUserListOpen ? (
     <PopupLayout
-      title={`공유됨: ${userList.length} 명`}
+      title={`공유됨: ${Object.values(userList).length} 명`}
       onClose={handleClickCloseBtn}
       popupStyle='normal'
       extraBtn={<IconButton zIdx={'1'} onClick={handleClickShareBtn} imgSrc={share} altText='공유하기 버튼' />}
     >
       <PopupItemLayout>
-        {userList.map((user) => {
+        {Object.values(userList).map((user) => {
           return (
             <StyledUserInfoBox key={user.id}>
               <Profile user={user} />

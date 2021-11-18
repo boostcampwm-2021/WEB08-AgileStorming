@@ -8,14 +8,14 @@ export const projectIdState = atom<string | null>({
   default: null,
 });
 
-export const sprintListState = atom<ISprint[]>({
+export const sprintListState = atom<Record<number, ISprint>>({
   key: 'sprintList',
-  default: [],
+  default: {},
 });
 
-export const userListState = atom<IUser[]>({
+export const userListState = atom<Record<string, IUser>>({
   key: 'userList',
-  default: [],
+  default: {},
 });
 
 export const connectedUserState = atom<Record<string, boolean>>({
@@ -23,7 +23,7 @@ export const connectedUserState = atom<Record<string, boolean>>({
   default: {},
 });
 
-export const labelListState = atom<ILabel[]>({
+export const labelListState = atom<Record<number, ILabel>>({
   key: 'labelList',
-  default: [],
+  default: {},
 });

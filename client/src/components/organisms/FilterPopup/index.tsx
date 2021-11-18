@@ -72,7 +72,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       </FilterMenuHeader>
       {displayedFilter === '스프린트' ? (
         <PopupItemLayout>
-          {sprintList.map((sprint) => {
+          {Object.values(sprintList).map((sprint) => {
             return (
               <FilterItem
                 key={sprint.id}
@@ -96,7 +96,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       )}
       {displayedFilter === '담당자' ? (
         <PopupItemLayout>
-          {userList.map((user) => {
+          {Object.values(userList).map((user) => {
             return (
               <FilterItem
                 key={user.id}
@@ -114,7 +114,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       )}
       {displayedFilter === '라벨' ? (
         <PopupItemLayout>
-          {labelList.map((label) => {
+          {Object.values(labelList).map((label) => {
             return (
               <FilterItem key={label.id} className={isSelected(label.name, labelFilter)} onClick={() => handleSetLabelFilter(label.name)}>
                 <ColorIcon color={label.color} />

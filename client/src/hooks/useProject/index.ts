@@ -3,7 +3,10 @@ import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { mindmapState } from 'recoil/mindmap';
 import { labelListState, projectIdState, sprintListState, userListState } from 'recoil/project';
+import { ILabel } from 'types/label';
 import { IMindNodes } from 'types/mindmap';
+import { ISprint } from 'types/sprint';
+import { IUser } from 'types/user';
 import { project } from 'utils/api';
 
 const useProject = () => {
@@ -20,10 +23,20 @@ const useProject = () => {
       return;
     }
     const projectInfo = await project.getInfo(roomId);
+
     setProjectId(roomId);
-    setSprintList(projectInfo.sprints);
-    setUserList(projectInfo.users);
-    setLabelList(projectInfo.labels);
+
+    const sprintList: Record<number, ISprint> = {};
+    projectInfo.sprints.forEach((sprint) => (sprintList[sprint.id] = sprint));
+    setSprintList(sprintList);
+
+    const userList: Record<string, IUser> = {};
+    projectInfo.users.forEach((user) => (userList[user.id] = user));
+    setUserList(userList);
+
+    const labelList: Record<number, ILabel> = {};
+    projectInfo.labels.forEach((label) => (labelList[label.id] = label));
+    setLabelList(labelList);
 
     const initNodes = new Map(
       projectInfo.mindmap.map((node) => {
