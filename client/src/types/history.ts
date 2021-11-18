@@ -1,9 +1,7 @@
 import { IUser } from 'types/user';
 import { THistoryEventData, THistoryEventType } from 'types/event';
 
-export interface IHistory {
-  history: IHistoryData[];
-}
+export type THistoryRowData = [string, ['type', string, 'projectId', string, 'user', string, 'data', string]];
 
 export interface IHistoryData {
   id?: number;

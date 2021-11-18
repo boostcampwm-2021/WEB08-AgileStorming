@@ -10,17 +10,11 @@ import {
   TUpdateNodeParent,
   TUpdateTaskInformation,
 } from 'types/event';
-import { IHistory, IHistoryData } from 'types/history';
+import { IHistoryData } from 'types/history';
 import { ILabel } from 'types/label';
-import { IMindmapData, IMindNode } from 'types/mindmap';
+import { IMindmapData } from 'types/mindmap';
 import { ISprint } from 'types/sprint';
 import { getChildLevel, levelToIdx, setTreeLevel } from 'utils/helpers';
-
-export interface IProps {
-  mindmap: IMindmapData;
-  setMindmap: SetterOrUpdater<IMindmapData>;
-  setHistory: SetterOrUpdater<IHistory>;
-}
 
 export interface IHistoryReceiver {
   (history: IHistoryData): void;
