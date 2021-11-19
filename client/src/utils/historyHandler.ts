@@ -73,8 +73,8 @@ export const restoreHistory = (params: IParams) => {
       break;
     case 'UPDATE_TASK_INFORMATION':
       if (isForward)
-        updateNodeInformation({ id: historyData.data.nodeFrom!, data: historyData.data.dataTo as TUpdateTaskInformation, historyMap });
-      else updateNodeInformation({ id: historyData.data.nodeFrom!, data: historyData.data.dataFrom as TUpdateTaskInformation, historyMap });
+        updateTaskInformation({ id: historyData.data.nodeFrom!, data: historyData.data.dataTo as TUpdateTaskInformation, historyMap });
+      else updateTaskInformation({ id: historyData.data.nodeFrom!, data: historyData.data.dataFrom as TUpdateTaskInformation, historyMap });
       break;
   }
 
@@ -195,7 +195,7 @@ interface IUpdateNodeInformationParams {
   historyMap: IMindNodes;
 }
 
-const updateNodeInformation = ({ id, data, historyMap }: IUpdateNodeInformationParams) => {
+const updateTaskInformation = ({ id, data, historyMap }: IUpdateNodeInformationParams) => {
   if (!data.changed.assigneeId) return;
   const node = historyMap.get(id)!;
 
