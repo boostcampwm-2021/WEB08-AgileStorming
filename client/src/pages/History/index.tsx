@@ -32,6 +32,7 @@ const HistoryPage = () => {
 
   useEffect(() => {
     getNewHistoryData({ projectId, showMessage, setHistoryDataList });
+    return setHistoryDataList([]);
   }, []);
 
   return (

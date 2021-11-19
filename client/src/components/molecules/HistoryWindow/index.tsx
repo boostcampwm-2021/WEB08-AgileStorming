@@ -16,7 +16,7 @@ const HistoryWindow: React.FC<IProps> = ({ onClick, currentHistoryData }) => {
   const { containerRef, dragRef } = useDragBackground();
   const historyDataList = useRecoilValue(historyDataListState);
   const userList = useRecoilValue(userListState);
-  const isSelected = (data: IHistoryData) => data.historyId === currentHistoryData?.historyId;
+  const isSelected = (data: IHistoryData): boolean => currentHistoryData !== null && data.historyId === currentHistoryData.historyId;
 
   return (
     <Wrapper ref={containerRef} className='background'>
