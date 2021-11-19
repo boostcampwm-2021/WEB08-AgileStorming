@@ -196,6 +196,7 @@ interface IUpdateNodeInformationParams {
 }
 
 const updateNodeInformation = ({ id, data, historyMap }: IUpdateNodeInformationParams) => {
+  if (!data.changed.assigneeId) return;
   const node = historyMap.get(id)!;
 
   historyMap.set(id, { ...node, ...data.changed });
