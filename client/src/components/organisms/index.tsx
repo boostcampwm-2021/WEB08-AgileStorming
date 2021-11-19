@@ -1,3 +1,4 @@
+export { default as ConfirmModal } from 'components/organisms/ConfirmModal';
 export { default as FilterPopup } from 'components/organisms/FilterPopup';
 export { default as ProjectCardContainer } from 'components/templates/ProjectCardContainer';
 export { default as NewProjectCard } from 'components/organisms/NewProjectCard';

@@ -5,7 +5,7 @@ import { PopupItemLayout, PopupLayout } from 'components/molecules';
 import { ColorIcon, UserIcon } from 'components/atoms';
 import { ISOtoYYMMDD } from 'utils/form';
 import { assigneeFilterState, labelFilterState, labelListState, sprintFilterState, sprintListState, userListState } from 'recoil/project';
-import { plus } from 'img';
+import { closeIcon, plus } from 'img';
 import useModal from 'hooks/useModal';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 
@@ -24,7 +24,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   const labelList = useRecoilValue(labelListState);
 
   const { showModal, hideModal } = useModal();
-  const { addLabel } = useHistoryEmitter();
+  const { addLabel, deleteSprint } = useHistoryEmitter();
 
   const newLabelName = useRef<string>('');
 
@@ -36,6 +36,23 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   const handleSetLabelFilter = (label: number) => setLabelFilter(label === labelFilter ? null : label);
 
   const handleClickAddSprint = () => showModal({ modalType: 'newSprintModal', modalProps: {} });
+  const handleClickDeleteSprintConfirm = () => {
+    deleteSprint({ sprintId: sprintFilter! });
+    setSprintFilter(null);
+    hideModal();
+  };
+  const handleClickDeleteSprint = () => {
+    showModal({
+      modalType: 'confirmModal',
+      modalProps: {
+        title: '스프린트 삭제',
+        text: `'${sprintList[sprintFilter!].name}' 스프린트를 삭제합니다`,
+        onClickSubmitButton: handleClickDeleteSprintConfirm,
+        onCancelButton: () => hideModal(),
+      },
+    });
+  };
+
   const handleChangeLabelInput = (event: React.ChangeEvent<HTMLInputElement>, ref: React.MutableRefObject<string>) =>
     (ref.current = event.target.value);
   const handleClickLabelSubmitEvent = () => {
@@ -94,9 +111,15 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
               );
             })}
           </FilterItemContainer>
-          <FilterButton onClick={handleClickAddSprint}>
-            <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
-          </FilterButton>
+          {sprintFilter ? (
+            <FilterButton onClick={handleClickDeleteSprint}>
+              <img src={closeIcon} width={'16px'} height={'16px'} alt='삭제하기' />
+            </FilterButton>
+          ) : (
+            <FilterButton onClick={handleClickAddSprint}>
+              <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
+            </FilterButton>
+          )}
         </PopupItemLayout>
       ) : (
         ''
