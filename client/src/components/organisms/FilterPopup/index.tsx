@@ -24,7 +24,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   const labelList = useRecoilValue(labelListState);
 
   const { showModal, hideModal } = useModal();
-  const { addLabel, deleteSprint } = useHistoryEmitter();
+  const { addLabel, deleteSprint, deleteLabel } = useHistoryEmitter();
 
   const newLabelName = useRef<string>('');
 
@@ -70,6 +70,24 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
         placeholder: '라벨 이름',
         onChangeInput: (e) => handleChangeLabelInput(e, newLabelName),
         onClickSubmitButton: handleClickLabelSubmitEvent,
+      },
+    });
+  };
+
+  const handleClickDeleteLabelConfirm = () => {
+    deleteLabel({ labelId: labelFilter! });
+    setLabelFilter(null);
+    hideModal();
+  };
+
+  const handleClickDeleteLabel = () => {
+    showModal({
+      modalType: 'confirmModal',
+      modalProps: {
+        title: '라벨 삭제',
+        text: `'${labelList[labelFilter!].name}' 라벨을 삭제합니다.`,
+        onClickSubmitButton: handleClickDeleteLabelConfirm,
+        onCancelButton: () => hideModal(),
       },
     });
   };
@@ -152,9 +170,15 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
               );
             })}
           </FilterItemContainer>
-          <FilterButton onClick={handleClickAddLabel}>
-            <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
-          </FilterButton>
+          {labelFilter ? (
+            <FilterButton onClick={handleClickDeleteLabel}>
+              <img src={closeIcon} width={'16px'} height={'16px'} alt='삭제하기' />
+            </FilterButton>
+          ) : (
+            <FilterButton onClick={handleClickAddLabel}>
+              <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
+            </FilterButton>
+          )}
         </PopupItemLayout>
       ) : (
         ''
