@@ -19,6 +19,13 @@ export const FilterMenuHeader = styled.div`
   }
 `;
 
+export const FilterItemContainer = styled.div`
+  position: relative;
+  display: block;
+  overflow-y: auto;
+  max-height: 4.5rem;
+`;
+
 export const FilterItem = styled.div`
   font-weight: bold;
   padding: 0.3rem 0.1rem;

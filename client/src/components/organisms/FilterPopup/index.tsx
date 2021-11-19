@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { FilterMenuHeader, FilterItem, SprintItem, FilterButton } from './style';
+import { FilterMenuHeader, FilterItem, SprintItem, FilterButton, FilterItemContainer } from './style';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { PopupItemLayout, PopupLayout } from 'components/molecules';
 import { ColorIcon, UserIcon } from 'components/atoms';
@@ -77,17 +77,23 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       </FilterMenuHeader>
       {displayedFilter === '스프린트' ? (
         <PopupItemLayout>
-          {Object.values(sprintList).map((sprint) => {
-            return (
-              <FilterItem key={sprint.id} className={isSelected(sprint.id, sprintFilter)} onClick={() => handleSetSprintFilter(sprint.id)}>
-                <SprintItem>
-                  <ColorIcon color={sprint.color} />
-                  <span>{sprintList[sprint.id].name}</span>
-                  <span>{`${ISOtoYYMMDD(sprint.startDate)}~${ISOtoYYMMDD(sprint.endDate)}`}</span>
-                </SprintItem>
-              </FilterItem>
-            );
-          })}
+          <FilterItemContainer>
+            {Object.values(sprintList).map((sprint) => {
+              return (
+                <FilterItem
+                  key={sprint.id}
+                  className={isSelected(sprint.id, sprintFilter)}
+                  onClick={() => handleSetSprintFilter(sprint.id)}
+                >
+                  <SprintItem>
+                    <ColorIcon color={sprint.color} />
+                    <span>{sprintList[sprint.id].name}</span>
+                    <span>{`${ISOtoYYMMDD(sprint.startDate)}~${ISOtoYYMMDD(sprint.endDate)}`}</span>
+                  </SprintItem>
+                </FilterItem>
+              );
+            })}
+          </FilterItemContainer>
           <FilterButton onClick={handleClickAddSprint}>
             <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
           </FilterButton>
@@ -97,28 +103,32 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       )}
       {displayedFilter === '담당자' ? (
         <PopupItemLayout>
-          {Object.values(userList).map((user) => {
-            return (
-              <FilterItem key={user.id} className={isSelected(user.id, assigneeFilter)} onClick={() => handleSetAssigneeFilter(user.id)}>
-                <UserIcon user={user} />
-                {userList[user.id].name}
-              </FilterItem>
-            );
-          })}
+          <FilterItemContainer>
+            {Object.values(userList).map((user) => {
+              return (
+                <FilterItem key={user.id} className={isSelected(user.id, assigneeFilter)} onClick={() => handleSetAssigneeFilter(user.id)}>
+                  <UserIcon user={user} />
+                  {userList[user.id].name}
+                </FilterItem>
+              );
+            })}
+          </FilterItemContainer>
         </PopupItemLayout>
       ) : (
         ''
       )}
       {displayedFilter === '라벨' ? (
         <PopupItemLayout>
-          {Object.values(labelList).map((label) => {
-            return (
-              <FilterItem key={label.id} className={isSelected(label.id, labelFilter)} onClick={() => handleSetLabelFilter(label.id)}>
-                <ColorIcon color={label.color} />
-                {labelList[label.id].name}
-              </FilterItem>
-            );
-          })}
+          <FilterItemContainer>
+            {Object.values(labelList).map((label) => {
+              return (
+                <FilterItem key={label.id} className={isSelected(label.id, labelFilter)} onClick={() => handleSetLabelFilter(label.id)}>
+                  <ColorIcon color={label.color} />
+                  {labelList[label.id].name}
+                </FilterItem>
+              );
+            })}
+          </FilterItemContainer>
           <FilterButton onClick={handleClickAddLabel}>
             <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
           </FilterButton>

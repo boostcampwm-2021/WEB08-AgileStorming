@@ -20,7 +20,7 @@ export const RightInfo = styled.div`
   position: fixed;
   top: 2.2rem;
   right: 0;
-  width: 270px;
+  width: 280px;
   padding: 1rem;
   z-index: 1;
 `;
