@@ -23,24 +23,27 @@ const HistoryBar: React.FC = () => {
     resetHistoryMapData();
     linkToMindmap();
   };
+
   const handleHistoryClick = useCallback(
     (historyDataPiece: IHistoryData) => () => {
       if (!currentHistoryData) return handleCloseHistoryBtnClick();
       if (currentHistoryData.historyId === historyDataPiece.historyId) return;
+
       const isForward = currentHistoryData.historyId < historyDataPiece.historyId;
       const targetData = isForward ? historyDataPiece : currentHistoryData;
-      const params = { history: targetData, isForward, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
-      setCurrentHistoryData(() => historyDataPiece);
-      // restoreHistory(params);
+      const params = { historyData: targetData, isForward, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
+      console.log(isForward, targetData, currentHistoryData);
+      restoreHistory(params);
+      setCurrentHistoryData(historyDataPiece);
     },
-    [currentHistoryData]
+    [currentHistoryData, historyDataList, historyMapData]
   );
 
   useEffect(() => {
-    if (!historyDataList.length) return;
+    if (!historyDataList.length || currentHistoryData) return;
     const lastData = historyDataList.at(-1);
     setCurrentHistoryData(lastData!);
-  }, []);
+  }, [historyDataList]);
 
   return (
     <Wrapper>
