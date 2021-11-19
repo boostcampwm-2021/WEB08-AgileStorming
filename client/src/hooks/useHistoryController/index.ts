@@ -1,7 +1,7 @@
 import { historyHandler } from 'hooks/useHistoryReceiver';
 import { useRef } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { historyDataState } from 'recoil/history';
+import { historyDataListState } from 'recoil/history';
 import { mindmapState } from 'recoil/mindmap';
 
 const useHistoryController = () => {

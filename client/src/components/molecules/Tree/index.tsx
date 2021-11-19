@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { Node } from 'components/atoms';
 import { Path, TempNode } from 'components/molecules';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect } from 'utils/helpers';
@@ -27,7 +27,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
   const { addNode } = useHistoryEmitter();
   const setMindmapData = useSetRecoilState(mindmapState);
 
-  const selectedNodeId = useRecoilValue(selectedNodeIdState);
+  const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeIdState);
   const isSelected = selectedNodeId === nodeId;
 
   const [coord, setCoord] = useState<TCoord | null>(null);
@@ -68,6 +68,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     };
 
     addNode(payload);
+    setSelectedNodeId(null);
   };
 
   const handleNodeContentFocusout = ({ currentTarget }: FormEvent<HTMLInputElement>) => {

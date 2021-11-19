@@ -3,41 +3,47 @@ import useLinkClick from 'hooks/useLinkClick';
 import { Wrapper, UpperDiv } from './style';
 import { Title } from 'components/atoms';
 import { HistoryLog, IconButton, PlayController, HistoryWindow } from 'components/molecules';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IHistoryData } from 'types/history';
 import { useResetRecoilState, useRecoilState } from 'recoil';
-import { historyDataState } from 'recoil/history';
+import { historyDataListState } from 'recoil/history';
 import { historyMapDataState } from 'recoil/mindmap';
 import { restoreHistory } from 'utils/historyHandler';
 
 const HistoryBar: React.FC = () => {
-  const [historyData, setHistoryData] = useRecoilState(historyDataState);
-  const resetHistoryData = useResetRecoilState(historyDataState);
+  const [historyDataList, setHistoryDataList] = useRecoilState(historyDataListState);
+  const resetHistoryDataList = useResetRecoilState(historyDataListState);
   const resetHistoryMapData = useResetRecoilState(historyMapDataState);
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const linkToMindmap = useLinkClick('mindmap');
-  const lastData = historyData[historyData.length - 1];
-  const [currentHistory, setCurrentHistory] = useState<IHistoryData>(lastData);
+  const [currentHistoryData, setCurrentHistoryData] = useState<IHistoryData | null>(null);
 
   const handleCloseHistoryBtnClick = () => {
-    resetHistoryData();
+    resetHistoryDataList();
     resetHistoryMapData();
     linkToMindmap();
   };
-  const handleHistoryClick = (historyDataPiece: IHistoryData) => () => {
-    if (currentHistory.historyId === historyDataPiece.historyId) return;
 
-    const isForward = currentHistory ? currentHistory.historyId < historyDataPiece.historyId : false;
-    const targetData = isForward ? historyDataPiece : currentHistory ?? lastData;
-    const params = { history: targetData, isForward, setHistoryMapData, setHistoryData, historyData, historyMapData };
-    restoreHistory(params);
+  const handleHistoryClick = useCallback(
+    (historyData: IHistoryData) => () => {
+      if (!currentHistoryData) return handleCloseHistoryBtnClick();
+      if (currentHistoryData.historyId === historyData.historyId) return;
 
-    setCurrentHistory(historyDataPiece);
-  };
+      const isForward = currentHistoryData.historyId < historyData.historyId;
+      const targetData = isForward ? historyData : currentHistoryData;
+      const params = { historyData: targetData, isForward, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
+
+      restoreHistory(params);
+      setCurrentHistoryData(historyData);
+    },
+    [currentHistoryData, historyDataList, historyMapData]
+  );
 
   useEffect(() => {
-    setCurrentHistory(lastData);
-  }, [lastData]);
+    if (!historyDataList.length || currentHistoryData) return;
+    const lastData = historyDataList.at(-1);
+    setCurrentHistoryData(lastData!);
+  }, [historyDataList]);
 
   return (
     <Wrapper>
@@ -48,8 +54,8 @@ const HistoryBar: React.FC = () => {
         <PlayController />
         <IconButton imgSrc={whiteCloseBtn} onClick={handleCloseHistoryBtnClick} altText='히스토리 닫기 버튼'></IconButton>
       </UpperDiv>
-      <HistoryWindow onClick={handleHistoryClick} currentHistory={currentHistory} />
-      <HistoryLog history={currentHistory} />
+      <HistoryWindow onClick={handleHistoryClick} currentHistoryData={currentHistoryData} />
+      <HistoryLog historyData={currentHistoryData} />
     </Wrapper>
   );
 };

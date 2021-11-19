@@ -4,30 +4,31 @@ import { MouseEvent } from 'react';
 import useDragBackground from 'hooks/useDragBackground';
 import { IHistoryData } from 'types/history';
 import { useRecoilValue } from 'recoil';
-import { historyDataState } from 'recoil/history';
+import { historyDataListState } from 'recoil/history';
 import { userListState } from 'recoil/project';
 
 interface IProps {
   onClick: (historyData: IHistoryData, idx: number) => (event: MouseEvent) => void;
-  currentHistory: IHistoryData;
+  currentHistoryData: IHistoryData | null;
 }
 
-const HistoryWindow: React.FC<IProps> = ({ onClick, currentHistory }) => {
+const HistoryWindow: React.FC<IProps> = ({ onClick, currentHistoryData }) => {
   const { containerRef, dragRef } = useDragBackground();
-  const historyData = useRecoilValue(historyDataState);
+  const historyDataList = useRecoilValue(historyDataListState);
   const userList = useRecoilValue(userListState);
+  const isSelected = (data: IHistoryData): boolean => currentHistoryData !== null && data.historyId === currentHistoryData.historyId;
 
   return (
     <Wrapper ref={containerRef} className='background'>
-      {historyData && userList && currentHistory
-        ? historyData.map((historyDataPiece, idx) => (
+      {historyDataList.length && userList && currentHistoryData
+        ? historyDataList.map((historyData, idx) => (
             <IconWrapper
-              key={idx}
-              onClick={onClick(historyDataPiece, idx)}
-              isSelected={historyDataPiece.historyId === currentHistory.historyId}
-              color={userList[historyDataPiece.user].color}
+              key={historyData.historyId}
+              onClick={onClick(historyData, idx)}
+              isSelected={isSelected(historyData)}
+              color={userList[historyData.user].color}
             >
-              <UserIcon user={userList[historyDataPiece.user]} cursor='pointer' />
+              <UserIcon user={userList[historyData.user]} cursor='pointer' />
             </IconWrapper>
           ))
         : null}

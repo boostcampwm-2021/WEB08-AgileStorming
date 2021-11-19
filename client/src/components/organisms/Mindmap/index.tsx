@@ -86,6 +86,11 @@ const changeNodeParent = ({ nextNodes, nodeInfos, updateNodeParent, draggedElem,
       nodeType: draggedLevel,
       nodeParentType: newParentLevel,
     },
+    dataFrom: {
+      nodeId: draggedNodeNum,
+      nodeType: draggedLevel,
+      nodeParentType: oldParentNode.level,
+    },
   } as THistoryEventData;
 
   updateNodeParent(payload);

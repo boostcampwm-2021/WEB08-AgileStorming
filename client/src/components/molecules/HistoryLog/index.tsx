@@ -6,19 +6,19 @@ import { Profile } from '..';
 import { Wrapper } from './style';
 
 interface IProps {
-  history: IHistoryData | null;
+  historyData: IHistoryData | null;
 }
 
-const HistoryLog: React.FC<IProps> = ({ history }) => {
+const HistoryLog: React.FC<IProps> = ({ historyData }) => {
   const userList = useRecoilValue(userListState);
 
   return (
     <Wrapper>
-      {history && userList ? (
+      {historyData && userList ? (
         <>
-          <Profile user={userList[history.user]} />
+          <Profile user={userList[historyData.user]} />
           <Title titleStyle='large' color='white' margin='0 0 0 1rem' lineHeight={2.5}>
-            {history.type}
+            {historyData.type}
           </Title>
         </>
       ) : null}
