@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
-import { FilterMenuHeader, FilterItem, SprintItem, FilterButton } from './style';
-import { useRecoilValue } from 'recoil';
+import React, { useRef, useState } from 'react';
+import { FilterMenuHeader, FilterItem, SprintItem, FilterButton, FilterItemContainer } from './style';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { PopupItemLayout, PopupLayout } from 'components/molecules';
 import { ColorIcon, UserIcon } from 'components/atoms';
 import { ISOtoYYMMDD } from 'utils/form';
-import { labelListState, sprintListState, userListState } from 'recoil/project';
-import { plus } from 'img';
+import { assigneeFilterState, labelFilterState, labelListState, sprintFilterState, sprintListState, userListState } from 'recoil/project';
+import { closeIcon, plus } from 'img';
 import useModal from 'hooks/useModal';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 
@@ -15,36 +15,53 @@ interface IProps {
 
 const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   const [displayedFilter, setDisplayedFilter] = useState('스프린트');
-  const [assigneeFilter, setAssigneeFilter] = useState<string | null>(null); // 추후에 recoil로
-  const [sprintFilter, setSprintFilter] = useState<string | null>(null); // 추후에 recoil로
-  const [labelFilter, setLabelFilter] = useState<string | null>(null); // 추후에 recoil로
 
+  const [assigneeFilter, setAssigneeFilter] = useRecoilState(assigneeFilterState);
+  const [sprintFilter, setSprintFilter] = useRecoilState(sprintFilterState);
+  const [labelFilter, setLabelFilter] = useRecoilState(labelFilterState);
   const sprintList = useRecoilValue(sprintListState);
   const userList = useRecoilValue(userListState);
   const labelList = useRecoilValue(labelListState);
 
   const { showModal, hideModal } = useModal();
-  const { addLabel } = useHistoryEmitter();
+  const { addLabel, deleteSprint, deleteLabel } = useHistoryEmitter();
 
   const newLabelName = useRef<string>('');
 
-  const isSelected = (target: string, selected: string | null) => (target === selected ? 'selected' : '');
+  const isSelected = (target: number | string, selected: number | string | null) => (target === selected ? 'selected' : '');
 
-  const handleFilterSelect = (filter: string) => setDisplayedFilter(filter);
-  const handleSetSprintFilter = (sprint: string) => setSprintFilter(sprint === sprintFilter ? null : sprint);
-  const handleSetAssigneeFilter = (assignee: string) => setAssigneeFilter(assignee === assigneeFilter ? null : assignee);
-  const handleSetLabelFilter = (label: string) => setLabelFilter(label === labelFilter ? null : label);
+  const requestDeleteSprint = () => {
+    deleteSprint({ sprintId: sprintFilter! });
+    setSprintFilter(null);
+    hideModal();
+  };
 
-  const handleClickAddSprint = () => showModal({ modalType: 'newSprintModal', modalProps: {} });
-  const handleChangeLabelInput = (event: React.ChangeEvent<HTMLInputElement>, ref: React.MutableRefObject<string>) =>
-    (ref.current = event.target.value);
-  const handleClickLabelSubmitEvent = () => {
+  const requestAddLabel = () => {
     if (!newLabelName.current) return;
     addLabel({ name: newLabelName.current });
     newLabelName.current = '';
     hideModal();
   };
-  const handleClickAddLabel = () => {
+
+  const requestDeleteLabel = () => {
+    deleteLabel({ labelId: labelFilter! });
+    setLabelFilter(null);
+    hideModal();
+  };
+
+  const showDeleteSprintModal = () => {
+    showModal({
+      modalType: 'confirmModal',
+      modalProps: {
+        title: '스프린트 삭제',
+        text: `'${sprintList[sprintFilter!].name}' 스프린트를 삭제합니다`,
+        onClickSubmitButton: () => requestDeleteSprint(),
+        onCancelButton: () => hideModal(),
+      },
+    });
+  };
+
+  const showAddLabelModal = () => {
     showModal({
       modalType: 'textInputModal',
       modalProps: {
@@ -52,10 +69,35 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
         text: '새로운 라벨 이름을 입력해주세요.',
         placeholder: '라벨 이름',
         onChangeInput: (e) => handleChangeLabelInput(e, newLabelName),
-        onClickSubmitButton: handleClickLabelSubmitEvent,
+        onClickSubmitButton: () => requestAddLabel(),
       },
     });
   };
+
+  const showDeleteLabelModal = () => {
+    showModal({
+      modalType: 'confirmModal',
+      modalProps: {
+        title: '라벨 삭제',
+        text: `'${labelList[labelFilter!].name}' 라벨을 삭제합니다.`,
+        onClickSubmitButton: () => requestDeleteLabel(),
+        onCancelButton: () => hideModal(),
+      },
+    });
+  };
+
+  const handleFilterSelect = (filter: string) => setDisplayedFilter(filter);
+  const handleSetSprintFilter = (sprint: number) => setSprintFilter(sprint === sprintFilter ? null : sprint);
+  const handleSetAssigneeFilter = (assignee: string) => setAssigneeFilter(assignee === assigneeFilter ? null : assignee);
+  const handleSetLabelFilter = (label: number) => setLabelFilter(label === labelFilter ? null : label);
+
+  const handleClickAddSprint = () => showModal({ modalType: 'newSprintModal', modalProps: {} });
+  const handleClickDeleteSprint = () => showDeleteSprintModal();
+  const handleClickAddLabel = () => showAddLabelModal();
+  const handleClickDeleteLabel = () => showDeleteLabelModal();
+
+  const handleChangeLabelInput = (event: React.ChangeEvent<HTMLInputElement>, ref: React.MutableRefObject<string>) =>
+    (ref.current = event.target.value);
 
   const FilterMenu: React.FC<{ menu: string }> = ({ menu }) => (
     <span className={isSelected(menu, displayedFilter)} onClick={() => handleFilterSelect(menu)}>
@@ -63,8 +105,24 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
     </span>
   );
 
+  const DeleteButton: React.FC<{ onClick: React.MouseEventHandler }> = ({ onClick }) => (
+    <FilterButton onClick={onClick}>
+      <img src={closeIcon} width={'16px'} height={'16px'} alt='삭제하기' />
+    </FilterButton>
+  );
+
+  const AddButton: React.FC<{ onClick: React.MouseEventHandler }> = ({ onClick }) => (
+    <FilterButton onClick={onClick}>
+      <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
+    </FilterButton>
+  );
+
+  const popupTitle = `필터링: ${sprintFilter ? sprintList[sprintFilter].name : ''} ${assigneeFilter ? userList[assigneeFilter].name : ''} ${
+    labelFilter ? labelList[labelFilter].name : ''
+  }`;
+
   return (
-    <PopupLayout title={`필터링: ${sprintFilter ?? ''} ${assigneeFilter ?? ''} ${labelFilter ?? ''}`} onClose={onClose}>
+    <PopupLayout title={popupTitle} onClose={onClose}>
       <FilterMenuHeader>
         <FilterMenu menu={'스프린트'} />
         <FilterMenu menu={'담당자'} />
@@ -72,59 +130,57 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       </FilterMenuHeader>
       {displayedFilter === '스프린트' ? (
         <PopupItemLayout>
-          {Object.values(sprintList).map((sprint) => {
-            return (
-              <FilterItem
-                key={sprint.id}
-                className={isSelected(sprint.name, sprintFilter)}
-                onClick={() => handleSetSprintFilter(sprint.name)}
-              >
-                <SprintItem>
-                  <ColorIcon color={sprint.color} />
-                  <span>{sprint.name}</span>
-                  <span>{`${ISOtoYYMMDD(sprint.startDate)}~${ISOtoYYMMDD(sprint.endDate)}`}</span>
-                </SprintItem>
-              </FilterItem>
-            );
-          })}
-          <FilterButton onClick={handleClickAddSprint}>
-            <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
-          </FilterButton>
+          <FilterItemContainer>
+            {Object.values(sprintList).map((sprint) => {
+              return (
+                <FilterItem
+                  key={sprint.id}
+                  className={isSelected(sprint.id, sprintFilter)}
+                  onClick={() => handleSetSprintFilter(sprint.id)}
+                >
+                  <SprintItem>
+                    <ColorIcon color={sprint.color} />
+                    <span>{sprintList[sprint.id].name}</span>
+                    <span>{`${ISOtoYYMMDD(sprint.startDate)}~${ISOtoYYMMDD(sprint.endDate)}`}</span>
+                  </SprintItem>
+                </FilterItem>
+              );
+            })}
+          </FilterItemContainer>
+          {sprintFilter ? <DeleteButton onClick={handleClickDeleteSprint} /> : <AddButton onClick={handleClickAddSprint} />}
         </PopupItemLayout>
       ) : (
         ''
       )}
       {displayedFilter === '담당자' ? (
         <PopupItemLayout>
-          {Object.values(userList).map((user) => {
-            return (
-              <FilterItem
-                key={user.id}
-                className={isSelected(user.name, assigneeFilter)}
-                onClick={() => handleSetAssigneeFilter(user.name)}
-              >
-                <UserIcon user={user} />
-                {user.name}
-              </FilterItem>
-            );
-          })}
+          <FilterItemContainer>
+            {Object.values(userList).map((user) => {
+              return (
+                <FilterItem key={user.id} className={isSelected(user.id, assigneeFilter)} onClick={() => handleSetAssigneeFilter(user.id)}>
+                  <UserIcon user={user} />
+                  {userList[user.id].name}
+                </FilterItem>
+              );
+            })}
+          </FilterItemContainer>
         </PopupItemLayout>
       ) : (
         ''
       )}
       {displayedFilter === '라벨' ? (
         <PopupItemLayout>
-          {Object.values(labelList).map((label) => {
-            return (
-              <FilterItem key={label.id} className={isSelected(label.name, labelFilter)} onClick={() => handleSetLabelFilter(label.name)}>
-                <ColorIcon color={label.color} />
-                {label.name}
-              </FilterItem>
-            );
-          })}
-          <FilterButton onClick={handleClickAddLabel}>
-            <img src={plus} width={'16px'} height={'16px'} alt='추가하기' />
-          </FilterButton>
+          <FilterItemContainer>
+            {Object.values(labelList).map((label) => {
+              return (
+                <FilterItem key={label.id} className={isSelected(label.id, labelFilter)} onClick={() => handleSetLabelFilter(label.id)}>
+                  <ColorIcon color={label.color} />
+                  {labelList[label.id].name}
+                </FilterItem>
+              );
+            })}
+          </FilterItemContainer>
+          {labelFilter ? <DeleteButton onClick={handleClickDeleteLabel} /> : <AddButton onClick={handleClickAddLabel} />}
         </PopupItemLayout>
       ) : (
         ''

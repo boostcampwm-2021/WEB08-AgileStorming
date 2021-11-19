@@ -1,5 +1,14 @@
 import useToast from 'hooks/useToast';
-import { TAddLabel, TAddSprint, TEventData, TEventType, THistoryEventData, THistoryEventType } from 'types/event';
+import {
+  TAddLabel,
+  TAddSprint,
+  TDeleteLabel,
+  TDeleteSprint,
+  TEventData,
+  TEventType,
+  THistoryEventData,
+  THistoryEventType,
+} from 'types/event';
 import { fillPayload } from 'utils/helpers';
 
 export interface IHistoryEmitter {
@@ -34,6 +43,7 @@ const useHistoryEmitter = () => {
       showMessage('서버와의 연결이 불안정합니다');
       return;
     }
+    console.log(type, payload);
     window.socket.emit('non-history-event', type, JSON.stringify(payload));
   };
 
@@ -60,8 +70,10 @@ const useHistoryEmitter = () => {
 
   //* non-history-event
   const addLabel = ({ name }: TAddLabel) => nonHistoryEmitter({ type: 'ADD_LABEL', payload: { name } });
+  const deleteLabel = ({ labelId }: TDeleteLabel) => nonHistoryEmitter({ type: 'DELETE_LABEL', payload: { labelId } });
   const addSprint = ({ name, startDate, endDate }: TAddSprint) =>
     nonHistoryEmitter({ type: 'ADD_SPRINT', payload: { name, startDate, endDate } });
+  const deleteSprint = ({ sprintId }: TDeleteSprint) => nonHistoryEmitter({ type: 'DELETE_SPRINT', payload: { sprintId } });
 
   return {
     addNode,
@@ -72,7 +84,9 @@ const useHistoryEmitter = () => {
     updateNodeContent,
     updateTaskInformation,
     addLabel,
+    deleteLabel,
     addSprint,
+    deleteSprint,
   };
 };
 

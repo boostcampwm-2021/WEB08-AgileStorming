@@ -4,6 +4,8 @@ import { labelListState, sprintListState } from 'recoil/project';
 import {
   INonHistoryEventData,
   TAddNodeData,
+  TDeleteLabel,
+  TDeleteSprint,
   THistoryEventData,
   TTask,
   TUpdateNodeContent,
@@ -133,16 +135,32 @@ interface INonHistoryEventHandlerProps {
 }
 
 const nonHistoryEventHandler = ({ response, setLabelList, setSprintList }: INonHistoryEventHandlerProps) => {
-  const { type, dbData } = response;
+  const { type, data, dbData } = response;
 
   switch (type) {
     case 'ADD_LABEL':
       const newLabel = dbData as ILabel;
       setLabelList((prev) => ({ ...prev, [newLabel.id]: newLabel }));
       break;
+    case 'DELETE_LABEL':
+      const { labelId } = data as TDeleteLabel;
+      setLabelList((prev) => {
+        const newLabelList = { ...prev };
+        delete newLabelList[labelId];
+        return newLabelList;
+      });
+      break;
     case 'ADD_SPRINT':
       const newSprint = dbData as ISprint;
       setSprintList((prev) => ({ ...prev, [newSprint.id]: newSprint }));
+      break;
+    case 'DELETE_SPRINT':
+      const { sprintId } = data as TDeleteSprint;
+      setSprintList((prev) => {
+        const newSprintList = { ...prev };
+        delete newSprintList[sprintId];
+        return newSprintList;
+      });
       break;
     default:
       break;
