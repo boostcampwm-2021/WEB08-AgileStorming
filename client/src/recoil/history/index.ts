@@ -1,8 +1,8 @@
 import { atom } from 'recoil';
 import { IHistoryData } from 'types/history';
 
-export const historyDataState = atom<IHistoryData[]>({
-  key: 'historyDataAtom',
+export const historyDataListState = atom<IHistoryData[]>({
+  key: 'historyDataListAtom',
   default: [],
 });
 

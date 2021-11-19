@@ -110,7 +110,7 @@ const addNode = ({ history, historyMap }: IAddNodeParams) => {
   const newNode = history.data.dataTo
     ? { content, children: [], nodeId, level: getChildLevel(parent.level) }
     : { ...(history.data.dataFrom as TDeleteNodeData) };
-  console.log([...parent!.children, nodeId]);
+
   historyMap.set(parentId, { ...parent!, children: [...parent!.children, nodeId] });
   historyMap.set(nodeId, newNode as IMindNode);
 };
@@ -157,15 +157,15 @@ const deleteNode = ({ history, historyMap, historyData, setHistoryData }: IDelet
   const newChildren = history.data.dataFrom ? parent.children.filter((cid) => cid !== childId) : parent.children.slice(0, -1);
 
   historyMap.set(parentId, { ...parent, children: newChildren });
-  console.log(history.data);
   if (history.data.dataTo && !(history.data.dataTo! as TAddNodeData).nodeId) {
     const newDataTo = { ...history.data.dataTo, nodeId: childId };
     const newHistory = { ...history!, data: { ...history.data, dataTo: newDataTo } };
     const newList = [...historyData!];
     const index = newList.findIndex((d) => d.historyId === newHistory.historyId);
-    console.log('-----', newDataTo);
-    newList.splice(index - 1, 1, newHistory as IHistoryData);
-
+    console.log('-----', 'index : ', index, ' historyId : ', newHistory.historyId);
+    console.log('list1', newList);
+    newList.splice(index, 1, newHistory as IHistoryData);
+    console.log('list2', newList);
     setHistoryData!(newList);
   }
 };
