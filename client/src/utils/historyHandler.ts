@@ -3,15 +3,7 @@ import { getNextMapState } from 'recoil/mindmap';
 import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
 import { IHistoryData } from 'types/history';
 import { getChildLevel } from 'utils/helpers';
-import {
-  TAddNodeData,
-  TDeleteNodeData,
-  TMoveNodeData,
-  TUpdateNodeContent,
-  TUpdateNodeParent,
-  TUpdateNodeSibling,
-  TUpdateTaskInformation,
-} from 'types/event';
+import { TAddNodeData, TDeleteNodeData, TMoveNodeData, TUpdateNodeParent, TUpdateNodeSibling, TUpdateTaskInformation } from 'types/event';
 
 interface IParams {
   historyData: IHistoryData;
@@ -52,18 +44,12 @@ export const restoreHistory = (params: IParams) => {
       else moveNode({ data: historyData.data.dataFrom as TMoveNodeData, id: historyData.data.nodeFrom!, historyMap });
       break;
     case 'UPDATE_NODE_CONTENT':
-      if (isForward)
-        updateNodeContent({
-          id: historyData.data.nodeFrom!,
-          content: (historyData.data.dataTo! as TUpdateNodeContent).content,
-          historyMap,
-        });
-      else
-        updateNodeContent({
-          id: historyData.data.nodeTo!,
-          content: (historyData.data.dataFrom! as TUpdateNodeContent).content,
-          historyMap,
-        });
+      updateNodeContent({
+        historyData,
+        historyMap,
+        isForward,
+      });
+
       break;
     case 'UPDATE_NODE_PARENT':
       if (isForward)
@@ -119,16 +105,16 @@ const addNode = ({ historyData, historyMap }: IAddNodeParams) => {
 };
 
 interface IUpdateNodeContentParams {
-  id: number;
-  content: string;
+  historyData: IHistoryData;
   historyMap: IMindNodes;
+  isForward: boolean;
 }
 
-const updateNodeContent = ({ id, content, historyMap }: IUpdateNodeContentParams) => {
-  const node = historyMap.get(id);
-  node!.content = content;
+const updateNodeContent = ({ historyData, historyMap, isForward }: IUpdateNodeContentParams) => {
+  const { nodeFrom: id, dataFrom, dataTo } = historyData.data;
+  const node = historyMap.get(id!)!;
 
-  historyMap.set(id, node!);
+  historyMap.set(id!, { ...node, ...(isForward ? dataTo : dataFrom) });
 };
 
 interface IMoveNodeParams {

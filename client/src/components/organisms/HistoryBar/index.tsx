@@ -25,16 +25,16 @@ const HistoryBar: React.FC = () => {
   };
 
   const handleHistoryClick = useCallback(
-    (historyDataPiece: IHistoryData) => () => {
+    (historyData: IHistoryData) => () => {
       if (!currentHistoryData) return handleCloseHistoryBtnClick();
-      if (currentHistoryData.historyId === historyDataPiece.historyId) return;
+      if (currentHistoryData.historyId === historyData.historyId) return;
 
-      const isForward = currentHistoryData.historyId < historyDataPiece.historyId;
-      const targetData = isForward ? historyDataPiece : currentHistoryData;
+      const isForward = currentHistoryData.historyId < historyData.historyId;
+      const targetData = isForward ? historyData : currentHistoryData;
       const params = { historyData: targetData, isForward, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
-      console.log(isForward, targetData, currentHistoryData);
+
       restoreHistory(params);
-      setCurrentHistoryData(historyDataPiece);
+      setCurrentHistoryData(historyData);
     },
     [currentHistoryData, historyDataList, historyMapData]
   );
