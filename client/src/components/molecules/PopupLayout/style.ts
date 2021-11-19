@@ -67,6 +67,9 @@ export const PopupHeader = styled.div<IStyleProps>`
   p {
     font-weight: bold;
     z-index: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   img {
     cursor: pointer;
