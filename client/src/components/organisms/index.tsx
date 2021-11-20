@@ -6,6 +6,7 @@ export { default as NewSprintModal } from 'components/organisms/NewSprintModal';
 export { default as NodeDetailWrapper } from 'components/organisms/NodeDetailWrapper';
 export { default as ProjectCard } from 'components/organisms/ProjectCard';
 export { default as TextInputModal } from 'components/organisms/TextInputModal';
+export { default as LabelList } from 'components/organisms/LabelList';
 export { default as MindmapBtnWrapper } from 'components/organisms/MindmapBtnWrapper';
 export { default as Mindmap } from 'components/organisms/Mindmap';
 export { default as MindmapTree } from 'components/organisms/MindmapTree';

@@ -34,7 +34,7 @@ const findOneOrCreate = async (taskId: number) => {
 };
 
 export const updateTask = async (nodeFrom: number, { changed }: TUpdateTaskInformation) => {
-  const { assigneeId, labels, sprintId, ...info } = changed;
+  const { assigneeId, labels, sprintId, labelIds, ...info } = changed;
   const task = await findOneOrCreate(nodeFrom);
   if (assigneeId) {
     const newAssignee = await findOneUser(assigneeId.toString(10));
@@ -43,6 +43,14 @@ export const updateTask = async (nodeFrom: number, { changed }: TUpdateTaskInfor
   if (labels) {
     const newLabels = await getRepository(Label).findByIds(labels);
     task.labels = newLabels;
+  }
+  if (labelIds) {
+    const labeIdList = JSON.parse(labelIds);
+    const newLabels = await getRepository(Label).findByIds(labeIdList);
+    if (newLabels.length !== labeIdList.length) {
+      return;
+    }
+    task.labelIds = labelIds;
   }
   if (sprintId) {
     const newSprint = await findOneSprint(sprintId.toString(10));

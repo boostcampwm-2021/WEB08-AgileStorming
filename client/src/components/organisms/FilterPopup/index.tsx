@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { FilterMenuHeader, FilterItem, SprintItem, FilterButton, FilterItemContainer } from './style';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { PopupItemLayout, PopupLayout } from 'components/molecules';
+import { LabelIcon, PopupItemLayout, PopupLayout } from 'components/molecules';
 import { ColorIcon, UserIcon } from 'components/atoms';
 import { ISOtoYYMMDD } from 'utils/form';
 import { assigneeFilterState, labelFilterState, labelListState, sprintFilterState, sprintListState, userListState } from 'recoil/project';
@@ -165,8 +165,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
           <FilterItemContainer>
             {Object.values(labelList).map((label) => (
               <FilterItem key={label.id} className={isSelected(label.id, labelFilter)} onClick={() => handleSetLabelFilter(label.id)}>
-                <ColorIcon color={label.color} />
-                {labelList[label.id].name}
+                <LabelIcon label={label} />
               </FilterItem>
             ))}
           </FilterItemContainer>

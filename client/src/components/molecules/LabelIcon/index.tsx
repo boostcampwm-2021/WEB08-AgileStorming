@@ -1,19 +1,17 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { SmallText } from 'components/atoms';
+import { StyledLabelIcon } from './style';
 import { ILabel } from 'types/label';
 
-interface IProps {
+export interface IProps {
   label: ILabel;
+  active?: boolean;
+  onClick?: () => void;
 }
 
-const StyledLabelIcon = styled.div<IProps>`
-  background-color: ${({ label }) => `#${label.color}`};
-`;
-const LabelIcon: React.FC<IProps> = ({ label }) => {
+const LabelIcon: React.FC<IProps> = ({ label, active = true, onClick = () => {} }) => {
   return (
-    <StyledLabelIcon label={label}>
-      <SmallText color={'white'}>{label.name}</SmallText>;
+    <StyledLabelIcon label={label} active={active} onClick={onClick}>
+      {label.name}
     </StyledLabelIcon>
   );
 };
