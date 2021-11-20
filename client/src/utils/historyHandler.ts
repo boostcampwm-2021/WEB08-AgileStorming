@@ -139,7 +139,7 @@ interface IDeleteNodeParams {
   historyDataList?: IHistoryData[];
 }
 
-const deleteNode = ({ historyData, historyMap, historyDataList, setHistoryDataList }: IDeleteNodeParams) => {
+const deleteNode = ({ historyData, historyMap, setHistoryDataList }: IDeleteNodeParams) => {
   const parentId = historyData.data.nodeFrom!;
   const parent = historyMap.get(parentId)!;
 
