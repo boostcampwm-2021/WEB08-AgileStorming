@@ -3,7 +3,10 @@ import { createCustomError } from '../utils';
 import * as userService from '../services/user';
 import * as authService from '../services/auth';
 import ErrorMessage from '../config/error-message';
+import { verifyToken } from '../middlewares/auth';
 const router = Router();
+
+router.get('/status', verifyToken, (req: Request, res: Response, next: Next) => res.sendStatus(200));
 
 router.post('/login', async (req: Request, res: Response, next: Next) => {
   try {
@@ -13,7 +16,7 @@ router.post('/login', async (req: Request, res: Response, next: Next) => {
       throw createCustomError(401, ErrorMessage.UNREGISTERED_USER);
     }
     const token = authService.createJWTToken(id);
-    res.cookie('token', token).sendStatus(200);
+    res.cookie('token', token).send(user);
   } catch (e) {
     next(e);
   }
