@@ -1,40 +1,27 @@
-import { historyHandler } from 'hooks/useHistoryReceiver';
 import { useRef } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { historyDataListState } from 'recoil/history';
-import { mindmapState } from 'recoil/mindmap';
+import { useRecoilState } from 'recoil';
+import { historyMapDataState } from 'recoil/mindmap';
+
+interface IHistoryControllerProps {
+  from: number;
+  to: number;
+  isForward: boolean;
+}
 
 const useHistoryController = () => {
-  const [mindmap, setMindmap] = useRecoilState(mindmapState);
-  // const { history } = useRecoilValue(historyState);
-  const historyIdxRef = useRef(history.length - 1);
-  const lastMindmapRef = useRef(mindmap);
+  const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
 
-  const handleMoveForward = () => {
-    if (historyIdxRef.current < history.length - 2) {
-      const nextIdx = historyIdxRef.current + 1;
-      // historyHandler({ setMindmap, historyData: history[nextIdx], isForward: true });
-      historyIdxRef.current = nextIdx;
-    }
+  const handleMoveForward = () => {};
+
+  const handleMoveBackward = () => {};
+
+  const historyController = ({ from, to, isForward }: IHistoryControllerProps) => {
+    // const targetData = isForward ? historyData : currentHistoryData;
+    // const params = { historyData: targetData, isForward, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
+    // restoreHistory(params);
   };
 
-  const handleMoveBackward = () => {
-    if (historyIdxRef.current > 0) {
-      const prevIdx = historyIdxRef.current - 1;
-      // historyHandler({ setMindmap, historyData: history[prevIdx], isForward: true });
-      historyIdxRef.current = prevIdx;
-    }
-  };
-
-  const handleControlEnd = () => {
-    setMindmap(lastMindmapRef.current);
-  };
-
-  return {
-    handleMoveForward,
-    handleMoveBackward,
-    handleControlEnd,
-  };
+  return historyController;
 };
 
 export default useHistoryController;

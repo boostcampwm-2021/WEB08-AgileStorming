@@ -10,3 +10,5 @@ export const farthestHistoryIdState = atom<string | undefined>({
   key: 'farthestHistoryAtom',
   default: undefined,
 });
+
+export const currentReverseIdxState = atom<number>({ key: 'currentReverseIdxAtom', default: -1 });
