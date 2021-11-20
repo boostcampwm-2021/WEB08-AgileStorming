@@ -9,25 +9,36 @@ interface IHistoryControllerProps {
   toIdx: number;
 }
 
+interface IHandleMoveProps {
+  historyData: IHistoryData;
+  idx: number;
+  fromIdx: number;
+}
+
 const useHistoryController = () => {
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const [historyDataList, setHistoryDataList] = useRecoilState(historyDataListState);
   const setCurrentReverseIdx = useSetRecoilState(currentReverseIdxState);
 
-  const handleMoveForward = (historyData: IHistoryData, idx: number, fromIdx: number) => {
+  const handleMoveForward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
     const params = { historyData, isForward: true, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
     restoreHistory(params);
     setCurrentReverseIdx(fromIdx + idx);
   };
 
-  const handleMoveBackward = (historyData: IHistoryData, idx: number, fromIdx: number) => {
+  const handleMoveBackward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
     const params = { historyData, isForward: false, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
     restoreHistory(params);
 
     setCurrentReverseIdx(fromIdx - idx);
   };
 
-  const historyController = ({ fromIdx, toIdx }: IHistoryControllerProps) => {
+  const wait = (time: number, func: (props: IHandleMoveProps) => void, props: IHandleMoveProps) =>
+    new Promise((resolve) => {
+      setTimeout(() => resolve(func(props)), time);
+    });
+
+  const historyController = async ({ fromIdx, toIdx }: IHistoryControllerProps) => {
     const isForward = fromIdx < toIdx;
 
     if (isForward) {
@@ -36,7 +47,10 @@ const useHistoryController = () => {
 
       const stopHistories = historyDataList.slice(from, to);
 
-      stopHistories.forEach((historyData, idx) => handleMoveForward(historyData, idx, fromIdx + 1));
+      await stopHistories.reduce(async (lastPromise, historyData, idx) => {
+        await lastPromise;
+        await wait(700, handleMoveForward, { historyData, idx, fromIdx: fromIdx + 1 });
+      }, Promise.resolve());
     } else {
       const from = toIdx + 1;
       const to = fromIdx + 1 !== 0 ? fromIdx + 1 : undefined;
@@ -44,7 +58,10 @@ const useHistoryController = () => {
       const stopHistories = historyDataList.slice(from, to);
       stopHistories.reverse();
 
-      stopHistories.forEach((historyData, idx) => handleMoveBackward(historyData, idx, fromIdx - 1));
+      await stopHistories.reduce(async (lastPromise, historyData, idx) => {
+        await lastPromise;
+        await wait(700, handleMoveBackward, { historyData, idx, fromIdx: fromIdx - 1 });
+      }, Promise.resolve());
     }
   };
 
