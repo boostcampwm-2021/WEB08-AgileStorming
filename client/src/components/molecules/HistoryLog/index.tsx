@@ -19,7 +19,7 @@ const HistoryLog: React.FC<IProps> = ({ historyData }) => {
       {historyData && userList ? (
         <>
           <Profile user={userList[historyData.user]} />
-          <Title titleStyle='large' color='white' margin='0 0 0 1rem' lineHeight={2.5}>
+          <Title titleStyle='large' color='white' margin='0 0 0 1rem' lineHeight={2.3}>
             {getLog(historyData)}
           </Title>
         </>
