@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { Node } from 'components/atoms';
+import { Node, PriorityIcon, UserIcon } from 'components/atoms';
 import { Path, TempNode } from 'components/molecules';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect } from 'utils/helpers';
 import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
@@ -9,6 +9,7 @@ import { NodeContainer, ChildContainer } from './style';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import { IMindmapData, IMindNode } from 'types/mindmap';
 import { ITaskFilters } from 'components/organisms/MindmapTree';
+import { IUser } from 'types/user';
 
 interface ITreeProps {
   nodeId: number;
@@ -16,6 +17,7 @@ interface ITreeProps {
   parentCoord: TCoord | null;
   parentId?: number;
   taskFilters: ITaskFilters;
+  userList: Record<string, IUser>;
 }
 
 interface ICheckFilterProps {
@@ -37,13 +39,13 @@ const checkFiltering = ({ node, taskFilters }: ICheckFilterProps) => {
   );
 };
 
-const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId, taskFilters }) => {
+const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId, taskFilters, userList }) => {
   const { rootId, mindNodes } = mindmapData;
   const isRoot = nodeId === rootId;
   const node = mindNodes.get(nodeId)!;
-  const { level, content, children, priority, assigneeId, status } = node;
+  const { level, content, children, assigneeId, priority, status } = node;
+  const assignee = assigneeId ? userList[assigneeId] : null;
   const isFilteredTask = level === 'TASK' && checkFiltering({ node, taskFilters });
-  if (level === 'TASK') console.log(isFilteredTask);
 
   const { addNode } = useHistoryEmitter();
   const setMindmapData = useSetRecoilState(mindmapState);
@@ -128,6 +130,8 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
           isFiltered={isFilteredTask}
           className='node mindmap-area'
         >
+          {!!assignee && <UserIcon user={assignee} />}
+          {!!priority && <PriorityIcon priority={priority} />}
           {content}
         </Node>
       )}
@@ -140,6 +144,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
             parentCoord={coord}
             parentId={nodeId}
             taskFilters={taskFilters}
+            userList={userList}
           />
         ))}
       </ChildContainer>
