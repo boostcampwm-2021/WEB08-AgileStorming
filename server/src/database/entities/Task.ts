@@ -28,6 +28,9 @@ export class Task {
   @Column({ nullable: true })
   finishedTime: string;
 
+  @Column({ nullable: true })
+  labelIds: string;
+
   @ManyToOne(() => Sprint, (sprints) => sprints.id, { onDelete: 'SET NULL' })
   sprint: Sprint;
 
