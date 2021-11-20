@@ -76,10 +76,11 @@ export const restoreHistory = (params: IParams) => {
         updateTaskInformation({ id: historyData.data.nodeFrom!, data: historyData.data.dataTo as TUpdateTaskInformation, historyMap });
       else updateTaskInformation({ id: historyData.data.nodeFrom!, data: historyData.data.dataFrom as TUpdateTaskInformation, historyMap });
       break;
+    default:
+      return;
   }
 
   const mapData = getNextMapState(historyMapData);
-
   setHistoryMapData(mapData);
 };
 
@@ -145,16 +146,20 @@ const deleteNode = ({ historyData, historyMap, historyDataList, setHistoryDataLi
   const childId = historyData.data.dataFrom
     ? (historyData.data.dataFrom as TDeleteNodeData).nodeId
     : parent.children[parent.children.length - 1];
-  const newChildren = historyData.data.dataFrom ? parent.children.filter((cid) => cid !== childId) : parent.children.slice(0, -1);
 
+  const newChildren = historyData.data.dataFrom ? parent.children.filter((cid) => cid !== childId) : parent.children.slice(0, -1);
   historyMap.set(parentId, { ...parent, children: newChildren });
+
   if (historyData.data.dataTo && !(historyData.data.dataTo! as TAddNodeData).nodeId) {
     const newDataTo = { ...historyData.data.dataTo, nodeId: childId };
     const newHistory = { ...historyData!, data: { ...historyData.data, dataTo: newDataTo } };
-    const newList = [...historyDataList!];
-    const index = newList.findIndex((d) => d.historyId === newHistory.historyId);
-    newList.splice(index, 1, newHistory as IHistoryData);
-    setHistoryDataList!(newList);
+
+    setHistoryDataList!((prevList) => {
+      const newList = [...prevList!];
+      const index = newList.findIndex((d) => d.historyId === newHistory.historyId);
+      newList.splice(index, 1, newHistory as IHistoryData);
+      return newList;
+    });
   }
 };
 

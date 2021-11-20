@@ -3,8 +3,7 @@ import useLinkClick from 'hooks/useLinkClick';
 import { Wrapper, UpperDiv } from './style';
 import { Title } from 'components/atoms';
 import { HistoryLog, IconButton, PlayController, HistoryWindow } from 'components/molecules';
-import { useCallback, useEffect, useState } from 'react';
-import { IHistoryData } from 'types/history';
+import { useCallback } from 'react';
 import { useResetRecoilState, useRecoilValue } from 'recoil';
 import { currentReverseIdxState, historyDataListState } from 'recoil/history';
 import { historyMapDataState } from 'recoil/mindmap';
@@ -30,20 +29,12 @@ const HistoryBar: React.FC = () => {
 
   const handleHistoryClick = useCallback(
     (idx: number) => () => {
-      if (!currentReverseIdx) return handleCloseHistoryBtnClick();
       if (currentReverseIdx === idx) return;
 
-      const isForward = currentReverseIdx < idx;
-
-      historyController({ from: currentReverseIdx, to: idx, isForward });
+      historyController({ fromIdx: currentReverseIdx, toIdx: idx });
     },
-    [currentReverseIdx]
+    [currentReverseIdx, historyController]
   );
-
-  // useEffect(() => {
-  //   if (!historyDataList.length || currentReverseIdx) return;
-  //   setcurrentReverseIdx(-1);
-  // }, [historyDataList]);
 
   return (
     <Wrapper>
