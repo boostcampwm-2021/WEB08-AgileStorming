@@ -7,11 +7,12 @@ export type TAddNodeData = {
   nodeId?: number;
 };
 export type TPriority = '낮음' | '보통' | '높음';
+export type TStatus = 'To Do' | 'In Progress' | 'Done';
 export type TDeleteNodeData = {
   nodeId: number;
   content: string;
   index: number;
-  status?: string;
+  status?: TStatus;
   posX?: string;
   posY?: string;
   assignee?: number;
@@ -41,7 +42,7 @@ export type TTask = {
   priority?: TPriority;
   dueDate?: string;
   estimatedTime?: string;
-  status?: 'To Do' | 'In Progress' | 'Done';
+  status?: TStatus;
   finishedTime?: string;
   sprintId?: number;
 };
