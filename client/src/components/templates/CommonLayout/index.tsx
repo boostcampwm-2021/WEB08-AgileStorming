@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import { filterIcon } from 'img';
+import { LeftInfo, RightInfo, Template } from './style';
 import { BoxButton } from 'components/atoms';
 import { NodeDetailWrapper, UserList, Header, FilterPopup } from 'components/organisms';
 import useSocketSetup from 'hooks/useSocketSetup';
-
-import { LeftInfo, RightInfo, Template } from './style';
 import useProject from 'hooks/useProject';
+import useAuthentication from 'hooks/useAuthentication';
+import { filterIcon } from 'img';
 
 const CommonLayout: React.FC = ({ children }) => {
-  useSocketSetup();
   const [DisplayFilter, setDisplayFilter] = useState(false);
   const handleFilterButton = () => setDisplayFilter(true);
   const handleClickFilterPopupClose = () => setDisplayFilter(false);
+  useAuthentication();
+  useSocketSetup();
   useProject();
 
   return (
