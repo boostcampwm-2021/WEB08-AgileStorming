@@ -1,7 +1,8 @@
 import { atom, selector } from 'recoil';
 import { IMindmapData } from 'types/mindmap';
 
-const ROOT_NODE_ID = -1;
+export const ROOT_NODE_ID = -1;
+export const TEMP_NODE_ID = -2;
 
 export const getNextMapState = (prevState: IMindmapData) => {
   const nextNodes = new Map(prevState.mindNodes!);
