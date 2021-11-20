@@ -2,7 +2,6 @@ import { Wrapper, IconWrapper } from './style';
 import { DragTarget, UserIcon } from 'components/atoms';
 import { MouseEvent } from 'react';
 import useDragBackground from 'hooks/useDragBackground';
-import { IHistoryData } from 'types/history';
 import { useRecoilValue } from 'recoil';
 import { currentReverseIdxState, historyDataListState } from 'recoil/history';
 import { userListState } from 'recoil/project';

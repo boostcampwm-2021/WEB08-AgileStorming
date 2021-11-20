@@ -1,5 +1,4 @@
 import { useRecoilValue } from 'recoil';
-import { historyMapState } from 'recoil/mindmap';
 import { labelListState, sprintListState, userListState } from 'recoil/project';
 import { TAddNodeData, TDeleteNodeData, TUpdateNodeContent, TUpdateTaskInformation, THistoryEventType } from 'types/event';
 import { IHistoryData } from 'types/history';
@@ -24,7 +23,6 @@ export const useLog = () => {
   const userList = useRecoilValue(userListState);
   const labelList = useRecoilValue(labelListState);
   const sprintList = useRecoilValue(sprintListState);
-  const historyMap = useRecoilValue(historyMapState);
 
   const getLog = ({ type, data: { dataTo, dataFrom } }: IHistoryData) => {
     return convertToDescription[type]({ dataTo, dataFrom } as IConvertParams);
