@@ -87,9 +87,9 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
   };
 
   const handleFilterSelect = (filter: string) => setDisplayedFilter(filter);
-  const handleSetSprintFilter = (sprint: number) => setSprintFilter(sprint === sprintFilter ? null : sprint);
-  const handleSetAssigneeFilter = (assignee: string) => setAssigneeFilter(assignee === assigneeFilter ? null : assignee);
-  const handleSetLabelFilter = (label: number) => setLabelFilter(label === labelFilter ? null : label);
+  const handleSetSprintFilter = (sprint: number) => setSprintFilter((prev) => (sprint === prev ? null : sprint));
+  const handleSetAssigneeFilter = (assignee: string) => setAssigneeFilter((prev) => (assignee === prev ? null : assignee));
+  const handleSetLabelFilter = (label: number) => setLabelFilter((prev) => (label === prev ? null : label));
 
   const handleClickAddSprint = () => showModal({ modalType: 'newSprintModal', modalProps: {} });
   const handleClickDeleteSprint = () => showDeleteSprintModal();
