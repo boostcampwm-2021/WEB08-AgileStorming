@@ -12,6 +12,9 @@ import playBtnPath from './playBtn.svg';
 import forwardBtnPath from './forwardBtn.svg';
 import whiteCloseBtnPath from './whiteCloseBtn.svg';
 import userPath from './user.png';
+import sirenGreenPath from './siren-green.svg';
+import sirenOrangePath from './siren-orange.svg';
+import sirenRedPath from './siren-red.svg';
 
 export const share: string = sharePath;
 export const logo: string = logoPath;
@@ -27,3 +30,6 @@ export const playBtn: string = playBtnPath;
 export const forwardBtn: string = forwardBtnPath;
 export const whiteCloseBtn: string = whiteCloseBtnPath;
 export const userIcon: string = userPath;
+export const sirenGreenIcon: string = sirenGreenPath;
+export const sirenOrangeIcon: string = sirenOrangePath;
+export const sirenRedIcon: string = sirenRedPath;

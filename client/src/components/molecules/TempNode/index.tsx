@@ -13,7 +13,7 @@ const TempNode: React.FC<IProps> = (props) => {
   const { onBlur, onKeyPress, level, isSelected, id, refProp } = props;
 
   return (
-    <Node ref={refProp} id={id} level={level} isSelected={isSelected}>
+    <Node ref={refProp} id={id} level={level} isSelected={isSelected} isFiltered={false}>
       <Input inputStyle='small' autoFocus onBlur={onBlur} onKeyPress={onKeyPress} />
     </Node>
   );

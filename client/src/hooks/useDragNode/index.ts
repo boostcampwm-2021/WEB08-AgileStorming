@@ -5,14 +5,12 @@ export interface IEvents {
   [key: string]: any;
 }
 
-const useDragEvent = (events: IEvents, interactElemIds: Array<string> = [], dragEnterColor = 'none') => {
+const useDragNode = (events: IEvents, dragEnterColor = 'none') => {
   const draggedRef = useRef<HTMLElement | null>(null);
-  interactElemIds = Array(100)
-    .fill(0)
-    .map((_, i) => '' + i);
   const isInteractable = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
-    return target.id && interactElemIds.find((elemId) => target.id.match(elemId));
+    const id = target?.id?.match('container');
+    return target.id && !id;
   };
 
   const handleDragStartNode = (event: React.MouseEvent) => {
@@ -64,4 +62,4 @@ const useDragEvent = (events: IEvents, interactElemIds: Array<string> = [], drag
   useEvents(dragEvents);
 };
 
-export default useDragEvent;
+export default useDragNode;

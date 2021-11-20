@@ -2,21 +2,23 @@ import { Levels } from 'utils/helpers';
 import { ILabel } from './label';
 import { ISprint } from './sprint';
 
+export type TAddNodeData = {
+  content: string;
+  nodeId?: number;
+};
+export type TPriority = '낮음' | '보통' | '높음';
+export type TStatus = 'To Do' | 'In Progress' | 'Done';
 export type TDeleteNodeData = {
   nodeId: number;
   content: string;
   index: number;
-  status?: string;
+  status?: TStatus;
   posX?: string;
   posY?: string;
   assignee?: number;
-  priority?: string;
+  priority?: TPriority;
   children: number[];
   level: Levels;
-};
-export type TAddNodeData = {
-  content: string;
-  nodeId?: number;
 };
 export type TMoveNodeData = {
   posX?: string;
@@ -37,10 +39,10 @@ export type TUpdateNodeContent = {
 export type TTask = {
   assigneeId?: string;
   labels?: number[];
-  priority?: string;
+  priority?: TPriority;
   dueDate?: string;
   estimatedTime?: string;
-  status?: 'To Do' | 'In Progress' | 'Done';
+  status?: TStatus;
   finishedTime?: string;
   sprintId?: number;
 };

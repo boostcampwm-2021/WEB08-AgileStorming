@@ -27,6 +27,8 @@ export const FilterItemContainer = styled.div`
 `;
 
 export const FilterItem = styled.div`
+  ${({ theme }) => theme.flex.rowCenter};
+  gap: 0.3rem;
   font-weight: bold;
   padding: 0.3rem 0.1rem;
   border-radius: 0.2rem;
