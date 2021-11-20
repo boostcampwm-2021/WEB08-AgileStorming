@@ -9,6 +9,8 @@ export interface INodeProps {
 }
 
 const Node = styled.div<INodeProps>`
+  ${({ theme }) => theme.flex.rowCenter};
+  gap: 0.3rem;
   background-color: ${({ theme, level }) => theme.nodeBgColors[levelToIdx(level)]};
   color: ${({ theme, level }) => theme.nodeColors[levelToIdx(level)]};
   border-radius: 0.5rem;
