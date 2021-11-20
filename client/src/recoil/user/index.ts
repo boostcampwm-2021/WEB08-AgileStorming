@@ -1,7 +1,12 @@
 import { atom } from 'recoil';
 import { IUser } from 'types/user';
 
-export const userState = atom<IUser>({
-  key: 'userAtom',
-  default: { id: 'chosh', name: '조성현', color: '000000', icon: 'frog' },
+export const isAuthenticatedState = atom({
+  key: 'isAuthenticated',
+  default: false,
+});
+
+export const userState = atom<IUser | null>({
+  key: 'user',
+  default: null,
 });

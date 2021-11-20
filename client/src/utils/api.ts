@@ -8,7 +8,9 @@ const api = axios.create({
 
 const HISTORY_COUNT_TO_GET = 15;
 
-export const authApi = {
+export const auth = {
+  status: () => api.get('/auth/status'),
+
   login: (id: string) =>
     api.post('/auth/login', {
       id,
@@ -60,6 +62,7 @@ export const history = {
 };
 
 export const API = {
+  auth,
   project,
   history,
 };

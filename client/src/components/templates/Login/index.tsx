@@ -1,38 +1,51 @@
 import React, { useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import { Template, Wrapper } from './style';
-import { BoxButton, Input, Title } from 'components/atoms';
+import { AxiosError } from 'axios';
+import { useHistory } from 'react-router-dom';
+import { History } from 'history';
+import { useSetRecoilState } from 'recoil';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
-import { authApi } from 'utils/api';
+import { isAuthenticatedState, userState } from 'recoil/user';
+import { BoxButton, Input, Title } from 'components/atoms';
+import { IUser } from 'types/user';
+import { auth } from 'utils/api';
 import { logo } from 'img';
 
+interface IHistoryProps {
+  link: string;
+}
+
 const Login = () => {
+  const setIsAuth = useSetRecoilState(isAuthenticatedState);
+  const setUser = useSetRecoilState(userState);
   const id = useRef<string>('');
-  const history = useHistory();
+  const history: History<IHistoryProps> = useHistory();
   const { showModal } = useModal();
   const { showMessage, showError } = useToast();
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => (id.current = e.target.value);
-  const handleClickLogin = () => {
+  const handleClickLogin = async () => {
     if (id.current === '') {
       showMessage('아이디를 입력해주세요');
       return;
     }
-    authApi
-      .login(id.current)
-      .then((res) => {
-        if (res.status === 200) {
-          showMessage('로그인 되었습니다.');
-          history.push('/project');
-        }
-      })
-      .catch((err) => (err.response?.data.msg ? showMessage(err.response?.data.msg) : showError(err)));
+    try {
+      const res = await auth.login(id.current);
+      if (res.status === 200) {
+        const user = res.data as IUser;
+        setIsAuth(true);
+        setUser(user);
+        localStorage.setItem('user', JSON.stringify(user));
+        showMessage('로그인 되었습니다.');
+        history.push(history.location.state?.link ? history.location.state.link : '/project');
+      }
+    } catch (err) {
+      showError(err as Error | AxiosError);
+    }
   };
 
-  const handleClickRegister = () => {
-    showModal({ modalType: 'registerModal', modalProps: {} });
-  };
+  const handleClickRegister = () => showModal({ modalType: 'registerModal', modalProps: {} });
 
   return (
     <Template>
