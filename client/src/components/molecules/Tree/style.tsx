@@ -9,6 +9,7 @@ export const NodeContainer = styled.div<IStyleProps>`
   ${({ theme }) => theme.flex.row};
   align-items: center;
   gap: 1rem;
+  width: fit-content;
 `;
 
 export const ChildContainer = styled.div`

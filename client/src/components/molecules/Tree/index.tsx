@@ -132,7 +132,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
   };
 
   return (
-    <NodeContainer id={nodeId + 'container'} ref={containerRef} isRoot={isRoot} draggable='true' className='mindmap-area'>
+    <NodeContainer id={nodeId + 'container'} ref={containerRef} isRoot={isRoot} className='mindmap-area'>
       {nodeId === TEMP_NODE_ID ? (
         <TempNode
           refProp={nodeRef}
@@ -144,6 +144,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
         />
       ) : (
         <Node
+          draggable={isRoot ? false : true}
           ref={nodeRef}
           id={nodeId.toString()}
           level={level}
