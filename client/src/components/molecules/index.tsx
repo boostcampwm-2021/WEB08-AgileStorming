@@ -1,3 +1,4 @@
+export { default as Dropdown } from 'components/molecules/Dropdown';
 export { default as IconButton } from 'components/molecules/IconButton';
 export { default as TextButton } from 'components/molecules/TextButton';
 export { default as Label } from 'components/molecules/Label';

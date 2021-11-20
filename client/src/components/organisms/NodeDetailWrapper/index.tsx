@@ -1,16 +1,16 @@
 import React from 'react';
-import { Label, PopupItemLayout, PopupLayout } from 'components/molecules';
+import { Label, PopupItemLayout, PopupLayout, Dropdown } from 'components/molecules';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedNodeState, selectedNodeIdState } from 'recoil/node';
 import { priorityListState, statusListState } from 'recoil/meta-data';
 import { Input } from 'components/atoms';
 import { isISODate, isPositiveNumber } from 'utils/form';
-import Dropdown from 'components/molecules/Dropdown';
 import useToast from 'hooks/useToast';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import { IMindNode } from 'types/mindmap';
 import { sprintListState, userListState } from 'recoil/project';
 import { TTask } from 'types/event';
+import { LabelList } from 'components/organisms';
 
 export const NodeDetailWrapper = () => {
   const priorityList = useRecoilValue(priorityListState);
@@ -102,8 +102,15 @@ export const NodeDetailWrapper = () => {
     }
   };
 
+  const requestLabelChange = (newLabelList: number[]) =>
+    updateTaskInformation({
+      nodeFrom: selectedNode!.nodeId,
+      dataFrom: { changed: { labelIds: JSON.stringify(newLabelList) } },
+      dataTo: { changed: { labelIds: JSON.stringify(newLabelList) } },
+    });
+
   return selectedNode ? (
-    <PopupLayout title={String(selectedNode.nodeId)} onClose={handleCloseButton} popupStyle='normal'>
+    <PopupLayout title={`#${String(selectedNode.nodeId)}`} onClose={handleCloseButton} popupStyle='normal'>
       <PopupItemLayout title={'내용'}>
         <Input
           key={selectedNode.content}
@@ -122,6 +129,7 @@ export const NodeDetailWrapper = () => {
               placeholder={selectedNode.sprintId ? sprintList[selectedNode.sprintId].name : ''}
               onValueChange={handleChangeNodeDetail('sprintId')}
               dropdownStyle='small'
+              margin='0.1rem 0'
             />
           </Label>
           <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
@@ -131,6 +139,7 @@ export const NodeDetailWrapper = () => {
               placeholder={selectedNode.assigneeId ? userList[selectedNode.assigneeId].name : ''}
               onValueChange={handleChangeNodeDetail('assigneeId')}
               dropdownStyle='small'
+              margin='0.1rem 0'
             />
           </Label>
           <Label label='마감 날짜' labelStyle='small' ratio={0.5} htmlFor='dueDate'>
@@ -175,7 +184,9 @@ export const NodeDetailWrapper = () => {
       ) : (
         ''
       )}
-      <PopupItemLayout title={'라벨'}>라벨정보</PopupItemLayout>
+      <PopupItemLayout title={'라벨'}>
+        <LabelList labelIds={JSON.parse(selectedNode.labelIds ?? '[]')} onChange={requestLabelChange} />
+      </PopupItemLayout>
     </PopupLayout>
   ) : null;
 };

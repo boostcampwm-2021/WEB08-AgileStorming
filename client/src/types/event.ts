@@ -45,6 +45,7 @@ export type TTask = {
   status?: TStatus;
   finishedTime?: string;
   sprintId?: number;
+  labelIds?: string;
 };
 export type TUpdateTaskInformation = {
   changed: TTask;
