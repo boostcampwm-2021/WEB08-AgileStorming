@@ -3,26 +3,47 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { Node } from 'components/atoms';
 import { Path, TempNode } from 'components/molecules';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect } from 'utils/helpers';
-import { getNextMapState, mindmapState } from 'recoil/mindmap';
+import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
 import { NodeContainer, ChildContainer } from './style';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
-import { IMindmapData } from 'types/mindmap';
+import { IMindmapData, IMindNode } from 'types/mindmap';
+import { ITaskFilters } from 'components/organisms/MindmapTree';
 
 interface ITreeProps {
   nodeId: number;
   mindmapData: IMindmapData;
   parentCoord: TCoord | null;
   parentId?: number;
+  taskFilters: ITaskFilters;
 }
 
-const TEMP_NODE_ID = -2;
+interface ICheckFilterProps {
+  node: IMindNode;
+  taskFilters: ITaskFilters;
+}
 
-const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId }) => {
+const checkFiltering = ({ node, taskFilters }: ICheckFilterProps) => {
+  const { sprintId, assigneeId, labels } = node;
+  if (!(sprintId || assigneeId || labels)) return false;
+
+  const [sprintFilter, userFilter, labelFilter] = Object.values(taskFilters);
+  if (!(sprintFilter || userFilter || labelFilter)) return false;
+
+  return (
+    (!sprintFilter || parseInt(sprintId + '') === sprintFilter) &&
+    (!userFilter || assigneeId === userFilter) &&
+    (!labelFilter || (labels && labels.includes(labelFilter)))
+  );
+};
+
+const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId, taskFilters }) => {
   const { rootId, mindNodes } = mindmapData;
   const isRoot = nodeId === rootId;
-  const node = mindNodes.get(nodeId);
-  const { level, content, children } = node!;
+  const node = mindNodes.get(nodeId)!;
+  const { level, content, children, priority, assigneeId, status } = node;
+  const isFilteredTask = level === 'TASK' && checkFiltering({ node, taskFilters });
+  if (level === 'TASK') console.log(isFilteredTask);
 
   const { addNode } = useHistoryEmitter();
   const setMindmapData = useSetRecoilState(mindmapState);
@@ -99,13 +120,27 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
           onKeyPress={handleNodeContentEnter}
         />
       ) : (
-        <Node ref={nodeRef} id={nodeId.toString()} level={level} isSelected={isSelected} className='node mindmap-area'>
+        <Node
+          ref={nodeRef}
+          id={nodeId.toString()}
+          level={level}
+          isSelected={isSelected}
+          isFiltered={isFilteredTask}
+          className='node mindmap-area'
+        >
           {content}
         </Node>
       )}
       <ChildContainer>
         {children.map((childrenId) => (
-          <Tree key={childrenId} nodeId={childrenId} mindmapData={mindmapData} parentCoord={coord} parentId={nodeId} />
+          <Tree
+            key={childrenId}
+            nodeId={childrenId}
+            mindmapData={mindmapData}
+            parentCoord={coord}
+            parentId={nodeId}
+            taskFilters={taskFilters}
+          />
         ))}
       </ChildContainer>
       <Path rect={rect} />

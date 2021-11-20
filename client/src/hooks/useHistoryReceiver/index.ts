@@ -1,5 +1,5 @@
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
-import { getNextMapState, mindmapState } from 'recoil/mindmap';
+import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import { labelListState, sprintListState } from 'recoil/project';
 import {
   INonHistoryEventData,
@@ -41,8 +41,6 @@ interface IUpdateNodeParent {
   newParentId: number;
   data: TUpdateNodeParent;
 }
-
-const TEMP_NODE_ID = -2;
 
 const addNode = ({ data, mindNodes, parentId, newId }: IAddNodeProps) => {
   const { content } = data.dataTo as TAddNodeData;

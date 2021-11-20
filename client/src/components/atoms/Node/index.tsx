@@ -1,9 +1,11 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Levels, levelToIdx } from 'utils/helpers';
 
 export interface INodeProps {
   level: Levels;
   isSelected: boolean;
+  isFiltered?: boolean;
 }
 
 const Node = styled.div<INodeProps>`
@@ -14,6 +16,11 @@ const Node = styled.div<INodeProps>`
   line-height: ${({ theme, level }) => theme.nodeFontSizes[levelToIdx(level)]};
   padding: 0.5rem 1rem;
   border: ${({ isSelected }) => (isSelected ? '2px solid blue' : '2px solid transparent')};
+  ${({ isFiltered }) =>
+    isFiltered &&
+    css`
+      border: 2px solid red;
+    `};
 `;
 
 export default Node;
