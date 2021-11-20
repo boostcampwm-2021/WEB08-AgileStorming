@@ -33,8 +33,8 @@ const useHistoryEmitter = () => {
       showMessage('서버와의 연결이 불안정합니다');
       return;
     }
-    console.log(type, payload);
     payload = fillPayload(payload);
+    console.log(type, payload);
     window.socket.emit('history-event', type, JSON.stringify(payload));
   };
 

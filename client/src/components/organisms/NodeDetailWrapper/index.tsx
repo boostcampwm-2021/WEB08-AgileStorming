@@ -2,7 +2,7 @@ import React from 'react';
 import { Label, PopupItemLayout, PopupLayout } from 'components/molecules';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedNodeState, selectedNodeIdState } from 'recoil/node';
-import { priorityListState } from 'recoil/meta-data';
+import { priorityListState, statusListState } from 'recoil/meta-data';
 import { Input } from 'components/atoms';
 import { isISODate, isPositiveNumber } from 'utils/form';
 import Dropdown from 'components/molecules/Dropdown';
@@ -14,6 +14,7 @@ import { TTask } from 'types/event';
 
 export const NodeDetailWrapper = () => {
   const priorityList = useRecoilValue(priorityListState);
+  const statusList = useRecoilValue(statusListState);
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
   const selectedNode = useRecoilValue(selectedNodeState);
   const sprintList = useRecoilValue(sprintListState);
@@ -24,6 +25,9 @@ export const NodeDetailWrapper = () => {
 
   const priorityDropdownItem: Record<string, string> = {};
   priorityList.forEach((priority) => (priorityDropdownItem[priority] = priority));
+
+  const statusDropdownItem: Record<string, string> = {};
+  statusList.forEach((status) => (statusDropdownItem[status] = status));
 
   const sprintDropdownItem: Record<number, string> = {};
   Object.values(sprintList).forEach((sprint) => (sprintDropdownItem[sprint.id] = sprint.name));
@@ -155,6 +159,15 @@ export const NodeDetailWrapper = () => {
               items={priorityDropdownItem}
               placeholder={selectedNode.priority}
               onValueChange={handleChangeNodeDetail('priority')}
+              dropdownStyle='small'
+            />
+          </Label>
+          <Label label='진행 상태' htmlFor='status' labelStyle='small' ratio={0.5}>
+            <Dropdown
+              id='status'
+              items={statusDropdownItem}
+              placeholder={selectedNode.status}
+              onValueChange={handleChangeNodeDetail('status')}
               dropdownStyle='small'
             />
           </Label>
