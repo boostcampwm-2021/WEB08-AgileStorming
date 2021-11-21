@@ -1,17 +1,17 @@
-import { Wrapper } from './style';
+import { RightWrapper, Wrapper, Range } from './style';
 import { IconButton, PlayController } from 'components/molecules';
 import { historyMapDataState } from 'recoil/mindmap';
-import { useResetRecoilState } from 'recoil';
-import { currentReverseIdxState, historyDataListState } from 'recoil/history';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import { currentReverseIdxState, historyDataListState, historyMovingSpeedState } from 'recoil/history';
 import useLinkClick from 'hooks/useLinkClick';
 import { whiteCloseBtn } from 'img';
 import { useCallback } from 'react';
 
 const HistoryHeader = () => {
+  const setHistoryMovingSpeed = useSetRecoilState(historyMovingSpeedState);
   const resetHistoryDataList = useResetRecoilState(historyDataListState);
   const resetHistoryMapData = useResetRecoilState(historyMapDataState);
   const resetCurrentReverseIdx = useResetRecoilState(currentReverseIdxState);
-
   const linkToMindmap = useLinkClick('mindmap');
 
   const handleCloseHistoryBtnClick = useCallback(() => {
@@ -21,11 +21,18 @@ const HistoryHeader = () => {
     linkToMindmap();
   }, [linkToMindmap]);
 
+  const changeHistoryMovingSpeed = ({ currentTarget }: React.MouseEvent<HTMLInputElement>) => {
+    const changedSpeed = 1000 - Number(currentTarget.value) * 10;
+    setHistoryMovingSpeed(changedSpeed);
+  };
+
   return (
     <Wrapper>
-      <input type='range' />
+      <Range type='range' onMouseUp={changeHistoryMovingSpeed} max='70' />
       <PlayController />
-      <IconButton imgSrc={whiteCloseBtn} onClick={handleCloseHistoryBtnClick} altText='히스토리 닫기 버튼'></IconButton>
+      <RightWrapper>
+        <IconButton imgSrc={whiteCloseBtn} onClick={handleCloseHistoryBtnClick} altText='히스토리 닫기 버튼' />
+      </RightWrapper>
     </Wrapper>
   );
 };

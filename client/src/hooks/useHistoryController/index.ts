@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { currentReverseIdxState, historyDataListState } from 'recoil/history';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { currentReverseIdxState, historyDataListState, historyMovingSpeedState } from 'recoil/history';
 import { historyMapDataState } from 'recoil/mindmap';
 import { IHistoryData } from 'types/history';
 import { restoreHistory } from 'utils/historyHandler';
@@ -26,10 +26,15 @@ const getFromTo = (fromIdx: number, toIdx: number, isForward: boolean) => {
   return [forwardIdx + 1, backwardIdx + 1 !== 0 ? backwardIdx + 1 : undefined];
 };
 
-const restoreAsyncHistory = (stopHistories: IHistoryData[], directionFunc: (props: IHandleMoveProps) => void, fromIdx: number) => {
+const restoreAsyncHistory = (
+  stopHistories: IHistoryData[],
+  directionFunc: (props: IHandleMoveProps) => void,
+  fromIdx: number,
+  time: number
+) => {
   const result = stopHistories.reduce(async (lastPromise, historyData, idx) => {
     await lastPromise;
-    await wait(700, directionFunc, { historyData, idx, fromIdx: fromIdx });
+    await wait(time, directionFunc, { historyData, idx, fromIdx: fromIdx });
   }, Promise.resolve());
   return result;
 };
@@ -38,6 +43,7 @@ const useHistoryController = () => {
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const [historyDataList, setHistoryDataList] = useRecoilState(historyDataListState);
   const setCurrentReverseIdx = useSetRecoilState(currentReverseIdxState);
+  const time = useRecoilValue(historyMovingSpeedState);
   const intervalId = useRef<NodeJS.Timer | null>(null);
 
   const handleMoveForward = useCallback(
@@ -65,13 +71,13 @@ const useHistoryController = () => {
       const stopHistories = historyDataList.slice(from, to);
 
       if (isForward) {
-        return restoreAsyncHistory(stopHistories, handleMoveForward, fromIdx + 1);
+        return restoreAsyncHistory(stopHistories, handleMoveForward, fromIdx + 1, time);
       } else {
         stopHistories.reverse();
-        return restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1);
+        return restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1, time);
       }
     },
-    [handleMoveForward, handleMoveBackward]
+    [handleMoveForward, handleMoveBackward, time]
   );
 
   const getOldestHistory = useCallback(
@@ -105,9 +111,9 @@ const useHistoryController = () => {
         const historyData = historyDataList.at(fromIdx + idx)!;
         handleMoveForward({ historyData, idx, fromIdx });
         idx++;
-      }, 700);
+      }, time);
     },
-    [historyDataList, intervalId.current, handleMoveForward]
+    [historyDataList, intervalId.current, handleMoveForward, time]
   );
 
   const stopHistories = useCallback(() => {
