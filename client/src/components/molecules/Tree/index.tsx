@@ -162,7 +162,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
           {content}
         </Node>
       )}
-      <ChildContainer>
+      <ChildContainer className='child-container'>
         {children.map((childrenId) => (
           <Tree
             key={childrenId}
