@@ -143,6 +143,7 @@ export const NodeDetailWrapper = () => {
             <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
               <Dropdown
                 id='sprint'
+                key={selectedNode.sprintId}
                 items={sprintDropdownItem}
                 placeholder={selectedNode.sprintId ? sprintList[selectedNode.sprintId].name : ''}
                 onValueChange={handleChangeNodeDetail('sprintId')}
@@ -153,6 +154,7 @@ export const NodeDetailWrapper = () => {
             <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
               <Dropdown
                 id='assignee'
+                key={selectedNode.assigneeId}
                 items={uerDropdownItem}
                 placeholder={selectedNode.assigneeId ? userList[selectedNode.assigneeId].name : ''}
                 onValueChange={handleChangeNodeDetail('assigneeId')}
@@ -196,6 +198,7 @@ export const NodeDetailWrapper = () => {
             <Label label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>
               <Dropdown
                 id='priority'
+                key={selectedNode.nodeId}
                 items={priorityDropdownItem}
                 placeholder={selectedNode.priority}
                 onValueChange={handleChangeNodeDetail('priority')}
@@ -206,6 +209,7 @@ export const NodeDetailWrapper = () => {
             <Label label='진행 상태' htmlFor='status' labelStyle='small' ratio={0.5}>
               <Dropdown
                 id='status'
+                key={selectedNode.status}
                 items={statusDropdownItem}
                 placeholder={selectedNode.status}
                 onValueChange={handleChangeNodeDetail('status')}
