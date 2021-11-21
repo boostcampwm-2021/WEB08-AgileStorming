@@ -100,6 +100,25 @@ export const NodeDetailWrapper = () => {
     }
   };
 
+  const handleBlurFinishedTime = ({ target }: React.FocusEvent<HTMLInputElement>) => {
+    if (!target.value) {
+      return;
+    }
+    if (!isPositiveNumber(target.value)) {
+      showMessage('숫자만 입력하세요. 단위는 시(hour)입니다.');
+      return;
+    }
+    if (target.value !== selectedNode!.finishedTime) {
+      updateTaskInformation({
+        nodeFrom: selectedNode!.nodeId,
+        dataFrom: { changed: { finishedTime: selectedNode!.finishedTime } },
+        dataTo: { changed: { finishedTime: target.value } },
+      });
+      showMessage(`실제 소요 시간 ${target.value}으로 변경.`);
+      return;
+    }
+  };
+
   const requestLabelChange = (newLabelList: number[]) =>
     updateTaskInformation({
       nodeFrom: selectedNode!.nodeId,
@@ -155,10 +174,21 @@ export const NodeDetailWrapper = () => {
             <Label label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
               <Input
                 id='estimatedTime'
-                key={selectedNode.nodeId}
-                placeholder={`${selectedNode.estimatedTime}시간`}
+                key={selectedNode.estimatedTime}
+                placeholder={selectedNode.estimatedTime ? `${selectedNode.estimatedTime}시간` : ''}
                 onFocus={handleFocusAlarm('숫자만 입력하세요. 단위는 시(hour)입니다.')}
                 onBlur={handleBlurEstimatedTime}
+                inputStyle='small'
+                margin='0.1rem 0'
+              />
+            </Label>
+            <Label label='실제 소요 시간' labelStyle='small' ratio={0.5} htmlFor='finishedTime'>
+              <Input
+                id='finishedTime'
+                key={selectedNode.finishedTime}
+                placeholder={selectedNode.finishedTime ? `${selectedNode.finishedTime}시간` : ''}
+                onFocus={handleFocusAlarm('숫자만 입력하세요. 단위는 시(hour)입니다.')}
+                onBlur={handleBlurFinishedTime}
                 inputStyle='small'
                 margin='0.1rem 0'
               />
