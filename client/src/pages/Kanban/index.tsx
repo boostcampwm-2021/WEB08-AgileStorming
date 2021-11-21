@@ -6,9 +6,10 @@ import { filteredTaskState } from 'recoil/project';
 
 const Kanban = () => {
   const taskNodes = useRecoilValue(filteredTaskState);
-  const toDoTasks = taskNodes.filter((task) => !task.status || task.status === 'To Do');
-  const inProgressTasks = taskNodes.filter((task) => task.status === 'In Progress');
-  const doneTasks = taskNodes.filter((task) => task.status === 'Done');
+  const taskNodesList = Array.from(Object.values(taskNodes));
+  const toDoTasks = taskNodesList.filter((task) => !task.status || task.status === 'To Do');
+  const inProgressTasks = taskNodesList.filter((task) => task.status === 'In Progress');
+  const doneTasks = taskNodesList.filter((task) => task.status === 'Done');
   return (
     <CommonLayout>
       <Wrapper flex={'center'}>
