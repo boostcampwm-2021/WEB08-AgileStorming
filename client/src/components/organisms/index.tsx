@@ -16,3 +16,4 @@ export { default as HistoryBar } from 'components/organisms/HistoryBar';
 export { default as UserList } from 'components/organisms/UserList';
 export { default as HistoryBackground } from 'components/organisms/HistoryBackground';
 export { default as TaskCard } from 'components/organisms/TaskCard';
+export { default as HistoryHeader } from 'components/organisms/HistoryHeader';

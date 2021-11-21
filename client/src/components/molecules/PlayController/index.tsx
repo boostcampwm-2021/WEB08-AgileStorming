@@ -1,10 +1,10 @@
-import styled from '@emotion/styled';
 import useHistoryController from 'hooks/useHistoryController';
 import { backwardBtn, playBtn, forwardBtn, pauseBtn } from 'img';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { currentReverseIdxState } from 'recoil/history';
 import { IconButton } from '..';
+import { Wrapper } from './style';
 
 const PlayController = () => {
   const currentReverseIdx = useRecoilValue(currentReverseIdxState);
@@ -36,7 +36,3 @@ const PlayController = () => {
 };
 
 export default PlayController;
-
-const Wrapper = styled.div`
-  ${({ theme }) => theme.flex.row}
-`;
