@@ -21,7 +21,10 @@
   "settings": {
     "import/ignore": ["node_modules"],
     "import/resolver": {
-      "typescript": {}
+      "typescript": {},
+      "node": {
+        "extensions": [".ts", ".tsx"]
+      }
     },
     "react": {
       "createClass": "createReactClass",
