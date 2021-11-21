@@ -15,18 +15,33 @@ const StyledTaskCardContainer = styled.div`
   width: 30vw;
   min-width: 300px;
   height: 88vh;
-  overflow-y: scroll;
+  overflow-x: clip;
+  overflow-y: overlay;
   background-color: ${({ theme }) => theme.color.primary1};
   border-radius: 8px;
   -webkit-box-shadow: 1px 4px 11px -1px rgba(0, 0, 0, 0.4);
   box-shadow: 1px 4px 11px -1px rgba(0, 0, 0, 0.4);
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    border-radius: 1ex;
+    -webkit-border-radius: 1ex;
+    background-color: ${({ theme }) => theme.color.primary1};
+  }
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.color.primary2};
+    border-radius: 1ex;
+    -webkit-border-radius: 1ex;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  }
 `;
 const StyledTitle = styled.div`
   position: sticky;
   align-self: flex-start;
   text-align: center;
   top: 0%;
-  width: 28vw;
+  width: 30vw;
   padding: 2vh;
   background-color: ${({ theme }) => theme.color.primary1};
   font-size: ${({ theme }) => theme.fontSize.title};
