@@ -12,7 +12,7 @@ export interface INodeProps {
 
 const styledStatus: { [key in TStatus]: string } = {
   'To Do': '',
-  'In Progress': 'background-color: #7BC3C3; font-weight:bold;',
+  'In Progress': 'filter: brightness(1.2);',
   Done: 'background-color: #DADADA',
 };
 
@@ -27,12 +27,8 @@ const Node = styled.div<INodeProps>`
   padding: 0.5rem 1rem;
   cursor: move;
   border: ${({ isSelected }) => (isSelected ? '2px solid blue' : '2px solid transparent')};
-  ${({ isFiltered }) =>
-    isFiltered &&
-    css`
-      border: 2px solid red;
-    `};
   ${({ status }) => (status ? styledStatus[status] : '')};
+  ${({ isFiltered }) => !isFiltered && 'filter: brightness(0.7)'};
 `;
 
 export default Node;

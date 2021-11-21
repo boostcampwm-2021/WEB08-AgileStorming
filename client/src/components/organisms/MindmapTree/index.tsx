@@ -22,8 +22,19 @@ const MindmapTree: React.FC<IProps> = ({ mindmapData }) => {
     user: useRecoilValue(assigneeFilterState),
     label: useRecoilValue(labelFilterState),
   };
+  const isFiltering = !!Object.values(taskFilters).reduce((acc, filter) => (acc += filter ? filter : ''), '');
 
-  return <Tree key={rootId} nodeId={rootId} mindmapData={mindmapData} parentCoord={null} taskFilters={taskFilters} userList={userList} />;
+  return (
+    <Tree
+      key={rootId}
+      nodeId={rootId}
+      mindmapData={mindmapData}
+      parentCoord={null}
+      taskFilters={taskFilters}
+      isFiltering={isFiltering}
+      userList={userList}
+    />
+  );
 };
 
 export default MindmapTree;
