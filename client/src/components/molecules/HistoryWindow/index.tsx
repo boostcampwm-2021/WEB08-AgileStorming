@@ -15,18 +15,11 @@ interface IProps {
 
 const HistoryWindow: React.FC<IProps> = ({ onClick }) => {
   const { containerRef, dragRef } = useDragBackground();
-  const { getNewHistoryData } = useNewHistoryData();
+  const { getMoreHistoryData } = useNewHistoryData();
   const historyDataList = useRecoilValue(historyDataListState);
   const userList = useRecoilValue(userListState);
   const currentReverseIdx = useRecoilValue(currentReverseIdxState);
   const isSelected = (idx: number): boolean => idx === currentReverseIdx;
-
-  const getMoreHistoryData = () => {
-    const currentHistoryData = historyDataList.at(0);
-    const rangeFrom = '(' + currentHistoryData?.streamId;
-
-    getNewHistoryData(rangeFrom);
-  };
 
   return (
     <Wrapper ref={containerRef} className='background'>

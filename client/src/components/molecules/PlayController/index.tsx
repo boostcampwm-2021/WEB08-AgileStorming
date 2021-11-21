@@ -12,11 +12,11 @@ const PlayController = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handleBackwardBtnClick = () => getOldestHistory(currentReverseIdx);
+  const handleForwardBtnClick = () => getYoungestHistory(currentReverseIdx);
   const handlePlayBtnClick = () => {
     playHistories(currentReverseIdx);
     setIsPlaying(true);
   };
-  const handleForwardBtnClick = () => getYoungestHistory(currentReverseIdx);
   const handleStopBtnClick = () => {
     stopHistories();
     setIsPlaying(false);
