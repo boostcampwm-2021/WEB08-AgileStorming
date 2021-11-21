@@ -10,7 +10,7 @@ import { isAuthenticatedState, userState } from 'recoil/user';
 import { BoxButton, Input, Title } from 'components/atoms';
 import { IUser } from 'types/user';
 import { auth } from 'utils/api';
-import { logo } from 'img';
+import { logoMovePrimary } from 'img';
 
 interface IHistoryProps {
   link: string;
@@ -56,8 +56,14 @@ const Login = () => {
         마인드맵으로 동료들과 작업을 간편하게 관리할 수 있습니다.
       </Title>
       <Wrapper>
-        <img src={logo} alt='AgileStorm' />
-        <Input inputStyle='full' placeholder='아이디를 입력해주세요' onChange={handleIdChange} margin='0.5rem 0' spellCheck={false} />
+        <img src={logoMovePrimary} width={'350px'} alt='AgileStorm' />
+        <Input
+          inputStyle='full'
+          placeholder='아이디를 입력해주세요'
+          onChange={handleIdChange}
+          margin='1.5rem 0 0.5rem 0'
+          spellCheck={false}
+        />
         <BoxButton onClick={handleClickLogin} btnStyle={'full'} color={'primary2'} margin={'0.3rem 0'}>
           로그인
         </BoxButton>
