@@ -6,8 +6,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedNodeIdState } from 'recoil/node';
 import { mindmapState } from 'recoil/mindmap';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
-// import useToast from 'hooks/useToast';
-// import { userState } from 'recoil/user';
+import useToast from 'hooks/useToast';
+import { IUser } from 'types/user';
 
 const StyledTaskCardContainer = styled.div`
   ${(props) => props.theme.flex.column}
@@ -52,14 +52,15 @@ const StyledTitle = styled.div`
 interface IProps {
   taskList: IMindNode[];
   status: 'To Do' | 'In Progress' | 'Done';
+  user: IUser;
 }
 
-const TaskCardContainer: React.FC<IProps> = ({ taskList, status }) => {
+const TaskCardContainer: React.FC<IProps> = ({ taskList, status, user }) => {
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
   const { mindNodes } = useRecoilValue(mindmapState);
   const { updateTaskInformation } = useHistoryEmitter();
-  // const { showMessage } = useToast();
-  // const { id } = useRecoilValue(userState);
+  const { showMessage } = useToast();
+
   const handleOnDoubleClickTask = (nodeId: number) => {
     setSelectedNodeId(nodeId);
   };
@@ -72,7 +73,7 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status }) => {
     if (clicks === 1) {
       dragTimeOut = setTimeout(() => {
         clicks = 0;
-        drag(e, currentTarget, nodeId);
+        onDragStart(e, currentTarget, nodeId);
       }, 200);
     }
     if (clicks === 2) {
@@ -103,12 +104,12 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status }) => {
     document.removeEventListener('mousemove', mouseMove);
     clone.remove();
   };
-  const drag = (e: React.MouseEvent<HTMLElement>, currentTarget: HTMLElement, nodeId: number) => {
+  const onDragStart = (e: React.MouseEvent<HTMLElement>, currentTarget: HTMLElement, nodeId: number) => {
     if (e.buttons !== 1) return;
-    // if (id !== mindNodes.get(nodeId)?.assignee) {
-    //   showMessage('자신에게 할당된 Task만 이동할 수 있습니다.');
-    //   return;
-    // }
+    if (user?.id !== mindNodes.get(nodeId)?.assigneeId) {
+      showMessage('자신에게 할당된 Task만 이동할 수 있습니다.');
+      return;
+    }
     const clone = currentTarget.cloneNode(true) as HTMLElement;
     clone.style.position = 'absolute';
     clone.style.zIndex = '1000';
