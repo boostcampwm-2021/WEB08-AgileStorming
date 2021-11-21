@@ -3,16 +3,16 @@ export type TAddNodeData = {
 };
 export type TPriority = '낮음' | '보통' | '높음';
 export type TStatus = 'To Do' | 'In Progress' | 'Done';
-export type TDeleteNodeData = {
+export interface TDeleteNodeData extends TTask {
   nodeId: number;
   content: string;
-  index: number;
-  status?: TStatus;
+  children: Array<number>;
+  backlogId?: string;
+  createdAt?: string;
+  comment?: [];
   posX?: string;
   posY?: string;
-  assignee?: number;
-  priority?: TPriority;
-};
+}
 export type TMoveNodeData = {
   posX?: string;
   posY?: string;

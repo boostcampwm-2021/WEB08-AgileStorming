@@ -1,5 +1,6 @@
 import { Levels } from 'utils/helpers';
 import { ILabel } from './label';
+import { IMindNode } from './mindmap';
 import { ISprint } from './sprint';
 
 export type TAddNodeData = {
@@ -8,18 +9,7 @@ export type TAddNodeData = {
 };
 export type TPriority = '낮음' | '보통' | '높음';
 export type TStatus = 'To Do' | 'In Progress' | 'Done';
-export type TDeleteNodeData = {
-  nodeId: number;
-  content: string;
-  index: number;
-  status?: TStatus;
-  posX?: string;
-  posY?: string;
-  assignee?: number;
-  priority?: TPriority;
-  children: number[];
-  level: Levels;
-};
+export type TDeleteNodeData = IMindNode;
 export type TMoveNodeData = {
   posX?: string;
   posY?: string;
