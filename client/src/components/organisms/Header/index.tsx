@@ -46,6 +46,7 @@ const Header: React.FC<IProps> = ({ children }: IProps) => {
         <BoxLink onClick={handleLinkClick.bind(null, '/kanban/')}>칸반보드</BoxLink>
         <BoxLink onClick={handleLinkClick.bind(null, '/calendar/')}>캘린더</BoxLink>
         <BoxLink onClick={handleLinkClick.bind(null, '/chart/')}>차트</BoxLink>
+        <BoxLink onClick={handleLinkClick.bind(null, '/backlog/')}>백로그</BoxLink>
       </HeaderContainer>
       {children}
     </>
