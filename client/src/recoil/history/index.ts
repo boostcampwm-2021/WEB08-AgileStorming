@@ -43,3 +43,8 @@ export const currentHistoryNodeIdState = selector({
     }
   },
 });
+
+export const historyMovingSpeedState = atom<number>({
+  key: 'historyMovingSpeedAtom',
+  default: 650,
+});

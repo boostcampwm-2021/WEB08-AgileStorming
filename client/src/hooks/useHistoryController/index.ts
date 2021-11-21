@@ -1,5 +1,6 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { currentReverseIdxState, historyDataListState } from 'recoil/history';
+import { useCallback, useRef } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { currentReverseIdxState, historyDataListState, historyMovingSpeedState } from 'recoil/history';
 import { historyMapDataState } from 'recoil/mindmap';
 import { IHistoryData } from 'types/history';
 import { restoreHistory } from 'utils/historyHandler';
@@ -15,57 +16,117 @@ interface IHandleMoveProps {
   fromIdx: number;
 }
 
+const wait = (time: number, func: (props: IHandleMoveProps) => void, props: IHandleMoveProps) =>
+  new Promise((resolve) => {
+    setTimeout(() => resolve(func(props)), time);
+  });
+
+const getFromTo = (fromIdx: number, toIdx: number, isForward: boolean) => {
+  const [forwardIdx, backwardIdx] = isForward ? [fromIdx, toIdx] : [toIdx, fromIdx];
+  return [forwardIdx + 1, backwardIdx + 1 !== 0 ? backwardIdx + 1 : undefined];
+};
+
+const restoreAsyncHistory = (
+  stopHistories: IHistoryData[],
+  directionFunc: (props: IHandleMoveProps) => void,
+  fromIdx: number,
+  time: number
+) => {
+  const result = stopHistories.reduce(async (lastPromise, historyData, idx) => {
+    await lastPromise;
+    await wait(time, directionFunc, { historyData, idx, fromIdx: fromIdx });
+  }, Promise.resolve());
+  return result;
+};
+
 const useHistoryController = () => {
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const [historyDataList, setHistoryDataList] = useRecoilState(historyDataListState);
   const setCurrentReverseIdx = useSetRecoilState(currentReverseIdxState);
+  const time = useRecoilValue(historyMovingSpeedState);
+  const intervalId = useRef<NodeJS.Timer | null>(null);
 
-  const handleMoveForward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
-    const params = { historyData, isForward: true, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
-    restoreHistory(params);
-    setCurrentReverseIdx(fromIdx + idx);
-  };
+  const handleMoveForward = useCallback(
+    ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
+      const params = { historyData, isForward: true, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
+      restoreHistory(params);
+      setCurrentReverseIdx(fromIdx + idx);
+    },
+    [historyDataList]
+  );
 
-  const handleMoveBackward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
-    const params = { historyData, isForward: false, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
-    restoreHistory(params);
+  const handleMoveBackward = useCallback(
+    ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
+      const params = { historyData, isForward: false, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
+      restoreHistory(params);
+      setCurrentReverseIdx(fromIdx - idx);
+    },
+    [historyDataList]
+  );
 
-    setCurrentReverseIdx(fromIdx - idx);
-  };
-
-  const wait = (time: number, func: (props: IHandleMoveProps) => void, props: IHandleMoveProps) =>
-    new Promise((resolve) => {
-      setTimeout(() => resolve(func(props)), time);
-    });
-
-  const historyController = async ({ fromIdx, toIdx }: IHistoryControllerProps) => {
-    const isForward = fromIdx < toIdx;
-
-    if (isForward) {
-      const from = fromIdx + 1;
-      const to = toIdx + 1 !== 0 ? toIdx + 1 : undefined;
-
+  const historyController = useCallback(
+    ({ fromIdx, toIdx }: IHistoryControllerProps) => {
+      const isForward = fromIdx < toIdx;
+      const [from, to] = getFromTo(fromIdx, toIdx, isForward);
       const stopHistories = historyDataList.slice(from, to);
 
-      await stopHistories.reduce(async (lastPromise, historyData, idx) => {
-        await lastPromise;
-        await wait(700, handleMoveForward, { historyData, idx, fromIdx: fromIdx + 1 });
-      }, Promise.resolve());
-    } else {
-      const from = toIdx + 1;
-      const to = fromIdx + 1 !== 0 ? fromIdx + 1 : undefined;
+      if (isForward) {
+        return restoreAsyncHistory(stopHistories, handleMoveForward, fromIdx + 1, time);
+      } else {
+        stopHistories.reverse();
+        return restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1, time);
+      }
+    },
+    [handleMoveForward, handleMoveBackward, time]
+  );
 
+  const getOldestHistory = useCallback(
+    (fromIdx: number) => {
+      const [from, to] = getFromTo(fromIdx, 0, false);
       const stopHistories = historyDataList.slice(from, to);
       stopHistories.reverse();
 
-      await stopHistories.reduce(async (lastPromise, historyData, idx) => {
-        await lastPromise;
-        await wait(700, handleMoveBackward, { historyData, idx, fromIdx: fromIdx - 1 });
-      }, Promise.resolve());
-    }
-  };
+      stopHistories.forEach((historyData, idx) => handleMoveBackward({ historyData, idx, fromIdx: fromIdx - 1 }));
+    },
+    [handleMoveBackward]
+  );
 
-  return historyController;
+  const getYoungestHistory = useCallback(
+    (fromIdx: number) => {
+      const [from, to] = getFromTo(fromIdx, -1, true);
+      const stopHistories = historyDataList.slice(from, to);
+
+      stopHistories.forEach((historyData, idx) => handleMoveForward({ historyData, idx, fromIdx: fromIdx + 1 }));
+    },
+    [handleMoveForward]
+  );
+
+  const playHistories = useCallback(
+    (fromIdx: number) => {
+      let idx = 1;
+
+      intervalId.current = setInterval(() => {
+        if (fromIdx + idx === 0) return clearInterval(intervalId.current!);
+
+        const historyData = historyDataList.at(fromIdx + idx)!;
+        handleMoveForward({ historyData, idx, fromIdx });
+        idx++;
+      }, time);
+    },
+    [historyDataList, intervalId.current, handleMoveForward, time]
+  );
+
+  const stopHistories = useCallback(() => {
+    clearInterval(intervalId.current!);
+  }, [intervalId.current]);
+
+  return {
+    historyController,
+    getOldestHistory,
+    getYoungestHistory,
+    playHistories,
+    stopHistories,
+  };
 };
 
 export default useHistoryController;

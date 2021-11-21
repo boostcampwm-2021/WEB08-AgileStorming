@@ -9,4 +9,5 @@ export interface IHistoryData {
   data: THistoryEventData;
   newNodeId?: number;
   historyId: number;
+  streamId: string;
 }

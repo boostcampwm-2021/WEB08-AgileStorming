@@ -9,12 +9,3 @@ export const Wrapper = styled.div`
   bottom: 0;
   padding: 0 2rem;
 `;
-
-export const UpperDiv = styled.div`
-  ${({ theme }) => theme.flex.row};
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-  width: 100%;
-  height: 40px;
-`;
