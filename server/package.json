@@ -41,6 +41,6 @@
     "lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "*.{ts,tsx,js,jsx}": "eslint --fix"
   }
 }
