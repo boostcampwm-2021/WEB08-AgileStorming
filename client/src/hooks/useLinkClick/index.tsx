@@ -1,9 +1,8 @@
 import useProjectId from 'hooks/useRoomId';
 import { useHistory } from 'react-router';
+import { TPage } from 'types/page';
 
-type TPath = 'project' | 'mindmap' | 'history' | 'kanban' | 'calendar' | 'chart';
-
-const useLinkClick = (path: TPath) => {
+const useLinkClick = (path: TPage) => {
   const history = useHistory();
   const projectId = useProjectId();
 

@@ -1,5 +1,9 @@
 import sharePath from './share.svg';
 import logoPath from './logo.png';
+import logoBigPath from './logo-big.png';
+import logoBigPrimaryPath from './logo-big-primary.png';
+import logoMovePrimaryPath from './logo-move-primary.gif';
+import logoMoveWhitePath from './logo-move-white.gif';
 import closeIconPath from './closeIcon.svg';
 import filterIconPath from './filterIcon.svg';
 import plusPath from './plus.svg';
@@ -18,6 +22,10 @@ import sirenRedPath from './siren-red.svg';
 
 export const share: string = sharePath;
 export const logo: string = logoPath;
+export const logoBig: string = logoBigPath;
+export const logoBigPrimary: string = logoBigPrimaryPath;
+export const logoMovePrimary: string = logoMovePrimaryPath;
+export const logoMoveWhite: string = logoMoveWhitePath;
 export const closeIcon: string = closeIconPath;
 export const filterIcon: string = filterIconPath;
 export const plus: string = plusPath;

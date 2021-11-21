@@ -1,3 +1,4 @@
+export { default as BacklogTable } from 'components/organisms/BacklogTable';
 export { default as ConfirmModal } from 'components/organisms/ConfirmModal';
 export { default as FilterPopup } from 'components/organisms/FilterPopup';
 export { default as ProjectCardContainer } from 'components/templates/ProjectCardContainer';

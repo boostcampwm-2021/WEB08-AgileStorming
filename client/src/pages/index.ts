@@ -1,3 +1,4 @@
+export { default as Backlog } from './Backlog';
 export { default as LoginPage } from './Login';
 export { default as KanbanPage } from './Kanban';
 export { default as ProjectPage } from './Project';

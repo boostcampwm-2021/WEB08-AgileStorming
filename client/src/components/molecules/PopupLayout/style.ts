@@ -21,6 +21,7 @@ const styleOptions: { [key in TStyle]: string } = {
       padding: 0.5rem  1rem  1rem 1rem;
       font-size: ${common.fontSize.normal};
       z-index: 3;
+      overflow: hidden;
     `,
 };
 
@@ -50,7 +51,6 @@ export const Layout = styled.div<IStyleProps>`
   margin: ${({ margin }) => margin};
   background-color: ${({ theme }) => theme.color.white};
   border-radius: 0.5rem;
-  overflow: hidden;
 `;
 
 export const PopupHeaderBackGround = styled.div<IStyleProps>`

@@ -89,15 +89,32 @@ export const NodeDetailWrapper = () => {
       showMessage('숫자만 입력하세요. 단위는 시(hour)입니다.');
       return;
     }
-    const newEstimatedTime = target.value + '시간';
-    const prevValue = selectedNode!.estimatedTime;
-    if (newEstimatedTime !== prevValue) {
+    if (target.value !== selectedNode!.estimatedTime) {
       updateTaskInformation({
         nodeFrom: selectedNode!.nodeId,
-        dataFrom: { changed: { estimatedTime: prevValue } },
-        dataTo: { changed: { estimatedTime: newEstimatedTime } },
+        dataFrom: { changed: { estimatedTime: selectedNode!.estimatedTime } },
+        dataTo: { changed: { estimatedTime: target.value } },
       });
-      showMessage(`예상 소요 시간 ${newEstimatedTime}으로 변경.`);
+      showMessage(`예상 소요 시간 ${target.value}으로 변경.`);
+      return;
+    }
+  };
+
+  const handleBlurFinishedTime = ({ target }: React.FocusEvent<HTMLInputElement>) => {
+    if (!target.value) {
+      return;
+    }
+    if (!isPositiveNumber(target.value)) {
+      showMessage('숫자만 입력하세요. 단위는 시(hour)입니다.');
+      return;
+    }
+    if (target.value !== selectedNode!.finishedTime) {
+      updateTaskInformation({
+        nodeFrom: selectedNode!.nodeId,
+        dataFrom: { changed: { finishedTime: selectedNode!.finishedTime } },
+        dataTo: { changed: { finishedTime: target.value } },
+      });
+      showMessage(`실제 소요 시간 ${target.value}으로 변경.`);
       return;
     }
   };
@@ -126,6 +143,7 @@ export const NodeDetailWrapper = () => {
             <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
               <Dropdown
                 id='sprint'
+                key={selectedNode.sprintId}
                 items={sprintDropdownItem}
                 placeholder={selectedNode.sprintId ? sprintList[selectedNode.sprintId].name : ''}
                 onValueChange={handleChangeNodeDetail('sprintId')}
@@ -136,6 +154,7 @@ export const NodeDetailWrapper = () => {
             <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
               <Dropdown
                 id='assignee'
+                key={selectedNode.assigneeId}
                 items={uerDropdownItem}
                 placeholder={selectedNode.assigneeId ? userList[selectedNode.assigneeId].name : ''}
                 onValueChange={handleChangeNodeDetail('assigneeId')}
@@ -146,6 +165,7 @@ export const NodeDetailWrapper = () => {
             <Label label='마감 날짜' labelStyle='small' ratio={0.5} htmlFor='dueDate'>
               <Input
                 id='dueDate'
+                key={selectedNode.nodeId}
                 placeholder={selectedNode.dueDate}
                 onFocus={handleFocusAlarm('YYYY-MM-DD 형식으로 입력하세요.')}
                 onBlur={handleBlurDueDate}
@@ -156,9 +176,21 @@ export const NodeDetailWrapper = () => {
             <Label label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
               <Input
                 id='estimatedTime'
-                placeholder={selectedNode.estimatedTime}
+                key={selectedNode.estimatedTime}
+                placeholder={selectedNode.estimatedTime ? `${selectedNode.estimatedTime}시간` : ''}
                 onFocus={handleFocusAlarm('숫자만 입력하세요. 단위는 시(hour)입니다.')}
                 onBlur={handleBlurEstimatedTime}
+                inputStyle='small'
+                margin='0.1rem 0'
+              />
+            </Label>
+            <Label label='실제 소요 시간' labelStyle='small' ratio={0.5} htmlFor='finishedTime'>
+              <Input
+                id='finishedTime'
+                key={selectedNode.finishedTime}
+                placeholder={selectedNode.finishedTime ? `${selectedNode.finishedTime}시간` : ''}
+                onFocus={handleFocusAlarm('숫자만 입력하세요. 단위는 시(hour)입니다.')}
+                onBlur={handleBlurFinishedTime}
                 inputStyle='small'
                 margin='0.1rem 0'
               />
@@ -166,6 +198,7 @@ export const NodeDetailWrapper = () => {
             <Label label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>
               <Dropdown
                 id='priority'
+                key={selectedNode.nodeId}
                 items={priorityDropdownItem}
                 placeholder={selectedNode.priority}
                 onValueChange={handleChangeNodeDetail('priority')}
@@ -176,6 +209,7 @@ export const NodeDetailWrapper = () => {
             <Label label='진행 상태' htmlFor='status' labelStyle='small' ratio={0.5}>
               <Dropdown
                 id='status'
+                key={selectedNode.status}
                 items={statusDropdownItem}
                 placeholder={selectedNode.status}
                 onValueChange={handleChangeNodeDetail('status')}

@@ -6,10 +6,10 @@ import { GlobalModal } from 'components/templates/GlobalModal';
 import { Toast } from 'components/atoms';
 import loadable from '@loadable/component';
 import { Spinner } from 'components/molecules';
+import { TPageComponent } from 'types/page';
 
-type TPage = 'Login' | 'Project' | 'Mindmap' | 'History' | 'Kanban' | 'Calendar' | 'Chart';
 interface IProps {
-  page: TPage;
+  page: TPageComponent;
 }
 
 const AsyncPage = loadable(({ page }: IProps) => import(`pages/${page}`), {
@@ -30,6 +30,8 @@ const App = () => {
           <Route path='/kanban/:projectId' render={() => <AsyncPage page={'Kanban'} />} />
           <Route path='/calendar/:projectId' render={() => <AsyncPage page={'Calendar'} />} />
           <Route path='/chart/:projectId' render={() => <AsyncPage page={'Chart'} />} />
+          <Route path='/backlog/:projectId' render={() => <AsyncPage page={'Backlog'} />} />
+
           <Redirect from='*' to='/' />
         </Switch>
         <GlobalModal />

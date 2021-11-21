@@ -64,13 +64,29 @@ const filteredTaskState = selector<Record<number, IMindNode>>({
       if (sprintFilter && node.sprintId !== sprintFilter) {
         return;
       }
-      if (labelFilter && !node.labels?.includes(labelFilter)) {
+      if (labelFilter && node.labelIds && !JSON.parse(node.labelIds).includes(labelFilter)) {
         return;
       }
       filteredTask[node.nodeId] = node;
     });
 
     return filteredTask;
+  },
+});
+
+const filteredTaskTimeState = selector<{ totalEstimatedTime: number; totalUsedTime: number }>({
+  key: 'filteredTaskEstimatedTime',
+  get: ({ get }) => {
+    const filteredNodes = get(filteredTaskState);
+    let totalEstimatedTime = 0;
+    let totalUsedTime = 0;
+
+    Object.values(filteredNodes).forEach((task) => {
+      totalEstimatedTime += Number(task.estimatedTime);
+      totalUsedTime += Number(task.finishedTime);
+    });
+
+    return { totalEstimatedTime, totalUsedTime };
   },
 });
 
@@ -84,4 +100,5 @@ export {
   sprintFilterState,
   labelFilterState,
   filteredTaskState,
+  filteredTaskTimeState,
 };
