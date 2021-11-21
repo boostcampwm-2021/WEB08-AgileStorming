@@ -22,6 +22,7 @@ export const IconWrapper = styled.div<IProps>`
   width: 50px;
   height: 50px;
   display: flex;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
 `;

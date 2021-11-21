@@ -36,6 +36,7 @@ export const parseNonHistoryEvent = (data: string[], dbData?: string) => {
 };
 
 export const parseHistory = (rowData: THistoryRowData) => ({
+  streamId: rowData[0],
   historyId: Number(rowData[0].split('-')[0]),
   type: rowData[1][1] as THistoryEventType,
   projectId: rowData[1][3],
