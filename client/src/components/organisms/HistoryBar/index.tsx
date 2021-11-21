@@ -1,5 +1,4 @@
 import { Wrapper } from './style';
-import { Title } from 'components/atoms';
 import { HistoryLog, HistoryWindow } from 'components/molecules';
 import { useCallback, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
