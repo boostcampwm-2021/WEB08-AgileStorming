@@ -27,10 +27,11 @@ const getFromTo = (fromIdx: number, toIdx: number, isForward: boolean) => {
 };
 
 const restoreAsyncHistory = (stopHistories: IHistoryData[], directionFunc: (props: IHandleMoveProps) => void, fromIdx: number) => {
-  stopHistories.reduce(async (lastPromise, historyData, idx) => {
+  const result = stopHistories.reduce(async (lastPromise, historyData, idx) => {
     await lastPromise;
     await wait(700, directionFunc, { historyData, idx, fromIdx: fromIdx });
   }, Promise.resolve());
+  return result;
 };
 
 const useHistoryController = () => {
@@ -64,10 +65,10 @@ const useHistoryController = () => {
       const stopHistories = historyDataList.slice(from, to);
 
       if (isForward) {
-        restoreAsyncHistory(stopHistories, handleMoveForward, fromIdx + 1);
+        return restoreAsyncHistory(stopHistories, handleMoveForward, fromIdx + 1);
       } else {
         stopHistories.reverse();
-        restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1);
+        return restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1);
       }
     },
     [handleMoveForward, handleMoveBackward]

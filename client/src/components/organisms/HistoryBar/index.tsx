@@ -3,7 +3,7 @@ import useLinkClick from 'hooks/useLinkClick';
 import { Wrapper, UpperDiv } from './style';
 import { Title } from 'components/atoms';
 import { HistoryLog, IconButton, PlayController, HistoryWindow } from 'components/molecules';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { useResetRecoilState, useRecoilValue } from 'recoil';
 import { currentReverseIdxState, historyDataListState } from 'recoil/history';
 import { historyMapDataState } from 'recoil/mindmap';
@@ -20,6 +20,8 @@ const HistoryBar: React.FC = () => {
   const linkToMindmap = useLinkClick('mindmap');
   const { historyController } = useHistoryController();
 
+  const isCalculating = useRef(false);
+
   const handleCloseHistoryBtnClick = () => {
     resetHistoryDataList();
     resetHistoryMapData();
@@ -28,10 +30,13 @@ const HistoryBar: React.FC = () => {
   };
 
   const handleHistoryClick = useCallback(
-    (idx: number) => () => {
-      if (currentReverseIdx === idx) return;
+    (idx: number) => async () => {
+      if (currentReverseIdx === idx || isCalculating.current) return;
 
-      historyController({ fromIdx: currentReverseIdx, toIdx: idx });
+      isCalculating.current = true;
+      const controller = historyController({ fromIdx: currentReverseIdx, toIdx: idx });
+
+      controller.finally(() => (isCalculating.current = false));
     },
     [currentReverseIdx, historyController]
   );
