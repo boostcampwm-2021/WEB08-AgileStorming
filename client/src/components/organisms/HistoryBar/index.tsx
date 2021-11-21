@@ -18,7 +18,7 @@ const HistoryBar: React.FC = () => {
   const resetCurrentReverseIdx = useResetRecoilState(currentReverseIdxState);
 
   const linkToMindmap = useLinkClick('mindmap');
-  const historyController = useHistoryController();
+  const { historyController } = useHistoryController();
 
   const handleCloseHistoryBtnClick = () => {
     resetHistoryDataList();

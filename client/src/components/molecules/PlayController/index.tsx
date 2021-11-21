@@ -1,11 +1,17 @@
 import styled from '@emotion/styled';
+import useHistoryController from 'hooks/useHistoryController';
 import { backwardBtn, playBtn, forwardBtn } from 'img';
+import { useRecoilValue } from 'recoil';
+import { currentReverseIdxState } from 'recoil/history';
 import { IconButton } from '..';
 
 const PlayController = () => {
-  const handleBackwardBtnClick = () => {};
+  const currentReverseIdx = useRecoilValue(currentReverseIdxState);
+  const { getOldestHistory, getYoungestHistory } = useHistoryController();
+
+  const handleBackwardBtnClick = () => getOldestHistory(currentReverseIdx);
   const handlePlayBtnClick = () => {};
-  const handleForwardBtnClick = () => {};
+  const handleForwardBtnClick = () => getYoungestHistory(currentReverseIdx);
 
   return (
     <Wrapper>

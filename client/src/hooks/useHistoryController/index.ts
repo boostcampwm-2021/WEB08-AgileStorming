@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { currentReverseIdxState, historyDataListState } from 'recoil/history';
 import { historyMapDataState } from 'recoil/mindmap';
@@ -15,55 +16,88 @@ interface IHandleMoveProps {
   fromIdx: number;
 }
 
+const wait = (time: number, func: (props: IHandleMoveProps) => void, props: IHandleMoveProps) =>
+  new Promise((resolve) => {
+    setTimeout(() => resolve(func(props)), time);
+  });
+
+const getFromTo = (fromIdx: number, toIdx: number, isForward: boolean) => {
+  const [forwardIdx, backwardIdx] = isForward ? [fromIdx, toIdx] : [toIdx, fromIdx];
+  return [forwardIdx + 1, backwardIdx + 1 !== 0 ? backwardIdx + 1 : undefined];
+};
+
+const restoreAsyncHistory = (stopHistories: IHistoryData[], directionFunc: (props: IHandleMoveProps) => void, fromIdx: number) => {
+  stopHistories.reduce(async (lastPromise, historyData, idx) => {
+    await lastPromise;
+    await wait(700, directionFunc, { historyData, idx, fromIdx: fromIdx });
+  }, Promise.resolve());
+};
+
 const useHistoryController = () => {
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const [historyDataList, setHistoryDataList] = useRecoilState(historyDataListState);
   const setCurrentReverseIdx = useSetRecoilState(currentReverseIdxState);
 
-  const handleMoveForward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
-    const params = { historyData, isForward: true, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
-    restoreHistory(params);
-    setCurrentReverseIdx(fromIdx + idx);
-  };
+  const handleMoveForward = useCallback(
+    ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
+      const params = { historyData, isForward: true, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
+      restoreHistory(params);
+      setCurrentReverseIdx(fromIdx + idx);
+    },
+    [historyDataList]
+  );
 
-  const handleMoveBackward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
-    const params = { historyData, isForward: false, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
-    restoreHistory(params);
+  const handleMoveBackward = useCallback(
+    ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
+      const params = { historyData, isForward: false, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
+      restoreHistory(params);
+      setCurrentReverseIdx(fromIdx - idx);
+    },
+    [historyDataList]
+  );
 
-    setCurrentReverseIdx(fromIdx - idx);
-  };
+  const historyController = useCallback(
+    ({ fromIdx, toIdx }: IHistoryControllerProps) => {
+      const isForward = fromIdx < toIdx;
+      const [from, to] = getFromTo(fromIdx, toIdx, isForward);
+      const stopHistories = historyDataList.slice(from, to);
 
-  const wait = (time: number, func: (props: IHandleMoveProps) => void, props: IHandleMoveProps) =>
-    new Promise((resolve) => {
-      setTimeout(() => resolve(func(props)), time);
-    });
+      if (isForward) {
+        restoreAsyncHistory(stopHistories, handleMoveForward, fromIdx + 1);
+      } else {
+        stopHistories.reverse();
+        restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1);
+      }
+    },
+    [handleMoveForward, handleMoveBackward]
+  );
 
-  const getFromTo = (fromIdx: number, toIdx: number, isForward: boolean) => {
-    const [forwardIdx, backwardIdx] = isForward ? [fromIdx, toIdx] : [toIdx, fromIdx];
-    return [forwardIdx + 1, backwardIdx + 1 !== 0 ? backwardIdx + 1 : undefined];
-  };
-
-  const restoreAsyncHistory = (stopHistories: IHistoryData[], directionFunc: (props: IHandleMoveProps) => void, fromIdx: number) => {
-    stopHistories.reduce(async (lastPromise, historyData, idx) => {
-      await lastPromise;
-      await wait(700, directionFunc, { historyData, idx, fromIdx: fromIdx });
-    }, Promise.resolve());
-  };
-
-  const historyController = ({ fromIdx, toIdx }: IHistoryControllerProps) => {
-    const isForward = fromIdx < toIdx;
-    const [from, to] = getFromTo(fromIdx, toIdx, isForward);
-    const stopHistories = historyDataList.slice(from, to);
-
-    if (isForward) {
-      restoreAsyncHistory(stopHistories, handleMoveForward, fromIdx + 1);
-    } else {
+  const getOldestHistory = useCallback(
+    (fromIdx: number) => {
+      const [from, to] = getFromTo(fromIdx, 0, false);
+      const stopHistories = historyDataList.slice(from, to);
       stopHistories.reverse();
-      restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1);
-    }
-  };
 
-  return historyController;
+      stopHistories.forEach((historyData, idx) => handleMoveBackward({ historyData, idx, fromIdx: fromIdx - 1 }));
+    },
+    [handleMoveBackward]
+  );
+
+  const getYoungestHistory = useCallback(
+    (fromIdx: number) => {
+      const [from, to] = getFromTo(fromIdx, -1, true);
+      const stopHistories = historyDataList.slice(from, to);
+
+      stopHistories.forEach((historyData, idx) => handleMoveForward({ historyData, idx, fromIdx: fromIdx + 1 }));
+    },
+    [handleMoveForward]
+  );
+
+  return {
+    historyController,
+    getOldestHistory,
+    getYoungestHistory,
+  };
 };
 
 export default useHistoryController;
