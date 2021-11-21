@@ -89,15 +89,13 @@ export const NodeDetailWrapper = () => {
       showMessage('숫자만 입력하세요. 단위는 시(hour)입니다.');
       return;
     }
-    const newEstimatedTime = target.value + '시간';
-    const prevValue = selectedNode!.estimatedTime;
-    if (newEstimatedTime !== prevValue) {
+    if (target.value !== selectedNode!.estimatedTime) {
       updateTaskInformation({
         nodeFrom: selectedNode!.nodeId,
-        dataFrom: { changed: { estimatedTime: prevValue } },
-        dataTo: { changed: { estimatedTime: newEstimatedTime } },
+        dataFrom: { changed: { estimatedTime: selectedNode!.estimatedTime } },
+        dataTo: { changed: { estimatedTime: target.value } },
       });
-      showMessage(`예상 소요 시간 ${newEstimatedTime}으로 변경.`);
+      showMessage(`예상 소요 시간 ${target.value}으로 변경.`);
       return;
     }
   };
@@ -146,6 +144,7 @@ export const NodeDetailWrapper = () => {
             <Label label='마감 날짜' labelStyle='small' ratio={0.5} htmlFor='dueDate'>
               <Input
                 id='dueDate'
+                key={selectedNode.nodeId}
                 placeholder={selectedNode.dueDate}
                 onFocus={handleFocusAlarm('YYYY-MM-DD 형식으로 입력하세요.')}
                 onBlur={handleBlurDueDate}
@@ -156,7 +155,8 @@ export const NodeDetailWrapper = () => {
             <Label label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
               <Input
                 id='estimatedTime'
-                placeholder={selectedNode.estimatedTime}
+                key={selectedNode.nodeId}
+                placeholder={`${selectedNode.estimatedTime}시간`}
                 onFocus={handleFocusAlarm('숫자만 입력하세요. 단위는 시(hour)입니다.')}
                 onBlur={handleBlurEstimatedTime}
                 inputStyle='small'
