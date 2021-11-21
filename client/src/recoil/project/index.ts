@@ -74,6 +74,22 @@ const filteredTaskState = selector<Record<number, IMindNode>>({
   },
 });
 
+const filteredTaskTimeState = selector<{ totalEstimatedTime: number; totalUsedTime: number }>({
+  key: 'filteredTaskEstimatedTime',
+  get: ({ get }) => {
+    const filteredNodes = get(filteredTaskState);
+    let totalEstimatedTime = 0;
+    let totalUsedTime = 0;
+
+    Object.values(filteredNodes).forEach((task) => {
+      totalEstimatedTime += Number(task.estimatedTime);
+      totalUsedTime += Number(task.finishedTime);
+    });
+
+    return { totalEstimatedTime, totalUsedTime };
+  },
+});
+
 export {
   projectIdState,
   sprintListState,
@@ -84,4 +100,5 @@ export {
   sprintFilterState,
   labelFilterState,
   filteredTaskState,
+  filteredTaskTimeState,
 };
