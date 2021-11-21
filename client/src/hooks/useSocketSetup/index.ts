@@ -60,13 +60,12 @@ const useSocketSetup = () => {
   useEffect(() => {
     (async () => {
       const isNewProject = projectId !== newProjectId;
-      if (isNewProject) {
-        if (projectId) {
-          window.socket!.emit('leave', projectId);
-          window.socket = null;
-        }
-        initSocket({ projectId: newProjectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver });
+      if (!isNewProject) return;
+      if (projectId) {
+        window.socket!.emit('leave', projectId);
+        window.socket = null;
       }
+      initSocket({ projectId: newProjectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver });
     })();
   }, [newProjectId, projectId, setSocket, historyReceiver, userReceiver]);
 };

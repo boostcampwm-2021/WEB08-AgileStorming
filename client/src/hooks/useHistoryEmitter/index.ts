@@ -26,11 +26,11 @@ export interface INonHistoryEmitterProps {
 }
 
 const useHistoryEmitter = () => {
-  const { showMessage } = useToast();
+  const { showError } = useToast();
 
   const historyEmitter = ({ type, payload }: IHistoryEmitterProps) => {
     if (!window.socket) {
-      showMessage('서버와의 연결이 불안정합니다');
+      showError(new Error('서버와의 연결이 불안정합니다'));
       return;
     }
     payload = fillPayload(payload);
@@ -40,7 +40,7 @@ const useHistoryEmitter = () => {
 
   const nonHistoryEmitter = ({ type, payload }: INonHistoryEmitterProps) => {
     if (!window.socket) {
-      showMessage('서버와의 연결이 불안정합니다');
+      showError(new Error('서버와의 연결이 불안정합니다'));
       return;
     }
     console.log(type, payload);
