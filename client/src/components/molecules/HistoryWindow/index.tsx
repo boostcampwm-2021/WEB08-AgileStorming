@@ -2,30 +2,29 @@ import { Wrapper, IconWrapper } from './style';
 import { DragTarget, UserIcon } from 'components/atoms';
 import { MouseEvent } from 'react';
 import useDragBackground from 'hooks/useDragBackground';
-import { IHistoryData } from 'types/history';
 import { useRecoilValue } from 'recoil';
-import { historyDataListState } from 'recoil/history';
+import { currentReverseIdxState, historyDataListState } from 'recoil/history';
 import { userListState } from 'recoil/project';
 
 interface IProps {
-  onClick: (historyData: IHistoryData, idx: number) => (event: MouseEvent) => void;
-  currentHistoryData: IHistoryData | null;
+  onClick: (idx: number) => (event: MouseEvent) => void;
 }
 
-const HistoryWindow: React.FC<IProps> = ({ onClick, currentHistoryData }) => {
+const HistoryWindow: React.FC<IProps> = ({ onClick }) => {
   const { containerRef, dragRef } = useDragBackground();
   const historyDataList = useRecoilValue(historyDataListState);
   const userList = useRecoilValue(userListState);
-  const isSelected = (data: IHistoryData): boolean => currentHistoryData !== null && data.historyId === currentHistoryData.historyId;
+  const currentReverseIdx = useRecoilValue(currentReverseIdxState);
+  const isSelected = (idx: number): boolean => idx === currentReverseIdx;
 
   return (
     <Wrapper ref={containerRef} className='background'>
-      {historyDataList.length && userList && currentHistoryData
+      {historyDataList.length && userList
         ? historyDataList.map((historyData, idx) => (
             <IconWrapper
               key={historyData.historyId}
-              onClick={onClick(historyData, idx)}
-              isSelected={isSelected(historyData)}
+              onClick={onClick(idx - historyDataList.length)}
+              isSelected={isSelected(idx - historyDataList.length)}
               color={userList[historyData.user].color}
             >
               <UserIcon user={userList[historyData.user]} cursor='pointer' />

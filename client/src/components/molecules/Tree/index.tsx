@@ -1,14 +1,15 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Node, PriorityIcon, UserIcon } from 'components/atoms';
 import { Path, TempNode } from 'components/molecules';
-import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect, Levels } from 'utils/helpers';
+import { ITaskFilters } from 'components/organisms/MindmapTree';
+import { NodeContainer, ChildContainer } from './style';
 import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
-import { NodeContainer, ChildContainer } from './style';
+import { currentHistoryNodeIdState } from 'recoil/history';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
+import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect, Levels } from 'utils/helpers';
 import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
-import { ITaskFilters } from 'components/organisms/MindmapTree';
 import { IUser } from 'types/user';
 
 interface ITreeProps {
@@ -73,6 +74,9 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
 
   const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeIdState);
   const isSelected = selectedNodeId === nodeId;
+
+  const currentHistoryNodeId = useRecoilValue(currentHistoryNodeIdState);
+  const isHistorySelected = currentHistoryNodeId === nodeId;
 
   const [coord, setCoord] = useState<TCoord | null>(null);
   const [rect, setRect] = useState<TRect | null>(null);
@@ -148,7 +152,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
           ref={nodeRef}
           id={nodeId.toString()}
           level={level}
-          isSelected={isSelected}
+          isSelected={isSelected || isHistorySelected}
           isFiltered={isFilteredTask}
           className='node mindmap-area'
           status={status}

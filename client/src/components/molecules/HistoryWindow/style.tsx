@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
   width: 100%;
   height: 80px;
   ${({ theme }) => theme.flex.row}
-  overflow: scroll;
+  overflow: hidden;
   gap: 1rem;
   align-items: center;
   font-size: 2rem;
