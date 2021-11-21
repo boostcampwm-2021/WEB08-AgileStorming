@@ -45,29 +45,27 @@ const labelFilterState = atom<number | null>({
   default: null,
 });
 
-const filteredTaskState = selector<Record<number, IMindNode>>({
+const filteredTaskState = selector<IMindNode[]>({
   key: 'filteredTask',
   get: ({ get }) => {
     const nodes = get(mindmapNodesState);
     const assigneeFilter = get(assigneeFilterState);
     const sprintFilter = get(sprintFilterState);
     const labelFilter = get(labelFilterState);
-    const filteredTask: Record<number, IMindNode> = {};
-
-    nodes.forEach((node) => {
+    const filteredTask: IMindNode[] = Array.from(nodes.values()).filter((node) => {
       if (node.level !== 'TASK') {
-        return;
+        return false;
       }
       if (assigneeFilter && node.assigneeId !== assigneeFilter) {
-        return;
+        return false;
       }
       if (sprintFilter && node.sprintId !== sprintFilter) {
-        return;
+        return false;
       }
       if (labelFilter && node.labelIds && !JSON.parse(node.labelIds).includes(labelFilter)) {
         return;
       }
-      filteredTask[node.nodeId] = node;
+      return true;
     });
 
     return filteredTask;

@@ -2,10 +2,10 @@ import CommonLayout from 'components/templates/CommonLayout';
 import { TaskCardContainer } from 'components/templates';
 import { Wrapper } from 'components/atoms';
 import { useRecoilValue } from 'recoil';
-import { taskState } from 'recoil/mindmap';
+import { filteredTaskState } from 'recoil/project';
 
 const Kanban = () => {
-  const taskNodes = useRecoilValue(taskState);
+  const taskNodes = useRecoilValue(filteredTaskState);
   const toDoTasks = taskNodes.filter((task) => !task.status || task.status === 'To Do');
   const inProgressTasks = taskNodes.filter((task) => task.status === 'In Progress');
   const doneTasks = taskNodes.filter((task) => task.status === 'Done');
