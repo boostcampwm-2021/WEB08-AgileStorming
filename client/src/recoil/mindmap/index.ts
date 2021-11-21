@@ -27,14 +27,6 @@ export const mindmapNodesState = selector({
   },
 });
 
-export const taskState = selector({
-  key: 'taskState',
-  get: ({ get }) => {
-    const { mindNodes } = get(mindmapState);
-    return Array.from(mindNodes.values()).filter((node) => node.level === 'TASK');
-  },
-});
-
 export const historyMapDataState = atom<IMindmapData>({
   key: 'historyMapAtom',
   default: { rootId: ROOT_NODE_ID, mindNodes: new Map() },
