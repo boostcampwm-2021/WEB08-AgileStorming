@@ -19,6 +19,7 @@ import userPath from './user.png';
 import sirenGreenPath from './siren-green.svg';
 import sirenOrangePath from './siren-orange.svg';
 import sirenRedPath from './siren-red.svg';
+import pauseBtnPath from './pauseBtn.svg';
 
 export const share: string = sharePath;
 export const logo: string = logoPath;
@@ -41,3 +42,4 @@ export const userIcon: string = userPath;
 export const sirenGreenIcon: string = sirenGreenPath;
 export const sirenOrangeIcon: string = sirenOrangePath;
 export const sirenRedIcon: string = sirenRedPath;
+export const pauseBtn: string = pauseBtnPath;
