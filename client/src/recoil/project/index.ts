@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil';
 import { mindmapNodesState } from 'recoil/mindmap';
+import { userState } from 'recoil/user';
 import { ILabel } from 'types/label';
 import { IMindNode } from 'types/mindmap';
 import { ISprint } from 'types/sprint';
@@ -118,6 +119,18 @@ const filteredUserInProgressTaskState = selector<IMindNode[]>({
   },
 });
 
+const userListCurrentUserTopState = selector<Array<IUser>>({
+  key: 'userListCurrentUserTopState',
+  get: ({ get }) => {
+    const userList = get(userListState);
+    const user = get(userState);
+    if (!user) {
+      return Object.values(userList);
+    }
+    return [user, ...Object.values(userList).filter((users) => users.id !== user.id)];
+  },
+});
+
 export {
   projectIdState,
   sprintListState,
@@ -131,4 +144,5 @@ export {
   filteredTaskState,
   filteredTaskTimeState,
   filteredUserInProgressTaskState,
+  userListCurrentUserTopState,
 };

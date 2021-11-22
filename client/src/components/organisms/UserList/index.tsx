@@ -6,7 +6,7 @@ import { BoxButton } from 'components/atoms';
 import { userIcon, share } from 'img';
 import styled from '@emotion/styled';
 import useToast from 'hooks/useToast';
-import { connectedUserState, userListState, userMouseOverState } from 'recoil/project';
+import { connectedUserState, userListCurrentUserTopState, userMouseOverState } from 'recoil/project';
 
 interface IStyledConnectionStatus {
   online: boolean;
@@ -30,7 +30,8 @@ const StyledConnectionStatus = styled.p<IStyledConnectionStatus>`
 export const UserList = () => {
   const [isUserListOpen, setUserListOpen] = useState(false);
   const [mouseOverUser, setMouseOverUser] = useRecoilState(userMouseOverState);
-  const userList = useRecoilValue(userListState)!;
+  const userList = useRecoilValue(userListCurrentUserTopState)!;
+  console.log(userList);
   const connectedUsers = useRecoilValue(connectedUserState);
   const { showMessage } = useToast();
 
@@ -46,13 +47,13 @@ export const UserList = () => {
   const handleOnMouseLeaveList = () => setMouseOverUser('');
   return isUserListOpen ? (
     <PopupLayout
-      title={`공유됨: ${Object.values(userList).length} 명`}
+      title={`공유됨: ${userList.length} 명`}
       onClose={handleClickCloseBtn}
       popupStyle='normal'
       extraBtn={<IconButton zIdx={'1'} onClick={handleClickShareBtn} imgSrc={share} altText='공유하기 버튼' />}
     >
       <PopupItemLayout>
-        {Object.values(userList).map((user) => {
+        {userList.map((user) => {
           return (
             <StyledUserInfoBox
               key={user.id}
