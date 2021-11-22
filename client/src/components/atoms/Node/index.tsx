@@ -16,6 +16,7 @@ const styledStatus: { [key in TStatus]: string } = {
 };
 
 const Node = styled.div<INodeProps>`
+  position: relative;
   ${({ theme }) => theme.flex.rowCenter};
   gap: 0.3rem;
   background-color: ${({ theme, level }) => theme.nodeBgColors[levelToIdx(level)]};

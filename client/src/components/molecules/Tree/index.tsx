@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Node, PriorityIcon, UserIcon } from 'components/atoms';
 import { Path, TempNode } from 'components/molecules';
 import { ITaskFilters } from 'components/organisms/MindmapTree';
-import { NodeContainer, ChildContainer } from './style';
+import { NodeContainer, ChildContainer, NodeDeleteBtn } from './style';
 import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
 import { currentHistoryNodeIdState } from 'recoil/history';
@@ -176,8 +176,8 @@ const Tree: React.FC<ITreeProps> = ({
             {!!assignee && <UserIcon user={assignee} />}
             {!!priority && <PriorityIcon priority={priority} />}
             {content}
+            {!isRoot && isSelected && <NodeDeleteBtn onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제</NodeDeleteBtn>}
           </Node>
-          {!isRoot && isSelected && <div onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제하기</div>}
         </>
       )}
       <ChildContainer className='child-container'>
