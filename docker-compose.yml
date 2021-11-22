@@ -36,9 +36,12 @@ services:
     build:
       context: ./nginx
     volumes:
+      - ${SSL_FULLCHAIN_DIR}:/ssl/fullchain.pem;
+      - ${SSL_PRIVKEY_DIR}:/ssl/privkey.pem;
       - share:/usr/nginx/html
     ports:
       - 80:80
+      - 443:443
     restart: always
 
   mysql:
