@@ -16,14 +16,20 @@ export class Task {
   @ManyToOne(() => User, (assignee) => assignee.tasks, { cascade: true })
   assignee: User;
 
+  @Column({ default: 'To Do' })
+  status: string;
+
+  @Column({ nullable: true })
+  startDate: string;
+
+  @Column({ nullable: true })
+  endDate: string;
+
   @Column({ nullable: true })
   dueDate: string;
 
   @Column({ nullable: true })
   estimatedTime: string;
-
-  @Column({ default: 'To Do' })
-  status: string;
 
   @Column({ nullable: true })
   finishedTime: string;
