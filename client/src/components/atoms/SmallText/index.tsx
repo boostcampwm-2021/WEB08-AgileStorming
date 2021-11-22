@@ -8,9 +8,10 @@ interface IStyleProps {
 }
 
 const SmallText = styled.p<IStyleProps>`
-  color: ${(props) => props.theme.color[props.color]};
-  font-size: ${(props) => props.theme.fontSize.small};
+  color: ${({ theme, color }) => theme.color[color]};
+  font-size: ${({ theme }) => theme.fontSize.small};
   font-weight: ${({ weight }) => weight ?? 'normal'};
   margin: ${({ margin }) => margin ?? '0'};
+  cursor: default;
 `;
 export default SmallText;

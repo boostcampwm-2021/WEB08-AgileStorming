@@ -33,7 +33,7 @@ const useToast = () => {
       const newToastList = toastList.filter((e) => e.id !== tid);
       const idx = toastList.findIndex((e) => e.id === tid);
       setTimeout(() => deleteMessage(tid), 200);
-      return [...newToastList, { id: tid, show: false, message: toastList[idx].message }];
+      return [...newToastList, { id: tid, show: false, message: toastList[idx]?.message }];
     });
   };
 

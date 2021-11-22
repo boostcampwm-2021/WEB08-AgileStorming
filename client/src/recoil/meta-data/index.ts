@@ -7,5 +7,5 @@ export const priorityListState = atom<string[]>({
 
 export const statusListState = atom<string[]>({
   key: 'statusList',
-  default: ['To do', 'In Progress', 'Done'],
+  default: ['To Do', 'In Progress', 'Done'],
 });

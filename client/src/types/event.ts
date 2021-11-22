@@ -29,11 +29,13 @@ export type TUpdateNodeContent = {
 export type TTask = {
   assigneeId?: string;
   labels?: number[];
+  status?: TStatus;
   priority?: TPriority;
   dueDate?: string;
-  estimatedTime?: string;
-  status?: TStatus;
-  finishedTime?: string;
+  startDate?: string | null;
+  endDate?: string | null;
+  estimatedTime?: string | null;
+  finishedTime?: string | null;
   sprintId?: number;
   labelIds?: string;
 };

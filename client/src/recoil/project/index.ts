@@ -64,6 +64,9 @@ const filteredTaskState = selector<Record<number, IMindNode>>({
       if (sprintFilter && node.sprintId !== sprintFilter) {
         return;
       }
+      if (labelFilter && !node.labelIds) {
+        return;
+      }
       if (labelFilter && node.labelIds && !JSON.parse(node.labelIds).includes(labelFilter)) {
         return;
       }

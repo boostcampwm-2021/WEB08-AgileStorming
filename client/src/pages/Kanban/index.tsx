@@ -2,19 +2,22 @@ import CommonLayout from 'components/templates/CommonLayout';
 import { TaskCardContainer } from 'components/templates';
 import { Wrapper } from 'components/atoms';
 import { useRecoilValue } from 'recoil';
-import { taskState } from 'recoil/mindmap';
+import { filteredTaskState } from 'recoil/project';
+import { userState } from 'recoil/user';
 
 const Kanban = () => {
-  const taskNodes = useRecoilValue(taskState);
-  const toDoTasks = taskNodes.filter((task) => !task.status || task.status === 'To Do');
-  const inProgressTasks = taskNodes.filter((task) => task.status === 'In Progress');
-  const doneTasks = taskNodes.filter((task) => task.status === 'Done');
+  const user = useRecoilValue(userState)!;
+  const taskNodes = useRecoilValue(filteredTaskState);
+  const taskNodesList = Array.from(Object.values(taskNodes));
+  const toDoTasks = taskNodesList.filter((task) => !task.status || task.status === 'To Do');
+  const inProgressTasks = taskNodesList.filter((task) => task.status === 'In Progress');
+  const doneTasks = taskNodesList.filter((task) => task.status === 'Done');
   return (
     <CommonLayout>
       <Wrapper flex={'center'}>
-        <TaskCardContainer status={'To Do'} taskList={toDoTasks} />
-        <TaskCardContainer status={'In Progress'} taskList={inProgressTasks} />
-        <TaskCardContainer status={'Done'} taskList={doneTasks} />
+        <TaskCardContainer status={'To Do'} taskList={toDoTasks} user={user} />
+        <TaskCardContainer status={'In Progress'} taskList={inProgressTasks} user={user} />
+        <TaskCardContainer status={'Done'} taskList={doneTasks} user={user} />
       </Wrapper>
     </CommonLayout>
   );

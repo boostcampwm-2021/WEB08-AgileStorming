@@ -10,7 +10,7 @@ const Profile: React.FC<IProps> = ({ user }) => {
   return (
     <Wrapper>
       <UserIcon user={user} />
-      <Title titleStyle='xlarge' color='white'>
+      <Title titleStyle='xlarge' color='white' margin='3px 0 3px 10px'>
         {user.name}
       </Title>
     </Wrapper>
