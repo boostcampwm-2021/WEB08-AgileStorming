@@ -20,7 +20,7 @@ interface ITreeProps {
   taskFilters: ITaskFilters;
   isFiltering: boolean;
   userList: Record<string, IUser>;
-  handleDeleteBtnClick: (props: IMindNode) => void;
+  handleDeleteBtnClick: (parentId: number, node: IMindNode) => void;
 }
 
 interface ICheckFilterProps {
@@ -177,7 +177,7 @@ const Tree: React.FC<ITreeProps> = ({
             {!!priority && <PriorityIcon priority={priority} />}
             {content}
           </Node>
-          {selectedNodeId === nodeId && <div onClick={handleDeleteBtnClick.bind(null, node)}>삭제하기</div>}
+          {!isRoot && isSelected && <div onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제하기</div>}
         </>
       )}
       <ChildContainer className='child-container'>

@@ -2,7 +2,6 @@ import { SetterOrUpdater } from 'recoil';
 import { getNextMapState } from 'recoil/mindmap';
 import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
 import { IHistoryData } from 'types/history';
-import { getChildLevel } from 'utils/helpers';
 import { TAddNodeData, TDeleteNodeData, TMoveNodeData, TUpdateNodeParent, TUpdateNodeSibling, TUpdateTaskInformation } from 'types/event';
 
 interface IParams {
@@ -17,27 +16,16 @@ interface IParams {
 export const restoreHistory = (params: IParams) => {
   const { historyData, isForward, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData } = params;
   const historyMap = historyMapData.mindNodes;
+  const { nodeFrom, dataFrom, dataTo } = historyData.data;
 
   switch (historyData.type) {
     case 'ADD_NODE':
-      if (isForward)
-        addNode({
-          historyData,
-          historyMap,
-        });
-      else
-        deleteNode({
-          historyData,
-          historyMap,
-          setHistoryDataList,
-          historyDataList,
-        });
-
+      if (isForward) addNode({ historyMap, parentId: nodeFrom!, dataFrom: dataFrom as IMindNode, dataTo: dataTo as IMindNode });
+      else deleteNode({ historyData, historyMap, setHistoryDataList, historyDataList });
       break;
     case 'DELETE_NODE':
       if (isForward) deleteNode({ historyData, historyMap });
-      else {
-      }
+      else addNode({ historyMap, parentId: nodeFrom!, dataFrom: dataFrom as IMindNode, dataTo: dataTo as IMindNode });
       break;
     case 'MOVE_NODE':
       if (isForward) moveNode({ data: historyData.data.dataTo as TMoveNodeData, id: historyData.data.nodeFrom!, historyMap });
@@ -85,24 +73,20 @@ export const restoreHistory = (params: IParams) => {
 };
 
 interface IAddNodeParams {
-  historyData: IHistoryData;
+  parentId: number;
   historyMap: IMindNodes;
+  dataTo: TAddNodeData;
+  dataFrom: TDeleteNodeData;
 }
 
-const addNode = ({ historyData, historyMap }: IAddNodeParams) => {
-  const parentId = historyData.data.nodeFrom!;
+const addNode = ({ historyMap, parentId, dataTo, dataFrom }: IAddNodeParams) => {
   const parent = historyMap.get(parentId)!;
-  const nodeId = historyData.data.dataTo
-    ? (historyData.data.dataTo as TAddNodeData).nodeId!
-    : (historyData.data.dataFrom as TDeleteNodeData).nodeId!;
+  const { nodeId } = dataTo ?? dataFrom;
 
-  const { content } = historyData.data.dataTo as TAddNodeData;
-  const newNode = historyData.data.dataTo
-    ? { content, children: [], nodeId, level: getChildLevel(parent.level) }
-    : { ...(historyData.data.dataFrom as TDeleteNodeData) };
+  const newNode = dataFrom ? { ...dataFrom } : { ...dataTo, children: [] };
 
-  historyMap.set(parentId, { ...parent!, children: [...parent!.children, nodeId] });
-  historyMap.set(nodeId, newNode as IMindNode);
+  historyMap.set(parentId, { ...parent!, children: [...parent.children, nodeId!] });
+  historyMap.set(nodeId!, newNode as IMindNode);
 };
 
 interface IUpdateNodeContentParams {
