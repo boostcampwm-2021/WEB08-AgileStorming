@@ -53,19 +53,11 @@ export type TAddSprint = {
 export type TAddLabel = {
   name: string;
 };
-export type TAddComment = {
-  nodeId: number;
-  comment: string;
-};
 export type TDeleteSprint = {
   sprintId: number;
 };
 export type TDeleteLabel = {
   labelId: number;
-};
-export type TDeleteComment = {
-  nodeId: number;
-  commentId: number;
 };
 
 export type THistoryEventType =
@@ -83,5 +75,5 @@ export type THistoryEventData = {
   dataTo: TAddNodeData | TMoveNodeData | TUpdateNodeParent | TUpdateNodeSibling | TUpdateNodeContent | TUpdateTaskInformation | null;
 };
 
-export type TEventType = 'ADD_SPRINT' | 'ADD_LABEL' | 'ADD_COMMENT' | 'DELETE_SPRINT' | 'DELETE_LABEL' | 'DELETE_COMMENT';
-export type TEventData = TAddSprint | TAddLabel | TAddComment | TDeleteSprint | TDeleteLabel | TDeleteComment;
+export type TEventType = 'ADD_SPRINT' | 'ADD_LABEL' | 'DELETE_SPRINT' | 'DELETE_LABEL';
+export type TEventData = TAddSprint | TAddLabel | TDeleteSprint | TDeleteLabel;
