@@ -14,7 +14,7 @@ import {
 } from 'types/event';
 import { IHistoryData } from 'types/history';
 import { ILabel } from 'types/label';
-import { IMindmapData, IMindNodes } from 'types/mindmap';
+import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
 import { ISprint } from 'types/sprint';
 import { getChildLevel, levelToIdx, setTreeLevel } from 'utils/helpers';
 
@@ -68,7 +68,7 @@ const updateNodeParent = ({ nextMapState: { mindNodes }, oldParentId, newParentI
 export const historyHandler = ({ setMindmap, historyData }: IHistoryHandlerProps) => {
   const {
     type,
-    data: { nodeFrom, nodeTo, dataTo },
+    data: { nodeFrom, nodeTo, dataFrom, dataTo },
     newNodeId,
   } = historyData;
 
@@ -83,7 +83,10 @@ export const historyHandler = ({ setMindmap, historyData }: IHistoryHandlerProps
     case 'DELETE_NODE':
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
-        nextMapState.mindNodes.delete(nodeFrom!);
+        const parentNode = nextMapState.mindNodes.get(nodeFrom!)!;
+        const { nodeId } = dataFrom as IMindNode;
+        parentNode.children = parentNode.children.filter((childId) => childId !== nodeId);
+        nextMapState.mindNodes.delete(nodeId!);
         return nextMapState;
       });
       break;

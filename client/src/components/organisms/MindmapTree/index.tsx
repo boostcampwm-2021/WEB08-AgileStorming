@@ -26,9 +26,8 @@ const MindmapTree: React.FC<IProps> = ({ mindmapData }) => {
   };
   const isFiltering = !!Object.values(taskFilters).reduce((acc, filter) => (acc += filter ? filter : ''), '');
 
-  const handleDeleteBtnClick = (node: IMindNode) => {
-    const { nodeId } = node;
-    deleteNode({ nodeFrom: nodeId, dataFrom: node });
+  const handleDeleteBtnClick = (parentId: number, node: IMindNode) => {
+    deleteNode({ nodeFrom: parentId, dataFrom: node });
   };
 
   return (
