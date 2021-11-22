@@ -1,5 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
-import { Comment } from './Comment';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Project } from './Project';
 import { Task } from './Task';
 
@@ -25,9 +24,6 @@ export class Mindmap {
 
   @CreateDateColumn()
   createdAt: Date;
-
-  @OneToMany(() => Comment, (comment) => comment.node, { cascade: true })
-  comment: Comment[];
 
   @OneToOne(() => Task, (task) => task.taskId, { cascade: true, nullable: true })
   task: Task;
