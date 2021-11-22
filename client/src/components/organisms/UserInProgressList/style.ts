@@ -37,6 +37,7 @@ export const StyledTextFlow = styled.div`
   text-overflow: ellipsis;
   color: ${({ theme }) => theme.color.black};
   font-size: ${({ theme }) => theme.fontSize.normal};
+  cursor: default;
 `;
 
 export const StyledTextButton = styled.div`
