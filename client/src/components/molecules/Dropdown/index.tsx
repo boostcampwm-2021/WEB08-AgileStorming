@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { isNumber } from 'utils/form';
 import { DropdownList, StyledInput, TStyle, Wrapper } from './style';
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -14,12 +15,16 @@ const Dropdown: React.FC<IProps> = ({ onValueChange, dropdownStyle = 'normal', i
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClickDropdown = () => setIsOpen(!isOpen);
-  const handleClickItem = (id: string | number) => {
+  const handleClickItem = (id: string) => {
     if (activatorRef.current) {
       activatorRef.current.value = items[id];
     }
     if (onValueChange) {
-      onValueChange(id);
+      if (isNumber(id)) {
+        onValueChange(Number(id));
+      } else {
+        onValueChange(id);
+      }
     }
     setIsOpen(false);
   };
