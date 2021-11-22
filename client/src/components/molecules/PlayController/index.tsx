@@ -25,7 +25,7 @@ const PlayController = () => {
   const handlePlayBtnClick = useCallback(() => {
     if (isCalculating) return;
     setIsCalculating(true);
-    playHistories(currentReverseIdx);
+    playHistories(currentReverseIdx, setIsPlaying);
     setIsPlaying(true);
   }, [isCalculating, currentReverseIdx]);
 

@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentReverseIdxState, historyDataListState, historyMovingSpeedState } from 'recoil/history';
+import { currentReverseIdxState, historyDataListState, historyMovingSpeedState, isHistoryCalculatingState } from 'recoil/history';
 import { historyMapDataState } from 'recoil/mindmap';
 import { IHistoryData } from 'types/history';
 import { restoreHistory } from 'utils/historyHandler';
@@ -43,6 +43,7 @@ const useHistoryController = () => {
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const [historyDataList, setHistoryDataList] = useRecoilState(historyDataListState);
   const setCurrentReverseIdx = useSetRecoilState(currentReverseIdxState);
+  const setIsCalculating = useSetRecoilState(isHistoryCalculatingState);
   const time = useRecoilValue(historyMovingSpeedState);
   const intervalId = useRef<NodeJS.Timer | null>(null);
 
@@ -102,11 +103,16 @@ const useHistoryController = () => {
   );
 
   const playHistories = useCallback(
-    (fromIdx: number) => {
+    (fromIdx: number, setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>) => {
       let idx = 1;
 
       intervalId.current = setInterval(() => {
-        if (fromIdx + idx === 0) return clearInterval(intervalId.current!);
+        if (fromIdx + idx === 0) {
+          setIsPlaying(false);
+          setIsCalculating(false);
+          clearInterval(intervalId.current!);
+          return;
+        }
 
         const historyData = historyDataList.at(fromIdx + idx)!;
         handleMoveForward({ historyData, idx, fromIdx });
