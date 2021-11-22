@@ -25,7 +25,6 @@ export interface IHistoryReceiver {
 export interface IHistoryHandlerProps {
   setMindmap: SetterOrUpdater<IMindmapData>;
   historyData: IHistoryData;
-  isForward: boolean;
 }
 
 interface IAddNodeProps {
@@ -66,25 +65,27 @@ const updateNodeParent = ({ nextMapState: { mindNodes }, oldParentId, newParentI
   setTreeLevel(mindNodes, nodeId, levelToIdx(childNode.level));
 };
 
-export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryHandlerProps) => {
+export const historyHandler = ({ setMindmap, historyData }: IHistoryHandlerProps) => {
   const {
     type,
-    data: { nodeFrom, nodeTo, dataFrom, dataTo },
+    data: { nodeFrom, nodeTo, dataTo },
     newNodeId,
   } = historyData;
 
   switch (type) {
     case 'ADD_NODE':
-      if (isForward)
-        setMindmap((prev) => {
-          const nextMapState = getNextMapState(prev);
-          if (isForward) addNode({ mindNodes: nextMapState.mindNodes, parentId: nodeFrom!, newId: newNodeId!, data: historyData.data });
-          return nextMapState;
-        });
-      else {
-      }
+      setMindmap((prev) => {
+        const nextMapState = getNextMapState(prev);
+        addNode({ mindNodes: nextMapState.mindNodes, parentId: nodeFrom!, newId: newNodeId!, data: historyData.data });
+        return nextMapState;
+      });
       break;
     case 'DELETE_NODE':
+      setMindmap((prev) => {
+        const nextMapState = getNextMapState(prev);
+        nextMapState.mindNodes.delete(nodeFrom!);
+        return nextMapState;
+      });
       break;
     case 'MOVE_NODE':
       break;
@@ -92,8 +93,7 @@ export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryH
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
         const data = dataTo as TUpdateNodeParent;
-        if (isForward) updateNodeParent({ nextMapState, oldParentId: nodeFrom!, newParentId: nodeTo!, data });
-        else updateNodeParent({ nextMapState, oldParentId: nodeTo!, newParentId: nodeFrom!, data });
+        updateNodeParent({ nextMapState, oldParentId: nodeFrom!, newParentId: nodeTo!, data });
         return nextMapState;
       });
       break;
@@ -105,7 +105,7 @@ export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryH
         const targetNode = nextMapState.mindNodes.get(nodeFrom!)!;
         nextMapState.mindNodes.set(nodeFrom!, {
           ...targetNode,
-          ...((isForward ? dataTo : dataFrom) as TUpdateNodeContent),
+          ...(dataTo as TUpdateNodeContent),
         });
         return nextMapState;
       });
@@ -116,7 +116,7 @@ export const historyHandler = ({ setMindmap, historyData, isForward }: IHistoryH
         const targetNode = nextMapState.mindNodes.get(nodeFrom!)!;
         nextMapState.mindNodes.set(nodeFrom!, {
           ...targetNode,
-          ...(((isForward ? dataTo : dataFrom) as TUpdateTaskInformation).changed as TTask),
+          ...((dataTo as TUpdateTaskInformation).changed as TTask),
         });
         return nextMapState;
       });
@@ -171,7 +171,7 @@ const useHistoryReceiver = () => {
   const setSprintList = useSetRecoilState(sprintListState);
 
   const historyReceiver = (historyData: IHistoryData) => {
-    historyHandler({ setMindmap, historyData, isForward: true });
+    historyHandler({ setMindmap, historyData });
   };
   const nonHistoryEventReceiver = (response: INonHistoryEventData) => nonHistoryEventHandler({ response, setLabelList, setSprintList });
 

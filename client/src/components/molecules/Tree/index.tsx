@@ -18,10 +18,13 @@ interface ITreeProps {
   parentCoord: TCoord | null;
   parentId?: number;
   taskFilters: ITaskFilters;
+  isFiltering: boolean;
   userList: Record<string, IUser>;
+  handleDeleteBtnClick: (props: IMindNode) => void;
 }
 
 interface ICheckFilterProps {
+  level: Levels;
   node: IMindNode;
   taskFilters: ITaskFilters;
 }
@@ -33,7 +36,9 @@ interface IGetStatusProps {
   node: IMindNode;
 }
 
-const checkFiltering = ({ node, taskFilters }: ICheckFilterProps) => {
+const isFilteredTask = ({ level, node, taskFilters }: ICheckFilterProps) => {
+  if (level !== 'TASK') return false;
+
   const { sprintId, assigneeId, labels } = node;
   if (!(sprintId || assigneeId || labels)) return false;
 
@@ -60,13 +65,23 @@ const getStatus = ({ isRoot, level, mindNodes, node }: IGetStatusProps) => {
   if (level === 'STORY' && children.length) return isAllTaskDone(node, mindNodes) ? 'Done' : 'To Do';
 };
 
-const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId, taskFilters, userList }) => {
+const Tree: React.FC<ITreeProps> = ({
+  nodeId,
+  mindmapData,
+  parentCoord,
+  parentId,
+  taskFilters,
+  isFiltering,
+  userList,
+  handleDeleteBtnClick,
+}) => {
   const { rootId, mindNodes } = mindmapData;
   const node = mindNodes.get(nodeId)!;
   const { level, content, children, assigneeId, priority } = node;
   const assignee = assigneeId ? userList[assigneeId] : null;
   const isRoot = nodeId === rootId;
-  const isFilteredTask = level === 'TASK' && checkFiltering({ node, taskFilters });
+  const isFiltered = isFiltering ? isFilteredTask({ level, node, taskFilters }) : true;
+
   const status = getStatus({ mindNodes, node, level, isRoot });
 
   const { addNode } = useHistoryEmitter();
@@ -147,22 +162,25 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
           onKeyPress={handleNodeContentEnter}
         />
       ) : (
-        <Node
-          draggable={isRoot ? false : true}
-          ref={nodeRef}
-          id={nodeId.toString()}
-          level={level}
-          isSelected={isSelected || isHistorySelected}
-          isFiltered={isFilteredTask}
-          className='node mindmap-area'
-          status={status}
-        >
-          {!!assignee && <UserIcon user={assignee} />}
-          {!!priority && <PriorityIcon priority={priority} />}
-          {content}
-        </Node>
+        <>
+          <Node
+            draggable={isRoot ? false : true}
+            ref={nodeRef}
+            id={nodeId.toString()}
+            level={level}
+            isSelected={isSelected || isHistorySelected}
+            isFiltered={isFiltered}
+            className='node mindmap-area'
+            status={status}
+          >
+            {!!assignee && <UserIcon user={assignee} />}
+            {!!priority && <PriorityIcon priority={priority} />}
+            {content}
+          </Node>
+          {selectedNodeId === nodeId && <div onClick={handleDeleteBtnClick.bind(null, node)}>삭제하기</div>}
+        </>
       )}
-      <ChildContainer>
+      <ChildContainer className='child-container'>
         {children.map((childrenId) => (
           <Tree
             key={childrenId}
@@ -171,7 +189,9 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
             parentCoord={coord}
             parentId={nodeId}
             taskFilters={taskFilters}
+            isFiltering={isFiltering}
             userList={userList}
+            handleDeleteBtnClick={handleDeleteBtnClick}
           />
         ))}
       </ChildContainer>
