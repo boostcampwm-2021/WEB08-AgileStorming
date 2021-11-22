@@ -45,6 +45,11 @@ const labelFilterState = atom<number | null>({
   default: null,
 });
 
+const userMouseOverState = atom<string>({
+  key: 'userMouseOver',
+  default: '',
+});
+
 const filteredTaskState = selector<Record<number, IMindNode>>({
   key: 'filteredTask',
   get: ({ get }) => {
@@ -93,6 +98,26 @@ const filteredTaskTimeState = selector<{ totalEstimatedTime: number; totalUsedTi
   },
 });
 
+const filteredUserInProgressTaskState = selector<IMindNode[]>({
+  key: 'filteredUserInProgressTaskState',
+  get: ({ get }) => {
+    const nodes = get(mindmapNodesState);
+    const mouseOverUser = get(userMouseOverState);
+    return Array.from(nodes.values()).filter((node) => {
+      if (node.level !== 'TASK') {
+        return false;
+      }
+      if (node.assigneeId !== mouseOverUser) {
+        return false;
+      }
+      if (node.status !== 'In Progress') {
+        return false;
+      }
+      return true;
+    });
+  },
+});
+
 export {
   projectIdState,
   sprintListState,
@@ -102,6 +127,8 @@ export {
   assigneeFilterState,
   sprintFilterState,
   labelFilterState,
+  userMouseOverState,
   filteredTaskState,
   filteredTaskTimeState,
+  filteredUserInProgressTaskState,
 };
