@@ -48,3 +48,8 @@ export const historyMovingSpeedState = atom<number>({
   key: 'historyMovingSpeedAtom',
   default: 650,
 });
+
+export const isHistoryCalculatingState = atom<boolean>({
+  key: 'isHistoryIsCalculatingAtom',
+  default: false,
+});

@@ -28,7 +28,7 @@ const HistoryHeader = () => {
 
   return (
     <Wrapper>
-      <Range type='range' onMouseUp={changeHistoryMovingSpeed} max='70' />
+      <Range type='range' onMouseUp={changeHistoryMovingSpeed} max='70' defaultValue='35' />
       <PlayController />
       <RightWrapper>
         <IconButton imgSrc={whiteCloseBtn} onClick={handleCloseHistoryBtnClick} altText='히스토리 닫기 버튼' />

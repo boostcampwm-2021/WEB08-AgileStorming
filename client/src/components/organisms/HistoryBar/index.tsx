@@ -1,8 +1,8 @@
 import { Wrapper } from './style';
 import { HistoryLog, HistoryWindow } from 'components/molecules';
-import { useCallback, useRef } from 'react';
-import { useRecoilValue } from 'recoil';
-import { currentReverseIdxState, historyDataListState } from 'recoil/history';
+import { useCallback } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentReverseIdxState, historyDataListState, isHistoryCalculatingState } from 'recoil/history';
 import useHistoryController from 'hooks/useHistoryController';
 import { HistoryHeader } from '..';
 
@@ -12,18 +12,20 @@ const HistoryBar: React.FC = () => {
 
   const { historyController } = useHistoryController();
 
-  const isCalculating = useRef(false);
+  const [isCalculating, setIsCalculating] = useRecoilState(isHistoryCalculatingState);
 
   const handleHistoryClick = useCallback(
     (idx: number) => async () => {
-      if (currentReverseIdx === idx || isCalculating.current) return;
+      if (currentReverseIdx === idx || isCalculating) return;
 
-      isCalculating.current = true;
+      setIsCalculating(true);
       const controller = historyController({ fromIdx: currentReverseIdx, toIdx: idx });
 
-      controller.finally(() => (isCalculating.current = false));
+      controller.finally(() => {
+        setIsCalculating(false);
+      });
     },
-    [currentReverseIdx, historyController]
+    [currentReverseIdx, historyController, isCalculating]
   );
 
   return (
