@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentReverseIdxState, historyDataListState, historyMovingSpeedState } from 'recoil/history';
+import { currentReverseIdxState, historyDataListState, historyMovingSpeedState, isHistoryCalculatingState } from 'recoil/history';
 import { historyMapDataState } from 'recoil/mindmap';
 import { IHistoryData } from 'types/history';
 import { restoreHistory } from 'utils/historyHandler';
@@ -43,6 +43,7 @@ const useHistoryController = () => {
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const [historyDataList, setHistoryDataList] = useRecoilState(historyDataListState);
   const setCurrentReverseIdx = useSetRecoilState(currentReverseIdxState);
+  const setIsCalculating = useSetRecoilState(isHistoryCalculatingState);
   const time = useRecoilValue(historyMovingSpeedState);
   const intervalId = useRef<NodeJS.Timer | null>(null);
 
@@ -52,7 +53,7 @@ const useHistoryController = () => {
       restoreHistory(params);
       setCurrentReverseIdx(fromIdx + idx);
     },
-    [historyDataList]
+    [historyDataList, historyMapData]
   );
 
   const handleMoveBackward = useCallback(
@@ -61,7 +62,7 @@ const useHistoryController = () => {
       restoreHistory(params);
       setCurrentReverseIdx(fromIdx - idx);
     },
-    [historyDataList]
+    [historyDataList, historyMapData]
   );
 
   const historyController = useCallback(
@@ -77,7 +78,7 @@ const useHistoryController = () => {
         return restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1, time);
       }
     },
-    [handleMoveForward, handleMoveBackward, time]
+    [handleMoveForward, handleMoveBackward, time, historyDataList]
   );
 
   const getOldestHistory = useCallback(
@@ -88,7 +89,7 @@ const useHistoryController = () => {
 
       stopHistories.forEach((historyData, idx) => handleMoveBackward({ historyData, idx, fromIdx: fromIdx - 1 }));
     },
-    [handleMoveBackward]
+    [historyDataList, handleMoveBackward]
   );
 
   const getYoungestHistory = useCallback(
@@ -98,22 +99,27 @@ const useHistoryController = () => {
 
       stopHistories.forEach((historyData, idx) => handleMoveForward({ historyData, idx, fromIdx: fromIdx + 1 }));
     },
-    [handleMoveForward]
+    [historyDataList, handleMoveForward]
   );
 
   const playHistories = useCallback(
-    (fromIdx: number) => {
+    (fromIdx: number, setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>) => {
       let idx = 1;
 
       intervalId.current = setInterval(() => {
-        if (fromIdx + idx === 0) return clearInterval(intervalId.current!);
+        if (fromIdx + idx === 0) {
+          setIsPlaying(false);
+          setIsCalculating(false);
+          clearInterval(intervalId.current!);
+          return;
+        }
 
         const historyData = historyDataList.at(fromIdx + idx)!;
         handleMoveForward({ historyData, idx, fromIdx });
         idx++;
       }, time);
     },
-    [historyDataList, intervalId.current, handleMoveForward, time]
+    [historyDataList, intervalId.current, handleMoveForward, time, setIsCalculating]
   );
 
   const stopHistories = useCallback(() => {

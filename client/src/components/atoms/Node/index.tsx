@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { TStatus } from 'types/event';
 import { Levels, levelToIdx } from 'utils/helpers';

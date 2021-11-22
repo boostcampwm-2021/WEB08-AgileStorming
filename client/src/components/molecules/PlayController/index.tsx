@@ -1,8 +1,8 @@
 import useHistoryController from 'hooks/useHistoryController';
 import { backwardBtn, playBtn, forwardBtn, pauseBtn } from 'img';
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { currentReverseIdxState } from 'recoil/history';
+import { useCallback, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentReverseIdxState, isHistoryCalculatingState } from 'recoil/history';
 import { IconButton } from '..';
 import { Wrapper } from './style';
 
@@ -10,14 +10,27 @@ const PlayController = () => {
   const currentReverseIdx = useRecoilValue(currentReverseIdxState);
   const { getOldestHistory, getYoungestHistory, playHistories, stopHistories } = useHistoryController();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isCalculating, setIsCalculating] = useRecoilState(isHistoryCalculatingState);
 
-  const handleBackwardBtnClick = () => getOldestHistory(currentReverseIdx);
-  const handleForwardBtnClick = () => getYoungestHistory(currentReverseIdx);
-  const handlePlayBtnClick = () => {
-    playHistories(currentReverseIdx);
+  const handleBackwardBtnClick = useCallback(() => {
+    if (isCalculating) return;
+    getOldestHistory(currentReverseIdx);
+  }, [isCalculating, getOldestHistory]);
+
+  const handleForwardBtnClick = useCallback(() => {
+    if (isCalculating) return;
+    getYoungestHistory(currentReverseIdx);
+  }, [isCalculating, getYoungestHistory]);
+
+  const handlePlayBtnClick = useCallback(() => {
+    if (isCalculating) return;
+    setIsCalculating(true);
+    playHistories(currentReverseIdx, setIsPlaying);
     setIsPlaying(true);
-  };
+  }, [isCalculating, currentReverseIdx, playHistories]);
+
   const handleStopBtnClick = () => {
+    setIsCalculating(false);
     stopHistories();
     setIsPlaying(false);
   };
