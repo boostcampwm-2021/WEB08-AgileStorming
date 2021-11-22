@@ -25,3 +25,14 @@ export const StyledCardInfoRight = styled.div`
     display: none;
   }
 `;
+
+export const StyledTaskTitle = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.large};
+  font-weight: bold;
+  color: ${({ theme }) => theme.color.black};
+  line-height: 1.2;
+  :hover {
+    cursor: pointer;
+    color: ${({ theme }) => theme.color.primary1};
+  }
+`;

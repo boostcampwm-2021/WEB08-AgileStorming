@@ -2,25 +2,25 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { labelListState, sprintListState, userListState } from 'recoil/project';
 import { IMindNode } from 'types/mindmap';
-import { Title, SmallText, UserIcon, Wrapper } from 'components/atoms';
+import { SmallText, UserIcon, Wrapper } from 'components/atoms';
 import { LabelIcon, TaskInfo } from 'components/molecules';
-import { StyledTaskCard, StyledCardInfoLeft, StyledCardInfoRight } from './style';
+import { StyledTaskCard, StyledCardInfoLeft, StyledCardInfoRight, StyledTaskTitle } from './style';
 
 interface IProps {
   taskInfo: IMindNode;
-  onDoubleClickTask: (event: React.MouseEvent<HTMLElement>) => void;
+  setSelectedNodeIdTask: (event: React.MouseEvent<HTMLElement>) => void;
   onMouseDownTask: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-const TaskCard: React.FC<IProps> = ({ taskInfo, onDoubleClickTask, onMouseDownTask }) => {
+const TaskCard: React.FC<IProps> = ({ taskInfo, setSelectedNodeIdTask, onMouseDownTask }) => {
   const userList = useRecoilValue(userListState)!;
   const sprintList = useRecoilValue(sprintListState)!;
   const labelList = useRecoilValue(labelListState)!;
   const user = taskInfo.assigneeId ? userList[taskInfo.assigneeId] : undefined;
 
   return (
-    <StyledTaskCard onDoubleClick={onDoubleClickTask} onMouseDown={onMouseDownTask}>
-      <Title titleStyle={'normal'}>{taskInfo.content}</Title>
+    <StyledTaskCard onDoubleClick={setSelectedNodeIdTask} onMouseDown={onMouseDownTask}>
+      <StyledTaskTitle onClick={setSelectedNodeIdTask}>{taskInfo.content}</StyledTaskTitle>
       <Wrapper flex={'row'}>
         <StyledCardInfoLeft>
           <TaskInfo title={'담당자: '} content={user ? user.name : ''}>

@@ -61,19 +61,25 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status, user }) => {
   const { updateTaskInformation } = useHistoryEmitter();
   const { showMessage } = useToast();
 
-  const handleOnDoubleClickTask = (nodeId: number) => {
-    setSelectedNodeId(nodeId);
+  let mousedownFired = false;
+  const setSelectedNodeIdTask = (nodeId: number) => {
+    if (mousedownFired) {
+      mousedownFired = false;
+      setSelectedNodeId(nodeId);
+      return;
+    }
   };
   let clicks = 0;
   let dragTimeOut: NodeJS.Timeout;
   const handleMouseDown = (e: React.MouseEvent<HTMLElement>, nodeId: number) => {
     e.preventDefault();
+    mousedownFired = true;
     const { currentTarget } = e;
     clicks++;
     if (clicks === 1) {
       dragTimeOut = setTimeout(() => {
         clicks = 0;
-        onDragStart(e, currentTarget, nodeId);
+        if (mousedownFired) onDragStart(e, currentTarget, nodeId);
       }, 200);
     }
     if (clicks === 2) {
@@ -127,7 +133,7 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status, user }) => {
         <TaskCard
           key={task.nodeId}
           taskInfo={task}
-          onDoubleClickTask={() => handleOnDoubleClickTask(task.nodeId)}
+          setSelectedNodeIdTask={() => setSelectedNodeIdTask(task.nodeId)}
           onMouseDownTask={(e: React.MouseEvent<HTMLElement>) => handleMouseDown(e, task.nodeId)}
         ></TaskCard>
       ))}
