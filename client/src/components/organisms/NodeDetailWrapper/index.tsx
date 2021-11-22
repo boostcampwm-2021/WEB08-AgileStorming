@@ -145,7 +145,7 @@ export const NodeDetailWrapper = () => {
                 id='sprint'
                 key={selectedNode.sprintId}
                 items={sprintDropdownItem}
-                placeholder={selectedNode.sprintId ? sprintList[selectedNode.sprintId].name : ''}
+                placeholder={selectedNode.sprintId && sprintList[selectedNode.sprintId] ? sprintList[selectedNode.sprintId].name : ''}
                 onValueChange={handleChangeNodeDetail('sprintId')}
                 dropdownStyle='small'
                 margin='0.1rem 0'

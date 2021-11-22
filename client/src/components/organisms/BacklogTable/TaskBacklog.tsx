@@ -20,7 +20,7 @@ const StoryBacklog: React.FC<IProps> = ({ task }) => {
   const taskRowData = [
     `${task.nodeId}`,
     `${task.content}`,
-    task.sprintId ? (
+    task.sprintId && sprintList[task.sprintId] ? (
       <>
         <ColorIcon key={task.nodeId} color={sprintList[task.sprintId].color} />
         {sprintList[task.sprintId].name}

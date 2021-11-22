@@ -32,7 +32,10 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, setSelectedNodeIdTask, onMouseDo
           ))}
         </StyledCardInfoLeft>
         <StyledCardInfoRight>
-          <TaskInfo title={'스프린트: '} content={taskInfo.sprintId ? sprintList[taskInfo.sprintId].name : ''}></TaskInfo>
+          <TaskInfo
+            title={'스프린트: '}
+            content={taskInfo.sprintId && sprintList[taskInfo.sprintId] ? sprintList[taskInfo.sprintId].name : ''}
+          ></TaskInfo>
           <TaskInfo title={'예상 소요 시간: '} content={taskInfo.estimatedTime ?? ''}>
             {taskInfo.estimatedTime ? (
               <SmallText color={'black'} margin={'0 0 0 3px'}>

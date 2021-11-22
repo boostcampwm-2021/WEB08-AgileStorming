@@ -9,6 +9,9 @@ export interface IProps {
 }
 
 const LabelIcon: React.FC<IProps> = ({ label, active = true, onClick = () => {} }) => {
+  if (!label) {
+    return null;
+  }
   return (
     <StyledLabelIcon label={label} active={active} onClick={onClick}>
       {label.name}
