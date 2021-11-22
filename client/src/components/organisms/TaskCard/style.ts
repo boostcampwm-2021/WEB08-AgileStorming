@@ -29,7 +29,7 @@ export const StyledCardInfoRight = styled.div`
 export const StyledTaskTitle = styled.div`
   font-size: ${({ theme }) => theme.fontSize.large};
   font-weight: bold;
-  color: ${({ theme }) => theme.color.black};
+  color: ${({ theme }) => theme.color.primary2};
   line-height: 1.2;
   :hover {
     cursor: pointer;

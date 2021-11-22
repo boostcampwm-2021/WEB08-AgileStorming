@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, useRef } from 'react';
 import styled from '@emotion/styled';
 import { IMindNode } from 'types/mindmap';
 import { TaskCard } from 'components/organisms';
@@ -8,6 +8,9 @@ import { mindmapState } from 'recoil/mindmap';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import useToast from 'hooks/useToast';
 import { IUser } from 'types/user';
+import useModal from 'hooks/useModal';
+import { TStatus, TTask } from 'types/event';
+import { isNumber } from 'utils/form';
 
 const StyledTaskCardContainer = styled.div`
   ${(props) => props.theme.flex.column}
@@ -60,31 +63,32 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status, user }) => {
   const { mindNodes } = useRecoilValue(mindmapState);
   const { updateTaskInformation } = useHistoryEmitter();
   const { showMessage } = useToast();
-
-  let mousedownFired = false;
+  const { showModal, hideModal } = useModal();
+  const finishedTime = useRef('');
+  const mousedownFired = useRef(false);
+  const clicks = useRef(0);
+  const dragTimeOut = useRef<NodeJS.Timeout | null>(null);
   const setSelectedNodeIdTask = (nodeId: number) => {
     if (mousedownFired) {
-      mousedownFired = false;
+      mousedownFired.current = false;
       setSelectedNodeId(nodeId);
       return;
     }
   };
-  let clicks = 0;
-  let dragTimeOut: NodeJS.Timeout;
   const handleMouseDown = (e: React.MouseEvent<HTMLElement>, nodeId: number) => {
     e.preventDefault();
-    mousedownFired = true;
+    mousedownFired.current = true;
     const { currentTarget } = e;
-    clicks++;
-    if (clicks === 1) {
-      dragTimeOut = setTimeout(() => {
-        clicks = 0;
-        if (mousedownFired) onDragStart(e, currentTarget, nodeId);
+    clicks.current++;
+    if (clicks.current === 1) {
+      dragTimeOut.current = setTimeout(() => {
+        clicks.current = 0;
+        if (mousedownFired.current) onDragStart(e, currentTarget, nodeId);
       }, 200);
     }
-    if (clicks === 2) {
-      clearTimeout(dragTimeOut);
-      clicks = 0;
+    if (clicks.current === 2) {
+      clearTimeout(dragTimeOut.current!);
+      clicks.current = 0;
     }
   };
   const moveAt = (clone: HTMLElement, pageX: number, pageY: number) => {
@@ -100,12 +104,7 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status, user }) => {
     const container = elemBelow.closest('.CardContainer')! as HTMLDivElement;
     const currentTask = mindNodes.get(nodeId)!;
     if (container && currentTask.status !== container.dataset.status) {
-      updateTaskInformation({
-        nodeFrom: nodeId,
-        nodeTo: nodeId,
-        dataFrom: { changed: { status: currentTask.status } },
-        dataTo: { changed: { status: container.dataset.status as 'To Do' | 'In Progress' | 'Done' } },
-      });
+      changeTaskStatus(nodeId, currentTask.status, container.dataset.status as 'To Do' | 'In Progress' | 'Done');
     }
     document.removeEventListener('mousemove', mouseMove);
     clone.remove();
@@ -124,6 +123,61 @@ const TaskCardContainer: React.FC<IProps> = ({ taskList, status, user }) => {
     const mouseMove = (event: MouseEvent) => onMouseMove(clone, event);
     document.addEventListener('mousemove', mouseMove);
     clone.addEventListener('mouseup', (event: MouseEvent) => onMouseUp(clone, nodeId, mouseMove, event));
+  };
+  const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!isNumber(event.target.value)) {
+      finishedTime.current = '';
+      showMessage('숫자만 입력하세요. 단위는 시(hour)입니다.');
+      return;
+    }
+    finishedTime.current = event.target.value;
+  };
+  const handleClickSubmitButton = (nodeId: number, statusBefore: TStatus | undefined, changed: TTask) => {
+    if (!finishedTime.current) {
+      showMessage('올바르지 않은 입력값입니다.');
+      return;
+    }
+    changed.startDate = undefined;
+    changed.finishedTime = finishedTime.current;
+    changed.endDate = new Date().toISOString().split('T')[0];
+    updateTaskInformation({
+      nodeFrom: nodeId,
+      nodeTo: nodeId,
+      dataFrom: { changed: { status: statusBefore } },
+      dataTo: { changed },
+    });
+    hideModal();
+    return;
+  };
+  const changeTaskStatus = (nodeId: number, statusBefore: TStatus | undefined, statusAfter: TStatus) => {
+    const changed: TTask = {
+      status: statusAfter,
+      finishedTime: null,
+      startDate: null,
+      endDate: null,
+    };
+    if (statusAfter === 'Done') {
+      showModal({
+        modalType: 'textInputModal',
+        modalProps: {
+          title: 'Task 완료 시간 입력',
+          text: 'Task를 완료하는데 걸린 시간을 입력해주세요',
+          placeholder: '시간',
+          onChangeInput: handleChangeInput,
+          onClickSubmitButton: () => handleClickSubmitButton(nodeId, statusBefore, changed),
+        },
+      });
+      return;
+    }
+    if (statusAfter === 'In Progress') {
+      changed.startDate = new Date().toISOString().split('T')[0];
+    }
+    updateTaskInformation({
+      nodeFrom: nodeId,
+      nodeTo: nodeId,
+      dataFrom: { changed: { status: statusBefore } },
+      dataTo: { changed },
+    });
   };
 
   return (
