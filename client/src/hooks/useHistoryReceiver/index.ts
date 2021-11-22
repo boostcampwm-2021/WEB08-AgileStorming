@@ -1,5 +1,5 @@
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
-import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
+import { getNextMapState, mindmapState } from 'recoil/mindmap';
 import { labelListState, sprintListState } from 'recoil/project';
 import {
   INonHistoryEventData,
@@ -47,12 +47,10 @@ const addNode = ({ data, mindNodes, parentId, newId }: IAddNodeProps) => {
   const level = getChildLevel(parent!.level);
 
   const newNode = { content, level, nodeId: newId, children: [] };
-  const newChildren = [...parent!.children.filter((childId) => childId !== TEMP_NODE_ID), newId];
-  const newParent = { ...parent!, children: newChildren };
+  const newParent = { ...parent!, children: [...parent!.children, newId] };
 
   mindNodes.set(newId, newNode);
   mindNodes.set(parentId, newParent);
-  mindNodes.delete(TEMP_NODE_ID);
 };
 
 const updateNodeParent = ({ nextMapState: { mindNodes }, oldParentId, newParentId, data: { nodeId } }: IUpdateNodeParent) => {

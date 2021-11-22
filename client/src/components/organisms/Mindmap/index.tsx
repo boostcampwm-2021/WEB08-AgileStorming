@@ -1,6 +1,6 @@
 import React from 'react';
 import MindmapTree from 'components/organisms/MindmapTree';
-import { getNextMapState } from 'recoil/mindmap';
+import { getNextMapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import useDragNode from 'hooks/useDragNode';
 import { getRegexNumber, levelToIdx } from 'utils/helpers';
@@ -101,6 +101,7 @@ const getNodeInfo = (nodeInfos: INodeInfos, nodeId: number, mindNodes: IMindNode
   const node = mindNodes.get(nodeId)!;
   let [maxChildDepth, finishedChildNum] = [0, 0];
   node?.children.forEach((childId) => {
+    if (childId === TEMP_NODE_ID) return;
     getNodeInfo(nodeInfos, childId, mindNodes);
     const { depth, isFinished } = nodeInfos.get(childId)!;
     maxChildDepth = Math.max(maxChildDepth, depth);
