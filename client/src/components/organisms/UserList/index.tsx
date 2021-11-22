@@ -31,7 +31,6 @@ export const UserList = () => {
   const [isUserListOpen, setUserListOpen] = useState(false);
   const [mouseOverUser, setMouseOverUser] = useRecoilState(userMouseOverState);
   const userList = useRecoilValue(userListCurrentUserTopState)!;
-  console.log(userList);
   const connectedUsers = useRecoilValue(connectedUserState);
   const { showMessage } = useToast();
 
