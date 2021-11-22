@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil';
 import { mindmapNodesState } from 'recoil/mindmap';
+import { userState } from 'recoil/user';
 import { ILabel } from 'types/label';
 import { IMindNode } from 'types/mindmap';
 import { ISprint } from 'types/sprint';
@@ -43,6 +44,11 @@ const sprintFilterState = atom<number | null>({
 const labelFilterState = atom<number | null>({
   key: 'labelFilter',
   default: null,
+});
+
+const userMouseOverState = atom<string>({
+  key: 'userMouseOver',
+  default: '',
 });
 
 const filteredTaskState = selector<Record<number, IMindNode>>({
@@ -93,6 +99,38 @@ const filteredTaskTimeState = selector<{ totalEstimatedTime: number; totalUsedTi
   },
 });
 
+const filteredUserInProgressTaskState = selector<IMindNode[]>({
+  key: 'filteredUserInProgressTaskState',
+  get: ({ get }) => {
+    const nodes = get(mindmapNodesState);
+    const mouseOverUser = get(userMouseOverState);
+    return Array.from(nodes.values()).filter((node) => {
+      if (node.level !== 'TASK') {
+        return false;
+      }
+      if (node.assigneeId !== mouseOverUser) {
+        return false;
+      }
+      if (node.status !== 'In Progress') {
+        return false;
+      }
+      return true;
+    });
+  },
+});
+
+const userListCurrentUserTopState = selector<Array<IUser>>({
+  key: 'userListCurrentUserTopState',
+  get: ({ get }) => {
+    const userList = get(userListState);
+    const user = get(userState);
+    if (!user) {
+      return Object.values(userList);
+    }
+    return [user, ...Object.values(userList).filter((users) => users.id !== user.id)];
+  },
+});
+
 export {
   projectIdState,
   sprintListState,
@@ -102,6 +140,9 @@ export {
   assigneeFilterState,
   sprintFilterState,
   labelFilterState,
+  userMouseOverState,
   filteredTaskState,
   filteredTaskTimeState,
+  filteredUserInProgressTaskState,
+  userListCurrentUserTopState,
 };

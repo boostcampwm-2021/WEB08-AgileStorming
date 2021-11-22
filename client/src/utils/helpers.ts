@@ -123,7 +123,7 @@ export {
   getType,
   getGap,
   getCurrentCoord,
-  QuarterSpace as QUATER_SPACE,
+  QuarterSpace as QUARTER_SPACE,
   getDrawShape,
   getId,
   pxToNum,

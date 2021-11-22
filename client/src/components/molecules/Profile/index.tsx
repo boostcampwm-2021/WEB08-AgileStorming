@@ -1,16 +1,16 @@
-import { Title, UserIcon } from 'components/atoms';
+import { Title, UserIcon, Wrapper } from 'components/atoms';
 import { IUser } from 'types/user';
-import { Wrapper } from './style';
 
 interface IProps {
   user: IUser;
+  color?: 'white' | 'black';
 }
 
-const Profile: React.FC<IProps> = ({ user }) => {
+const Profile: React.FC<IProps> = ({ user, color = 'white' }) => {
   return (
-    <Wrapper>
+    <Wrapper flex={'rowCenter'}>
       <UserIcon user={user} />
-      <Title titleStyle='xlarge' color='white' margin='3px 0 3px 10px'>
+      <Title titleStyle='xlarge' color={color} margin='3px 0 3px 10px'>
         {user.name}
       </Title>
     </Wrapper>

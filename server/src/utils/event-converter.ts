@@ -2,7 +2,6 @@ import { createNode, updateNode, updateNodeParent, deleteNode } from '../service
 import { deleteChildTasks, deleteTask, updateTask } from '../services/task';
 import { createSprint, deleteSprint } from '../services/sprint';
 import { createLabel, deleteLabel } from '../services/label';
-import { createComment, deleteComment } from '../services/comment';
 import * as eventType from './event-type';
 
 enum EventArgs {
@@ -61,9 +60,6 @@ const eventFunction = (): Record<eventType.TEventType, TEventFunction> => {
       const { id, name, color } = await createLabel(project, data as eventType.TAddLabel);
       return JSON.stringify({ id, name, color });
     },
-    ADD_COMMENT: (data) => {
-      return createComment(data as eventType.TAddComment);
-    },
     DELETE_SPRINT: (data) => {
       const { sprintId } = data as eventType.TDeleteSprint;
       console.log(sprintId);
@@ -73,11 +69,6 @@ const eventFunction = (): Record<eventType.TEventType, TEventFunction> => {
     DELETE_LABEL: (data) => {
       const { labelId } = data as eventType.TDeleteLabel;
       deleteLabel(labelId);
-      return;
-    },
-    DELETE_COMMENT: (data) => {
-      const { commentId } = data as eventType.TDeleteComment;
-      deleteComment(commentId);
       return;
     },
   };

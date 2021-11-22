@@ -17,6 +17,7 @@ export const StyledTitle = styled.div<IStyleProps>`
   margin: ${({ margin }) => margin};
   font-weight: bold;
   line-height: ${({ lineHeight }) => lineHeight ?? 1.2};
+  cursor: default;
 `;
 
 const styleOptions: { [key in TStyle]: string } = {
