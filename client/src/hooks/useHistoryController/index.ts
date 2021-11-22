@@ -53,7 +53,7 @@ const useHistoryController = () => {
       restoreHistory(params);
       setCurrentReverseIdx(fromIdx + idx);
     },
-    [historyDataList]
+    [historyDataList, historyMapData]
   );
 
   const handleMoveBackward = useCallback(
@@ -62,7 +62,7 @@ const useHistoryController = () => {
       restoreHistory(params);
       setCurrentReverseIdx(fromIdx - idx);
     },
-    [historyDataList]
+    [historyDataList, historyMapData]
   );
 
   const historyController = useCallback(
@@ -78,7 +78,7 @@ const useHistoryController = () => {
         return restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1, time);
       }
     },
-    [handleMoveForward, handleMoveBackward, time]
+    [handleMoveForward, handleMoveBackward, time, historyDataList]
   );
 
   const getOldestHistory = useCallback(
@@ -89,7 +89,7 @@ const useHistoryController = () => {
 
       stopHistories.forEach((historyData, idx) => handleMoveBackward({ historyData, idx, fromIdx: fromIdx - 1 }));
     },
-    [handleMoveBackward]
+    [historyDataList, handleMoveBackward]
   );
 
   const getYoungestHistory = useCallback(
@@ -99,7 +99,7 @@ const useHistoryController = () => {
 
       stopHistories.forEach((historyData, idx) => handleMoveForward({ historyData, idx, fromIdx: fromIdx + 1 }));
     },
-    [handleMoveForward]
+    [historyDataList, handleMoveForward]
   );
 
   const playHistories = useCallback(
@@ -119,7 +119,7 @@ const useHistoryController = () => {
         idx++;
       }, time);
     },
-    [historyDataList, intervalId.current, handleMoveForward, time]
+    [historyDataList, intervalId.current, handleMoveForward, time, setIsCalculating]
   );
 
   const stopHistories = useCallback(() => {

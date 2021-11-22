@@ -15,19 +15,19 @@ const PlayController = () => {
   const handleBackwardBtnClick = useCallback(() => {
     if (isCalculating) return;
     getOldestHistory(currentReverseIdx);
-  }, [isCalculating]);
+  }, [isCalculating, getOldestHistory]);
 
   const handleForwardBtnClick = useCallback(() => {
     if (isCalculating) return;
     getYoungestHistory(currentReverseIdx);
-  }, [isCalculating]);
+  }, [isCalculating, getYoungestHistory]);
 
   const handlePlayBtnClick = useCallback(() => {
     if (isCalculating) return;
     setIsCalculating(true);
     playHistories(currentReverseIdx, setIsPlaying);
     setIsPlaying(true);
-  }, [isCalculating, currentReverseIdx]);
+  }, [isCalculating, currentReverseIdx, playHistories]);
 
   const handleStopBtnClick = () => {
     setIsCalculating(false);

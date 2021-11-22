@@ -155,7 +155,7 @@ const deleteNode = ({ historyData, historyMap, setHistoryDataList }: IDeleteNode
     const newHistory = { ...historyData!, data: { ...historyData.data, dataTo: newDataTo } };
 
     setHistoryDataList!((prevList) => {
-      const newList = [...prevList!];
+      const newList = [...prevList];
       const index = newList.findIndex((d) => d.historyId === newHistory.historyId);
       newList.splice(index, 1, newHistory as IHistoryData);
       return newList;

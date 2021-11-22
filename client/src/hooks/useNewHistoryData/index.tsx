@@ -20,8 +20,8 @@ const useNewHistoryData = () => {
         const historyRowData = await API.history.get(projectId, rangeFrom);
         if (!historyRowData.length) return showMessage('더이상 가져올 히스토리가 없습니다.');
 
-        const historyData: IHistoryData[] = historyRowData.map((data: THistoryRowData) => parseHistory(data)).reverse();
-        setHistoryDataList((prev: IHistoryData[]) => [...historyData, ...prev]);
+        const newHistoryDataList: IHistoryData[] = historyRowData.map((data: THistoryRowData) => parseHistory(data)).reverse();
+        setHistoryDataList((prev: IHistoryData[]) => [...newHistoryDataList, ...prev]);
       } catch (err) {
         console.log(err);
         showMessage('히스토리를 가져오지 못했습니다.');
@@ -35,7 +35,7 @@ const useNewHistoryData = () => {
     const rangeFrom = '(' + currentHistoryData?.streamId;
 
     getNewHistoryData(rangeFrom);
-  }, [historyDataList]);
+  }, [historyDataList, getNewHistoryData]);
 
   return { getNewHistoryData, getMoreHistoryData };
 };
