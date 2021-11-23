@@ -11,6 +11,8 @@ const getTodayDate = () => {
 
 const isSameDate = (A: IDate, B: IDate) => A.year === B.year && A.month === B.month && A.date === B.date;
 
+const makeISODate = ({ year, month, date }: IDate) => `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
+
 const getTodayISODate = () => new Date().toISOString().slice(0, 10);
 
 const parseISODate = (ISODate: string) => {
@@ -28,4 +30,4 @@ const getPrevMonthISODate = (ISODate: string) => {
   return new Date(year, month - 1).toISOString().slice(0, 10);
 };
 
-export { getTodayDate, isSameDate, getTodayISODate, parseISODate, getNextMonthISODate, getPrevMonthISODate };
+export { getTodayDate, isSameDate, makeISODate, getTodayISODate, parseISODate, getNextMonthISODate, getPrevMonthISODate };
