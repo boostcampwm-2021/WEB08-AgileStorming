@@ -53,14 +53,8 @@ const useHistoryEmitter = () => {
   const deleteNode = ({ nodeFrom, dataFrom }: THistoryEventData) =>
     historyEmitter({ type: 'DELETE_NODE', payload: { nodeFrom, dataFrom } });
 
-  const moveNode = ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) =>
-    historyEmitter({ type: 'MOVE_NODE', payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
-
   const updateNodeParent = ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) =>
     historyEmitter({ type: 'UPDATE_NODE_PARENT', payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
-
-  const updateNodeSibling = ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) =>
-    historyEmitter({ type: 'UPDATE_NODE_SIBLING', payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
 
   const updateNodeContent = ({ nodeFrom, dataFrom, dataTo }: THistoryEventData) =>
     historyEmitter({ type: 'UPDATE_NODE_CONTENT', payload: { nodeFrom, dataFrom, dataTo } });
@@ -78,9 +72,7 @@ const useHistoryEmitter = () => {
   return {
     addNode,
     deleteNode,
-    moveNode,
     updateNodeParent,
-    updateNodeSibling,
     updateNodeContent,
     updateTaskInformation,
     addLabel,

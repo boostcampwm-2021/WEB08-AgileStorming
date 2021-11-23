@@ -6,8 +6,6 @@ interface INode {
   level?: string;
   label?: string;
   content?: string;
-  posX?: string;
-  posY?: string;
   children?: string;
 }
 

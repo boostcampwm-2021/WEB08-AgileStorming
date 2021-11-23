@@ -23,20 +23,11 @@ const historyEventFunction = (): Record<eventType.THistoryEventType, THistoryEve
       deleteNode(nodeFrom, (dataFrom as eventType.TDeleteNodeData).nodeId);
       return;
     },
-    MOVE_NODE: ({ nodeTo, dataTo }) => {
-      updateNode(nodeTo, dataTo as eventType.TMoveNodeData);
-      return;
-    },
     UPDATE_NODE_PARENT: ({ nodeFrom, nodeTo, dataTo }) => {
       const { nodeId, nodeType, nodeParentType } = dataTo as eventType.TUpdateNodeParent;
       updateNodeParent(nodeFrom, nodeTo, nodeId);
       if (nodeType === 'TASK' && nodeParentType !== 'STORY') deleteTask(nodeId);
       if (nodeType === 'STORY' && nodeParentType !== 'EPIC') deleteChildTasks(nodeId);
-      return;
-    },
-    UPDATE_NODE_SIBLING: ({ dataTo }) => {
-      const { parentId, children } = dataTo as eventType.TUpdateNodeSibling;
-      updateNode(parentId, { children: JSON.stringify(children) });
       return;
     },
     UPDATE_NODE_CONTENT: ({ nodeFrom, dataTo }) => {

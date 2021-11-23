@@ -9,23 +9,12 @@ export interface TDeleteNodeData extends TTask {
   children: Array<number>;
   backlogId?: string;
   createdAt?: string;
-  comment?: [];
-  posX?: string;
-  posY?: string;
   sideEffect: [];
 }
-export type TMoveNodeData = {
-  posX?: string;
-  posY?: string;
-};
 export type TUpdateNodeParent = {
   nodeId: number;
   nodeType: 'EPIC' | 'STORY' | 'TASK';
   nodeParentType: 'ROOT' | 'EPIC' | 'STORY';
-};
-export type TUpdateNodeSibling = {
-  parentId: number;
-  children: number[];
 };
 export type TUpdateNodeContent = {
   content: string;
@@ -61,19 +50,12 @@ export type TDeleteLabel = {
   labelId: number;
 };
 
-export type THistoryEventType =
-  | 'ADD_NODE'
-  | 'DELETE_NODE'
-  | 'MOVE_NODE'
-  | 'UPDATE_NODE_PARENT'
-  | 'UPDATE_NODE_SIBLING'
-  | 'UPDATE_NODE_CONTENT'
-  | 'UPDATE_TASK_INFORMATION';
+export type THistoryEventType = 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_PARENT' | 'UPDATE_NODE_CONTENT' | 'UPDATE_TASK_INFORMATION';
 export type THistoryEventData = {
   nodeFrom: number | null;
   nodeTo: number | null;
-  dataFrom: TDeleteNodeData | TMoveNodeData | TUpdateNodeParent | TUpdateNodeSibling | TUpdateNodeContent | TUpdateTaskInformation | null;
-  dataTo: TAddNodeData | TMoveNodeData | TUpdateNodeParent | TUpdateNodeSibling | TUpdateNodeContent | TUpdateTaskInformation | null;
+  dataFrom: TDeleteNodeData | TUpdateNodeParent | TUpdateNodeContent | TUpdateTaskInformation | null;
+  dataTo: TAddNodeData | TUpdateNodeParent | TUpdateNodeContent | TUpdateTaskInformation | null;
 };
 
 export type TEventType = 'ADD_SPRINT' | 'ADD_LABEL' | 'DELETE_SPRINT' | 'DELETE_LABEL';

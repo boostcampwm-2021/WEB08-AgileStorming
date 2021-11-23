@@ -2,7 +2,7 @@ import { SetterOrUpdater } from 'recoil';
 import { getNextMapState } from 'recoil/mindmap';
 import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
 import { IHistoryData } from 'types/history';
-import { TAddNodeData, TDeleteNodeData, TMoveNodeData, TUpdateNodeParent, TUpdateNodeSibling, TUpdateTaskInformation } from 'types/event';
+import { TAddNodeData, TDeleteNodeData, TUpdateNodeParent, TUpdateTaskInformation } from 'types/event';
 
 interface IParams {
   historyData: IHistoryData;
@@ -27,10 +27,6 @@ export const restoreHistory = (params: IParams) => {
       if (isForward) deleteNode({ historyData, historyMap });
       else addNode({ historyMap, parentId: nodeFrom!, dataFrom: dataFrom as TDeleteNodeData, dataTo: dataTo as IMindNode });
       break;
-    case 'MOVE_NODE':
-      if (isForward) moveNode({ data: historyData.data.dataTo as TMoveNodeData, id: historyData.data.nodeFrom!, historyMap });
-      else moveNode({ data: historyData.data.dataFrom as TMoveNodeData, id: historyData.data.nodeFrom!, historyMap });
-      break;
     case 'UPDATE_NODE_CONTENT':
       updateNodeContent({
         historyData,
@@ -53,10 +49,6 @@ export const restoreHistory = (params: IParams) => {
           data: historyData.data.dataFrom as TUpdateNodeParent,
           historyMap,
         });
-      break;
-    case 'UPDATE_NODE_SIBLING':
-      if (isForward) updateNodeSibling({ data: historyData.data.dataTo as TUpdateNodeSibling, historyMap });
-      else updateNodeSibling({ data: historyData.data.dataFrom as TUpdateNodeSibling, historyMap });
       break;
     case 'UPDATE_TASK_INFORMATION':
       if (isForward)
@@ -107,20 +99,6 @@ const updateNodeContent = ({ historyData, historyMap, isForward }: IUpdateNodeCo
   historyMap.set(id!, { ...node, ...(isForward ? dataTo : dataFrom) });
 };
 
-interface IMoveNodeParams {
-  data: TMoveNodeData;
-  id: number;
-  historyMap: IMindNodes;
-}
-
-const moveNode = ({ data, id, historyMap }: IMoveNodeParams) => {
-  const node = historyMap.get(id);
-  node!.posX = data.posX;
-  node!.posY = data.posY;
-
-  historyMap.set(id, node!);
-};
-
 interface IDeleteNodeParams {
   historyData: IHistoryData;
   historyMap: IMindNodes;
@@ -168,19 +146,6 @@ const updateNodeParent = ({ from, to, data, historyMap }: IUpdateNodeParentParam
 
   historyMap.set(from, fromNode);
   historyMap.set(to, toNode);
-};
-
-interface IUpdateNodeSiblingParams {
-  data: TUpdateNodeSibling;
-  historyMap: IMindNodes;
-}
-
-const updateNodeSibling = ({ data, historyMap }: IUpdateNodeSiblingParams) => {
-  const { parentId, children } = data;
-  const parent = historyMap.get(parentId)!;
-
-  parent.children = children;
-  historyMap.set(parentId, parent);
 };
 
 interface IUpdateNodeInformationParams {

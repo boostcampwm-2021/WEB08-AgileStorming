@@ -47,8 +47,6 @@ export const createProject = async (name: string, creator: string) => {
   const rootId = await createNode(newProject.id, null, {
     level: 'ROOT',
     content: name,
-    posX: '0',
-    posY: '0',
     children: JSON.stringify([]),
   });
   newProject.rootId = rootId;

@@ -1,4 +1,3 @@
-import { Levels } from 'utils/helpers';
 import { ILabel } from './label';
 import { IMindNode } from './mindmap';
 import { ISprint } from './sprint';
@@ -12,18 +11,10 @@ export type TStatus = 'To Do' | 'In Progress' | 'Done';
 export interface TDeleteNodeData extends IMindNode {
   sideEffect: Array<IMindNode>;
 }
-export type TMoveNodeData = {
-  posX?: string;
-  posY?: string;
-};
 export type TUpdateNodeParent = {
   nodeId: number;
   nodeType: 'EPIC' | 'STORY' | 'TASK';
   nodeParentType: 'ROOT' | 'EPIC' | 'STORY';
-};
-export type TUpdateNodeSibling = {
-  parentId: number;
-  children: number[];
 };
 export type TUpdateNodeContent = {
   content: string;
@@ -67,19 +58,12 @@ export type TDeleteComment = {
   commentId: number;
 };
 
-export type THistoryEventType =
-  | 'ADD_NODE'
-  | 'DELETE_NODE'
-  | 'MOVE_NODE'
-  | 'UPDATE_NODE_PARENT'
-  | 'UPDATE_NODE_SIBLING'
-  | 'UPDATE_NODE_CONTENT'
-  | 'UPDATE_TASK_INFORMATION';
+export type THistoryEventType = 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_PARENT' | 'UPDATE_NODE_CONTENT' | 'UPDATE_TASK_INFORMATION';
 export type THistoryEventData = {
   nodeFrom?: number | null;
   nodeTo?: number | null;
-  dataFrom?: TDeleteNodeData | TMoveNodeData | TUpdateNodeParent | TUpdateNodeSibling | TUpdateNodeContent | TUpdateTaskInformation | null;
-  dataTo?: TAddNodeData | TMoveNodeData | TUpdateNodeParent | TUpdateNodeSibling | TUpdateNodeContent | TUpdateTaskInformation | null;
+  dataFrom?: TDeleteNodeData | TUpdateNodeParent | TUpdateNodeContent | TUpdateTaskInformation | null;
+  dataTo?: TAddNodeData | TUpdateNodeParent | TUpdateNodeContent | TUpdateTaskInformation | null;
 };
 
 export type TEventType = 'ADD_SPRINT' | 'ADD_LABEL' | 'ADD_COMMENT' | 'DELETE_SPRINT' | 'DELETE_LABEL' | 'DELETE_COMMENT';

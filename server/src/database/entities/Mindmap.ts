@@ -16,12 +16,6 @@ export class Mindmap {
   @Column()
   content: string;
 
-  @Column({ default: null })
-  posX: string;
-
-  @Column({ default: null })
-  posY: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
