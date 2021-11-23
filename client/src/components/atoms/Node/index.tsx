@@ -26,7 +26,7 @@ const Node = styled.div<INodeProps>`
   line-height: ${({ theme, level }) => theme.nodeFontSizes[levelToIdx(level)]};
   padding: 0.5rem 1rem;
   cursor: move;
-  border: ${({ isSelected }) => (isSelected ? '2px solid blue' : '2px solid transparent')};
+  border: ${({ theme, isSelected }) => (isSelected ? `2px solid ${theme.color.primary2}` : '2px solid transparent')};
   ${({ status }) => (status ? styledStatus[status] : '')};
   ${({ isFiltered }) => !isFiltered && 'filter: brightness(0.7)'};
 `;

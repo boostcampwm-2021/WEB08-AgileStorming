@@ -28,12 +28,8 @@ export const currentHistoryNodeIdState = selector({
         return (currentNodeData.data.dataTo! as TAddNodeData).nodeId;
       case 'DELETE_NODE':
         return (currentNodeData.data.dataFrom! as TDeleteNodeData).nodeId;
-      case 'MOVE_NODE':
-        return currentNodeData.data.nodeFrom! as THistoryEventData;
       case 'UPDATE_NODE_PARENT':
         return (currentNodeData.data.dataFrom! as TUpdateNodeParent).nodeId;
-      case 'UPDATE_NODE_SIBLING':
-        return currentNodeData.data.nodeFrom! as THistoryEventData;
       case 'UPDATE_NODE_CONTENT':
         return currentNodeData.data.nodeFrom! as THistoryEventData;
       case 'UPDATE_TASK_INFORMATION':
@@ -52,4 +48,12 @@ export const historyMovingSpeedState = atom<number>({
 export const isHistoryCalculatingState = atom<boolean>({
   key: 'isHistoryIsCalculatingAtom',
   default: false,
+});
+
+export const isHistoryOpenState = selector({
+  key: 'historyOpenState',
+  get: ({ get }) => {
+    const isOpen = !!get(historyDataListState).length;
+    return isOpen;
+  },
 });

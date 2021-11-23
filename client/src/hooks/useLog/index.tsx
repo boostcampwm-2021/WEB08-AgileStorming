@@ -31,9 +31,7 @@ export const useLog = () => {
   const convertToDescription: TConvertToDescription = {
     ADD_NODE: ({ dataTo }) => `${(dataTo as TAddNodeData).content} 노드가 생성되었습니다.`,
     DELETE_NODE: ({ dataFrom }) => `${(dataFrom as TDeleteNodeData).content} 노드가 삭제되었습니다.`,
-    MOVE_NODE: ({}) => `노드 위치가 변경되었습니다.`,
     UPDATE_NODE_PARENT: () => `노드 레벨이 변경되었습니다.`,
-    UPDATE_NODE_SIBLING: () => `노드 순서가 변경되었습니다.`,
     UPDATE_NODE_CONTENT: ({ dataFrom, dataTo }) =>
       `노드 내용이 '${(dataFrom as TUpdateNodeContent).content}'에서 '${(dataTo as TUpdateNodeContent)!.content}'로 변경되었습니다.`,
     UPDATE_TASK_INFORMATION: (data) => {

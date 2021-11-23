@@ -6,20 +6,17 @@ import { ITaskFilters } from 'components/organisms/MindmapTree';
 import { NodeContainer, ChildContainer, NodeDeleteBtn } from './style';
 import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
-import { currentHistoryNodeIdState } from 'recoil/history';
+import { currentHistoryNodeIdState, isHistoryOpenState } from 'recoil/history';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect, Levels } from 'utils/helpers';
 import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
-import { IUser } from 'types/user';
+import { assigneeFilterState, labelFilterState, sprintFilterState, userListState } from 'recoil/project';
 
 interface ITreeProps {
   nodeId: number;
   mindmapData: IMindmapData;
   parentCoord: TCoord | null;
   parentId?: number;
-  taskFilters: ITaskFilters;
-  isFiltering: boolean;
-  userList: Record<string, IUser>;
   handleDeleteBtnClick: (parentId: number, node: IMindNode) => void;
 }
 
@@ -65,24 +62,15 @@ const getStatus = ({ isRoot, level, mindNodes, node }: IGetStatusProps) => {
   if (level === 'STORY' && children.length) return isAllTaskDone(node, mindNodes) ? 'Done' : 'To Do';
 };
 
-const Tree: React.FC<ITreeProps> = ({
-  nodeId,
-  mindmapData,
-  parentCoord,
-  parentId,
-  taskFilters,
-  isFiltering,
-  userList,
-  handleDeleteBtnClick,
-}) => {
-  const { rootId, mindNodes } = mindmapData;
-  const node = mindNodes.get(nodeId)!;
-  const { level, content, children, assigneeId, priority } = node;
-  const assignee = assigneeId ? userList[assigneeId] : null;
-  const isRoot = nodeId === rootId;
-  const isFiltered = isFiltering ? isFilteredTask({ level, node, taskFilters }) : true;
-
-  const status = getStatus({ mindNodes, node, level, isRoot });
+const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId, handleDeleteBtnClick }) => {
+  const taskFilters: ITaskFilters = {
+    sprint: useRecoilValue(sprintFilterState),
+    user: useRecoilValue(assigneeFilterState),
+    label: useRecoilValue(labelFilterState),
+  };
+  const userList = useRecoilValue(userListState);
+  const isHistoryOpen = useRecoilValue(isHistoryOpenState);
+  const isFiltering = !!Object.values(taskFilters).reduce((acc, filter) => (acc += filter ? filter : ''), '');
 
   const { addNode } = useHistoryEmitter();
   const setMindmapData = useSetRecoilState(mindmapState);
@@ -97,6 +85,15 @@ const Tree: React.FC<ITreeProps> = ({
   const [rect, setRect] = useState<TRect | null>(null);
   const nodeRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const { rootId, mindNodes } = mindmapData;
+  const node = mindNodes.get(nodeId)!;
+  const { level, content, children, assigneeId, priority } = node;
+  const assignee = assigneeId ? userList[assigneeId] : null;
+  const isRoot = nodeId === rootId;
+  const isFiltered = isFiltering ? isFilteredTask({ level, node, taskFilters }) : true;
+
+  const status = getStatus({ mindNodes, node, level, isRoot });
 
   useEffect(() => {
     if (!nodeRef.current || !containerRef.current) return;
@@ -168,15 +165,17 @@ const Tree: React.FC<ITreeProps> = ({
             ref={nodeRef}
             id={nodeId.toString()}
             level={level}
-            isSelected={isSelected || isHistorySelected}
+            isSelected={(!isHistoryOpen && isSelected) || isHistorySelected}
             isFiltered={isFiltered}
             className='node mindmap-area'
             status={status}
           >
             {!!assignee && <UserIcon user={assignee} />}
             {!!priority && <PriorityIcon priority={priority} />}
+            {!isHistoryOpen && !isRoot && isSelected && (
+              <NodeDeleteBtn onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제</NodeDeleteBtn>
+            )}
             {content}
-            {!isRoot && isSelected && <NodeDeleteBtn onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제</NodeDeleteBtn>}
           </Node>
         </>
       )}
@@ -188,9 +187,6 @@ const Tree: React.FC<ITreeProps> = ({
             mindmapData={mindmapData}
             parentCoord={coord}
             parentId={nodeId}
-            taskFilters={taskFilters}
-            isFiltering={isFiltering}
-            userList={userList}
             handleDeleteBtnClick={handleDeleteBtnClick}
           />
         ))}
