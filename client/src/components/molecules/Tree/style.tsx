@@ -18,9 +18,9 @@ export const ChildContainer = styled.div`
 `;
 
 export const NodeDeleteBtn = styled.div`
-  color: ${(props) => props.theme.color.white};
-  background: blue;
-  font-size: ${(props) => props.theme.fontSize.small};
+  color: ${({ theme }) => theme.color.white};
+  background: ${({ theme }) => theme.color.primary2};
+  font-size: ${({ theme }) => theme.fontSize.small};
   border-radius: 1rem;
   padding: 0.2rem;
   position: absolute;
