@@ -49,3 +49,11 @@ export const isHistoryCalculatingState = atom<boolean>({
   key: 'isHistoryIsCalculatingAtom',
   default: false,
 });
+
+export const isHistoryOpenState = selector({
+  key: 'historyOpenState',
+  get: ({ get }) => {
+    const isOpen = !!get(historyDataListState).length;
+    return isOpen;
+  },
+});
