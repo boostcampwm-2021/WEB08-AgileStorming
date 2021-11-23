@@ -28,6 +28,7 @@ export const FilterItemContainer = styled.div`
 
 export const FilterItem = styled.div`
   ${({ theme }) => theme.flex.rowCenter};
+  height: 1.5rem;
   gap: 0.3rem;
   font-weight: bold;
   padding: 0.3rem 0.1rem;
@@ -55,6 +56,7 @@ export const FilterButton = styled.div`
 `;
 
 export const SprintItem = styled.div`
+  width: 100%;
   display: grid;
   grid-template-columns: 7.5% 32.5% 60%;
   span {

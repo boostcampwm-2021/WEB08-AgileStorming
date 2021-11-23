@@ -55,8 +55,8 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       modalProps: {
         title: '스프린트 삭제',
         text: `'${sprintList[sprintFilter!].name}' 스프린트를 삭제합니다`,
-        onClickSubmitButton: () => requestDeleteSprint(),
-        onCancelButton: () => hideModal(),
+        onClickSubmitButton: requestDeleteSprint,
+        onCancelButton: hideModal,
       },
     });
   };
@@ -69,7 +69,7 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
         text: '새로운 라벨 이름을 입력해주세요.',
         placeholder: '라벨 이름',
         onChangeInput: (e) => handleChangeLabelInput(e, newLabelName),
-        onClickSubmitButton: () => requestAddLabel(),
+        onClickSubmitButton: requestAddLabel,
       },
     });
   };
@@ -80,8 +80,8 @@ const FilterPopup: React.FC<IProps> = ({ onClose }) => {
       modalProps: {
         title: '라벨 삭제',
         text: `'${labelList[labelFilter!].name}' 라벨을 삭제합니다.`,
-        onClickSubmitButton: () => requestDeleteLabel(),
-        onCancelButton: () => hideModal(),
+        onClickSubmitButton: requestDeleteLabel,
+        onCancelButton: hideModal,
       },
     });
   };
