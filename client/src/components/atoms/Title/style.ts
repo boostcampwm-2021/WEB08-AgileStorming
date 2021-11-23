@@ -6,10 +6,12 @@ interface IStyleProps {
   color: TColor;
   margin?: string;
   lineHeight?: number;
+  cursor?: TCursor;
 }
 
 export type TStyle = 'small' | 'normal' | 'large' | 'xlarge' | 'xxxlarge' | 'title';
 export type TColor = 'black' | 'white';
+export type TCursor = 'default' | 'pointer' | 'text' | 'none';
 
 export const StyledTitle = styled.div<IStyleProps>`
   ${({ titleStyle }) => styleOptions[titleStyle]}
@@ -17,7 +19,7 @@ export const StyledTitle = styled.div<IStyleProps>`
   margin: ${({ margin }) => margin};
   font-weight: bold;
   line-height: ${({ lineHeight }) => lineHeight ?? 1.2};
-  cursor: default;
+  cursor: ${({ cursor }) => cursor};
 `;
 
 const styleOptions: { [key in TStyle]: string } = {
