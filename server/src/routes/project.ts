@@ -1,5 +1,5 @@
 import { Router, Request, Response, Next } from 'express';
-import { createCustomError } from '../utils';
+import { createCustomError, deleteProjectHistory } from '../utils';
 import * as projectService from '../services/project';
 import { verifyToken } from '../middlewares/auth';
 import { identifyUser } from '../middlewares/user';
@@ -29,6 +29,7 @@ router.delete('/delete', verifyToken, identifyUser, async (req: Request, res: Re
   try {
     const { projectId } = req.body;
     await projectService.deleteProject(res.locals.user.id, projectId);
+    await deleteProjectHistory(projectId);
     res.sendStatus(200);
   } catch (e) {
     next(e);
