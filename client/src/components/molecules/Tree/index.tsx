@@ -165,15 +165,17 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
             ref={nodeRef}
             id={nodeId.toString()}
             level={level}
-            isSelected={isSelected || isHistorySelected}
+            isSelected={(!isHistoryOpen && isSelected) || isHistorySelected}
             isFiltered={isFiltered}
             className='node mindmap-area'
             status={status}
           >
             {!!assignee && <UserIcon user={assignee} />}
             {!!priority && <PriorityIcon priority={priority} />}
+            {!isHistoryOpen && !isRoot && isSelected && (
+              <NodeDeleteBtn onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제</NodeDeleteBtn>
+            )}
             {content}
-            {!isRoot && isSelected && <NodeDeleteBtn onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제</NodeDeleteBtn>}
           </Node>
         </>
       )}
