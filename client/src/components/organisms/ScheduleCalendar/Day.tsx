@@ -7,10 +7,10 @@ import { DayTask, DayWrapper } from './style';
 interface IProps {
   dayDate?: { year: number; month: number; date: number };
   tasks?: IMindNode[];
+  setHoveredNode?: React.Dispatch<React.SetStateAction<IMindNode | null>>;
 }
 
-const Day: React.FC<IProps> = ({ dayDate, tasks = [] }) => {
-  const todayDate = getTodayDate();
+const Day: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNode = () => {} }) => {
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
 
   if (!dayDate) {
@@ -22,13 +22,30 @@ const Day: React.FC<IProps> = ({ dayDate, tasks = [] }) => {
     setSelectedNodeId(id);
   };
 
-  const { year, month, date } = dayDate;
+  const handleHoverTask = (task: IMindNode) => setHoveredNode(task);
+  const handleLeaveTask = () => setHoveredNode(null);
+
+  const { date } = dayDate;
+  const todayDate = getTodayDate();
+  const today = new Date();
+
   return (
     <DayWrapper today={isSameDate(dayDate, todayDate)}>
       {date}
-      {tasks.map(({ nodeId, content }) => (
-        <DayTask key={nodeId} onClick={(e) => handleClickTask(e, nodeId)}>{`#${nodeId} ${content}`}</DayTask>
-      ))}
+      {tasks.map((task) => {
+        const dueAt = task.dueDate ? new Date(task.dueDate) : null;
+        const endedAt = task.endDate ? new Date(task.endDate) : null;
+
+        return (
+          <DayTask
+            key={task.nodeId}
+            onClick={(e) => handleClickTask(e, task.nodeId)}
+            onMouseEnter={() => handleHoverTask(task)}
+            onMouseLeave={() => handleLeaveTask()}
+            delayed={dueAt && !endedAt && today > dueAt}
+          >{`#${task.nodeId} ${task.content}`}</DayTask>
+        );
+      })}
     </DayWrapper>
   );
 };
