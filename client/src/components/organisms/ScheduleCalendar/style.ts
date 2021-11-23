@@ -35,15 +35,28 @@ const CalendarHeader = styled.div`
 `;
 
 const DayWrapper = styled.div<{ disable?: boolean; today?: boolean }>`
+  position: relative;
   padding: 0.2rem;
   height: 6.8rem;
   font-size: ${({ theme }) => theme.fontSize.small};
   border-top: 1px solid ${({ theme }) => theme.color.gray3};
   border-right: 1px solid ${({ theme }) => theme.color.gray3};
+  overflow: hidden;
 
   color: ${({ today, theme }) => (today ? theme.color.primary1 : theme.color.gray1)};
   text-decoration: ${({ today }) => (today ? 'underline' : '')};
   background-color: ${({ disable, theme }) => (disable ? theme.color.gray4 : '')};
 `;
 
-export { MonthSelectorWrapper, CalendarWrapper, CalendarHeader, DayWrapper };
+const DayTask = styled.div<{ disable?: boolean; today?: boolean }>`
+  color: ${({ theme }) => theme.color.black};
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  :hover {
+    background-color: ${({ theme }) => theme.color.gray4};
+  }
+`;
+
+export { MonthSelectorWrapper, CalendarWrapper, CalendarHeader, DayWrapper, DayTask };
