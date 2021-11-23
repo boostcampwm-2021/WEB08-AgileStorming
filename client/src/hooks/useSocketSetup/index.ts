@@ -17,6 +17,7 @@ interface IInitProps {
 }
 
 const initSocket = ({ projectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver }: IInitProps) => {
+  console.log('socket connected');
   window.socket = io(process.env.REACT_APP_SERVER!, {
     query: {
       projectId,
@@ -62,11 +63,12 @@ const useSocketSetup = () => {
       const isNewProject = projectId !== newProjectId;
       if (!isNewProject) return;
       if (projectId) {
+        console.log('socket leave');
         window.socket!.emit('leave', projectId);
         window.socket = null;
       }
       initSocket({ projectId: newProjectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver });
     })();
-  }, [newProjectId, projectId, setSocket, historyReceiver, userReceiver]);
+  }, [newProjectId, projectId, historyReceiver, userReceiver]);
 };
 export default useSocketSetup;

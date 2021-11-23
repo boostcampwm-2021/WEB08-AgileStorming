@@ -38,6 +38,7 @@ const socketIO = (server, origin) => {
 
   io.on('connection', async (socket: ISocket) => {
     const { id } = socket.decoded;
+    console.log(id, 'connected');
     const projectId = socket.handshake.query.projectId as string;
 
     const handleNewEvent = async (data: Record<number, object>) => {
@@ -74,6 +75,7 @@ const socketIO = (server, origin) => {
 
     socket.on('leave', (targetProjectId) => {
       socket.leave(targetProjectId);
+      console.log(id, 'leave');
       socket.disconnect();
     });
 
