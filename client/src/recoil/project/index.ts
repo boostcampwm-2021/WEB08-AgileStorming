@@ -100,7 +100,7 @@ const filteredTaskTimeState = selector<{ totalEstimatedTime: number; totalUsedTi
 });
 
 const filteredUserInProgressTaskState = selector<IMindNode[]>({
-  key: 'filteredUserInProgressTaskState',
+  key: 'filteredUserInProgressTask',
   get: ({ get }) => {
     const nodes = get(mindmapNodesState);
     const mouseOverUser = get(userMouseOverState);
@@ -120,7 +120,7 @@ const filteredUserInProgressTaskState = selector<IMindNode[]>({
 });
 
 const userListCurrentUserTopState = selector<Array<IUser>>({
-  key: 'userListCurrentUserTopState',
+  key: 'userListCurrentUserOnTop',
   get: ({ get }) => {
     const userList = get(userListState);
     const user = get(userState);
@@ -128,6 +128,82 @@ const userListCurrentUserTopState = selector<Array<IUser>>({
       return Object.values(userList);
     }
     return [user, ...Object.values(userList).filter((users) => users.id !== user.id)];
+  },
+});
+
+interface SprintTaskInfo {
+  sprintName: string;
+  sprintStartDate: string;
+  totalEstimatedTime: number;
+  totalFinishedTime: number;
+}
+
+const sprintBurnDownState = selector<SprintTaskInfo[]>({
+  key: 'sprintBurnDown',
+  get: ({ get }) => {
+    const sprintList = get(sprintListState);
+    const taskInSprint: Record<number, SprintTaskInfo> = {};
+    Object.values(sprintList).forEach((sprint) => {
+      taskInSprint[sprint.id] = {
+        sprintName: sprint.name,
+        sprintStartDate: sprint.startDate,
+        totalEstimatedTime: 0,
+        totalFinishedTime: 0,
+      };
+    });
+    const nodes = get(mindmapNodesState);
+    nodes.forEach((node) => {
+      if (node.sprintId) {
+        const sprintInfo = taskInSprint[node.sprintId];
+        const { totalEstimatedTime, totalFinishedTime } = sprintInfo;
+        taskInSprint[node.sprintId] = {
+          ...sprintInfo,
+          totalEstimatedTime: totalEstimatedTime + Number(node.estimatedTime),
+          totalFinishedTime: totalFinishedTime + Number(node.finishedTime),
+        };
+      }
+    });
+    return Object.values(taskInSprint).sort((a: SprintTaskInfo, b: SprintTaskInfo) => {
+      if (a.sprintStartDate > b.sprintStartDate) return 1;
+      if (a.sprintStartDate < b.sprintStartDate) return -1;
+      if (a.sprintStartDate === b.sprintStartDate) return 0;
+      return 0;
+    });
+  },
+});
+
+interface UserTaskInfo {
+  userName: string;
+  totalUserTaskEstimatedTime: number;
+  tasks: Array<[string, number]>;
+}
+
+const userTaskRatioState = selector<UserTaskInfo[]>({
+  key: 'userTaskRatio',
+  get: ({ get }) => {
+    const userList = get(userListState);
+    const taskOnUser: Record<string, UserTaskInfo> = {};
+    const nodes = get(mindmapNodesState);
+    Object.values(userList).forEach((user) => {
+      taskOnUser[user.id] = {
+        userName: user.name,
+        totalUserTaskEstimatedTime: 0,
+        tasks: [],
+      };
+    });
+    nodes.forEach((node) => {
+      if (node.assigneeId) {
+        const userInfo = taskOnUser[node.assigneeId];
+        const { totalUserTaskEstimatedTime, tasks } = userInfo;
+        tasks.push([node.content, Number(node.estimatedTime)]);
+        taskOnUser[node.assigneeId] = {
+          ...userInfo,
+          totalUserTaskEstimatedTime: totalUserTaskEstimatedTime + Number(node.estimatedTime),
+          tasks,
+        };
+      }
+    });
+    return Object.values(taskOnUser);
   },
 });
 
@@ -145,4 +221,6 @@ export {
   filteredTaskTimeState,
   filteredUserInProgressTaskState,
   userListCurrentUserTopState,
+  sprintBurnDownState,
+  userTaskRatioState,
 };
