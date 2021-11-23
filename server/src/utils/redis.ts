@@ -34,3 +34,12 @@ export const xrevrange = ({ projectId, from, to, count }: Record<string, string>
     });
   });
 };
+
+export const deleteProjectHistory = (projectId: string) => {
+  return new Promise<string>((resolve) => {
+    redisClient.del(projectId, (err, result) => {
+      if (err) throw err;
+      resolve(result);
+    });
+  });
+};
