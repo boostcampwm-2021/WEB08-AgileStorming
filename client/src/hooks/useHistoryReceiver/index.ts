@@ -5,6 +5,7 @@ import {
   INonHistoryEventData,
   TAddNodeData,
   TDeleteLabel,
+  TDeleteNodeData,
   TDeleteSprint,
   THistoryEventData,
   TTask,
@@ -14,7 +15,7 @@ import {
 } from 'types/event';
 import { IHistoryData } from 'types/history';
 import { ILabel } from 'types/label';
-import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
+import { IMindmapData, IMindNodes } from 'types/mindmap';
 import { ISprint } from 'types/sprint';
 import { getChildLevel, levelToIdx, setTreeLevel } from 'utils/helpers';
 
@@ -82,13 +83,13 @@ export const historyHandler = ({ setMindmap, historyData }: IHistoryHandlerProps
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
         const parentNode = nextMapState.mindNodes.get(nodeFrom!)!;
-        const { nodeId } = dataFrom as IMindNode;
+        const { nodeId, sideEffect } = dataFrom as TDeleteNodeData;
         parentNode.children = parentNode.children.filter((childId) => childId !== nodeId);
         nextMapState.mindNodes.delete(nodeId!);
+        console.log(123123, sideEffect);
+        sideEffect.forEach((childNode) => nextMapState.mindNodes.delete(childNode.nodeId));
         return nextMapState;
       });
-      break;
-    case 'MOVE_NODE':
       break;
     case 'UPDATE_NODE_PARENT':
       setMindmap((prev) => {
@@ -97,8 +98,6 @@ export const historyHandler = ({ setMindmap, historyData }: IHistoryHandlerProps
         updateNodeParent({ nextMapState, oldParentId: nodeFrom!, newParentId: nodeTo!, data });
         return nextMapState;
       });
-      break;
-    case 'UPDATE_NODE_SIBLING':
       break;
     case 'UPDATE_NODE_CONTENT':
       setMindmap((prev) => {

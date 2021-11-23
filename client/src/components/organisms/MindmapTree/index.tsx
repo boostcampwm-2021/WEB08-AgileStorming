@@ -4,6 +4,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { assigneeFilterState, labelFilterState, sprintFilterState, userListState } from 'recoil/project';
 import { IMindmapData, IMindNode } from 'types/mindmap';
+import { getAllChildren } from 'utils/helpers';
 
 interface IProps {
   mindmapData: IMindmapData;
@@ -27,7 +28,8 @@ const MindmapTree: React.FC<IProps> = ({ mindmapData }) => {
   const isFiltering = !!Object.values(taskFilters).reduce((acc, filter) => (acc += filter ? filter : ''), '');
 
   const handleDeleteBtnClick = (parentId: number, node: IMindNode) => {
-    deleteNode({ nodeFrom: parentId, dataFrom: node });
+    const sideEffect: IMindNode[] = getAllChildren(node, mindmapData);
+    deleteNode({ nodeFrom: parentId, dataFrom: { ...node, sideEffect: sideEffect } });
   };
 
   return (

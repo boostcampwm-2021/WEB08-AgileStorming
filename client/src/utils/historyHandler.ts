@@ -20,12 +20,12 @@ export const restoreHistory = (params: IParams) => {
 
   switch (historyData.type) {
     case 'ADD_NODE':
-      if (isForward) addNode({ historyMap, parentId: nodeFrom!, dataFrom: dataFrom as IMindNode, dataTo: dataTo as IMindNode });
+      if (isForward) addNode({ historyMap, parentId: nodeFrom!, dataFrom: dataFrom as TDeleteNodeData, dataTo: dataTo as IMindNode });
       else deleteNode({ historyData, historyMap, setHistoryDataList, historyDataList });
       break;
     case 'DELETE_NODE':
       if (isForward) deleteNode({ historyData, historyMap });
-      else addNode({ historyMap, parentId: nodeFrom!, dataFrom: dataFrom as IMindNode, dataTo: dataTo as IMindNode });
+      else addNode({ historyMap, parentId: nodeFrom!, dataFrom: dataFrom as TDeleteNodeData, dataTo: dataTo as IMindNode });
       break;
     case 'MOVE_NODE':
       if (isForward) moveNode({ data: historyData.data.dataTo as TMoveNodeData, id: historyData.data.nodeFrom!, historyMap });
@@ -37,7 +37,6 @@ export const restoreHistory = (params: IParams) => {
         historyMap,
         isForward,
       });
-
       break;
     case 'UPDATE_NODE_PARENT':
       if (isForward)
@@ -87,6 +86,12 @@ const addNode = ({ historyMap, parentId, dataTo, dataFrom }: IAddNodeParams) => 
 
   historyMap.set(parentId, { ...parent!, children: [...parent.children, nodeId!] });
   historyMap.set(nodeId!, newNode as IMindNode);
+
+  if (dataTo) return;
+
+  dataFrom.sideEffect.forEach((node) => {
+    historyMap.set(node.nodeId, node);
+  });
 };
 
 interface IUpdateNodeContentParams {
@@ -134,7 +139,7 @@ const deleteNode = ({ historyData, historyMap, setHistoryDataList }: IDeleteNode
   const newChildren = historyData.data.dataFrom ? parent.children.filter((cid) => cid !== childId) : parent.children.slice(0, -1);
   historyMap.set(parentId, { ...parent, children: newChildren });
 
-  if (historyData.data.dataTo && !(historyData.data.dataTo! as TAddNodeData).nodeId) {
+  if (historyData.data.dataTo && !(historyData.data.dataTo as TAddNodeData).nodeId) {
     const newDataTo = { ...historyData.data.dataTo, nodeId: childId };
     const newHistory = { ...historyData!, data: { ...historyData.data, dataTo: newDataTo } };
 
