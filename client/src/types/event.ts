@@ -9,7 +9,9 @@ export type TAddNodeData = {
 };
 export type TPriority = '낮음' | '보통' | '높음';
 export type TStatus = 'To Do' | 'In Progress' | 'Done';
-export type TDeleteNodeData = IMindNode;
+export interface TDeleteNodeData extends IMindNode {
+  sideEffect: Array<IMindNode>;
+}
 export type TMoveNodeData = {
   posX?: string;
   posY?: string;

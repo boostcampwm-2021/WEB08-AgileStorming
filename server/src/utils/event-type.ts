@@ -12,6 +12,7 @@ export interface TDeleteNodeData extends TTask {
   comment?: [];
   posX?: string;
   posY?: string;
+  sideEffect: [];
 }
 export type TMoveNodeData = {
   posX?: string;
