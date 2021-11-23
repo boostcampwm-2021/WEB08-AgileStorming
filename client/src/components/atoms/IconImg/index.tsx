@@ -4,19 +4,21 @@ import styled from '@emotion/styled';
 interface IProps {
   imgSrc: string;
   altText: string;
+  size?: { width: string; height: string };
 }
 
 const StyledIconImg = styled.img`
-  padding: ${(props) => props.theme.padding.small};
+  ${({ theme }) => theme.flex.columnCenter}
+  padding: ${({ theme }) => theme.padding.small};
   :hover {
     cursor: pointer;
     border-radius: 99px;
-    background: ${(props) => props.theme.color.gray3};
+    background: ${({ theme }) => theme.color.gray3};
   }
 `;
 
-const IconImg: React.FC<IProps> = ({ imgSrc, altText }) => {
-  return <StyledIconImg src={imgSrc} alt={altText} />;
+const IconImg: React.FC<IProps> = ({ imgSrc, altText, size }) => {
+  return <StyledIconImg src={imgSrc} alt={altText} width={size?.width} height={size?.height} />;
 };
 
 export default IconImg;
