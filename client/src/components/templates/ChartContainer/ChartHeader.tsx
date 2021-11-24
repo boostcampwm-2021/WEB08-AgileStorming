@@ -18,12 +18,6 @@ const ChartHeader: React.FC = () => {
         </Title>
         {selectedChart === 'burndown' ? <StyledTitleUnderline /> : null}
       </StyledTitleWrapper>
-      <StyledTitleWrapper onClick={handleOnClickChartTitle} data-type={'velocity'}>
-        <Title color={'black'} cursor={'pointer'}>
-          {'속도'}
-        </Title>
-        {selectedChart === 'velocity' ? <StyledTitleUnderline /> : null}
-      </StyledTitleWrapper>
       <StyledTitleWrapper onClick={handleOnClickChartTitle} data-type={'task-ratio'}>
         <Title color={'black'} cursor={'pointer'}>
           {'담당한 일 비율'}
@@ -36,11 +30,11 @@ const ChartHeader: React.FC = () => {
         </Title>
         {selectedChart === 'priority' ? <StyledTitleUnderline /> : null}
       </StyledTitleWrapper>
-      <StyledTitleWrapper onClick={handleOnClickChartTitle} data-type={'finished-task'}>
+      <StyledTitleWrapper onClick={handleOnClickChartTitle} data-type={'task-done'}>
         <Title color={'black'} cursor={'pointer'}>
-          {'완료한 태스크 수'}
+          {'태스크 완료도'}
         </Title>
-        {selectedChart === 'finished-task' ? <StyledTitleUnderline /> : null}
+        {selectedChart === 'task-done' ? <StyledTitleUnderline /> : null}
       </StyledTitleWrapper>
     </StyledChartHeader>
   );
