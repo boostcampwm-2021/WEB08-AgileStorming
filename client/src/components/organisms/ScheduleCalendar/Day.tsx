@@ -44,6 +44,7 @@ const Day: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNode = () => {},
             onMouseEnter={() => handleHoverTask(task)}
             onMouseLeave={() => handleLeaveTask()}
             delayed={dueAt && !endedAt && today > dueAt}
+            ended={dueAt && endedAt && true}
             blur={blur}
           >{`#${task.nodeId} ${task.content}`}</DayTask>
         );

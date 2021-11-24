@@ -55,12 +55,20 @@ const DayWrapper = styled.div<{ disable?: boolean; today?: boolean }>`
   }};
 `;
 
-const DayTask = styled.div<{ delayed?: boolean | null; blur?: boolean }>`
+const DayTask = styled.div<{ delayed?: boolean | null; ended?: boolean | null; blur?: boolean }>`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  color: ${({ theme, delayed }) => (delayed ? theme.color.red : theme.color.black)};
+  color: ${({ theme, delayed, ended }) => {
+    if (delayed) {
+      return theme.color.red;
+    }
+    if (ended) {
+      return theme.color.primary1;
+    }
+    return '';
+  }};
   opacity: ${({ blur }) => (blur ? 0.5 : 1)};
 
   :hover {
