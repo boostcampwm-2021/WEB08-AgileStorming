@@ -1,6 +1,7 @@
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import useProjectId from 'hooks/useRoomId';
+import useToast from 'hooks/useToast';
 import { useHistory } from 'react-router';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { doneTaskChartState } from 'recoil/chart';
@@ -9,6 +10,7 @@ import { assigneeFilterState, sprintFilterState } from 'recoil/project';
 const DoneTaskChart = () => {
   const history = useHistory();
   const projectId = useProjectId();
+  const { showMessage } = useToast();
   const setAssigneeFilter = useSetRecoilState(assigneeFilterState);
   const setSprintFilter = useSetRecoilState(sprintFilterState);
   const doneTaskData = useRecoilValue(doneTaskChartState);
@@ -22,7 +24,7 @@ const DoneTaskChart = () => {
     },
 
     title: {
-      text: '속도 차트',
+      text: '태스크 완료도',
     },
 
     xAxis: {
@@ -70,10 +72,12 @@ const DoneTaskChart = () => {
                 category,
                 series: { name },
               } = this;
-              const sprintId = dictSprintname[category?.split('<')[0]];
+              const sprintName = category?.split('<')[0];
+              const sprintId = dictSprintname[sprintName];
               const assigneeId = dictUsername[name];
               setSprintFilter(sprintId);
               if (assigneeId) setAssigneeFilter(assigneeId);
+              showMessage(`필터링: ${sprintName} ${assigneeId ? '유저명: ' + assigneeId : ''}`);
               history.push('/backlog/' + projectId);
             },
           },
