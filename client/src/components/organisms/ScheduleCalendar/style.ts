@@ -56,9 +56,11 @@ const DayWrapper = styled.div<{ disable?: boolean; today?: boolean }>`
 `;
 
 const DayTask = styled.div<{ delayed?: boolean | null; ended?: boolean | null; blur?: boolean }>`
+  font-weight: bold;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: pointer;
 
   color: ${({ theme, delayed, ended }) => {
     if (delayed) {
@@ -138,4 +140,38 @@ const LayerDayWrapper = styled.div`
   }
 `;
 
-export { MonthSelectorWrapper, CalendarWrapper, CalendarHeader, DayWrapper, DayTask, LayerWrapper, LayerDayWrapper };
+const LayerSprintDayWrapper = styled.div`
+  position: relative;
+  height: 6.8rem;
+  color: ${({ theme }) => theme.color.black};
+  font-size: ${({ theme }) => theme.fontSize.small};
+  border-top: 1px solid ${({ theme }) => theme.color.gray3};
+  opacity: 0.2;
+
+  .start {
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+  }
+  .end {
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+  }
+`;
+
+const LayerSprint = styled.div<{ color: string }>`
+  width: 100%;
+  height: 1rem;
+  background-color: ${({ color }) => `#${color}`}; ;
+`;
+
+export {
+  MonthSelectorWrapper,
+  CalendarWrapper,
+  CalendarHeader,
+  DayWrapper,
+  DayTask,
+  LayerWrapper,
+  LayerDayWrapper,
+  LayerSprintDayWrapper,
+  LayerSprint,
+};
