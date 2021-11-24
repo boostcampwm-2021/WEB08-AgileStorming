@@ -22,7 +22,7 @@ const Calendar: React.FC<IProps> = ({ currentDateISO }) => {
       {Array(prevDays)
         .fill(0)
         .map((_, idx) => (
-          <CalendarDay key={idx} />
+          <CalendarDay key={idx} disable={true} />
         ))}
       {Array(days)
         .fill(0)
@@ -34,7 +34,7 @@ const Calendar: React.FC<IProps> = ({ currentDateISO }) => {
       {Array(nextDays)
         .fill(0)
         .map((_, idx) => (
-          <CalendarDay key={idx} />
+          <CalendarDay key={idx} disable={true} />
         ))}
     </>
   );
