@@ -43,14 +43,13 @@ const DayWrapper = styled.div<{ disable?: boolean; today?: boolean }>`
   border-right: 1px solid ${({ theme }) => theme.color.gray3};
   overflow: hidden;
 
-  color: ${({ today, theme }) => (today ? theme.color.white : theme.color.gray1)};
-  text-decoration: ${({ today }) => (today ? 'underline' : '')};
+  color: ${({ today, theme }) => (today ? theme.color.primary1 : theme.color.gray1)};
   background-color: ${({ disable, today, theme }) => {
     if (disable) {
       return theme.color.gray4;
     }
     if (today) {
-      return theme.color.primary1;
+      return theme.color.primary3;
     }
     return '';
   }};
