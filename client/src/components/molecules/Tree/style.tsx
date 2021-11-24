@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { NodeTag } from 'components/atoms';
 
 interface IStyleProps {
   isRoot: boolean;
@@ -17,12 +18,8 @@ export const ChildContainer = styled.div`
   gap: 1rem;
 `;
 
-export const NodeDeleteBtn = styled.div`
-  color: ${({ theme }) => theme.color.white};
+export const NodeDeleteBtn = styled(NodeTag)`
   background: ${({ theme }) => theme.color.primary2};
-  font-size: ${({ theme }) => theme.fontSize.small};
-  border-radius: 1rem;
-  padding: 0.2rem;
   position: absolute;
   right: 0;
   top: 0;
