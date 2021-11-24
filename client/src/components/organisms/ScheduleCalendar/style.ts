@@ -1,5 +1,12 @@
 import styled from '@emotion/styled';
 
+const Wrapper = styled.div`
+  ${({ theme }) => theme.flex.columnCenter};
+  .blur {
+    opacity: 0.5;
+  }
+`;
+
 const MonthSelectorWrapper = styled.div`
   ${({ theme }) => theme.flex.center};
   margin-top: 3rem;
@@ -88,7 +95,6 @@ const LayerWrapper = styled.div`
   top: 9.7rem;
   border-radius: 0.5rem;
   overflow: hidden;
-  opacity: 1;
   pointer-events: none;
 `;
 
@@ -107,6 +113,7 @@ const LayerDayWrapper = styled.div`
     ${({ theme }) => theme.flex.center};
     width: 100%;
     height: 1.2rem;
+    border-radius: 0.5rem;
   }
 
   hr {
@@ -165,6 +172,7 @@ const LayerSprint = styled.div<{ color: string }>`
 `;
 
 export {
+  Wrapper,
   MonthSelectorWrapper,
   CalendarWrapper,
   CalendarHeader,

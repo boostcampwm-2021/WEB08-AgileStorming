@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CalendarHeader, CalendarWrapper, LayerWrapper } from './style';
+import { CalendarHeader, CalendarWrapper, LayerWrapper, Wrapper } from './style';
 import { getTodayISODate, parseISODate } from 'utils/date';
 import MonthSelector from './MonthSelector';
 import Day from './Day';
@@ -7,7 +7,6 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { filteredTaskState } from 'recoil/project';
 import { IMindNode } from 'types/mindmap';
 
-import { Wrapper } from 'components/atoms';
 import { selectedNodeIdState } from 'recoil/node';
 import LayerDay from './LayerDay';
 import LayerSprintMonth from './LayerSprintMonth';
@@ -44,7 +43,7 @@ const ScheduleCalendar = () => {
   const handleClickOutside = () => setSelectedNodeId(null);
 
   return (
-    <Wrapper flex='columnCenter' onClick={() => handleClickOutside()}>
+    <Wrapper onClick={() => handleClickOutside()}>
       <MonthSelector currentDateISO={currentDateISO} setCurrentDateISO={setCurrentDateISO} />
       <CalendarWrapper>
         {columns.map((column, idx) => (
@@ -89,7 +88,9 @@ const ScheduleCalendar = () => {
             <LayerDay key={idx} />
           ))}
       </LayerWrapper>
-      <LayerSprintMonth currentDateISO={currentDateISO} />
+      <LayerWrapper className={hoveredNode ? 'blur' : ''}>
+        <LayerSprintMonth currentDateISO={currentDateISO} />
+      </LayerWrapper>
     </Wrapper>
   );
 };

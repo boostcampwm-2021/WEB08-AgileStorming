@@ -26,20 +26,20 @@ const LayerSprintDay: React.FC<IProps> = ({ dayDate, sprints }) => {
 
   return (
     <LayerSprintDayWrapper>
-      {sprints.map(({ startDate, endDate, color }) => {
+      {sprints.map(({ id, startDate, endDate, color }) => {
         if (startDate === ISODate) {
-          return <LayerSprint className={'start'} color={color} />;
+          return <LayerSprint key={id} className={'start'} color={color} />;
         }
 
         if (endDate === ISODate) {
-          return <LayerSprint className={'end'} color={color} />;
+          return <LayerSprint key={id} className={'end'} color={color} />;
         }
 
         const startAt = new Date(startDate);
         const endAt = new Date(endDate);
 
         if (day > startAt && day < endAt) {
-          return <LayerSprint color={color} />;
+          return <LayerSprint key={id} color={color} />;
         }
       })}
     </LayerSprintDayWrapper>

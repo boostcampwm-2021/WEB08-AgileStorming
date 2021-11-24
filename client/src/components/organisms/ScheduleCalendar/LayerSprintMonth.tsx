@@ -1,8 +1,8 @@
-import { LayerWrapper } from './style';
-import { parseISODate } from 'utils/date';
+import React from 'react';
 import LayerSprintDay from './LayerSprintDay';
 import { useRecoilValue } from 'recoil';
 import { sprintListState } from 'recoil/project';
+import { parseISODate } from 'utils/date';
 
 interface IProps {
   currentDateISO: string;
@@ -16,7 +16,7 @@ const LayerSprintMonth: React.FC<IProps> = ({ currentDateISO }) => {
   const nextDays = 6 - new Date(year, month, 0).getDay();
 
   return (
-    <LayerWrapper>
+    <>
       {Array(prevDays)
         .fill(0)
         .map((_, idx) => (
@@ -32,8 +32,10 @@ const LayerSprintMonth: React.FC<IProps> = ({ currentDateISO }) => {
         .map((_, idx) => (
           <LayerSprintDay key={idx} />
         ))}
-    </LayerWrapper>
+    </>
   );
 };
 
-export default LayerSprintMonth;
+const LayerSprintMonthMemo = React.memo(LayerSprintMonth);
+
+export default LayerSprintMonthMemo;
