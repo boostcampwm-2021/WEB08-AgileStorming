@@ -1,3 +1,15 @@
 {
-  "cSpell.words": ["Mindmap", "typeorm", "xadd", "xread", "xrevrange", "middleware", "middlewares"]
+  "cSpell.words": [
+    "Burndown",
+    "drilldown",
+    "highcharts",
+    "middleware",
+    "middlewares",
+    "Mindmap",
+    "typeorm",
+    "xadd",
+    "xread",
+    "xrevrange",
+    "xxxlarge"
+  ]
 }
