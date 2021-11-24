@@ -83,6 +83,7 @@ const ScheduleCalendar = () => {
               dayDate={{ year, month, date: idx + 1 }}
               tasks={taskMapToDueDate[`${year}-${month}-${idx + 1}`]}
               setHoveredNode={setHoveredNode}
+              blur={hoveredNode ? true : false}
             />
           ))}
         {Array(nextDays)

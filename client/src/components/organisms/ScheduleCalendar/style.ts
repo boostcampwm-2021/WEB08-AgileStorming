@@ -55,16 +55,18 @@ const DayWrapper = styled.div<{ disable?: boolean; today?: boolean }>`
   }};
 `;
 
-const DayTask = styled.div<{ delayed?: boolean | null }>`
+const DayTask = styled.div<{ delayed?: boolean | null; blur?: boolean }>`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
   color: ${({ theme, delayed }) => (delayed ? theme.color.red : theme.color.black)};
+  opacity: ${({ blur }) => (blur ? 0.5 : 1)};
 
   :hover {
     color: ${({ theme }) => theme.color.white};
     background-color: ${({ theme }) => theme.color.primary1};
+    opacity: 1;
   }
 `;
 

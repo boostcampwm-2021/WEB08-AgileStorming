@@ -8,9 +8,10 @@ interface IProps {
   dayDate?: { year: number; month: number; date: number };
   tasks?: IMindNode[];
   setHoveredNode?: React.Dispatch<React.SetStateAction<IMindNode | null>>;
+  blur?: boolean;
 }
 
-const Day: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNode = () => {} }) => {
+const Day: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNode = () => {}, blur }) => {
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
 
   if (!dayDate) {
@@ -43,6 +44,7 @@ const Day: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNode = () => {} 
             onMouseEnter={() => handleHoverTask(task)}
             onMouseLeave={() => handleLeaveTask()}
             delayed={dueAt && !endedAt && today > dueAt}
+            blur={blur}
           >{`#${task.nodeId} ${task.content}`}</DayTask>
         );
       })}
