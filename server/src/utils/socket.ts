@@ -91,6 +91,10 @@ const socketIO = (server, origin) => {
       const dbData = await convertEvent(eventData);
       io.in(projectId).emit('non-history-event', eventData, dbData);
     });
+    socket.on('user-focus', (nodeId) => {
+      console.log(id, nodeId);
+      io.in(projectId).emit('user-focus', id, nodeId);
+    });
   });
 };
 export default socketIO;
