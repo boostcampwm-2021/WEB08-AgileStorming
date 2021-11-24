@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Node, PriorityIcon, UserIcon } from 'components/atoms';
-import { Path, TempNode } from 'components/molecules';
+import { Path, TempNode, UserFocusBox } from 'components/molecules';
 import { ITaskFilters } from 'components/organisms/MindmapTree';
 import { NodeContainer, ChildContainer, NodeDeleteBtn } from './style';
 import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
@@ -10,7 +10,7 @@ import { currentHistoryNodeIdState, isHistoryOpenState } from 'recoil/history';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect, Levels } from 'utils/helpers';
 import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
-import { assigneeFilterState, labelFilterState, sprintFilterState, userListState } from 'recoil/project';
+import { assigneeFilterState, labelFilterState, sprintFilterState, userFocusNodeState, userListState } from 'recoil/project';
 
 interface ITreeProps {
   nodeId: number;
@@ -70,6 +70,12 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
   };
   const userList = useRecoilValue(userListState);
   const isHistoryOpen = useRecoilValue(isHistoryOpenState);
+  const userFocusNode = useRecoilValue(userFocusNodeState);
+
+  const focusingUsers = Array.from(userFocusNode.entries())
+    .filter(([_, id]) => id === nodeId)
+    .map(([userId, _]) => userList[userId])
+    .slice(0, 3);
   const isFiltering = !!Object.values(taskFilters).reduce((acc, filter) => (acc += filter ? filter : ''), '');
 
   const { addNode } = useHistoryEmitter();
@@ -175,6 +181,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
             {!isHistoryOpen && !isRoot && isSelected && (
               <NodeDeleteBtn onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제</NodeDeleteBtn>
             )}
+            <UserFocusBox users={focusingUsers} />
             {content}
           </Node>
         </>
