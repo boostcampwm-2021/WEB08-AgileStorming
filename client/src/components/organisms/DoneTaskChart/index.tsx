@@ -7,9 +7,13 @@ import { doneTaskChartState } from 'recoil/chart';
 import { assigneeFilterState, sprintFilterState } from 'recoil/project';
 
 const DoneTaskChart = () => {
+  const history = useHistory();
+  const projectId = useProjectId();
+  const setAssigneeFilter = useSetRecoilState(assigneeFilterState);
+  const setSprintFilter = useSetRecoilState(sprintFilterState);
   const doneTaskData = useRecoilValue(doneTaskChartState);
 
-  const { categories, series } = doneTaskData;
+  const { categories, series, dictSprintname, dictUsername } = doneTaskData;
   const copiedSeries = Object.values(series).map((elem) => ({ ...elem, data: [...elem.data] }));
 
   const options = {
@@ -59,6 +63,21 @@ const DoneTaskChart = () => {
     plotOptions: {
       column: {
         stacking: 'normal',
+        point: {
+          events: {
+            click: function (this: { category: string; series: Highcharts.Series }) {
+              const {
+                category,
+                series: { name },
+              } = this;
+              const sprintId = dictSprintname[category?.split('<')[0]];
+              const assigneeId = dictUsername[name];
+              setSprintFilter(sprintId);
+              if (assigneeId) setAssigneeFilter(assigneeId);
+              history.push('/backlog/' + projectId);
+            },
+          },
+        },
       },
       series: {
         cursor: 'pointer',
