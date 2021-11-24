@@ -53,7 +53,6 @@ const eventFunction = (): Record<eventType.TEventType, TEventFunction> => {
     },
     DELETE_SPRINT: (data) => {
       const { sprintId } = data as eventType.TDeleteSprint;
-      console.log(sprintId);
       deleteSprint(sprintId);
       return;
     },
