@@ -1,3 +1,4 @@
+import React from 'react';
 import { IconButton } from 'components/molecules';
 import { arrowLeft, arrowRight } from 'img';
 import { getNextMonthISODate, getPrevMonthISODate, parseISODate } from 'utils/date';
@@ -23,4 +24,6 @@ const MonthSelector: React.FC<IProps> = ({ currentDateISO, setCurrentDateISO }) 
   );
 };
 
-export default MonthSelector;
+const MonthSelectorMemo = React.memo(MonthSelector);
+
+export default MonthSelectorMemo;

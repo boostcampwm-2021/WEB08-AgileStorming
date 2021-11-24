@@ -1,21 +1,19 @@
+import { LayerTask, LayerScheduleDayWrapper } from './style';
 import { useSetRecoilState } from 'recoil';
 import { selectedNodeIdState } from 'recoil/node';
 import { IMindNode } from 'types/mindmap';
-import { getTodayDate, isSameDate } from 'utils/date';
-import { DayTask, DayWrapper } from './style';
 
 interface IProps {
   dayDate?: { year: number; month: number; date: number };
   tasks?: IMindNode[];
   setHoveredNode?: React.Dispatch<React.SetStateAction<IMindNode | null>>;
-  blur?: boolean;
 }
 
-const Day: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNode = () => {}, blur }) => {
+const LayerScheduleDay: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNode = () => {} }) => {
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
 
   if (!dayDate) {
-    return <DayWrapper disable={true}></DayWrapper>;
+    return <LayerScheduleDayWrapper></LayerScheduleDayWrapper>;
   }
 
   const handleClickTask = (e: React.MouseEvent, id: number) => {
@@ -26,31 +24,27 @@ const Day: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNode = () => {},
   const handleHoverTask = (task: IMindNode) => setHoveredNode(task);
   const handleLeaveTask = () => setHoveredNode(null);
 
-  const { date } = dayDate;
-  const todayDate = getTodayDate();
   const today = new Date();
 
   return (
-    <DayWrapper today={isSameDate(dayDate, todayDate)}>
-      {date}
+    <LayerScheduleDayWrapper>
       {tasks.map((task) => {
         const dueAt = task.dueDate ? new Date(task.dueDate) : null;
         const endedAt = task.endDate ? new Date(task.endDate) : null;
 
         return (
-          <DayTask
+          <LayerTask
             key={task.nodeId}
             onClick={(e) => handleClickTask(e, task.nodeId)}
             onMouseEnter={() => handleHoverTask(task)}
             onMouseLeave={() => handleLeaveTask()}
             delayed={dueAt && !endedAt && today > dueAt}
             ended={dueAt && endedAt && true}
-            blur={blur}
-          >{`#${task.nodeId} ${task.content}`}</DayTask>
+          >{`#${task.nodeId} ${task.content}`}</LayerTask>
         );
       })}
-    </DayWrapper>
+    </LayerScheduleDayWrapper>
   );
 };
 
-export default Day;
+export default LayerScheduleDay;

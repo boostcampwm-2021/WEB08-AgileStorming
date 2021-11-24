@@ -2,8 +2,15 @@ import styled from '@emotion/styled';
 
 const Wrapper = styled.div`
   ${({ theme }) => theme.flex.columnCenter};
+
+  font-size: ${({ theme }) => theme.fontSize.small};
+  font-weight: bold;
+
   .blur {
     opacity: 0.5;
+  }
+  .no-click {
+    pointer-events: none;
   }
 `;
 
@@ -26,6 +33,7 @@ const CalendarWrapper = styled.div`
   width: 60rem;
   margin: 1.5rem 0 1rem 0;
   background-color: ${({ theme }) => theme.color.white};
+  border-left: 1px solid ${({ theme }) => theme.color.gray3};
   border-radius: 0.5rem;
   overflow: hidden;
   ${({ theme }) => theme.shadow};
@@ -35,17 +43,14 @@ const CalendarHeader = styled.div`
   ${({ theme }) => theme.flex.center};
   height: 2rem;
   color: ${({ theme }) => theme.color.white};
-  font-size: ${({ theme }) => theme.fontSize.small};
-  font-weight: bold;
   background-color: ${({ theme }) => theme.color.primary1};
   border-right: 1px solid ${({ theme }) => theme.color.gray3};
 `;
 
-const DayWrapper = styled.div<{ disable?: boolean; today?: boolean }>`
+const CalendarDay = styled.div<{ disable?: boolean; today?: boolean }>`
   position: relative;
-  padding: 0.2rem;
   height: 6.8rem;
-  font-size: ${({ theme }) => theme.fontSize.small};
+  padding: 0.2rem;
   border-top: 1px solid ${({ theme }) => theme.color.gray3};
   border-right: 1px solid ${({ theme }) => theme.color.gray3};
   overflow: hidden;
@@ -62,11 +67,37 @@ const DayWrapper = styled.div<{ disable?: boolean; today?: boolean }>`
   }};
 `;
 
-const DayTask = styled.div<{ delayed?: boolean | null; ended?: boolean | null; blur?: boolean }>`
+const LayerWrapper = styled.div`
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 60rem;
+  top: 9.6rem;
+
+  font-size: ${({ theme }) => theme.fontSize.small};
   font-weight: bold;
-  overflow: hidden;
   white-space: nowrap;
+
+  border-radius: 0.5rem;
+  overflow: hidden;
+`;
+
+const LayerDay = styled.div`
+  position: relative;
+  height: 6.8rem;
+  border-top: 1px solid #00000000;
+
+  overflow: hidden;
+`;
+
+const LayerScheduleDayWrapper = styled(LayerDay)`
+  padding: 0.2rem;
+  padding-top: 1.1rem;
+`;
+
+const LayerTask = styled.div<{ delayed?: boolean | null; ended?: boolean | null }>`
   text-overflow: ellipsis;
+  overflow: hidden;
   cursor: pointer;
 
   color: ${({ theme, delayed, ended }) => {
@@ -76,38 +107,18 @@ const DayTask = styled.div<{ delayed?: boolean | null; ended?: boolean | null; b
     if (ended) {
       return theme.color.primary1;
     }
-    return '';
+    return theme.color.gray1;
   }};
-  opacity: ${({ blur }) => (blur ? 0.5 : 1)};
 
   :hover {
     color: ${({ theme }) => theme.color.white};
     background-color: ${({ theme }) => theme.color.primary1};
-    opacity: 1;
   }
 `;
 
-const LayerWrapper = styled.div`
-  position: absolute;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  width: 60rem;
-  top: 9.7rem;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  pointer-events: none;
-`;
-
-const LayerDayWrapper = styled.div`
-  position: relative;
-  height: 6.8rem;
-  width: 100%;
+const LayerTaskDetailDayWrapper = styled(LayerDay)`
   padding-top: 2.8rem;
   color: ${({ theme }) => theme.color.white};
-  font-size: ${({ theme }) => theme.fontSize.small};
-  border-top: 1px solid ${({ theme }) => theme.color.gray3};
-
-  overflow: hidden;
 
   div {
     ${({ theme }) => theme.flex.center};
@@ -147,12 +158,7 @@ const LayerDayWrapper = styled.div`
   }
 `;
 
-const LayerSprintDayWrapper = styled.div`
-  position: relative;
-  height: 6.8rem;
-  color: ${({ theme }) => theme.color.black};
-  font-size: ${({ theme }) => theme.fontSize.small};
-  border-top: 1px solid ${({ theme }) => theme.color.gray3};
+const LayerSprintDayWrapper = styled(LayerDay)`
   opacity: 0.2;
 
   .start {
@@ -176,10 +182,11 @@ export {
   MonthSelectorWrapper,
   CalendarWrapper,
   CalendarHeader,
-  DayWrapper,
-  DayTask,
+  CalendarDay,
   LayerWrapper,
-  LayerDayWrapper,
+  LayerScheduleDayWrapper,
+  LayerTask,
+  LayerTaskDetailDayWrapper,
   LayerSprintDayWrapper,
   LayerSprint,
 };
