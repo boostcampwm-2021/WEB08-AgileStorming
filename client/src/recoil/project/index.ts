@@ -131,7 +131,7 @@ const userListCurrentUserTopState = selector<Array<IUser>>({
   },
 });
 
-interface SprintTaskInfo {
+export interface SprintTaskInfo {
   sprintName: string;
   sprintStartDate: string;
   totalEstimatedTime: number;

@@ -2,7 +2,7 @@ import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { useRecoilValue } from 'recoil';
-import { sprintBurnDownState } from 'recoil/project';
+import { sprintBurnDownState, SprintTaskInfo } from 'recoil/project';
 
 interface IProps {
   child?: string;
@@ -12,7 +12,7 @@ const BurnDownChart: React.FC<IProps> = () => {
   const sprintInfoTask = useRecoilValue(sprintBurnDownState);
   const options = {
     title: {
-      text: 'Burndown Chart',
+      text: '번다운 차트',
       x: -20,
     },
     colors: ['blue', 'red'],
@@ -50,12 +50,20 @@ const BurnDownChart: React.FC<IProps> = () => {
         name: '예상 시간',
         color: 'rgba(255,0,0,0.25)',
         lineWidth: 2,
-        data: sprintInfoTask.map((info) => info.totalEstimatedTime),
+        data: sprintInfoTask
+          .reduce((prev: number[], curr: SprintTaskInfo, idx: number) => {
+            return [...prev, curr.totalEstimatedTime + (prev[idx - 1] || 0)];
+          }, [])
+          .reverse(),
       },
       {
         name: '실제 시간',
         color: 'rgba(0,120,200,0.75)',
-        data: sprintInfoTask.map((info) => info.totalFinishedTime),
+        data: sprintInfoTask
+          .reduce((prev: number[], curr: SprintTaskInfo, idx: number) => {
+            return [...prev, curr.totalFinishedTime + (prev[idx - 1] || 0)];
+          }, [])
+          .reverse(),
       },
     ],
   };
