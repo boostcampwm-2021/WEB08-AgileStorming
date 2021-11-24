@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 
 const TableWrapper = styled.table`
-  position: absolute;
   width: 90vw;
-  margin: 7rem 0 0 5vw;
+  margin: 1.5rem 0;
   border-radius: 0.5rem;
   overflow: hidden;
   ${({ theme }) => theme.shadow};
@@ -11,8 +10,7 @@ const TableWrapper = styled.table`
 
 const BacklogInfo = styled.div`
   ${({ theme }) => theme.flex.row};
-  position: absolute;
-  margin: 4.7rem 0 0 11rem;
+  margin: 4.8rem auto 0 11rem;
   gap: 1rem;
   color: ${({ theme }) => theme.color.primary2};
   font-size: ${({ theme }) => theme.fontSize.xxlarge};

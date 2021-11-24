@@ -1,3 +1,5 @@
+import arrowLeftPath from './arrow-left.svg';
+import arrowRightPath from './arrow-right.svg';
 import sharePath from './share.svg';
 import logoPath from './logo.png';
 import logoBigPath from './logo-big.png';
@@ -22,6 +24,8 @@ import sirenRedPath from './siren-red.svg';
 import pauseBtnPath from './pauseBtn.svg';
 import primaryPlusCirclePath from './primaryPlusCircle.svg';
 
+export const arrowLeft: string = arrowLeftPath;
+export const arrowRight: string = arrowRightPath;
 export const share: string = sharePath;
 export const logo: string = logoPath;
 export const logoBig: string = logoBigPath;
