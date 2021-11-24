@@ -15,3 +15,4 @@ export { default as HistoryWindow } from 'components/molecules/HistoryWindow';
 export { default as TempNode } from 'components/molecules/TempNode';
 export { default as TaskInfo } from 'components/molecules/TaskInfo';
 export { default as LabelIcon } from 'components/molecules/LabelIcon';
+export { default as UserFocusBox } from 'components/molecules/UserFocusBox';
