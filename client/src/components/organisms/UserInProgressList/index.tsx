@@ -42,8 +42,7 @@ export const UserInProgressList: React.FC<IProps> = ({ user }) => {
           {filteredUserInProgressTask.map((task) => {
             return (
               <StyledTask key={task.nodeId}>
-                <Title titleStyle={'normal'} margin='0 5px 0 0'>{`#${task.nodeId}: `}</Title>
-                <StyledTextFlow>{task.content}</StyledTextFlow>
+                <StyledTextFlow>{`# ${task.content}`}</StyledTextFlow>
               </StyledTask>
             );
           })}
