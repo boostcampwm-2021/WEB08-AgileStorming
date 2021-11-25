@@ -2,17 +2,29 @@ import React, { ChangeEvent } from 'react';
 import { ModalOverlay, Input, SmallText } from 'components/atoms';
 import { PopupLayout, TextButton } from 'components/molecules';
 import useModal from 'hooks/useModal';
+import useKeys from 'hooks/useKeys';
 
 export interface ITextInputModalProps {
-  onClickSubmitButton?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClickSubmitButton?: () => void;
   onChangeInput?: (event: ChangeEvent<HTMLInputElement>) => void;
   title?: string;
   text?: string;
   placeholder?: string;
 }
 
-const TextInputModal: React.FC<ITextInputModalProps> = ({ onClickSubmitButton = () => {}, onChangeInput, title, text, placeholder }) => {
+const TextInputModal: React.FC<ITextInputModalProps> = ({
+  onClickSubmitButton = () => {},
+  onChangeInput = () => {},
+  title,
+  text,
+  placeholder,
+}) => {
   const { hideModal } = useModal();
+  const { setOnEnterKey, setOnEscKey } = useKeys();
+
+  setOnEnterKey(onClickSubmitButton);
+  setOnEscKey(hideModal);
+
   return (
     <>
       <ModalOverlay visible={true} onClick={hideModal} />

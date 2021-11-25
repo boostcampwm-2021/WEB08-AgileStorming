@@ -5,6 +5,7 @@ import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
 import { AxiosError } from 'axios';
 import { auth } from 'utils/api';
+import useKeys from 'hooks/useKeys';
 
 export interface IRegisterModalProps {
   key?: string;
@@ -18,6 +19,7 @@ interface INewUser {
 const RegisterModal: React.FC<IRegisterModalProps> = () => {
   const newUser = useRef<INewUser>({ id: '', name: '' });
   const { hideModal } = useModal();
+  const { setOnEnterKey, setOnEscKey } = useKeys();
   const { showMessage, showError } = useToast();
 
   const handleIdChange = (e: ChangeEvent<HTMLInputElement>) => (newUser.current.id = e.target.value);
@@ -37,6 +39,10 @@ const RegisterModal: React.FC<IRegisterModalProps> = () => {
       showError(err as Error | AxiosError);
     }
   };
+
+  setOnEnterKey(handleSubmit);
+  setOnEscKey(hideModal);
+
   return (
     <>
       <ModalOverlay visible={true} onClick={hideModal} />

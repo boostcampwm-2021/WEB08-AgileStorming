@@ -3,9 +3,10 @@ import { ModalOverlay, SmallText } from 'components/atoms';
 import { PopupLayout, TextButton } from 'components/molecules';
 import useModal from 'hooks/useModal';
 import { BottomButtonWrapper } from './style';
+import useKeys from 'hooks/useKeys';
 
 export interface IConfirmModalProps {
-  onClickSubmitButton?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClickSubmitButton?: () => void;
   onCancelButton?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   title?: string;
   text?: string;
@@ -13,6 +14,11 @@ export interface IConfirmModalProps {
 
 const ConfirmModal: React.FC<IConfirmModalProps> = ({ onClickSubmitButton = () => {}, onCancelButton = () => {}, title, text }) => {
   const { hideModal } = useModal();
+  const { setOnEnterKey, setOnEscKey } = useKeys();
+
+  setOnEnterKey(onClickSubmitButton);
+  setOnEscKey(hideModal);
+
   return (
     <>
       <ModalOverlay visible={true} onClick={hideModal} />
