@@ -13,5 +13,6 @@ export const StyledIcon = styled.span<IStyledIcon>`
   border-radius: 1rem;
   background-color: ${({ color }) => `#${color}`};
   cursor: ${({ cursor }) => cursor ?? 'default'};
+  font-weight: normal; // 구글 크롬 이모티콘 이슈
   user-select: none;
 `;
