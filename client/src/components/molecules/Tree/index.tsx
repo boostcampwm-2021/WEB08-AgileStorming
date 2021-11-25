@@ -73,8 +73,8 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
   const userFocusNode = useRecoilValue(userFocusNodeState);
 
   const focusingUsers = Array.from(userFocusNode.entries())
-    .filter(([_, id]) => id === nodeId)
-    .map(([userId, _]) => userList[userId])
+    .filter((entry) => entry[1] === nodeId)
+    .map((entry) => userList[entry[0]])
     .slice(0, 3);
   const isFiltering = !!Object.values(taskFilters).reduce((acc, filter) => (acc += filter ? filter : ''), '');
 

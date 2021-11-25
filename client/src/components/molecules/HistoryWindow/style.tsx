@@ -11,10 +11,12 @@ export const Wrapper = styled.div`
   ${({ theme }) => theme.flex.row}
   overflow-y: hidden;
   overflow-x: scroll;
+  ${({ theme }) => theme.customScrollbar.primary1}
   gap: 1rem;
   align-items: center;
   font-size: 2rem;
   position: relative;
+  border-radius: 0.5rem;
 `;
 
 export const IconWrapper = styled.div<IProps>`
