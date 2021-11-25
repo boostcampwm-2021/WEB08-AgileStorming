@@ -4,7 +4,7 @@ import { labelListState, sprintListState, userListState } from 'recoil/project';
 import { IMindNode } from 'types/mindmap';
 import { SmallText, UserIcon, Wrapper } from 'components/atoms';
 import { LabelIcon, TaskInfo } from 'components/molecules';
-import { StyledTaskCard, StyledCardInfoLeft, StyledCardInfoRight, StyledTaskTitle } from './style';
+import { StyledTaskCard, StyledCardInfoLeft, StyledCardInfoRight, StyledTaskTitle, StyledIconContainer } from './style';
 
 interface IProps {
   taskInfo: IMindNode;
@@ -27,9 +27,6 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, setSelectedNodeIdTask, onMouseDo
             {user !== undefined ? <UserIcon user={user} /> : ''}
           </TaskInfo>
           <TaskInfo title={'중요도: '} content={taskInfo.priority!}></TaskInfo>
-          {taskInfo.labels?.map((labelId) => (
-            <LabelIcon key={labelId} label={labelList[labelId!]}></LabelIcon>
-          ))}
         </StyledCardInfoLeft>
         <StyledCardInfoRight>
           <TaskInfo
@@ -46,6 +43,13 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, setSelectedNodeIdTask, onMouseDo
           <TaskInfo title={'마감 시간: '} content={taskInfo.dueDate!}></TaskInfo>
         </StyledCardInfoRight>
       </Wrapper>
+      {taskInfo.labelIds ? (
+        <StyledIconContainer>
+          {JSON.parse(taskInfo.labelIds).map((labelId: number) => (
+            <LabelIcon key={labelId} label={labelList[labelId]} />
+          ))}
+        </StyledIconContainer>
+      ) : null}
     </StyledTaskCard>
   );
 };
