@@ -31,6 +31,7 @@ const HistoryWindow: React.FC<IProps> = ({ onClick }) => {
               onClick={onClick(idx - historyDataList.length)}
               isSelected={isSelected(idx - historyDataList.length)}
               color={userList[historyData.user].color}
+              className={'background'}
             >
               <UserIcon user={userList[historyData.user]} cursor='pointer' />
             </IconWrapper>

@@ -3,6 +3,8 @@ import * as img from 'img';
 import styled from '@emotion/styled';
 import { useHistory } from 'react-router';
 import useProjectId from 'hooks/useRoomId';
+import { useRecoilState } from 'recoil';
+import { urlLocationState } from 'recoil/project';
 
 interface IProps {
   children?: React.ReactNode;
@@ -24,29 +26,41 @@ const HeaderContainer = styled.div`
   background-color: ${(props) => props.theme.color.primary1};
 `;
 
-const BoxLink = styled.div`
+interface IBoxlink {
+  isSelected: boolean;
+}
+const BoxLink = styled.div<IBoxlink>`
   all: unset;
   cursor: pointer;
   color: ${(props) => props.theme.color.white};
+  padding-bottom: 0.1rem;
+  border-bottom: 0.1rem solid ${({ isSelected, theme }) => (isSelected ? theme.color.white : 'transparent')};
 `;
+
+const PAGES = ['/mindmap/', '/kanban/', '/calendar/', '/chart/', '/backlog/'];
+const TABS = ['마인드맵', '칸반보드', '캘린더', '차트', '백로그'];
 
 const Header: React.FC<IProps> = ({ children }: IProps) => {
   const history = useHistory();
   const projectId = useProjectId();
+  const [urlLocation, setUrlLocation] = useRecoilState(urlLocationState);
 
-  const handleLinkClick = (link: any) => {
+  const handleLinkClick = (link: string) => {
+    setUrlLocation(link);
     history.push(link + projectId);
   };
+
+  const isSelected = (link: string) => link === urlLocation;
 
   return (
     <>
       <HeaderContainer>
         <BackIcon src={img.back} onClick={() => history.push('/project')} alt='IconImgNoHoverStyle' />
-        <BoxLink onClick={handleLinkClick.bind(null, '/mindmap/')}>마인드맵</BoxLink>
-        <BoxLink onClick={handleLinkClick.bind(null, '/kanban/')}>칸반보드</BoxLink>
-        <BoxLink onClick={handleLinkClick.bind(null, '/calendar/')}>캘린더</BoxLink>
-        <BoxLink onClick={handleLinkClick.bind(null, '/chart/')}>차트</BoxLink>
-        <BoxLink onClick={handleLinkClick.bind(null, '/backlog/')}>백로그</BoxLink>
+        {PAGES.map((pageName, i) => (
+          <BoxLink key={pageName} isSelected={isSelected(pageName)} onClick={handleLinkClick.bind(null, pageName)}>
+            {TABS[i]}
+          </BoxLink>
+        ))}
       </HeaderContainer>
       {children}
     </>

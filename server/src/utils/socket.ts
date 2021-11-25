@@ -92,8 +92,7 @@ const socketIO = (server, origin) => {
       io.in(projectId).emit('non-history-event', eventData, dbData);
     });
     socket.on('user-focus', (nodeId) => {
-      console.log(id, nodeId);
-      io.in(projectId).emit('user-focus', id, nodeId);
+      socket.to(projectId).emit('user-focus', id, nodeId);
     });
   });
 };

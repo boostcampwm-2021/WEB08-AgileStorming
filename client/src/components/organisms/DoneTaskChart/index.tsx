@@ -93,7 +93,7 @@ const DoneTaskChart = () => {
 
   return (
     <>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <HighchartsReact highcharts={Highcharts} options={options} containerProps={{ style: { height: '100%', width: '100%' } }} />
     </>
   );
 };

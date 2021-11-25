@@ -9,11 +9,14 @@ export const Wrapper = styled.div`
   width: 100%;
   height: 80px;
   ${({ theme }) => theme.flex.row}
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  ${({ theme }) => theme.customScrollbar.primary1}
   gap: 1rem;
   align-items: center;
   font-size: 2rem;
   position: relative;
+  border-radius: 0.5rem;
 `;
 
 export const IconWrapper = styled.div<IProps>`
