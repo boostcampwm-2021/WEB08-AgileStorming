@@ -103,6 +103,23 @@ const nodeBgColors = [color.primary1, color.red, color.yellow, color.mint];
 const nodeColors = [color.white, color.white, color.black, color.black];
 const nodeFontSizes = [fontSize.large, fontSize.normal, fontSize.small, fontSize.small];
 
+const customScrollbar = `
+::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  border-radius: 1ex;
+  -webkit-border-radius: 1ex;
+  background-color: #5865F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #0A127C;
+  border-radius: 1ex;
+  -webkit-border-radius: 1ex;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+} 
+`;
+
 const common = {
   color,
   fontSize,
@@ -114,6 +131,7 @@ const common = {
   nodeBgColors,
   nodeColors,
   nodeFontSizes,
+  customScrollbar,
 };
 
 export default common;

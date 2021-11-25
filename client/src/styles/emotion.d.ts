@@ -23,5 +23,6 @@ declare module '@emotion/react' {
     nodeBgColors: string[];
     nodeColors: string[];
     nodeFontSizes: string[];
+    customScrollbar: string;
   }
 }
