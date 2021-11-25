@@ -206,17 +206,6 @@ export const NodeDetailWrapper = () => {
                 margin='0.1rem 0'
               />
             </Label>
-            <Label label='진행 상태' htmlFor='status' labelStyle='small' ratio={0.5}>
-              <Dropdown
-                id='status'
-                key={selectedNode.status}
-                items={statusDropdownItem}
-                placeholder={selectedNode.status}
-                onValueChange={handleChangeNodeDetail('status')}
-                dropdownStyle='small'
-                margin='0.1rem 0'
-              />
-            </Label>
           </PopupItemLayout>
           <PopupItemLayout title={'라벨'}>
             <LabelList labelIds={JSON.parse(selectedNode.labelIds ?? '[]')} onChange={requestLabelChange} />
