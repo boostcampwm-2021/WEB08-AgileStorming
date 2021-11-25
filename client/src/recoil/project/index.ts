@@ -56,6 +56,11 @@ const userFocusNodeState = atom<Map<string, number>>({
   default: new Map(),
 });
 
+const urlLocationState = atom<string>({
+  key: 'urlLocationState',
+  default: '/mindmap/',
+});
+
 const filteredTaskState = selector<Record<number, IMindNode>>({
   key: 'filteredTask',
   get: ({ get }) => {
@@ -223,6 +228,7 @@ export {
   labelFilterState,
   userMouseOverState,
   userFocusNodeState,
+  urlLocationState,
   filteredTaskState,
   filteredTaskTimeState,
   filteredUserInProgressTaskState,
