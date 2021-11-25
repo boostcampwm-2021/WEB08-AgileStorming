@@ -30,7 +30,7 @@ const MonthSelectorWrapper = styled.div`
 const CalendarWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  width: 60rem;
+  width: 70rem;
   margin: 1.5rem 0 1rem 0;
   background-color: ${({ theme }) => theme.color.white};
   border-left: 1px solid ${({ theme }) => theme.color.gray3};
@@ -49,7 +49,7 @@ const CalendarHeader = styled.div`
 
 const CalendarDay = styled.div<{ disable?: boolean; today?: boolean }>`
   position: relative;
-  height: 6.8rem;
+  height: 8.8rem;
   padding: 0.2rem;
   border-top: 1px solid ${({ theme }) => theme.color.gray3};
   border-right: 1px solid ${({ theme }) => theme.color.gray3};
@@ -71,7 +71,7 @@ const LayerWrapper = styled.div`
   position: absolute;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  width: 60rem;
+  width: 70rem;
   top: 9.6rem;
 
   font-size: ${({ theme }) => theme.fontSize.small};
@@ -84,20 +84,27 @@ const LayerWrapper = styled.div`
 
 const LayerDay = styled.div`
   position: relative;
-  height: 6.8rem;
+  height: 8.8rem;
   border-top: 1px solid #00000000;
-
   overflow: hidden;
 `;
 
 const LayerScheduleDayWrapper = styled(LayerDay)`
+  height: 7.7rem;
+  margin-top: 1.1rem;
   padding: 0.2rem;
-  padding-top: 1.1rem;
+  overflow-y: auto;
+  ${({ theme }) => theme.customScrollbar.primary3}
 `;
 
 const LayerTask = styled.div<{ delayed?: boolean | null; ended?: boolean | null }>`
-  text-overflow: ellipsis;
-  overflow: hidden;
+  ${({ theme }) => theme.flex.rowCenter}
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   cursor: pointer;
 
   color: ${({ theme, delayed, ended }) => {
@@ -117,7 +124,7 @@ const LayerTask = styled.div<{ delayed?: boolean | null; ended?: boolean | null 
 `;
 
 const LayerTaskDetailDayWrapper = styled(LayerDay)`
-  padding-top: 2.8rem;
+  padding-top: 3.8rem;
   color: ${({ theme }) => theme.color.white};
 
   div {
