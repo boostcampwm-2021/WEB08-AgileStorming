@@ -1,65 +1,91 @@
 import useToast from 'hooks/useToast';
-import { IData } from 'recoil/history';
+import {
+  TAddLabel,
+  TAddSprint,
+  TDeleteLabel,
+  TDeleteSprint,
+  TEventData,
+  TEventType,
+  THistoryEventData,
+  THistoryEventType,
+} from 'types/event';
+import { fillPayload } from 'utils/helpers';
 
 export interface IHistoryEmitter {
   (props: IHistoryEmitterProps): void;
 }
 
 export interface IHistoryEmitterProps {
-  type: eventType;
-  payload: IData;
+  type: THistoryEventType;
+  payload: THistoryEventData;
 }
 
-export enum eventType {
-  ADD_NODE = 'ADD_NODE',
-  MOVE_NODE = 'MOVE_NODE',
-  DELETE_NODE = 'DELETE_NODE',
-  CHANGE_CONTENT = 'CHANGE_CONTENT',
-  CHANGE_SPRINT = 'CHANGE_SPRINT',
-  CHANGE_ASSIGNEE = 'CHANGE_ASSIGNEE',
-  CHANGE_EXPECTED_AT = 'CHANGE_EXPECTED_AT',
-  CHANGE_EXPECTED_TIME = 'CHANGE_EXPECTED_TIME',
-  CHANGE_PRIORITY = 'CHANGE_PRIORITY',
+export interface INonHistoryEmitterProps {
+  type: TEventType;
+  payload: TEventData;
 }
 
 const useHistoryEmitter = () => {
-  const { showMessage } = useToast();
+  const { showError } = useToast();
 
-  const historyEmitter = ({ type, payload }: IHistoryEmitterProps) => {
+  const isSocketConnected = () => {
     if (!window.socket) {
-      showMessage('서버와의 연결이 불안정합니다');
-      return;
+      showError(new Error('서버와의 연결이 불안정합니다'));
+      return false;
     }
-    window.socket.emit('event', type, JSON.stringify(payload));
+    return true;
   };
 
-  const addNode = ({ nodeFrom, dataTo }: IData) => historyEmitter({ type: eventType.ADD_NODE, payload: { nodeFrom, dataTo } });
-  const moveNode = ({ nodeFrom, nodeTo, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: eventType.MOVE_NODE, payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
-  const deleteNode = ({ nodeFrom, dataFrom }: IData) => historyEmitter({ type: eventType.DELETE_NODE, payload: { nodeFrom, dataFrom } });
-  const changeContent = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: eventType.CHANGE_CONTENT, payload: { nodeFrom, dataFrom, dataTo } });
-  const changeSprint = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: eventType.CHANGE_SPRINT, payload: { nodeFrom, dataFrom, dataTo } });
-  const changeAssignee = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: eventType.CHANGE_ASSIGNEE, payload: { nodeFrom, dataFrom, dataTo } });
-  const changeExpectedAt = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: eventType.CHANGE_EXPECTED_AT, payload: { nodeFrom, dataFrom, dataTo } });
-  const changeExpectedTime = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: eventType.CHANGE_EXPECTED_TIME, payload: { nodeFrom, dataFrom, dataTo } });
-  const changePriority = ({ nodeFrom, dataFrom, dataTo }: IData) =>
-    historyEmitter({ type: eventType.CHANGE_PRIORITY, payload: { nodeFrom, dataFrom, dataTo } });
+  const historyEmitter = ({ type, payload }: IHistoryEmitterProps) => {
+    if (!isSocketConnected()) return;
+    payload = fillPayload(payload);
+    console.log(type, payload);
+    window.socket!.emit('history-event', type, JSON.stringify(payload));
+  };
+
+  const nonHistoryEmitter = ({ type, payload }: INonHistoryEmitterProps) => {
+    if (!isSocketConnected()) return;
+    console.log(type, payload);
+    window.socket!.emit('non-history-event', type, JSON.stringify(payload));
+  };
+
+  //* history-event
+  const addNode = ({ nodeFrom, dataTo }: THistoryEventData) => historyEmitter({ type: 'ADD_NODE', payload: { nodeFrom, dataTo } });
+
+  const deleteNode = ({ nodeFrom, dataFrom }: THistoryEventData) =>
+    historyEmitter({ type: 'DELETE_NODE', payload: { nodeFrom, dataFrom } });
+
+  const updateNodeParent = ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) =>
+    historyEmitter({ type: 'UPDATE_NODE_PARENT', payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
+
+  const updateNodeContent = ({ nodeFrom, dataFrom, dataTo }: THistoryEventData) =>
+    historyEmitter({ type: 'UPDATE_NODE_CONTENT', payload: { nodeFrom, dataFrom, dataTo } });
+
+  const updateTaskInformation = ({ nodeFrom, nodeTo, dataFrom, dataTo }: THistoryEventData) =>
+    historyEmitter({ type: 'UPDATE_TASK_INFORMATION', payload: { nodeFrom, nodeTo, dataFrom, dataTo } });
+
+  //* non-history-event
+  const addLabel = ({ name }: TAddLabel) => nonHistoryEmitter({ type: 'ADD_LABEL', payload: { name } });
+  const deleteLabel = ({ labelId }: TDeleteLabel) => nonHistoryEmitter({ type: 'DELETE_LABEL', payload: { labelId } });
+  const addSprint = ({ name, startDate, endDate }: TAddSprint) =>
+    nonHistoryEmitter({ type: 'ADD_SPRINT', payload: { name, startDate, endDate } });
+  const deleteSprint = ({ sprintId }: TDeleteSprint) => nonHistoryEmitter({ type: 'DELETE_SPRINT', payload: { sprintId } });
+  const focusNode = (nodeId: number | null) => {
+    if (!isSocketConnected()) return;
+    window.socket!.emit('user-focus', nodeId);
+  };
 
   return {
     addNode,
-    moveNode,
     deleteNode,
-    changeContent,
-    changeSprint,
-    changeAssignee,
-    changeExpectedAt,
-    changeExpectedTime,
-    changePriority,
+    updateNodeParent,
+    updateNodeContent,
+    updateTaskInformation,
+    addLabel,
+    deleteLabel,
+    addSprint,
+    deleteSprint,
+    focusNode,
   };
 };
 

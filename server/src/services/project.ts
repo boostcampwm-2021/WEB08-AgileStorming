@@ -1,4 +1,4 @@
-import { getConnection, getRepository } from 'typeorm';
+import { getConnection, getManager, getRepository } from 'typeorm';
 import { Project } from '../database/entities/Project';
 import { createNode } from './mindmap';
 import { findOneUser } from './user';
@@ -37,6 +37,8 @@ export const addUserToProject = async (userId: string, projectId: string) => {
     .where('project.id = :projectId', { projectId })
     .getOne();
   const user = await findOneUser(userId);
+  if (!project) return;
+  if (!user) return;
   project.users = [...project.users, user];
   return getRepository(Project).save(project);
 };
@@ -44,16 +46,43 @@ export const addUserToProject = async (userId: string, projectId: string) => {
 export const createProject = async (name: string, creator: string) => {
   const user = await findOneUser(creator);
   const newProject = await getRepository(Project).save({ name, creator: user, users: [user] });
-  createNode(newProject.id, null, { content: name, posX: '0', posY: '0', children: JSON.stringify([]) });
-  return newProject;
+  const rootId = await createNode(newProject.id, null, {
+    level: 'ROOT',
+    content: name,
+    children: JSON.stringify([]),
+  });
+  newProject.rootId = rootId;
+  return getRepository(Project).save(newProject);
 };
 
 export const deleteProject = async (userId: string, projectId: string) => {
   const user = await findOneUser(userId);
-  const deleteProject = { id: projectId, creator: user };
-  return getConnection().createQueryBuilder().delete().from(Project).where(deleteProject).execute();
+  const projectCondition = { id: projectId, creator: user };
+  return getConnection().createQueryBuilder().delete().from(Project).where(projectCondition).execute();
 };
 
 export const findOneProject = async (id: string) => {
   return getRepository(Project).findOne({ where: { id } });
+};
+
+export const getProjectInfo = async (projectId: string) => {
+  return getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoinAndSelect('project.users', 'users')
+    .leftJoinAndSelect('project.sprints', 'sprints')
+    .leftJoinAndSelect('project.labels', 'labels')
+    .where('project.id = :projectId', { projectId })
+    .getOne();
+};
+
+export const getProjectNodeInfo = async (ProjectId: string) => {
+  return getManager().query(
+    `
+  SELECT *
+  FROM mindmap
+  LEFT JOIN task
+  ON mindmap.id = task.taskId
+  WHERE mindmap.projectId = ? ;`,
+    [ProjectId]
+  );
 };

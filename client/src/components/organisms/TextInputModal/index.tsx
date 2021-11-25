@@ -1,27 +1,40 @@
 import React, { ChangeEvent } from 'react';
-import { ModalBox, ModalOverlay, Input, SmallText } from 'components/atoms';
-import { TextButton } from 'components/molecules';
+import { ModalOverlay, Input, SmallText } from 'components/atoms';
+import { PopupLayout, TextButton } from 'components/molecules';
+import useModal from 'hooks/useModal';
+import useKeys from 'hooks/useKeys';
 
-interface IProps {
-  onClickSubmitButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  onClickOverlay: (event: React.MouseEvent<HTMLElement>) => void;
-  onClickChangeInput: (event: ChangeEvent<HTMLInputElement>) => void;
-  text: string;
-  placeholder: string;
-  visible: boolean;
+export interface ITextInputModalProps {
+  onClickSubmitButton?: () => void;
+  onChangeInput?: (event: ChangeEvent<HTMLInputElement>) => void;
+  title?: string;
+  text?: string;
+  placeholder?: string;
 }
 
-const TextInputModal: React.FC<IProps> = ({ onClickSubmitButton, onClickOverlay, onClickChangeInput, text, placeholder, visible }) => {
+const TextInputModal: React.FC<ITextInputModalProps> = ({
+  onClickSubmitButton = () => {},
+  onChangeInput = () => {},
+  title,
+  text,
+  placeholder,
+}) => {
+  const { hideModal } = useModal();
+  const { setOnEnterKey, setOnEscKey } = useKeys();
+
+  setOnEnterKey(onClickSubmitButton);
+  setOnEscKey(hideModal);
+
   return (
     <>
-      <ModalOverlay visible={visible} onClick={onClickOverlay} />
-      <ModalBox visible={visible}>
-        <SmallText color={'black'} weight={'bold'}>
+      <ModalOverlay visible={true} onClick={hideModal} />
+      <PopupLayout title={title} popupStyle={'modal'} onClose={hideModal}>
+        <SmallText color={'black'} weight={'normal'} margin={'1rem 0 0 0'}>
           {text}
         </SmallText>
-        <Input placeholder={placeholder} margin={'20px 0'} onChange={onClickChangeInput} />
+        <Input placeholder={placeholder} margin={'20px 0'} onChange={onChangeInput} inputStyle={'gray'} />
         <TextButton onClick={onClickSubmitButton} text={'확인'} textColor={'red'} textWeight={'bold'} margin={'0 0 0 auto'} />
-      </ModalBox>
+      </PopupLayout>
     </>
   );
 };

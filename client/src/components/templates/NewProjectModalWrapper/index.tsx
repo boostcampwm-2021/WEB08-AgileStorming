@@ -1,48 +1,41 @@
-import React, { useState, useRef, ChangeEvent } from 'react';
-import { NewProjectCard, TextInputModal } from 'components/organisms';
+import React, { useRef, ChangeEvent } from 'react';
+import { NewProjectCard } from 'components/organisms';
 import { IProject } from 'pages/Project';
 import { API } from 'utils/api';
+import useModal from 'hooks/useModal';
 
 interface IProps {
   addNewProject: (newProject: IProject) => void;
 }
 
 const NewProjectModalWrapper: React.FC<IProps> = ({ addNewProject }) => {
-  const [isModalVisible, setModalVisible] = useState(false);
+  const { showModal, hideModal } = useModal();
   const projectName = useRef<string>('');
-  const handleClickPlusButton = () => {
-    setModalVisible((isModalVisible) => !isModalVisible);
-  };
-  const handleClickOverlay = () => {
-    setModalVisible(false);
-  };
+
   const handleClickSubmitButton = async () => {
     if (!projectName.current) return;
     const newProject = await API.project.create(projectName.current);
     projectName.current = '';
     addNewProject(newProject);
-    setModalVisible(false);
+    hideModal();
   };
   const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     projectName.current = event.target.value;
   };
-  return (
-    <>
-      <NewProjectCard
-        onClickPlusButton={handleClickPlusButton}
-        modal={
-          <TextInputModal
-            onClickSubmitButton={handleClickSubmitButton}
-            onClickOverlay={handleClickOverlay}
-            onClickChangeInput={handleChangeInput}
-            text={'새로운 프로젝트 만들기'}
-            placeholder={'프로젝트 이름'}
-            visible={isModalVisible}
-          />
-        }
-      />
-    </>
-  );
+  const handleClickPlusButton = () => {
+    showModal({
+      modalType: 'textInputModal',
+      modalProps: {
+        title: '새 프로젝트 만들기',
+        text: '새 프로젝트의 이름을 입력해주세요',
+        placeholder: '프로젝트 이름',
+        onChangeInput: handleChangeInput,
+        onClickSubmitButton: handleClickSubmitButton,
+      },
+    });
+  };
+
+  return <NewProjectCard onClickPlusButton={handleClickPlusButton} />;
 };
 
 export default NewProjectModalWrapper;

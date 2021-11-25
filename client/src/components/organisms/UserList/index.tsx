@@ -1,19 +1,19 @@
-import React from 'react';
+import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { connectedUserState, userListOpenState, queryUserListState } from 'recoil/user-list';
-import { PopupItemLayout, PopupLayout } from 'components/molecules';
+import { PopupItemLayout, PopupLayout, IconButton, Profile } from 'components/molecules';
+import { UserInProgressList } from 'components/organisms';
 import { BoxButton } from 'components/atoms';
-import { IconButton, Profile } from 'components/molecules';
 import { userIcon, share } from 'img';
 import styled from '@emotion/styled';
 import useToast from 'hooks/useToast';
+import { connectedUserState, userListCurrentUserTopState, userMouseOverState } from 'recoil/project';
 
-interface IProps {}
 interface IStyledConnectionStatus {
   online: boolean;
 }
 
 const StyledUserInfoBox = styled.div`
+  position: relative;
   background-color: ${({ theme }) => theme.color.primary1};
   ${({ theme }) => theme.flex.rowCenter}
   border-radius: 8px;
@@ -24,38 +24,47 @@ const StyledConnectionStatus = styled.p<IStyledConnectionStatus>`
   color: ${({ theme, online }) => (online ? theme.color.red : theme.color.gray3)};
   font-size: ${({ theme }) => theme.fontSize.xlarge};
   margin: 0 0 0 auto;
+  cursor: default;
 `;
 
-export const UserList: React.FC<IProps> = () => {
-  const [isUserListOpen, setUserListOpen] = useRecoilState(userListOpenState);
-  const userList = useRecoilValue(queryUserListState)!;
+export const UserList = () => {
+  const [isUserListOpen, setUserListOpen] = useState(false);
+  const [mouseOverUser, setMouseOverUser] = useRecoilState(userMouseOverState);
+  const userList = useRecoilValue(userListCurrentUserTopState)!;
   const connectedUsers = useRecoilValue(connectedUserState);
   const { showMessage } = useToast();
-  const handleClickCloseBtn = () => {
-    setUserListOpen(false);
-  };
-  const handleClickBoxBtn = () => {
-    setUserListOpen(true);
-  };
+
+  const handleClickCloseBtn = () => setUserListOpen(false);
+  const handleClickBoxBtn = () => setUserListOpen(true);
   const handleClickShareBtn = () => {
     navigator.clipboard.writeText(window.location.href);
     showMessage('공유 링크가 클립보드에 복사되었습니다.');
   };
+  const handleOnMouseEnterList = (event: React.MouseEvent<HTMLElement>) => {
+    setMouseOverUser(event.currentTarget.dataset.user!);
+  };
+  const handleOnMouseLeaveList = () => setMouseOverUser('');
   return isUserListOpen ? (
     <PopupLayout
-      title={`공유됨: ${Object.keys(userList).length} 명`}
+      title={`공유됨: ${userList.length} 명`}
       onClose={handleClickCloseBtn}
       popupStyle='normal'
       extraBtn={<IconButton zIdx={'1'} onClick={handleClickShareBtn} imgSrc={share} altText='공유하기 버튼' />}
     >
       <PopupItemLayout>
-        {Object.values(userList).map((user) => {
+        {userList.map((user) => {
           return (
-            <StyledUserInfoBox key={user.id}>
-              <Profile user={user} />
+            <StyledUserInfoBox
+              key={user.id}
+              data-user={user.id}
+              onMouseEnter={handleOnMouseEnterList}
+              onMouseLeave={handleOnMouseLeaveList}
+            >
+              <Profile user={user} width='120px' />
               <StyledConnectionStatus online={connectedUsers[user.id]}>
                 {connectedUsers[user.id] ? 'online' : 'offline'}
               </StyledConnectionStatus>
+              {mouseOverUser === user.id ? <UserInProgressList user={user}></UserInProgressList> : null}
             </StyledUserInfoBox>
           );
         })}

@@ -1,60 +1,32 @@
-import React, { Suspense } from 'react';
-import styled from '@emotion/styled';
-import { filterIcon } from 'img';
-import { BoxButton } from 'components/atoms';
-import { NodeDetailWrapper, UserList } from 'components/organisms';
+import { useState } from 'react';
+import FilterButton from './FilterButton';
+import { LeftInfo, RightInfo, Template } from './style';
+import { NodeDetailWrapper, UserList, Header, FilterPopup } from 'components/organisms';
 import useSocketSetup from 'hooks/useSocketSetup';
-import { Header } from 'components/organisms';
-import { Spinner } from 'components/molecules';
+import useProject from 'hooks/useProject';
+import useAuthentication from 'hooks/useAuthentication';
 
-export const Template = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.color.bgWhite};
-`;
+const CommonLayout: React.FC = ({ children }) => {
+  const [DisplayFilter, setDisplayFilter] = useState(false);
 
-export const LeftInfo = styled.div`
-  position: fixed;
-  top: 2.2rem;
-  left: 0;
-  width: 270px;
-  padding: 1rem;
-  z-index: 1;
-`;
-
-export const RightInfo = styled.div`
-  position: fixed;
-  top: 2.2rem;
-  right: 0;
-  width: 270px;
-  padding: 1rem;
-  z-index: 1;
-`;
-
-interface IProps {
-  children?: React.ReactNode;
-}
-
-const CommonLayout: React.FC<IProps> = ({ children }) => {
+  const handleClickFilterPopupClose = () => setDisplayFilter(false);
+  useAuthentication();
   useSocketSetup();
-  const handleFilterButton = () => {};
+  useProject();
+
+  const handleClickFilterButton = () => setDisplayFilter(true);
 
   return (
     <Template>
       <Header />
-      <Suspense fallback={<Spinner />}>
-        <LeftInfo>
-          <UserList />
-        </LeftInfo>
-        <RightInfo>
-          <BoxButton onClick={handleFilterButton} btnStyle={'normal'} margin='1rem 0 0 auto'>
-            <img src={filterIcon} alt='필터링 버튼'></img>
-            {'필터링'}
-          </BoxButton>
-          <NodeDetailWrapper />
-        </RightInfo>
-      </Suspense>
+
+      <LeftInfo>
+        <UserList />
+      </LeftInfo>
+      <RightInfo>
+        {DisplayFilter ? <FilterPopup onClose={handleClickFilterPopupClose} /> : <FilterButton onClick={handleClickFilterButton} />}
+        <NodeDetailWrapper />
+      </RightInfo>
       {children}
     </Template>
   );

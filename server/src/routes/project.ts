@@ -1,5 +1,5 @@
 import { Router, Request, Response, Next } from 'express';
-import { createCustomError } from '../utils';
+import { createCustomError, deleteProjectHistory } from '../utils';
 import * as projectService from '../services/project';
 import { verifyToken } from '../middlewares/auth';
 import { identifyUser } from '../middlewares/user';
@@ -29,6 +29,7 @@ router.delete('/delete', verifyToken, identifyUser, async (req: Request, res: Re
   try {
     const { projectId } = req.body;
     await projectService.deleteProject(res.locals.user.id, projectId);
+    await deleteProjectHistory(projectId);
     res.sendStatus(200);
   } catch (e) {
     next(e);
@@ -40,6 +41,19 @@ router.get('/user-list', async (req: Request, res: Response, next: Next) => {
     const { projectId } = req.query;
     const projectList = await projectService.getProjectUserList(projectId);
     res.send(projectList);
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.get('/info', async (req: Request, res: Response, next: Next) => {
+  try {
+    const { projectId } = req.query;
+    const projectInfo = await projectService.getProjectInfo(projectId);
+    const projectNodeInfo = await projectService.getProjectNodeInfo(projectId);
+
+    projectNodeInfo.forEach((node) => (node.children = JSON.parse(node.children)));
+    res.send({ projectInfo, projectNodeInfo });
   } catch (e) {
     next(e);
   }

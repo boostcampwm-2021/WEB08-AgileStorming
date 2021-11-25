@@ -1,73 +1,30 @@
-import { useCallback, useEffect, useRef } from 'react';
-import { getCenterCoord } from 'utils/helpers';
-
-interface ICoord {
-  clientX: number;
-  clientY: number;
-}
+import { useEffect, useRef } from 'react';
+import { getInitPosition, addListeners, removeListeners, initTarget, TCoord } from './functions';
 
 const useDragBackground = () => {
-  const lastCoord = useRef<ICoord | null>(null);
+  const lastCoord = useRef<TCoord | null>(null);
   const draggable = useRef(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
-
-  const [centerX, centerY] = getCenterCoord(window.innerWidth, window.innerHeight);
-
-  const toggleDraggable = () => (draggable.current = !draggable.current);
-
-  const handleWindowMouseDown = useCallback(({ clientX, clientY, target }: MouseEvent) => {
-    console.log(target);
-    console.log((target as HTMLElement).className.includes('background'));
-    if (!(target as HTMLElement).className.includes('background')) return;
-    toggleDraggable();
-    lastCoord.current = { clientX, clientY };
-  }, []);
-
-  const handleWindowMouseUp = useCallback(({ target }: MouseEvent) => {
-    if (!(target as HTMLElement).className.includes('background')) return;
-    toggleDraggable();
-    lastCoord.current = null;
-  }, []);
-
-  const handleWindowMouseMove = useCallback(({ clientX, clientY }: MouseEvent) => {
-    if (!draggable.current || !lastCoord.current) return;
-    if (timer.current) return;
-
-    timer.current = setTimeout(
-      (clientX, clientY) => {
-        timer.current = null;
-
-        if (!lastCoord.current) return;
-        const diffX = lastCoord.current.clientX - clientX;
-        const diffY = lastCoord.current.clientY - clientY;
-
-        window.scrollBy(diffX, diffY);
-        lastCoord.current = { clientX, clientY };
-      },
-      20,
-      clientX,
-      clientY
-    );
-  }, []);
-
-  const addListeners = useCallback(() => {
-    window.addEventListener('mousedown', handleWindowMouseDown);
-    window.addEventListener('mousemove', handleWindowMouseMove);
-    window.addEventListener('mouseup', handleWindowMouseUp);
-  }, [handleWindowMouseDown, handleWindowMouseMove, handleWindowMouseUp]);
-
-  const removeListeners = useCallback(() => {
-    window.removeEventListener('mousedown', handleWindowMouseDown);
-    window.removeEventListener('mousemove', handleWindowMouseMove);
-    window.removeEventListener('mouseup', handleWindowMouseUp);
-  }, [handleWindowMouseDown, handleWindowMouseMove, handleWindowMouseUp]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.scrollTo(centerX, centerY);
-    addListeners();
+    if (!dragRef.current || !containerRef.current) return;
 
-    return removeListeners;
-  }, [addListeners, removeListeners]);
+    const target = dragRef.current as HTMLDivElement;
+    const container = containerRef.current as HTMLDivElement;
+    const containerRect = container.getBoundingClientRect();
+    const factors = { draggable, target, timer, lastCoord };
+    const { left, top } = getInitPosition(containerRect);
+
+    initTarget({ target, top, left });
+
+    addListeners(container, factors);
+
+    return () => removeListeners(container, factors);
+  }, [dragRef.current, containerRef.current]);
+
+  return { containerRef: containerRef, dragRef: dragRef };
 };
 
 export default useDragBackground;

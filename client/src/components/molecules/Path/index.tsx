@@ -20,7 +20,7 @@ const Path: React.FC<IProps> = ({ rect }) => {
 
   return (
     <Svg rect={rect} xmlns='http://www.w3.org/2000/svg' xmlnsXlink='http://www.w3.org/1999/xlink'>
-      <path fill='none' stroke='#000' d={getDrawShape(rect!)} strokeWidth='1' strokeLinecap='round'></path>
+      <path fill='none' stroke='#888888' d={getDrawShape(rect!)} strokeWidth='1' strokeLinecap='round'></path>
     </Svg>
   );
 };

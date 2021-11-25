@@ -1,7 +1,11 @@
-import React from 'react';
+import { ChartContainer, CommonLayout } from 'components/templates';
 
 const Chart = () => {
-  return <div>차트페이지</div>;
+  return (
+    <CommonLayout>
+      <ChartContainer />
+    </CommonLayout>
+  );
 };
 
 export default Chart;

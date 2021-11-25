@@ -1,4 +1,5 @@
 import { ProjectCardContainer } from 'components/templates';
+import useAuthentication from 'hooks/useAuthentication';
 import useSocketDisconnect from 'hooks/useSocketDisconnect';
 import { useEffect, useState } from 'react';
 import { API } from 'utils/api';
@@ -17,12 +18,13 @@ export interface IProject {
 }
 
 const Project = () => {
+  useAuthentication();
   useSocketDisconnect();
   const [projectList, setProjectList] = useState([] as Array<IProject>);
   useEffect(() => {
     const getProjectList = async () => {
-      const projectList = await API.project.get();
-      setProjectList(projectList);
+      const projectListData = await API.project.get();
+      setProjectList(projectListData);
     };
     getProjectList();
     return;

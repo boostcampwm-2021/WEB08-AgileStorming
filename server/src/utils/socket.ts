@@ -1,10 +1,10 @@
 import { Server, Socket } from 'socket.io';
-import _ from 'lodash';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { xread, xadd } from './redis';
-import { convertEvent } from './event-converter';
+import { convertHistoryEvent, convertEvent } from './event-converter';
 import { getUserHasProject, addUserToProject } from '../services/project';
+import { findOneUser } from '../services/user';
 
 dotenv.config();
 
@@ -38,17 +38,19 @@ const socketIO = (server, origin) => {
 
   io.on('connection', async (socket: ISocket) => {
     const { id } = socket.decoded;
+    console.log(id, 'connected');
     const projectId = socket.handshake.query.projectId as string;
 
     const handleNewEvent = async (data: Record<number, object>) => {
       const eventData = data[0][1][0][1];
-      const dbData = await convertEvent(eventData);
-      io.in(projectId).emit('event', eventData, dbData);
+      const dbData = await convertHistoryEvent(eventData);
+      io.in(projectId).emit('history-event', eventData, dbData);
     };
 
-    const handleNewUser = () => {
+    const handleNewUser = async () => {
       addUserToProject(id, projectId);
-      io.in(projectId).emit('new', id);
+      const newUser = await findOneUser(id);
+      io.in(projectId).emit('new', JSON.stringify(newUser));
     };
 
     socket.join(projectId);
@@ -71,17 +73,26 @@ const socketIO = (server, origin) => {
       socket.to(projectId).emit('left', id);
     });
 
-    socket.on('leave', (projectId) => {
-      socket.leave(projectId);
+    socket.on('leave', (targetProjectId) => {
+      socket.leave(targetProjectId);
+      console.log(id, 'leave');
       socket.disconnect();
     });
 
-    socket.on('event', (type, data) => {
+    socket.on('history-event', (type, data) => {
       xread(projectId, '$', handleNewEvent);
       xadd({
         stream: projectId,
         args: ['type', type, 'projectId', projectId, 'user', id, 'data', data],
       });
+    });
+    socket.on('non-history-event', async (type, data) => {
+      const eventData = ['type', type, 'projectId', projectId, 'user', id, 'data', data];
+      const dbData = await convertEvent(eventData);
+      io.in(projectId).emit('non-history-event', eventData, dbData);
+    });
+    socket.on('user-focus', (nodeId) => {
+      socket.to(projectId).emit('user-focus', id, nodeId);
     });
   });
 };

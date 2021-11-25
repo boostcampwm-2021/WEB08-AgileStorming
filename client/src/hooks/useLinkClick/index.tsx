@@ -1,15 +1,15 @@
 import useProjectId from 'hooks/useRoomId';
+import { useCallback } from 'react';
 import { useHistory } from 'react-router';
+import { TPage } from 'types/page';
 
-type TPath = 'project' | 'mindmap' | 'history' | 'kanban' | 'calendar' | 'chart';
-
-const useLinkClick = (path: TPath) => {
+const useLinkClick = (path: TPage) => {
   const history = useHistory();
   const projectId = useProjectId();
 
-  const handleLinkClick = () => {
+  const handleLinkClick = useCallback(() => {
     history.push(`/${path}/${projectId}`);
-  };
+  }, [history, projectId]);
 
   return handleLinkClick;
 };

@@ -1,5 +1,5 @@
 import { IconImg, Title } from 'components/atoms';
-import { IUser } from 'recoil/user';
+import { IUser } from 'types/user';
 
 interface IProps {
   user: IUser;

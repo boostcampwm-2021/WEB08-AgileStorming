@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "axios": "^0.24.0",
-    "body-parser": "^1.18.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -20,12 +19,27 @@
   },
   "devDependencies": {
     "@types/node": "^8.0.29",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-typescript": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.6",
     "nodemon": "^2.0.14",
     "ts-node": "3.3.0",
-    "typescript": "3.3.3333"
+    "typescript": "^4.6.0-dev.20211116"
   },
   "scripts": {
     "start": "nodemon src/index.ts",
-    "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
+    "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "prepare": "cd .. && husky install",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": "eslint --fix"
   }
 }

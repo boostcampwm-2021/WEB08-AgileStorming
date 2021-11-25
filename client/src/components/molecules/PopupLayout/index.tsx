@@ -18,7 +18,7 @@ const PopupLayout: React.FC<IProps> = ({ children, onClose, title = '', margin =
       <PopupHeader popupStyle={popupStyle}>
         <p>{title}</p>
         {extraBtn}
-        <img onClick={onClose} src={closeIcon} alt='닫기' />
+        <img onClick={onClose} width={'18px'} height={'18px'} src={closeIcon} alt='닫기' />
       </PopupHeader>
       {children}
     </Layout>

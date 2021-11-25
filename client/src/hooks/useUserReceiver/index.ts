@@ -1,6 +1,7 @@
 import { useSetRecoilState } from 'recoil';
-import { connectedUserState, forceReloadUserList } from 'recoil/user-list';
 import useToast from 'hooks/useToast';
+import { connectedUserState, userListState } from 'recoil/project';
+import { IUser } from 'types/user';
 
 type TUserReceiverType = 'JOIN' | 'LEFT' | 'NEW' | 'INIT';
 export interface IUserRes {
@@ -13,10 +14,10 @@ export interface IUserReceiver {
 }
 
 const useUserReceiver = () => {
+  const setUserList = useSetRecoilState(userListState);
   const setConnectedUser = useSetRecoilState(connectedUserState);
-  const forceUserListReload = useSetRecoilState(forceReloadUserList);
   const { showMessage } = useToast();
-  const useUserReceiver = ({ type, data }: IUserRes) => {
+  const userReceiver = ({ type, data }: IUserRes) => {
     switch (type) {
       case 'JOIN':
         setConnectedUser((users) => {
@@ -33,14 +34,13 @@ const useUserReceiver = () => {
         });
         break;
       case 'NEW':
-        showMessage(`${data} 님이 새로 참여하셨습니다.`);
-        forceUserListReload(new Date().toISOString());
+        const newUser: IUser = JSON.parse(data as string);
+        setUserList((prev) => ({ ...prev, [newUser.id]: newUser }));
+        showMessage(`${newUser.name} 님이 새로 참여하셨습니다.`);
         break;
       case 'INIT':
         const connectedUser: Record<string, boolean> = {};
-        (data as string[]).forEach((userId: string) => {
-          connectedUser[userId] = true;
-        });
+        (data as string[]).forEach((userId: string) => (connectedUser[userId] = true));
         setConnectedUser(connectedUser);
         break;
       default:
@@ -48,6 +48,6 @@ const useUserReceiver = () => {
     }
   };
 
-  return useUserReceiver;
+  return userReceiver;
 };
 export default useUserReceiver;

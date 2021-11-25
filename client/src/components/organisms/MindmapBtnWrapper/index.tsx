@@ -1,29 +1,27 @@
 import { useHistory } from 'react-router-dom';
 import { clock, plusCircle } from 'img';
-import { useRecoilState } from 'recoil';
-import { getNextMapState, IMindmapData, mindmapState } from 'recoil/mindmap';
-import { idxToLevel, levelToIdx } from 'utils/helpers';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
+import { getChildLevel } from 'utils/helpers';
 import { BoxButton } from 'components/atoms';
 import useProjectId from 'hooks/useRoomId';
-import { selectedNodeIdState } from 'recoil/node';
+import { selectedNodeIdState, selectedNodeState } from 'recoil/node';
 import { Wrapper } from './style';
+import { IMindmapData, IMindNode } from 'types/mindmap';
 
 interface ITempNodeParams {
   mindmapData: IMindmapData;
   selectedNodeId: number | null;
 }
 
-const TEMP_NODE_ID = -1;
-
 const createTempNode = ({ mindmapData, selectedNodeId }: ITempNodeParams) => {
   const { rootId, mindNodes } = mindmapData;
-  const parentNode = mindNodes.get(selectedNodeId ?? 0);
-  const level = idxToLevel(levelToIdx(parentNode!.level) + 1);
+  const parentNode = { ...mindNodes.get(selectedNodeId ?? rootId) } as IMindNode;
+  const level = getChildLevel(parentNode!.level!);
 
   const tempNode = { nodeId: TEMP_NODE_ID, level: level, content: '', children: [] };
-
-  parentNode!.children.push(TEMP_NODE_ID);
-  mindNodes.set(parentNode!.nodeId, parentNode!);
+  parentNode!.children = [...parentNode!.children!, TEMP_NODE_ID];
+  mindNodes.set(parentNode!.nodeId!, parentNode!);
   mindNodes.set(TEMP_NODE_ID, tempNode);
 
   const newMapState = getNextMapState({ mindNodes, rootId });
@@ -33,16 +31,18 @@ const createTempNode = ({ mindmapData, selectedNodeId }: ITempNodeParams) => {
 
 const MindmapWrapper: React.FC = () => {
   const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeIdState);
+  const selectedNode = useRecoilValue(selectedNodeState);
   const [mindmapData, setMindmapData] = useRecoilState(mindmapState);
-  const hitory = useHistory();
+  const history = useHistory();
   const projectId = useProjectId();
 
   const handleHistoryBtnClick = () => {
-    hitory.push(`/history/${projectId}`);
+    history.push(`/history/${projectId}`);
   };
 
   const handlePlusNodeBtnClick = () => {
-    if (selectedNodeId === -1) return;
+    if (selectedNodeId === TEMP_NODE_ID) return;
+    if (selectedNode && selectedNode.level === 'TASK') return;
 
     const newMapState = createTempNode({ mindmapData, selectedNodeId });
     setSelectedNodeId(TEMP_NODE_ID);

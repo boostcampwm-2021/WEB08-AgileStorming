@@ -7,12 +7,13 @@ interface IProps {
   altText: string;
   margin?: string;
   zIdx?: string;
+  size?: { width: string; height: string };
 }
 
-const IconButton: React.FC<IProps> = ({ onClick, imgSrc, altText, margin, zIdx }) => {
+const IconButton: React.FC<IProps> = ({ onClick, imgSrc, altText, margin, zIdx, size }) => {
   return (
     <TransparentButton onClick={onClick} margin={margin} zIdx={zIdx}>
-      <IconImg imgSrc={imgSrc} altText={altText} />
+      <IconImg imgSrc={imgSrc} altText={altText} size={size} />
     </TransparentButton>
   );
 };

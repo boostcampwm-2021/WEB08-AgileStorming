@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Project } from './Project';
+import { Task } from './Task';
 
 @Entity()
 export class User {
@@ -17,4 +18,7 @@ export class User {
 
   @OneToMany(() => Project, (project) => project.creator)
   projects: Project[];
+
+  @OneToMany(() => Task, (tasks) => tasks.assignee)
+  tasks: Task[];
 }

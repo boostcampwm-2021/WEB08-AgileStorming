@@ -12,6 +12,11 @@ export const Layout = styled.div`
   border-top: 2px solid black;
   padding: 0.5rem 0;
   margin-top: 0.2rem;
+
+  .selected {
+    color: ${({ theme }) => theme.color.white};
+    background-color: ${({ theme }) => theme.color.primary1};
+  }
 `;
 
 const NodeDetailLayout: React.FC<IProps> = ({ children, title }) => {

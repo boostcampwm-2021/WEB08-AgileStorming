@@ -1,11 +1,16 @@
 import axios from 'axios';
+import { IMindmapData, IProject } from 'types/project';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_SERVER + 'api',
   withCredentials: true,
 });
 
-export const authApi = {
+const HISTORY_COUNT_TO_GET = 15;
+
+export const auth = {
+  status: () => api.get('/auth/status'),
+
   login: (id: string) =>
     api.post('/auth/login', {
       id,
@@ -39,8 +44,25 @@ export const project = {
     });
     return userList;
   },
+  getInfo: async (projectId: string): Promise<{ projectInfo: IProject; projectNodeInfo: IMindmapData[] }> => {
+    const info = await api.get('/project/info', {
+      params: { projectId },
+    });
+    return info.data;
+  },
+};
+
+export const history = {
+  get: async (projectId: string, rangeFrom?: string) => {
+    const historyResponse = await api.get(`/history/${projectId}`, { params: { count: HISTORY_COUNT_TO_GET, rangeFrom } });
+
+    if (historyResponse.status !== 200) throw new Error(historyResponse.statusText);
+    return historyResponse.data;
+  },
 };
 
 export const API = {
+  auth,
   project,
+  history,
 };

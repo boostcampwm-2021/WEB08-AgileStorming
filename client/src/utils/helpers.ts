@@ -1,3 +1,6 @@
+import { THistoryEventData } from 'types/event';
+import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
+
 interface ICoord {
   x: number;
   y: number;
@@ -6,7 +9,7 @@ interface ICoord {
 interface IRect extends ICoord {
   width: number;
   height: number;
-  type: QUATER_SPACE;
+  type: QuarterSpace;
 }
 
 interface IGetTypeParams {
@@ -24,32 +27,18 @@ interface ICalcRectParams {
   parentCoord: TCoord;
   currentCoord: TCoord;
   gap: TGap;
-  type: QUATER_SPACE;
+  type: QuarterSpace;
 }
 
-enum QUATER_SPACE {
+enum QuarterSpace {
   FIRST = 1,
   SECOND,
   THIRD,
   FOURTH,
 }
 
-enum MINDMAP_BG_SIZE {
-  WIDTH = 5000,
-  HEIGHT = 5000,
-}
-
 const pxToNum = (px: string): number => Number(px.slice(0, -2));
 const numToPx = (num: number): string => num + 'px';
-const getCenterCoord = (width: number, height: number): number[] => [
-  (MINDMAP_BG_SIZE.WIDTH - width) / 2,
-  (MINDMAP_BG_SIZE.HEIGHT - height) / 2,
-];
-
-const getKoreans = (str: string): [string, RegExpMatchArray] => [str, str.match(/[가-힣]/g) ?? []];
-const splitEnAndKo = ([str, koreans]: [string, RegExpMatchArray]): [number, number] => [str.length - koreans.length, koreans.length];
-const calculateWidth = ([en, ko]: [number, number]): number => en * 9 + ko * 18 + 20;
-const getNodeWidth = (str: string) => calculateWidth(splitEnAndKo(getKoreans(str)));
 
 const getRegexNumber = (nodeId: string) => {
   return Number(nodeId.replace(/[^0-9]/g, ''));
@@ -83,7 +72,7 @@ const getGap = (currentContainer: HTMLElement) => ({
 });
 
 const getType = ({ currentCoord, gap, parentCoord }: IGetTypeParams) =>
-  currentCoord.y + gap.topGap > parentCoord.y ? QUATER_SPACE.FOURTH : QUATER_SPACE.FIRST;
+  currentCoord.y + gap.topGap > parentCoord.y ? QuarterSpace.FOURTH : QuarterSpace.FIRST;
 
 const calcRect = ({ parentCoord, currentCoord, gap, type }: ICalcRectParams): IRect => ({
   x: currentCoord.x - Math.abs(currentCoord.x + gap.leftGap - parentCoord.x),
@@ -103,30 +92,60 @@ const getNewNode = (id: number, level: Levels, content: string) => ({
   sprint: null,
   assignee: null,
   createdAt: new Date().toISOString(),
-  expectedAt: null,
-  closedAt: null,
-  expectedTime: null,
   priority: null,
+  dueDate: null,
+  estimatedTime: null,
+  finishedTime: null,
   comment: [],
 });
 
+const fillPayload = (payload: THistoryEventData): THistoryEventData => ({
+  nodeFrom: null,
+  nodeTo: null,
+  dataFrom: null,
+  dataTo: null,
+  ...payload,
+});
+
+const getChildLevel = (level: Levels): Levels => idxToLevel(levelToIdx(level) + 1);
+
+const setTreeLevel = (mindNodes: IMindNodes, nodeId: number, depth: number) => {
+  const node = mindNodes.get(nodeId)!;
+  node.level = idxToLevel(depth);
+  node.children.forEach((childId) => setTreeLevel(mindNodes, childId, depth + 1));
+};
+
+const getAllChildren = (node: IMindNode, mindmapData: IMindmapData) => {
+  const allChildren: Array<IMindNode> = [];
+  node.children.forEach((childId) => {
+    const childNode = mindmapData.mindNodes.get(childId)!;
+    allChildren.push(childNode);
+    childNode?.children.forEach((grandChildId) => {
+      const grandChildNode = mindmapData.mindNodes.get(grandChildId)!;
+      allChildren.push(grandChildNode);
+    });
+  });
+  return allChildren;
+};
+
 export {
+  getChildLevel,
+  fillPayload,
   getNewNode,
   calcRect,
   getType,
   getGap,
   getCurrentCoord,
-  QUATER_SPACE,
+  QuarterSpace as QUARTER_SPACE,
   getDrawShape,
   getId,
   pxToNum,
   numToPx,
-  getCenterCoord,
-  getNodeWidth,
-  MINDMAP_BG_SIZE,
   getRegexNumber,
   idxToLevel,
   levelToIdx,
+  setTreeLevel,
+  getAllChildren,
 };
 export type TRect = IRect;
 export type TCoord = ICoord;

@@ -28,7 +28,7 @@ const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList })
   };
   const handleClickTrashButton = (event: React.MouseEvent<HTMLButtonElement>, projectId: string) => {
     event.stopPropagation();
-    setProjectList((projectList) => projectList.filter((p) => p.id !== projectId));
+    setProjectList((list) => list.filter((p) => p.id !== projectId));
     API.project.delete(projectId);
   };
   const handleClickProjectCard = (projectId: string) => {
@@ -36,7 +36,7 @@ const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList })
   };
   const addNewProject = (newProject: IProject) => {
     const newProjectWithCount = { ...newProject, count: 1 };
-    setProjectList((projectList) => [...projectList, newProjectWithCount]);
+    setProjectList((list) => [...list, newProjectWithCount]);
   };
   return (
     <StyledProjectCardContainer>

@@ -1,31 +1,26 @@
-import styled from '@emotion/styled';
 import { Title } from 'components/atoms';
-import { IUser } from 'recoil/user';
+import { useLog } from 'hooks/useLog';
+import { useRecoilValue } from 'recoil';
+import { userListState } from 'recoil/project';
+import { IHistoryData } from 'types/history';
 import { Profile } from '..';
-
-const Wrapper = styled.div`
-  ${({ theme }) => theme.flex.row};
-  width: 100%;
-`;
-
-export interface IDescription {
-  modifier: IUser;
-  type: 'ADD_NODE' | 'DELETE_NODE' | 'UPDATE_NODE_POSITION' | 'UPDATE_NODE_CONTENT';
-  content: string;
-}
+import { Wrapper } from './style';
 
 interface IProps {
-  description: IDescription | null;
+  historyData: IHistoryData | null;
 }
 
-const HistoryLog: React.FC<IProps> = ({ description }) => {
+const HistoryLog: React.FC<IProps> = ({ historyData }) => {
+  const userList = useRecoilValue(userListState);
+  const getLog = useLog();
+
   return (
     <Wrapper>
-      {description ? (
+      {historyData && userList ? (
         <>
-          <Profile user={description.modifier} />
-          <Title titleStyle='xlarge' color='white' margin='0 0 0 0.5rem' lineHeight={2}>
-            {description.type}
+          <Profile user={userList[historyData.user]} />
+          <Title titleStyle='large' color='white' margin='0 0 0 1rem' lineHeight={2.3}>
+            {getLog(historyData)}
           </Title>
         </>
       ) : null}

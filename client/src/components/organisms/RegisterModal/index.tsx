@@ -3,9 +3,13 @@ import { ModalBox, ModalOverlay, Input, Title } from 'components/atoms';
 import { TextButton } from 'components/molecules';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
-import { authApi } from 'utils/api';
+import { AxiosError } from 'axios';
+import { auth } from 'utils/api';
+import useKeys from 'hooks/useKeys';
 
-export interface IRegisterModalProps {}
+export interface IRegisterModalProps {
+  key?: string;
+}
 
 interface INewUser {
   id: string;
@@ -15,25 +19,30 @@ interface INewUser {
 const RegisterModal: React.FC<IRegisterModalProps> = () => {
   const newUser = useRef<INewUser>({ id: '', name: '' });
   const { hideModal } = useModal();
+  const { setOnEnterKey, setOnEscKey } = useKeys();
   const { showMessage, showError } = useToast();
 
   const handleIdChange = (e: ChangeEvent<HTMLInputElement>) => (newUser.current.id = e.target.value);
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => (newUser.current.name = e.target.value);
-  const handleSubmit = (e: React.MouseEvent) => {
+  const handleSubmit = async () => {
     if (newUser.current.id === '' || newUser.current.name === '') {
       showMessage('아이디와 이름을 입력해주세요');
       return;
     }
-    authApi
-      .register(newUser.current.id, newUser.current.name)
-      .then((res) => {
-        if (res.status === 200) {
-          showMessage('가입되었습니다.');
-          hideModal();
-        }
-      })
-      .catch((err) => (err.response?.data.msg ? showMessage(err.response?.data.msg) : showError(err)));
+    try {
+      const res = await auth.register(newUser.current.id, newUser.current.name);
+      if (res.status === 200) {
+        showMessage('가입되었습니다.');
+        hideModal();
+      }
+    } catch (err) {
+      showError(err as Error | AxiosError);
+    }
   };
+
+  setOnEnterKey(handleSubmit);
+  setOnEscKey(hideModal);
+
   return (
     <>
       <ModalOverlay visible={true} onClick={hideModal} />

@@ -1,32 +1,43 @@
-import { IconWrapper, Wrapper } from './style';
-import { closeIcon } from 'img';
-import { IconImg } from 'components/atoms';
-import { MouseEvent, MouseEventHandler, useEffect, useRef } from 'react';
-import { IHistoryData } from 'components/organisms/HistoryBar';
+import { Wrapper, IconWrapper } from './style';
+import { DragTarget, UserIcon } from 'components/atoms';
+import { IconButton } from '..';
+import { MouseEvent } from 'react';
+import useDragBackground from 'hooks/useDragBackground';
+import { useRecoilValue } from 'recoil';
+import { currentReverseIdxState, historyDataListState } from 'recoil/history';
+import { userListState } from 'recoil/project';
+import { primaryPlusCircle } from 'img';
+import useNewHistoryData from 'hooks/useNewHistoryData';
 
 interface IProps {
-  onClick: (historyData: IHistoryData, idx: number) => (event: MouseEvent) => void;
-  histories?: IHistoryData[];
+  onClick: (idx: number) => (event: MouseEvent) => void;
 }
 
-const HistoryWindow: React.FC<IProps> = ({ onClick, histories }) => {
-  const scrollRef = useRef(null);
-
-  useEffect(() => {
-    if (!scrollRef.current) return;
-    (scrollRef.current as HTMLElement).scrollIntoView();
-  }, [scrollRef.current]);
+const HistoryWindow: React.FC<IProps> = ({ onClick }) => {
+  const { containerRef, dragRef } = useDragBackground();
+  const { getMoreHistoryData } = useNewHistoryData();
+  const historyDataList = useRecoilValue(historyDataListState);
+  const userList = useRecoilValue(userListState);
+  const currentReverseIdx = useRecoilValue(currentReverseIdxState);
+  const isSelected = (idx: number): boolean => idx === currentReverseIdx;
 
   return (
-    <Wrapper>
-      {histories
-        ? histories.map((historyData, idx) => (
-            <IconWrapper key={idx} color={historyData.modifier.color} onClick={onClick(historyData, idx)}>
-              <IconImg imgSrc={historyData.modifier.icon} altText={`히스토리 ${idx + 1}`} />
+    <Wrapper ref={containerRef} className='background'>
+      <IconButton imgSrc={primaryPlusCircle} onClick={getMoreHistoryData} altText={'히스토리 목록 더 가져오기'} margin='0 0 0 1rem' />
+      {historyDataList.length && userList
+        ? historyDataList.map((historyData, idx) => (
+            <IconWrapper
+              key={historyData.historyId}
+              onClick={onClick(idx - historyDataList.length)}
+              isSelected={isSelected(idx - historyDataList.length)}
+              color={userList[historyData.user].color}
+              className={'background'}
+            >
+              <UserIcon user={userList[historyData.user]} cursor='pointer' />
             </IconWrapper>
           ))
         : null}
-      <div ref={scrollRef} id='scrollEnd' />
+      <DragTarget ref={dragRef} />
     </Wrapper>
   );
 };

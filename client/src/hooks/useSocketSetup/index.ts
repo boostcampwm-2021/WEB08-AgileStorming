@@ -2,20 +2,24 @@ import useProjectId from 'hooks/useRoomId';
 import useHistoryReceiver, { IHistoryReceiver } from 'hooks/useHistoryReceiver';
 import { useEffect } from 'react';
 import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
-import { getParsedHistory, historyState } from 'recoil/history';
-import { mindmapState } from 'recoil/mindmap';
 import { ISocket, socketState } from 'recoil/socket';
 import io from 'socket.io-client';
 import useUserReceiver, { IUserReceiver } from 'hooks/useUserReceiver';
+import { parseHistoryEvent, parseNonHistoryEvent } from 'utils/parser';
+import { INonHistoryEventData } from 'types/event';
+import { userFocusNodeState } from 'recoil/project';
 
 interface IInitProps {
   projectId: string;
   setSocket: SetterOrUpdater<ISocket>;
   historyReceiver: IHistoryReceiver;
+  nonHistoryEventReceiver: (eventData: INonHistoryEventData) => void;
   userReceiver: IUserReceiver;
+  setUserFocusNode: SetterOrUpdater<Map<string, number>>;
 }
 
-const initSocket = ({ projectId, setSocket, historyReceiver, userReceiver }: IInitProps) => {
+const initSocket = ({ projectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver, setUserFocusNode }: IInitProps) => {
+  console.log('socket connected');
   window.socket = io(process.env.REACT_APP_SERVER!, {
     query: {
       projectId,
@@ -38,11 +42,27 @@ const initSocket = ({ projectId, setSocket, historyReceiver, userReceiver }: IIn
   });
   socket.on('left', (userId: string) => {
     userReceiver({ data: userId, type: 'LEFT' });
+    setUserFocusNode((prev) => {
+      const next = new Map(prev);
+      next.delete(userId);
+      return next;
+    });
   });
-  socket.on('event', (data) => {
-    const history = getParsedHistory(data);
-    console.log('event', history);
-    historyReceiver(history);
+  socket.on('history-event', (data, dbData) => {
+    const eventData = parseHistoryEvent(data, dbData);
+    historyReceiver(eventData);
+  });
+  socket.on('non-history-event', (data, dbData) => {
+    const eventData = parseNonHistoryEvent(data, dbData);
+    nonHistoryEventReceiver(eventData);
+  });
+  socket.on('user-focus', (userId, nodeId) => {
+    setUserFocusNode((prev) => {
+      const next = new Map(prev);
+      if (nodeId) next.set(userId, nodeId);
+      else next.delete(userId);
+      return next;
+    });
   });
   setSocket({ projectId });
 };
@@ -50,20 +70,21 @@ const initSocket = ({ projectId, setSocket, historyReceiver, userReceiver }: IIn
 const useSocketSetup = () => {
   const newProjectId = useProjectId();
   const [{ projectId }, setSocket] = useRecoilState(socketState);
-  const [mindmap, setMindmap] = useRecoilState(mindmapState);
-  const setHistory = useSetRecoilState(historyState);
-  const historyReceiver = useHistoryReceiver({ mindmap, setMindmap, setHistory });
+  const setUserFocusNode = useSetRecoilState(userFocusNodeState);
+  const { historyReceiver, nonHistoryEventReceiver } = useHistoryReceiver();
   const userReceiver = useUserReceiver();
 
   useEffect(() => {
-    const isNewProject = projectId !== newProjectId;
-    if (isNewProject) {
+    (async () => {
+      const isNewProject = projectId !== newProjectId;
+      if (!isNewProject) return;
       if (projectId) {
+        console.log('socket leave');
         window.socket!.emit('leave', projectId);
         window.socket = null;
       }
-      initSocket({ projectId: newProjectId, setSocket, historyReceiver, userReceiver });
-    }
-  }, [newProjectId, projectId, setSocket, historyReceiver, userReceiver]);
+      initSocket({ projectId: newProjectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver, setUserFocusNode });
+    })();
+  }, [newProjectId, projectId, historyReceiver, userReceiver]);
 };
 export default useSocketSetup;

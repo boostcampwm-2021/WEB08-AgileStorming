@@ -1,7 +1,12 @@
-import React from 'react';
+import { ScheduleCalendar } from 'components/organisms';
+import { CommonLayout } from 'components/templates';
 
 const Calendar = () => {
-  return <div>캘린더페이지</div>;
+  return (
+    <CommonLayout>
+      <ScheduleCalendar />
+    </CommonLayout>
+  );
 };
 
 export default Calendar;

@@ -1,6 +1,5 @@
 import 'reflect-metadata';
-import express from 'express';
-import bodyParser from 'body-parser';
+import express, { Error, Request, Response, Next } from 'express';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { createConnection } from 'typeorm';
@@ -19,13 +18,14 @@ const server = http.createServer(app);
 socketIO(server, process.env.ORIGIN);
 
 createConnection(ormConfig)
-  .then(() => console.log(`Database connected`))
+  .then(() => console.log('Database connected'))
   .catch((error) => console.log(error));
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
@@ -40,7 +40,7 @@ app.use(
 
 app.use('/api', router);
 
-app.use(function (err, req, res, next) {
+app.use(function (err: Error, req: Request, res: Response, next: Next) {
   if (err.status) {
     return res.status(err.status).json({ msg: err.message });
   }

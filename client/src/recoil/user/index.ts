@@ -1,13 +1,12 @@
 import { atom } from 'recoil';
+import { IUser } from 'types/user';
 
-export interface IUser {
-  id: string;
-  name: string;
-  color: string;
-  icon: string;
-}
+export const isAuthenticatedState = atom({
+  key: 'isAuthenticated',
+  default: false,
+});
 
-export const userState = atom<IUser>({
-  key: 'userAtom',
-  default: { id: 'chosh', name: '조성현', color: '000000', icon: 'chicken' },
+export const userState = atom<IUser | null>({
+  key: 'user',
+  default: null,
 });

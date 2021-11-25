@@ -16,6 +16,7 @@ export type TColor =
 export type TFontSize = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge' | 'title';
 export type TSize = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge';
 export type TFlex = 'center' | 'rowCenter' | 'columnCenter' | 'row' | 'column';
+export type TScrollbar = 'primary1' | 'primary2' | 'primary3';
 
 const color: { [key in TColor]: string } = {
   primary1: '#5865F2',
@@ -31,7 +32,7 @@ const color: { [key in TColor]: string } = {
   gray2: '#BBBBBB',
   gray3: '#D7D7D7',
   gray4: '#EEEEEE',
-  gray5: '#BBBBBB99',
+  gray5: '#BBBBBB55',
 };
 
 const calcRem = (px: number) => `${px / 16}rem`;
@@ -43,7 +44,7 @@ const fontSize: { [key in TFontSize]: string } = {
   xlarge: calcRem(20),
   xxlarge: calcRem(22),
   xxxlarge: calcRem(24),
-  title: calcRem(50),
+  title: calcRem(36),
 };
 
 const padding: { [key in TSize]: string } = {
@@ -103,6 +104,26 @@ const nodeBgColors = [color.primary1, color.red, color.yellow, color.mint];
 const nodeColors = [color.white, color.white, color.black, color.black];
 const nodeFontSizes = [fontSize.large, fontSize.normal, fontSize.small, fontSize.small];
 
+const scrollStyle = (backgroundColor: string) => `
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    border-radius: 1ex;
+    -webkit-border-radius: 1ex;
+    background-color: #BBBBBB;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: ${backgroundColor};
+    border-radius: 1ex;
+    -webkit-border-radius: 1ex;
+  } 
+  `;
+const customScrollbar: { [key in TScrollbar]: string } = {
+  primary1: scrollStyle(color.primary1),
+  primary2: scrollStyle(color.primary2),
+  primary3: scrollStyle(color.primary3),
+};
+
 const common = {
   color,
   fontSize,
@@ -114,6 +135,7 @@ const common = {
   nodeBgColors,
   nodeColors,
   nodeFontSizes,
+  customScrollbar,
 };
 
 export default common;

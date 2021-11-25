@@ -1,25 +1,30 @@
 import React, { useRef, useState } from 'react';
+import { isNumber } from 'utils/form';
 import { DropdownList, StyledInput, TStyle, Wrapper } from './style';
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  onValueChange?: Function;
+  onValueChange?: (arg: string | number) => void;
   dropdownStyle?: TStyle;
-  items?: string[];
+  items?: Record<string | number, string>;
   margin?: string;
 }
 
-const Dropdown: React.FC<IProps> = ({ onValueChange, dropdownStyle = 'normal', items = [], margin = '0', ...props }) => {
+const Dropdown: React.FC<IProps> = ({ onValueChange, dropdownStyle = 'normal', items = {}, margin = '0', ...props }) => {
   const activatorRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClickDropdown = (e: React.MouseEvent) => setIsOpen(!isOpen);
-  const handleClickItem = (value: string) => {
+  const handleClickDropdown = () => setIsOpen(!isOpen);
+  const handleClickItem = (id: string) => {
     if (activatorRef.current) {
-      activatorRef.current.value = value;
+      activatorRef.current.value = items[id];
     }
     if (onValueChange) {
-      onValueChange(value);
+      if (isNumber(id)) {
+        onValueChange(Number(id));
+      } else {
+        onValueChange(id);
+      }
     }
     setIsOpen(false);
   };
@@ -46,9 +51,9 @@ const Dropdown: React.FC<IProps> = ({ onValueChange, dropdownStyle = 'normal', i
     <Wrapper margin={margin}>
       <StyledInput dropdownStyle={dropdownStyle} onClick={handleClickDropdown} ref={activatorRef} {...props} readOnly={true} />
       <DropdownList dropdownStyle={dropdownStyle} visible={isOpen} ref={listRef}>
-        {items.map((item, idx) => (
-          <li key={idx} onClick={() => handleClickItem(item)}>
-            {item}
+        {Object.keys(items).map((id) => (
+          <li key={id} onClick={() => handleClickItem(id)}>
+            {items[id]}
           </li>
         ))}
       </DropdownList>

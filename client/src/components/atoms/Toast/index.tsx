@@ -13,6 +13,7 @@ const StyledToastContainer = styled.div`
   bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 4;
 `;
 
 const StyledToast = styled.div<IStyledToast>`

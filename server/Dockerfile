@@ -1,7 +1,6 @@
-WORKDIR "./"
-
-RUN mkdir /var/log/redis
-
-RUN mkdir /usr/local/etc/redis
-
-COPY ./redis.conf /usr/local/etc/redis/redis.conf
+FROM node:14-alpine
+WORKDIR "/app"
+COPY package*.json ./
+RUN npm install
+COPY . . 
+CMD ["npm","start"]

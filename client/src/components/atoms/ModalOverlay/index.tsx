@@ -15,7 +15,7 @@ const StyledModalOverlay = styled.div<IStyledProps>`
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 999;
+  z-index: 2;
 `;
 
 export default StyledModalOverlay;

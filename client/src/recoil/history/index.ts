@@ -1,39 +1,59 @@
-import { eventType } from 'hooks/useHistoryEmitter';
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
+import { TAddNodeData, TDeleteNodeData, THistoryEventData, TUpdateNodeParent } from 'types/event';
+import { IHistoryData } from 'types/history';
 
-export interface IHistories {
-  histories: IHistory[];
-}
+const CANNOT_FIND_NODE_ID = -3;
 
-export interface IData {
-  nodeFrom?: number;
-  nodeTo?: number;
-  dataFrom?: unknown;
-  dataTo?: unknown;
-}
-
-export interface IHistory {
-  type: eventType;
-  projectId: string;
-  user: string;
-  data: IData;
-}
-
-export const historyState = atom<IHistories>({
-  key: 'historyAtom',
-  default: { histories: [] },
+export const historyDataListState = atom<IHistoryData[]>({
+  key: 'historyDataListAtom',
+  default: [],
 });
 
-export const getParsedHistory = (data: string[]): IHistory => {
-  const stringJson =
-    data.reduce((acc: string, v: string, i: number) => {
-      if (!(i % 2)) {
-        acc += `"${v}":`;
-      } else {
-        acc += v[0] === '{' ? `${v}` : `"${v}"`;
-        if (i !== data.length - 1) acc += ', ';
-      }
-      return acc;
-    }, '{') + '}';
-  return JSON.parse(stringJson);
-};
+export const farthestHistoryIdState = atom<string | undefined>({
+  key: 'farthestHistoryAtom',
+  default: undefined,
+});
+
+export const currentReverseIdxState = atom<number>({ key: 'currentReverseIdxAtom', default: -1 });
+
+export const currentHistoryNodeIdState = selector({
+  key: 'currentHistoryNodeIdState',
+  get: ({ get }) => {
+    const currentReverseIdx = get(currentReverseIdxState);
+    const historyDataList = get(historyDataListState);
+
+    const currentNodeData = historyDataList.at(currentReverseIdx);
+    switch (currentNodeData?.type) {
+      case 'ADD_NODE':
+        return (currentNodeData.data.dataTo! as TAddNodeData).nodeId;
+      case 'DELETE_NODE':
+        return (currentNodeData.data.dataFrom! as TDeleteNodeData).nodeId;
+      case 'UPDATE_NODE_PARENT':
+        return (currentNodeData.data.dataFrom! as TUpdateNodeParent).nodeId;
+      case 'UPDATE_NODE_CONTENT':
+        return currentNodeData.data.nodeFrom! as THistoryEventData;
+      case 'UPDATE_TASK_INFORMATION':
+        return currentNodeData.data.nodeFrom! as THistoryEventData;
+      default:
+        return CANNOT_FIND_NODE_ID;
+    }
+  },
+});
+
+export const historyMovingSpeedState = atom<number>({
+  key: 'historyMovingSpeedAtom',
+  default: 650,
+});
+
+export const isHistoryCalculatingState = atom<boolean>({
+  key: 'isHistoryIsCalculatingAtom',
+  default: false,
+});
+
+export const isHistoryOpenState = selector({
+  key: 'historyOpenState',
+  get: ({ get }) => {
+    const isOpen = !!get(historyDataListState).length;
+    return isOpen;
+  },
+});
