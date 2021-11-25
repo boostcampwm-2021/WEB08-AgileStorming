@@ -15,6 +15,7 @@ interface IProps {
 
 const HistoryWindow: React.FC<IProps> = ({ onClick }) => {
   const dragRef = useRef<HTMLDivElement | null>(null);
+  const refs = useRef<HTMLDivElement[]>([]);
   const { getMoreHistoryData } = useNewHistoryData();
   const historyDataList = useRecoilValue(historyDataListState);
   const userList = useRecoilValue(userListState);
@@ -30,6 +31,14 @@ const HistoryWindow: React.FC<IProps> = ({ onClick }) => {
     container.scrollBy({ left: container.scrollWidth - container.clientWidth / 2 });
   }, [historyDataList]);
 
+  const addToRefs = (el: HTMLDivElement) => refs.current.push(el);
+
+  useEffect(() => {
+    if (refs.current.length === 0) return;
+    const target = refs.current.at(currentReverseIdx);
+    target!.scrollIntoView({ inline: 'center', behavior: 'smooth' });
+  }, [currentReverseIdx]);
+
   return (
     <Wrapper ref={dragRef} className='background'>
       <Before exist={historyDataList.length ? true : false} />
@@ -37,6 +46,7 @@ const HistoryWindow: React.FC<IProps> = ({ onClick }) => {
       {historyDataList.length && userList
         ? historyDataList.map((historyData, idx) => (
             <IconWrapper
+              ref={addToRefs}
               key={historyData.historyId}
               onClick={onClick(idx - historyDataList.length)}
               isSelected={isSelected(idx - historyDataList.length)}
