@@ -7,6 +7,7 @@ interface IStyleProps {
   margin?: string;
   lineHeight?: number;
   cursor?: TCursor;
+  width?: string;
 }
 
 export type TStyle = 'small' | 'normal' | 'large' | 'xlarge' | 'xxxlarge' | 'title';
@@ -20,6 +21,9 @@ export const StyledTitle = styled.div<IStyleProps>`
   font-weight: bold;
   line-height: ${({ lineHeight }) => lineHeight ?? 1.2};
   cursor: ${({ cursor }) => cursor};
+  width: ${({ width }) => width};
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const styleOptions: { [key in TStyle]: string } = {
