@@ -7,6 +7,7 @@ import useToast from 'hooks/useToast';
 import { isHaveEmptyString, isISODate } from 'utils/form';
 import { SplitDiv } from './style';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
+import useKeys from 'hooks/useKeys';
 
 export interface INewSprintModalProps {
   noProps?: string;
@@ -16,6 +17,7 @@ const NewSprintModal: React.FC<INewSprintModalProps> = () => {
   const newSprint = useRef<TAddSprint>({ name: '', startDate: '', endDate: '' });
   const { addSprint } = useHistoryEmitter();
   const { hideModal } = useModal();
+  const { setOnEnterKey, setOnEscKey } = useKeys();
   const { showMessage } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, key: keyof TAddSprint) => (newSprint.current[key] = e.target.value);
@@ -33,6 +35,9 @@ const NewSprintModal: React.FC<INewSprintModalProps> = () => {
     addSprint({ name, startDate, endDate });
     hideModal();
   };
+
+  setOnEnterKey(handleSubmit);
+  setOnEscKey(hideModal);
 
   return (
     <>
