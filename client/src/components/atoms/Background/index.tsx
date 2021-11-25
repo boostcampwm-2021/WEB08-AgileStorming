@@ -8,12 +8,11 @@ interface IProps {
   children?: React.ReactNode;
   id?: string;
   className?: string;
-  refProp?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-const Background: React.FC<IProps> = ({ className, bgColor, bgSize, children, id, zIndex, refProp }) => {
+const Background: React.FC<IProps> = ({ className, bgColor, bgSize, children, id, zIndex }) => {
   return (
-    <BackgroundDiv ref={refProp} id={id} className={className} bgColor={bgColor} bgSize={bgSize} zIndex={zIndex}>
+    <BackgroundDiv id={id} className={className} bgColor={bgColor} bgSize={bgSize} zIndex={zIndex}>
       {children}
     </BackgroundDiv>
   );

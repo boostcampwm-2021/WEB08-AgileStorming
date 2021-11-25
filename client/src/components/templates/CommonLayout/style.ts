@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 
 export const Template = styled.div`
   position: relative;
-  width: 100%;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   background-color: ${({ theme }) => theme.color.bgWhite};
 `;
 

@@ -1,4 +1,4 @@
-import { Background, DragTarget } from 'components/atoms';
+import { Background } from 'components/atoms';
 import useDragBackground from 'hooks/useDragBackground';
 import useLinkClick from 'hooks/useLinkClick';
 import { useEffect } from 'react';
@@ -10,7 +10,7 @@ const UNDER_ELEMENT = -10;
 
 const HistoryBackground = () => {
   const linkToMindmap = useLinkClick('mindmap');
-  const { containerRef, dragRef } = useDragBackground({ startPosition: 'mid' });
+  useDragBackground();
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const mindmapData = useRecoilValue(mindmapState);
 
@@ -23,14 +23,9 @@ const HistoryBackground = () => {
 
   return (
     <>
-      <Background refProp={containerRef} bgSize='over' bgColor='gray5' className='background' />
+      <Background bgSize='over' bgColor='gray5' className='background' />
       <Background bgSize='over' zIndex={UNDER_ELEMENT}>
-        {historyMapData.mindNodes.size ? (
-          <>
-            <Mindmap mindmapData={historyMapData} />
-            <DragTarget ref={dragRef} />
-          </>
-        ) : null}
+        {historyMapData.mindNodes.size ? <Mindmap mindmapData={historyMapData} /> : null}
       </Background>
     </>
   );
