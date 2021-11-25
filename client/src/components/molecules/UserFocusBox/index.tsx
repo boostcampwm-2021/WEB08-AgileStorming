@@ -11,13 +11,19 @@ interface IFocusProps {
 
 const Container = styled.div`
   ${({ theme }) => theme.flex.row};
+  width: 100%;
   position: absolute;
-  left: -10%;
+  left: -1rem;
   top: 0;
   transform: translateY(-50%);
 `;
 
 const UserFocusTag = styled(NodeTag)<IFocusProps>`
+  flex: 1;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   background: ${({ userColor }) => '#' + userColor};
 `;
 
