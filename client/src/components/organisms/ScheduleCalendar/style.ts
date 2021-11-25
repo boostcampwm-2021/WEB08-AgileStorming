@@ -103,6 +103,7 @@ const LayerTask = styled.div<{ delayed?: boolean | null; ended?: boolean | null 
   span {
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   cursor: pointer;

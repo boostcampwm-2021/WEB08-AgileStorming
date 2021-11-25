@@ -72,6 +72,7 @@ const TaskRow = styled.tr`
     border: 1px solid ${({ theme }) => theme.color.gray3};
     font-weight: bold;
     pointer-events: auto;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
