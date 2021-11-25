@@ -10,6 +10,8 @@ interface IProps {
 
 const BurnDownChart: React.FC<IProps> = () => {
   const sprintInfoTask = useRecoilValue(sprintBurnDownState);
+  const totalTaskEstimatedTime = sprintInfoTask.reduce((prev: number, curr: SprintTaskInfo) => prev + curr.totalEstimatedTime, 0);
+  const totalTaskFinishedTime = sprintInfoTask.reduce((prev: number, curr: SprintTaskInfo) => prev + curr.totalFinishedTime, 0);
   const options = {
     title: {
       text: '번다운 차트',
@@ -51,19 +53,25 @@ const BurnDownChart: React.FC<IProps> = () => {
         color: 'rgba(255,0,0,0.25)',
         lineWidth: 2,
         data: sprintInfoTask
-          .reduce((prev: number[], curr: SprintTaskInfo, idx: number) => {
-            return [...prev, curr.totalEstimatedTime + (prev[idx - 1] || 0)];
-          }, [])
-          .reverse(),
+          .reduce(
+            (prev: number[], curr: SprintTaskInfo, idx: number) => {
+              return [...prev, prev[idx] - curr.totalEstimatedTime];
+            },
+            [totalTaskEstimatedTime]
+          )
+          .slice(0, -1),
       },
       {
         name: '실제 시간',
         color: 'rgba(0,120,200,0.75)',
         data: sprintInfoTask
-          .reduce((prev: number[], curr: SprintTaskInfo, idx: number) => {
-            return [...prev, curr.totalFinishedTime + (prev[idx - 1] || 0)];
-          }, [])
-          .reverse(),
+          .reduce(
+            (prev: number[], curr: SprintTaskInfo, idx: number) => {
+              return [...prev, prev[idx] - curr.totalFinishedTime];
+            },
+            [totalTaskFinishedTime]
+          )
+          .slice(0, -1),
       },
     ],
   };

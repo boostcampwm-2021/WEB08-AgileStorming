@@ -33,10 +33,13 @@ export const StyledTask = styled.div`
 `;
 
 export const StyledTextFlow = styled.div`
+  width: 100%;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   color: ${({ theme }) => theme.color.black};
   font-size: ${({ theme }) => theme.fontSize.normal};
+  font-weight: bold;
   cursor: default;
 `;
 

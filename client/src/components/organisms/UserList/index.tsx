@@ -60,7 +60,7 @@ export const UserList = () => {
               onMouseEnter={handleOnMouseEnterList}
               onMouseLeave={handleOnMouseLeaveList}
             >
-              <Profile user={user} />
+              <Profile user={user} width='120px' />
               <StyledConnectionStatus online={connectedUsers[user.id]}>
                 {connectedUsers[user.id] ? 'online' : 'offline'}
               </StyledConnectionStatus>

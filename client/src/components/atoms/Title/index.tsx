@@ -8,6 +8,7 @@ interface IProps {
   margin?: string;
   lineHeight?: number;
   cursor?: TCursor;
+  width?: string;
 }
 
 const Title: React.FC<IProps> = ({
@@ -17,9 +18,10 @@ const Title: React.FC<IProps> = ({
   titleStyle = 'normal',
   lineHeight,
   cursor = 'default',
+  width,
 }) => {
   return (
-    <StyledTitle titleStyle={titleStyle} color={color} margin={margin} lineHeight={lineHeight} cursor={cursor}>
+    <StyledTitle titleStyle={titleStyle} color={color} margin={margin} lineHeight={lineHeight} cursor={cursor} width={width}>
       {children}
     </StyledTitle>
   );
