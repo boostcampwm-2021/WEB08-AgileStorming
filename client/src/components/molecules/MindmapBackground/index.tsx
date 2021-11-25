@@ -7,7 +7,7 @@ interface IProps {
 }
 
 const MindmapBackground: React.FC<IProps> = ({ className, children }) => {
-  const { containerRef, dragRef } = useDragBackground();
+  const { containerRef, dragRef } = useDragBackground({ startPosition: 'mid' });
 
   return (
     <Background refProp={containerRef} className={className} bgSize='over' bgColor='bgWhite'>

@@ -18,7 +18,19 @@ interface IHandlerParams {
   target: HTMLDivElement;
 }
 
-const getInitPosition = (rect: DOMRect) => ({ left: rect.width / 2, top: rect.height / 2 });
+interface IGetInitPositionParams {
+  container: HTMLDivElement;
+  rect: DOMRect;
+  startPosition: 'mid' | 'end';
+}
+
+const getInitPosition = ({ container, rect, startPosition }: IGetInitPositionParams) =>
+  startPosition === 'mid'
+    ? {
+        left: rect.width / 2,
+        top: rect.height / 2,
+      }
+    : { left: container.scrollWidth - rect.width / 2, top: rect.height / 2 };
 
 const initTarget = ({ target, top, left }: ITargetParams) => {
   target.style.top = numToPx(top);

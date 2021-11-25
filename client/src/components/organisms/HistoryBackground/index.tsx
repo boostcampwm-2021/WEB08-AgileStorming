@@ -10,7 +10,7 @@ const UNDER_ELEMENT = -10;
 
 const HistoryBackground = () => {
   const linkToMindmap = useLinkClick('mindmap');
-  const { containerRef, dragRef } = useDragBackground();
+  const { containerRef, dragRef } = useDragBackground({ startPosition: 'mid' });
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const mindmapData = useRecoilValue(mindmapState);
 
