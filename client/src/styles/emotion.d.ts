@@ -18,11 +18,13 @@ declare module '@emotion/react' {
     flex: {
       [key in Types.TFlex]: string;
     };
+    customScrollbar: {
+      [key in Types.TScrollbar]: string;
+    };
     shadow: string;
     absoluteCenter: string;
     nodeBgColors: string[];
     nodeColors: string[];
     nodeFontSizes: string[];
-    customScrollbar: string;
   }
 }

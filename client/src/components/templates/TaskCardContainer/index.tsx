@@ -24,7 +24,7 @@ const StyledTaskCardContainer = styled.div`
   border-radius: 8px;
   -webkit-box-shadow: 1px 4px 11px -1px rgba(0, 0, 0, 0.4);
   box-shadow: 1px 4px 11px -1px rgba(0, 0, 0, 0.4);
-  ${({ theme }) => theme.customScrollbar};
+  ${({ theme }) => theme.customScrollbar.primary2};
 `;
 const StyledTitle = styled.div`
   position: sticky;

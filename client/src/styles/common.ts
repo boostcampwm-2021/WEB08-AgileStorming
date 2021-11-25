@@ -16,6 +16,7 @@ export type TColor =
 export type TFontSize = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge' | 'title';
 export type TSize = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge';
 export type TFlex = 'center' | 'rowCenter' | 'columnCenter' | 'row' | 'column';
+export type TScrollbar = 'primary2' | 'primary3';
 
 const color: { [key in TColor]: string } = {
   primary1: '#5865F2',
@@ -103,22 +104,36 @@ const nodeBgColors = [color.primary1, color.red, color.yellow, color.mint];
 const nodeColors = [color.white, color.white, color.black, color.black];
 const nodeFontSizes = [fontSize.large, fontSize.normal, fontSize.small, fontSize.small];
 
-const customScrollbar = `
-::-webkit-scrollbar {
-  width: 5px;
-  height: 8px;
-  border-radius: 1ex;
-  -webkit-border-radius: 1ex;
-  background-color: #5865F2;
-}
-::-webkit-scrollbar-thumb {
-  background: #0A127C;
-  border-radius: 1ex;
-  -webkit-border-radius: 1ex;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
-  -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
-} 
-`;
+const customScrollbar: { [key in TScrollbar]: string } = {
+  primary2: `
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    border-radius: 1ex;
+    -webkit-border-radius: 1ex;
+    background-color: #BBBBBB;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #0A127C;
+    border-radius: 1ex;
+    -webkit-border-radius: 1ex;
+  } 
+  `,
+  primary3: `
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    border-radius: 1ex;
+    -webkit-border-radius: 1ex;
+    background-color: #BBBBBB;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #BDD4E0;
+    border-radius: 1ex;
+    -webkit-border-radius: 1ex;
+  } 
+  `,
+};
 
 const common = {
   color,
