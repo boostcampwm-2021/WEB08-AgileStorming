@@ -4,6 +4,7 @@ import { IUser, TIcon } from 'types/user';
 interface IProps {
   user: IUser;
   cursor?: string;
+  adaptive?: boolean;
 }
 
 const iconToEmoji: { [key in TIcon]: string } = {
@@ -14,9 +15,9 @@ const iconToEmoji: { [key in TIcon]: string } = {
   rabbit: '🐰',
 };
 
-const UserIcon: React.FC<IProps> = ({ user, cursor }) => {
+const UserIcon: React.FC<IProps> = ({ user, cursor, adaptive = false }) => {
   return (
-    <StyledIcon color={user.color} cursor={cursor}>
+    <StyledIcon color={user.color} cursor={cursor} adaptive={adaptive}>
       {iconToEmoji[user.icon]}
     </StyledIcon>
   );
