@@ -12,12 +12,14 @@ const HistoryHeader = () => {
   const resetHistoryDataList = useResetRecoilState(historyDataListState);
   const resetHistoryMapData = useResetRecoilState(historyMapDataState);
   const resetCurrentReverseIdx = useResetRecoilState(currentReverseIdxState);
+  const resetMovingSpeed = useResetRecoilState(historyMovingSpeedState);
   const linkToMindmap = useLinkClick('mindmap');
 
   const handleCloseHistoryBtnClick = useCallback(() => {
     resetHistoryDataList();
     resetHistoryMapData();
     resetCurrentReverseIdx();
+    resetMovingSpeed();
     linkToMindmap();
   }, [linkToMindmap]);
 
