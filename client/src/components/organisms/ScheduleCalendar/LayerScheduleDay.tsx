@@ -1,9 +1,7 @@
 import { LayerTask, LayerScheduleDayWrapper } from './style';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { selectedNodeIdState } from 'recoil/node';
 import { IMindNode } from 'types/mindmap';
-import { UserIcon } from 'components/atoms';
-import { userListState } from 'recoil/project';
 
 interface IProps {
   dayDate?: { year: number; month: number; date: number };
@@ -13,7 +11,6 @@ interface IProps {
 
 const LayerScheduleDay: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNode = () => {} }) => {
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
-  const userList = useRecoilValue(userListState);
 
   if (!dayDate) {
     return <LayerScheduleDayWrapper></LayerScheduleDayWrapper>;
@@ -44,7 +41,6 @@ const LayerScheduleDay: React.FC<IProps> = ({ dayDate, tasks = [], setHoveredNod
             delayed={dueAt && !endedAt && today > dueAt}
             ended={dueAt && endedAt && true}
           >
-            {task.assigneeId ? <UserIcon user={userList[task.assigneeId]} adaptive={true} /> : ''}
             <span>{`#${task.nodeId} ${task.content}`}</span>
           </LayerTask>
         );

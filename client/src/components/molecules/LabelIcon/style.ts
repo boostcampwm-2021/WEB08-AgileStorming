@@ -6,6 +6,7 @@ const StyledLabelIcon = styled.span<IProps>`
   background-color: ${({ active, theme, label }) => (active ? `#${label.color}` : theme.color.gray2)};
   padding: 0 0.3rem;
   border-radius: 0.5rem;
+  font-weight: bold;
 `;
 
 export { StyledLabelIcon };

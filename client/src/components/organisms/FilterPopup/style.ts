@@ -23,7 +23,7 @@ export const FilterItemContainer = styled.div`
   position: relative;
   display: block;
   overflow-y: auto;
-  max-height: 4.5rem;
+  max-height: 6rem;
   ${({ theme }) => theme.customScrollbar.primary3}
 `;
 
