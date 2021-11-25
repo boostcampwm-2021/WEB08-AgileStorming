@@ -38,6 +38,7 @@ const socketIO = (server, origin) => {
 
   io.on('connection', async (socket: ISocket) => {
     const { id } = socket.decoded;
+    console.log(id, 'connected');
     const projectId = socket.handshake.query.projectId as string;
 
     const handleNewEvent = async (data: Record<number, object>) => {
@@ -74,6 +75,7 @@ const socketIO = (server, origin) => {
 
     socket.on('leave', (targetProjectId) => {
       socket.leave(targetProjectId);
+      console.log(id, 'leave');
       socket.disconnect();
     });
 
@@ -88,6 +90,10 @@ const socketIO = (server, origin) => {
       const eventData = ['type', type, 'projectId', projectId, 'user', id, 'data', data];
       const dbData = await convertEvent(eventData);
       io.in(projectId).emit('non-history-event', eventData, dbData);
+    });
+    socket.on('user-focus', (nodeId) => {
+      console.log(id, nodeId);
+      io.in(projectId).emit('user-focus', id, nodeId);
     });
   });
 };

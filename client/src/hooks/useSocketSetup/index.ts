@@ -1,12 +1,13 @@
 import useProjectId from 'hooks/useRoomId';
 import useHistoryReceiver, { IHistoryReceiver } from 'hooks/useHistoryReceiver';
 import { useEffect } from 'react';
-import { SetterOrUpdater, useRecoilState } from 'recoil';
+import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
 import { ISocket, socketState } from 'recoil/socket';
 import io from 'socket.io-client';
 import useUserReceiver, { IUserReceiver } from 'hooks/useUserReceiver';
 import { parseHistoryEvent, parseNonHistoryEvent } from 'utils/parser';
 import { INonHistoryEventData } from 'types/event';
+import { userFocusNodeState } from 'recoil/project';
 
 interface IInitProps {
   projectId: string;
@@ -14,9 +15,11 @@ interface IInitProps {
   historyReceiver: IHistoryReceiver;
   nonHistoryEventReceiver: (eventData: INonHistoryEventData) => void;
   userReceiver: IUserReceiver;
+  setUserFocusNode: SetterOrUpdater<Map<string, number>>;
 }
 
-const initSocket = ({ projectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver }: IInitProps) => {
+const initSocket = ({ projectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver, setUserFocusNode }: IInitProps) => {
+  console.log('socket connected');
   window.socket = io(process.env.REACT_APP_SERVER!, {
     query: {
       projectId,
@@ -39,6 +42,11 @@ const initSocket = ({ projectId, setSocket, historyReceiver, nonHistoryEventRece
   });
   socket.on('left', (userId: string) => {
     userReceiver({ data: userId, type: 'LEFT' });
+    setUserFocusNode((prev) => {
+      const next = new Map(prev);
+      next.delete(userId);
+      return next;
+    });
   });
   socket.on('history-event', (data, dbData) => {
     const eventData = parseHistoryEvent(data, dbData);
@@ -48,12 +56,21 @@ const initSocket = ({ projectId, setSocket, historyReceiver, nonHistoryEventRece
     const eventData = parseNonHistoryEvent(data, dbData);
     nonHistoryEventReceiver(eventData);
   });
+  socket.on('user-focus', (userId, nodeId) => {
+    setUserFocusNode((prev) => {
+      const next = new Map(prev);
+      if (nodeId) next.set(userId, nodeId);
+      else next.delete(userId);
+      return next;
+    });
+  });
   setSocket({ projectId });
 };
 
 const useSocketSetup = () => {
   const newProjectId = useProjectId();
   const [{ projectId }, setSocket] = useRecoilState(socketState);
+  const setUserFocusNode = useSetRecoilState(userFocusNodeState);
   const { historyReceiver, nonHistoryEventReceiver } = useHistoryReceiver();
   const userReceiver = useUserReceiver();
 
@@ -62,11 +79,12 @@ const useSocketSetup = () => {
       const isNewProject = projectId !== newProjectId;
       if (!isNewProject) return;
       if (projectId) {
+        console.log('socket leave');
         window.socket!.emit('leave', projectId);
         window.socket = null;
       }
-      initSocket({ projectId: newProjectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver });
+      initSocket({ projectId: newProjectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver, setUserFocusNode });
     })();
-  }, [newProjectId, projectId, setSocket, historyReceiver, userReceiver]);
+  }, [newProjectId, projectId, historyReceiver, userReceiver]);
 };
 export default useSocketSetup;

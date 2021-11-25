@@ -51,6 +51,11 @@ const userMouseOverState = atom<string>({
   default: '',
 });
 
+const userFocusNodeState = atom<Map<string, number>>({
+  key: 'userFocusNode',
+  default: new Map(),
+});
+
 const filteredTaskState = selector<Record<number, IMindNode>>({
   key: 'filteredTask',
   get: ({ get }) => {
@@ -217,6 +222,7 @@ export {
   sprintFilterState,
   labelFilterState,
   userMouseOverState,
+  userFocusNodeState,
   filteredTaskState,
   filteredTaskTimeState,
   filteredUserInProgressTaskState,

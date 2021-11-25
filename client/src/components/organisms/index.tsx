@@ -21,3 +21,5 @@ export { default as HistoryHeader } from 'components/organisms/HistoryHeader';
 export { default as UserInProgressList } from 'components/organisms/UserInProgressList';
 export { default as BurnDownChart } from 'components/organisms/BurnDownChart';
 export { default as TaskRatioChart } from 'components/organisms/TaskRatioChart';
+export { default as DoneTaskChart } from 'components/organisms/DoneTaskChart';
+export { default as PriorityChart } from 'components/organisms/PriorityChart';
