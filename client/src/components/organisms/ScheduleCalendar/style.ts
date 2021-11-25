@@ -101,6 +101,8 @@ const LayerTask = styled.div<{ delayed?: boolean | null; ended?: boolean | null 
   ${({ theme }) => theme.flex.rowCenter}
 
   span {
+    font-weight: normal;
+    margin-bottom: 0.3rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -167,7 +169,7 @@ const LayerTaskDetailDayWrapper = styled(LayerDay)`
 `;
 
 const LayerSprintDayWrapper = styled(LayerDay)`
-  opacity: 0.2;
+  opacity: 0.4;
 
   .start {
     border-top-left-radius: 0.5rem;
@@ -181,7 +183,7 @@ const LayerSprintDayWrapper = styled(LayerDay)`
 
 const LayerSprint = styled.div<{ color: string }>`
   width: 100%;
-  height: 1rem;
+  height: 1.2rem;
   background-color: ${({ color }) => `#${color}`}; ;
 `;
 
