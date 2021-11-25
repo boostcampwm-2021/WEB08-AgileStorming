@@ -37,6 +37,8 @@ export const addUserToProject = async (userId: string, projectId: string) => {
     .where('project.id = :projectId', { projectId })
     .getOne();
   const user = await findOneUser(userId);
+  if (!project) return;
+  if (!user) return;
   project.users = [...project.users, user];
   return getRepository(Project).save(project);
 };
