@@ -3,7 +3,7 @@ import LayerScheduleDay from './LayerScheduleDay';
 import { useRecoilValue } from 'recoil';
 import { filteredTaskState } from 'recoil/project';
 import { IMindNode } from 'types/mindmap';
-import { parseISODate } from 'utils/date';
+import { makeISODate, parseISODate } from 'utils/date';
 
 interface IProps {
   currentDateISO: string;
@@ -47,7 +47,7 @@ const LayerScheduleMonth: React.FC<IProps> = ({ currentDateISO, setHoveredNode }
           <LayerScheduleDay
             key={idx}
             dayDate={{ year, month, date: idx + 1 }}
-            tasks={taskMapToDueDate[`${year}-${month}-${idx + 1}`]}
+            tasks={taskMapToDueDate[makeISODate({ year, month, date: idx + 1 })]}
             setHoveredNode={setHoveredNode}
           />
         ))}
