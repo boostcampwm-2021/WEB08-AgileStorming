@@ -29,7 +29,7 @@ const HistoryBar: React.FC = () => {
   );
 
   return (
-    <Wrapper>
+    <Wrapper className='history'>
       <HistoryHeader />
       <HistoryWindow onClick={handleHistoryClick} />
       <HistoryLog historyData={historyDataList.at(currentReverseIdx) ?? null} />

@@ -1,5 +1,4 @@
-import { Background, DragTarget } from 'components/atoms';
-import useDragBackground from 'hooks/useDragBackground';
+import { Background } from 'components/atoms';
 
 interface IProps {
   children?: React.ReactNode;
@@ -7,12 +6,9 @@ interface IProps {
 }
 
 const MindmapBackground: React.FC<IProps> = ({ className, children }) => {
-  const { containerRef, dragRef } = useDragBackground();
-
   return (
-    <Background refProp={containerRef} className={className} bgSize='over' bgColor='bgWhite'>
+    <Background className={className} bgSize='over' bgColor='bgWhite'>
       {children}
-      <DragTarget ref={dragRef} />
     </Background>
   );
 };

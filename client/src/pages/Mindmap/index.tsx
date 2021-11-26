@@ -1,6 +1,7 @@
 import { MindmapTemplate } from 'components/templates';
 import CommonLayout from 'components/templates/CommonLayout';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
+import useDragBackground from 'hooks/useDragBackground';
 import { useCallback, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { selectedNodeIdState } from 'recoil/node';
@@ -8,6 +9,7 @@ import { selectedNodeIdState } from 'recoil/node';
 const MindmapPage = () => {
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
   const { focusNode } = useHistoryEmitter();
+  useDragBackground();
 
   const selectNode = (nodeId: number | null) => {
     setSelectedNodeId(nodeId);

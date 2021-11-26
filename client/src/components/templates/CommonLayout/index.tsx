@@ -6,7 +6,11 @@ import useSocketSetup from 'hooks/useSocketSetup';
 import useProject from 'hooks/useProject';
 import useAuthentication from 'hooks/useAuthentication';
 
-const CommonLayout: React.FC = ({ children }) => {
+interface IProps {
+  refProp?: React.MutableRefObject<HTMLDivElement | null>;
+}
+
+const CommonLayout: React.FC<IProps> = ({ children, refProp }) => {
   const [DisplayFilter, setDisplayFilter] = useState(false);
 
   const handleClickFilterPopupClose = () => setDisplayFilter(false);
@@ -17,7 +21,7 @@ const CommonLayout: React.FC = ({ children }) => {
   const handleClickFilterButton = () => setDisplayFilter(true);
 
   return (
-    <Template>
+    <Template ref={refProp}>
       <Header />
 
       <LeftInfo>
