@@ -153,6 +153,12 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     removeTempNode();
   };
 
+  useEffect(() => {
+    if (isHistorySelected) {
+      nodeRef.current?.scrollIntoView({ block: 'center', inline: 'center' });
+    }
+  }, [isHistorySelected]);
+
   return (
     <NodeContainer id={nodeId + 'container'} ref={containerRef} isRoot={isRoot} className='node-container mindmap-area'>
       {nodeId === TEMP_NODE_ID ? (
