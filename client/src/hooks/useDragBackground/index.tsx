@@ -16,6 +16,11 @@ const useDragBackground = (dragTarget: HTMLDivElement | null | (Window & typeof 
       if ((target as HTMLElement).tagName !== 'DIV') return;
       if (!(target as HTMLElement).className.includes('background')) return;
 
+      const isTargetHasClassName = (className: string) => (target as HTMLElement).className.includes(className);
+
+      if (!isTargetHasClassName('background') && !isTargetHasClassName('child-container') && !isTargetHasClassName('node-container'))
+        return;
+
       draggable.current = true;
       lastCoord.current = { screenX, screenY };
     },
