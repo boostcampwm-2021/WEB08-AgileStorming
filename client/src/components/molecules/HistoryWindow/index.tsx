@@ -25,10 +25,9 @@ const HistoryWindow: React.FC<IProps> = ({ onClick }) => {
   useDragBackground(dragRef.current);
 
   useEffect(() => {
-    if (!dragRef.current) return;
-    const container = dragRef.current;
-
-    container.scrollBy({ left: container.scrollWidth - container.clientWidth / 2 });
+    if (currentReverseIdx !== -1) return;
+    const lastHistory = refs.current.at(-1);
+    if (lastHistory) lastHistory.scrollIntoView({ block: 'center', inline: 'center' });
   }, [historyDataList]);
 
   const addToRefs = (el: HTMLDivElement) => refs.current.push(el);
