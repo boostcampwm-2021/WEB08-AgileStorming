@@ -36,12 +36,10 @@ export const IconWrapper = styled.div<IProps>`
 
 export const After = styled.div`
   width: calc(50vw - 3rem - 25px);
-  /* background-color: black; */
   flex-shrink: 0;
 `;
 
 export const Before = styled.div<IBefore>`
   width: ${({ exist }) => (exist ? 'calc(50vw - 5rem - 75px)' : 'calc(50vw - 4rem - 25px)')};
-  /* background-color: red; */
   flex-shrink: 0;
 `;
