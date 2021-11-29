@@ -3,7 +3,7 @@ import { historyDataListState } from 'recoil/history';
 import { IHistoryData, THistoryRowData } from 'types/history';
 import { API } from 'utils/api';
 import { parseHistory } from 'utils/parser';
-import useProjectId from 'hooks/useRoomId';
+import useProjectId from 'hooks/useProjectId';
 import useToast from 'hooks/useToast';
 import { useCallback } from 'react';
 
