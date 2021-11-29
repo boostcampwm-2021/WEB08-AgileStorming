@@ -86,7 +86,6 @@ export const historyHandler = ({ setMindmap, historyData }: IHistoryHandlerProps
         const { nodeId, sideEffect } = dataFrom as TDeleteNodeData;
         parentNode.children = parentNode.children.filter((childId) => childId !== nodeId);
         nextMapState.mindNodes.delete(nodeId!);
-        console.log(123123, sideEffect);
         sideEffect.forEach((childNode) => nextMapState.mindNodes.delete(childNode.nodeId));
         return nextMapState;
       });
