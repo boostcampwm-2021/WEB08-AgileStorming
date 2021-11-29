@@ -1,15 +1,13 @@
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import useProjectId from 'hooks/useRoomId';
+import useCustomHistory from 'hooks/useCustomHistory';
 import useToast from 'hooks/useToast';
-import { useHistory } from 'react-router';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { doneTaskChartState } from 'recoil/chart';
 import { assigneeFilterState, sprintFilterState } from 'recoil/project';
 
 const DoneTaskChart = () => {
-  const history = useHistory();
-  const projectId = useProjectId();
+  const { historyPush } = useCustomHistory();
   const { showMessage } = useToast();
   const setAssigneeFilter = useSetRecoilState(assigneeFilterState);
   const setSprintFilter = useSetRecoilState(sprintFilterState);
@@ -78,7 +76,7 @@ const DoneTaskChart = () => {
               setSprintFilter(sprintId);
               if (assigneeId) setAssigneeFilter(assigneeId);
               showMessage(`필터링: ${sprintName} ${assigneeId ? '유저명: ' + assigneeId : ''}`);
-              history.push('/backlog/' + projectId);
+              historyPush('backlog');
             },
           },
         },
