@@ -124,6 +124,8 @@ const customScrollbar: { [key in TScrollbar]: string } = {
   primary3: scrollStyle(color.primary3),
 };
 
+const HEADER_HEIGHT = '2rem';
+
 const common = {
   color,
   fontSize,
@@ -136,6 +138,7 @@ const common = {
   nodeColors,
   nodeFontSizes,
   customScrollbar,
+  HEADER_HEIGHT,
 };
 
 export default common;
