@@ -15,12 +15,12 @@ const Container = styled.div`
   position: absolute;
   left: -1rem;
   top: 0;
-  transform: translateY(-50%);
+  transform: translateY(-70%);
 `;
 
 const UserFocusTag = styled(NodeTag)<IFocusProps>`
-  flex: 1;
-  min-width: 0;
+  width: 33%;
+  text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
