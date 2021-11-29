@@ -1,68 +1,44 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as img from 'img';
-import styled from '@emotion/styled';
-import { useHistory } from 'react-router';
-import useProjectId from 'hooks/useRoomId';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { urlLocationState } from 'recoil/project';
+import useCustomHistory from 'hooks/useCustomHistory';
+import { PAGES } from 'utils/helpers';
+import { TextLink, HeaderContainer, Icon, TextBox, LogoutBtn } from './style';
 
-interface IProps {
-  children?: React.ReactNode;
-}
-const BackIcon = styled.img`
-  padding: ${(props) => props.theme.padding.normal};
-  cursor: pointer;
-`;
-
-const HeaderContainer = styled.div`
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  ${(props) => props.theme.flex.row};
-  align-items: center;
-  gap: 0.5rem;
-  background-color: ${(props) => props.theme.color.primary1};
-`;
-
-interface IBoxlink {
-  isSelected: boolean;
-}
-const BoxLink = styled.div<IBoxlink>`
-  all: unset;
-  cursor: pointer;
-  color: ${(props) => props.theme.color.white};
-  padding-bottom: 0.1rem;
-  border-bottom: 0.1rem solid ${({ isSelected, theme }) => (isSelected ? theme.color.white : 'transparent')};
-`;
-
-const PAGES = ['/mindmap/', '/kanban/', '/calendar/', '/chart/', '/backlog/'];
 const TABS = ['마인드맵', '칸반보드', '캘린더', '차트', '백로그'];
 
-const Header: React.FC<IProps> = ({ children }: IProps) => {
-  const history = useHistory();
-  const projectId = useProjectId();
-  const [urlLocation, setUrlLocation] = useRecoilState(urlLocationState);
-
-  const handleLinkClick = (link: string) => {
-    setUrlLocation(link);
-    history.push(link + projectId);
-  };
-
+const Header: React.FC = () => {
+  const { historyInit, historyPush, historyPop } = useCustomHistory();
+  const urlLocation = useRecoilValue(urlLocationState);
   const isSelected = (link: string) => link === urlLocation;
+  const isInProject = PAGES.includes(urlLocation);
+  const isLoginPage = urlLocation === '/';
+
+  useEffect(() => {
+    historyInit();
+    window.addEventListener('popstate', historyPop);
+    return () => window.removeEventListener('popstate', historyPop);
+  }, []);
 
   return (
     <>
-      <HeaderContainer>
-        <BackIcon src={img.back} onClick={() => history.push('/project')} alt='IconImgNoHoverStyle' />
-        {PAGES.map((pageName, i) => (
-          <BoxLink key={pageName} isSelected={isSelected(pageName)} onClick={handleLinkClick.bind(null, pageName)}>
-            {TABS[i]}
-          </BoxLink>
-        ))}
-      </HeaderContainer>
-      {children}
+      {!isLoginPage && (
+        <HeaderContainer>
+          {isInProject && (
+            <>
+              <Icon src={img.back} onClick={() => historyPush('project')} alt='GoBackIcon' />
+              {PAGES.map((pageName, i) => (
+                <TextLink key={pageName} isSelected={isSelected(pageName)} onClick={() => historyPush(pageName)}>
+                  {TABS[i]}
+                </TextLink>
+              ))}
+            </>
+          )}
+          {!isInProject && <TextBox style={{ paddingLeft: '1rem' }}>My Projects</TextBox>}
+          <LogoutBtn>로그아웃</LogoutBtn>
+        </HeaderContainer>
+      )}
     </>
   );
 };
