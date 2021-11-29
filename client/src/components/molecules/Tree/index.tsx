@@ -187,7 +187,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
             {!isHistoryOpen && !isRoot && isSelected && (
               <NodeDeleteBtn onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제</NodeDeleteBtn>
             )}
-            <UserFocusBox users={focusingUsers} />
+            {!isHistoryOpen && <UserFocusBox users={focusingUsers} />}
             {content}
           </Node>
         </>
