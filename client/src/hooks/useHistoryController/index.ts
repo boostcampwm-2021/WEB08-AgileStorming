@@ -1,9 +1,14 @@
 import { useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentReverseIdxState, historyDataListState, historyMovingSpeedState, isHistoryCalculatingState } from 'recoil/history';
-import { historyMapDataState } from 'recoil/mindmap';
+import {
+  currentReverseIdxState,
+  historyDataListState,
+  historyMovingSpeedState,
+  isHistoryCalculatingState,
+  historyMapDataState,
+} from 'recoil/history';
 import { IHistoryData } from 'types/history';
-import { restoreHistory } from 'utils/historyHandler';
+import { restoreHistory } from 'hooks/useHistoryController/restoreHistory';
 
 interface IHistoryControllerProps {
   fromIdx: number;
