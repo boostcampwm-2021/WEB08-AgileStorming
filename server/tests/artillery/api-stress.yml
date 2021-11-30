@@ -1,0 +1,26 @@
+config:
+  target: 'http://localhost:5000'
+
+  phases:
+    - duration: 10
+      arrivalRate: 10
+      name: warm up
+    - duration: 20
+      arrivalRate: 10
+      rampTo: 100
+      name: Ramp up load
+    - duration: 30
+      arrivalRate: 100
+      name: Sustained load
+scenarios:
+  - name: 'try register and login'
+    flow:
+      - post:
+          url: '/api/auth/register'
+          json:
+            id: '{{ $randomNumber(1,10000) }}'
+            name: 'tester'
+      - post:
+          url: '/api/auth/login'
+          json:
+            id: '{{ $randomNumber(1,10000) }}'
