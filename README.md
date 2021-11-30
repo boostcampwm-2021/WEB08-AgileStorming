@@ -22,6 +22,17 @@
 백로그, 캘린더, 차트를 통해 프로젝트 현황을 파악할 수 있습니다.
 	
 <br/>
+
+## 애자일스토밍의 구조
+
+![image](https://user-images.githubusercontent.com/73219421/144015475-9abd93cb-2d0f-43ae-b031-2cdfffa69a21.png)
+
+레디스를 사용해 이벤트 소싱 패턴을 적용하였습니다. 소켓 통신을 전달된 프로젝트의 변경 사항이 요청되면, 레디스에 로그를 저장해 빠르게 응답하고 비동기로 데이터베이스에 반영합니다.
+
+서버를 도커화시키고, 자동 배포 환경을 구축했습니다.
+
+CI 환경을 구축, 테스트와 lint를 자동화하여 코드 품질을 보호했습니다.
+
 	
 <div align="center">
     <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=black" style="margin: 2px"/>
