@@ -1,14 +1,8 @@
+import useRestoreHistory from 'hooks/useRestoreHistory';
 import { useRef } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  currentReverseIdxState,
-  historyDataListState,
-  historyMovingSpeedState,
-  isHistoryCalculatingState,
-  historyMapDataState,
-} from 'recoil/history';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { currentReverseIdxState, historyDataListState, historyMovingSpeedState, isHistoryCalculatingState } from 'recoil/history';
 import { IHistoryData } from 'types/history';
-import { restoreHistory } from 'hooks/useHistoryController/restoreHistory';
 
 interface IHistoryControllerProps {
   fromIdx: number;
@@ -45,21 +39,21 @@ const restoreAsyncHistory = (
 };
 
 const useHistoryController = () => {
-  const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
-  const [historyDataList, setHistoryDataList] = useRecoilState(historyDataListState);
+  const historyDataList = useRecoilValue(historyDataListState);
   const setCurrentReverseIdx = useSetRecoilState(currentReverseIdxState);
   const setIsCalculating = useSetRecoilState(isHistoryCalculatingState);
+  const { restoreHistory } = useRestoreHistory();
   const time = useRecoilValue(historyMovingSpeedState);
   const intervalId = useRef<NodeJS.Timer | null>(null);
 
   const handleMoveForward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
-    const params = { historyData, isForward: true, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
+    const params = { historyData, isForward: true };
     restoreHistory(params);
     setCurrentReverseIdx(fromIdx + idx);
   };
 
   const handleMoveBackward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
-    const params = { historyData, isForward: false, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
+    const params = { historyData, isForward: false };
     restoreHistory(params);
     setCurrentReverseIdx(fromIdx - idx);
   };
