@@ -4,7 +4,7 @@ import { TAddLabel } from '../utils/event-type';
 import { Label } from '../database/entities/Label';
 import { Color } from '../database/entities/Color';
 
-export const findOneLabel = async (id: string) => {
+export const findOneLabel = (id: string) => {
   return getRepository(Label).findOne({ where: { id } });
 };
 export const createLabel = async (projectId: string, labelInfo: TAddLabel) => {
@@ -13,6 +13,6 @@ export const createLabel = async (projectId: string, labelInfo: TAddLabel) => {
   const newLabel = await getRepository(Label).save({ ...labelInfo, color: color.rgb, project });
   return newLabel;
 };
-export const deleteLabel = async (labelId: number) => {
+export const deleteLabel = (labelId: number) => {
   return getRepository(Label).createQueryBuilder().delete().where({ id: labelId }).execute();
 };
