@@ -3,7 +3,8 @@ import useDragBackground from 'hooks/useDragBackground';
 import useLinkClick from 'hooks/useLinkClick';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { getNextMapState, mindmapState, historyMapDataState } from 'recoil/mindmap';
+import { historyMapDataState } from 'recoil/history';
+import { getNextMapState, mindmapState } from 'recoil/mindmap';
 import { Mindmap } from '..';
 
 const UNDER_ELEMENT = -10;
