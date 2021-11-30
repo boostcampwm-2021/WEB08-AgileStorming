@@ -4,7 +4,7 @@ import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
 import { IHistoryData } from 'types/history';
 import { TAddNodeData, TDeleteNodeData, TUpdateNodeParent, TUpdateTaskInformation } from 'types/event';
 
-interface IParams {
+export interface IParams {
   historyData: IHistoryData;
   isForward: boolean;
   setHistoryMapData: SetterOrUpdater<IMindmapData>;
