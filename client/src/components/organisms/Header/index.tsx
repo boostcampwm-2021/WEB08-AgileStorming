@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { urlLocationState } from 'recoil/project';
 import useCustomHistory from 'hooks/useCustomHistory';
 import { PAGES } from 'utils/helpers';
-import { TextLink, HeaderContainer, Icon, TextBox, LogoutBtn } from './style';
+import { TextLink, HeaderContainer, Icon, TextBox } from './style';
 
 const TABS = ['마인드맵', '칸반보드', '캘린더', '차트', '백로그'];
 
@@ -36,7 +36,6 @@ const Header: React.FC = () => {
             </>
           )}
           {!isInProject && <TextBox style={{ paddingLeft: '1rem' }}>My Projects</TextBox>}
-          <LogoutBtn>로그아웃</LogoutBtn>
         </HeaderContainer>
       )}
     </>
