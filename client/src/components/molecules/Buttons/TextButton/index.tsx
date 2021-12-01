@@ -1,7 +1,7 @@
 import React from 'react';
 import { SmallText, TransparentButton } from 'components/atoms';
 import * as Types from 'styles/common';
-import styled from '@emotion/styled';
+import { StyledTextButton } from './style';
 
 interface IProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -10,16 +10,6 @@ interface IProps {
   textWeight?: string;
   margin: string;
 }
-
-interface IStyleProps {
-  margin: string;
-}
-
-const StyledTextButton = styled.div<IStyleProps>`
-  width: fit-content;
-  height: fit-content;
-  margin: ${(props) => props.margin};
-`;
 
 const TextButton: React.FC<IProps> = ({ onClick, text, textColor, textWeight, margin }) => {
   return (
