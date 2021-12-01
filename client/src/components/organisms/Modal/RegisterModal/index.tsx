@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useRef } from 'react';
 import { ModalBox, ModalOverlay, Input, Title } from 'components/atoms';
-import { TextButton } from 'components/molecules';
+import { PopupLayout, TextButton } from 'components/molecules';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
 import { AxiosError } from 'axios';
@@ -46,18 +46,17 @@ const RegisterModal: React.FC<IRegisterModalProps> = () => {
   return (
     <>
       <ModalOverlay visible={true} onClick={hideModal} />
-      <ModalBox visible={true}>
-        <Title titleStyle={'xlarge'}>회원가입</Title>
-        <Title titleStyle={'large'} margin={'2rem 0 0 0.5rem'}>
+      <PopupLayout title={'회원가입'} popupStyle={'modal'} onClose={hideModal}>
+        <Title titleStyle={'normal'} margin={'2rem 0 0 0.5rem'}>
           아이디
         </Title>
-        <Input inputStyle={'large'} placeholder={'아이디를 입력해주세요'} margin={'1rem 0'} onChange={handleIdChange} />
-        <Title titleStyle={'large'} margin={'1rem 0 0 0.5rem'}>
+        <Input inputStyle={'gray'} placeholder={'아이디를 입력해주세요'} margin={'1rem 0'} onChange={handleIdChange} />
+        <Title titleStyle={'normal'} margin={'1rem 0 0 0.5rem'}>
           이름
         </Title>
-        <Input inputStyle={'large'} placeholder={'이름을 입력해주세요'} margin={'1rem 0'} onChange={handleNameChange} />
+        <Input inputStyle={'gray'} placeholder={'이름을 입력해주세요'} margin={'1rem 0'} onChange={handleNameChange} />
         <TextButton onClick={handleSubmit} text={'확인'} textColor={'red'} textWeight={'bold'} margin={'1rem 0 0 auto'} />
-      </ModalBox>
+      </PopupLayout>
     </>
   );
 };
