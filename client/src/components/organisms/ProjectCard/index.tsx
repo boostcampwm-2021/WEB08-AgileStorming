@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import * as img from 'img';
-import { SmallText } from 'components/atoms';
+import { participants, share, thumbnail, trashcan } from 'img';
+import { IconImg, SmallText, Title } from 'components/atoms';
 import { IconButton } from 'components/molecules';
 
 interface IProps {
@@ -18,50 +18,72 @@ interface IProps {
   };
 }
 
-const StyledProjectCard = styled.div`
-  ${(props) => props.theme.flex.column}
+interface IStyledProjectCardProps {
+  color: string;
+}
+
+const StyledProjectCard = styled.div<IStyledProjectCardProps>`
+  ${({ theme }) => theme.flex.column}
   width: 320px;
   height: 300px;
-  background: ${(props) => props.theme.color.white};
-  border: 1px solid ${(props) => props.theme.color.gray3};
+  background: ${({ color }) => '#' + color};
+  border: 1px solid ${({ theme }) => theme.color.gray3};
   border-radius: 5px;
   filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
   margin: 10px;
   padding: ${({ theme }) => theme.padding.xxlarge};
   :hover {
     cursor: pointer;
-    background: ${(props) => props.theme.color.bgWhite};
+    background: ${({ theme }) => theme.color.bgWhite};
   }
+`;
+
+const StyledLowerContainer = styled.div`
+  ${({ theme }) => theme.flex.row}
+  width: 100%;
+  justify-content: space-between;
 `;
 
 const StyledIconContainer = styled.div`
   ${({ theme }) => theme.flex.rowCenter}
-  margin: auto 0 0 auto;
+  align-items: center;
 `;
 
-const StyledTextContainer = styled.div`
+const StyledUpperContainer = styled.div`
   ${({ theme }) => theme.flex.columnCenter}
   margin: auto 0;
 `;
 
+const StyledTextContainer = styled.div`
+  ${({ theme }) => theme.flex.column};
+  width: 100%;
+  padding-left: 1.5rem;
+`;
+
 const ProjectCard: React.FC<IProps> = ({ name, count, creator, onClickShareButton, onClickDeleteButton, onClickProjectCard }) => {
   return (
-    <StyledProjectCard onClick={onClickProjectCard}>
-      <StyledTextContainer>
-        <SmallText color={'black'} weight={'bold'}>
-          {'프로젝트: ' + name}
-        </SmallText>
-        <SmallText color={'gray1'} weight={'normal'}>
-          {'참여자 수: ' + count}
-        </SmallText>
-        <SmallText color={'primary1'} weight={'bold'}>
-          {'만든 이: ' + creator.name}
-        </SmallText>
-      </StyledTextContainer>
-      <StyledIconContainer>
-        <IconButton onClick={onClickShareButton} imgSrc={img.share} altText='공유하기 버튼' />
-        <IconButton onClick={onClickDeleteButton} imgSrc={img.trashcan} altText='삭제하기 버튼' />
-      </StyledIconContainer>
+    <StyledProjectCard onClick={onClickProjectCard} color={creator.color}>
+      <StyledUpperContainer>
+        <IconImg imgSrc={thumbnail} altText='썸네일' size={{ width: '260px', height: '160px' }} borderRadius='20px' noHover={true} />
+        <StyledTextContainer>
+          <Title titleStyle={'xlarge'}>{name}</Title>
+          <SmallText color={'primary1'} weight={'bold'}>
+            {'프로젝트 관리자: ' + creator.name}
+          </SmallText>
+        </StyledTextContainer>
+      </StyledUpperContainer>
+      <StyledLowerContainer>
+        <StyledIconContainer>
+          <IconImg imgSrc={participants} altText='' noHover={true} />
+          <Title titleStyle={'normal'} margin='4px 0 0 0'>
+            {count}
+          </Title>
+        </StyledIconContainer>
+        <StyledIconContainer>
+          <IconButton onClick={onClickShareButton} imgSrc={share} altText='공유하기 버튼' />
+          <IconButton onClick={onClickDeleteButton} imgSrc={trashcan} altText='삭제하기 버튼' />
+        </StyledIconContainer>
+      </StyledLowerContainer>
     </StyledProjectCard>
   );
 };

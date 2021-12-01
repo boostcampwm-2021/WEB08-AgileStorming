@@ -23,6 +23,8 @@ import sirenOrangePath from './siren-orange.svg';
 import sirenRedPath from './siren-red.svg';
 import pauseBtnPath from './pauseBtn.svg';
 import primaryPlusCirclePath from './primaryPlusCircle.svg';
+import participantsPath from './participants.svg';
+import thumbnailPath from './thumbnail.jpeg';
 
 export const arrowLeft: string = arrowLeftPath;
 export const arrowRight: string = arrowRightPath;
@@ -49,3 +51,5 @@ export const sirenOrangeIcon: string = sirenOrangePath;
 export const sirenRedIcon: string = sirenRedPath;
 export const pauseBtn: string = pauseBtnPath;
 export const primaryPlusCircle: string = primaryPlusCirclePath;
+export const participants: string = participantsPath;
+export const thumbnail: string = thumbnailPath;
