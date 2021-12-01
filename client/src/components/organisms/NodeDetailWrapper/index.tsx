@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label, PopupItemLayout, PopupLayout, Dropdown } from 'components/molecules';
+import { LabelLayout, PopupItemLayout, PopupLayout, Dropdown } from 'components/molecules';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedNodeState, selectedNodeIdState } from 'recoil/node';
 import { priorityListState } from 'recoil/meta-data';
@@ -141,7 +141,7 @@ export const NodeDetailWrapper = () => {
     <PopupLayout title={`#${String(selectedNode.nodeId)}`} onClose={handleCloseButton} popupStyle='normal'>
       <NodeDetailContent />
       <PopupItemLayout title={'세부사항'}>
-        <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
+        <LabelLayout label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
           <Dropdown
             id='sprint'
             key={selectedNode.sprintId}
@@ -151,8 +151,8 @@ export const NodeDetailWrapper = () => {
             dropdownStyle='small'
             margin='0.1rem 0'
           />
-        </Label>
-        <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
+        </LabelLayout>
+        <LabelLayout label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
           <Dropdown
             id='assignee'
             key={selectedNode.assigneeId}
@@ -162,8 +162,8 @@ export const NodeDetailWrapper = () => {
             dropdownStyle='small'
             margin='0.1rem 0'
           />
-        </Label>
-        <Label label='마감 날짜' labelStyle='small' ratio={0.5} htmlFor='dueDate'>
+        </LabelLayout>
+        <LabelLayout label='마감 날짜' labelStyle='small' ratio={0.5} htmlFor='dueDate'>
           <Input
             id='dueDate'
             key={selectedNode.nodeId}
@@ -173,8 +173,8 @@ export const NodeDetailWrapper = () => {
             inputStyle='small'
             margin='0.1rem 0'
           />
-        </Label>
-        <Label label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
+        </LabelLayout>
+        <LabelLayout label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
           <Input
             id='estimatedTime'
             key={selectedNode.estimatedTime}
@@ -184,8 +184,8 @@ export const NodeDetailWrapper = () => {
             inputStyle='small'
             margin='0.1rem 0'
           />
-        </Label>
-        <Label label='실제 소요 시간' labelStyle='small' ratio={0.5} htmlFor='finishedTime'>
+        </LabelLayout>
+        <LabelLayout label='실제 소요 시간' labelStyle='small' ratio={0.5} htmlFor='finishedTime'>
           <Input
             id='finishedTime'
             key={selectedNode.finishedTime}
@@ -195,8 +195,8 @@ export const NodeDetailWrapper = () => {
             inputStyle='small'
             margin='0.1rem 0'
           />
-        </Label>
-        <Label label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>
+        </LabelLayout>
+        <LabelLayout label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>
           <Dropdown
             id='priority'
             key={selectedNode.nodeId}
@@ -206,7 +206,7 @@ export const NodeDetailWrapper = () => {
             dropdownStyle='small'
             margin='0.1rem 0'
           />
-        </Label>
+        </LabelLayout>
       </PopupItemLayout>
       <PopupItemLayout title={'라벨'}>
         <LabelList labelIds={JSON.parse(selectedNode.labelIds ?? '[]')} onChange={requestLabelChange} />
