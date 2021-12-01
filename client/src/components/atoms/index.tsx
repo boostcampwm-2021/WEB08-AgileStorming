@@ -1,12 +1,12 @@
-export { default as BoxButton } from 'components/atoms/BoxButton';
+export { default as BoxButton } from 'components/atoms/Buttons/BoxButton';
 export { default as ColorIcon } from 'components/atoms/Icons/ColorIcon';
 export { default as Input } from 'components/atoms/Input';
 export { default as Toast } from 'components/atoms/Toast';
-export { default as Title } from 'components/atoms/Title';
+export { default as Title } from 'components/atoms/Texts/Title';
 export { default as IconImg } from 'components/atoms/IconImg';
-export { default as TransparentButton } from 'components/atoms/TransparentButton';
+export { default as TransparentButton } from 'components/atoms/Buttons/TransparentButton';
 export { default as ModalOverlay } from 'components/atoms/ModalOverlay';
-export { default as SmallText } from 'components/atoms/SmallText';
+export { default as SmallText } from 'components/atoms/Texts/SmallText';
 export { default as Background } from 'components/atoms/Background';
 export { default as Node } from 'components/atoms/Node';
 export { default as UserIcon } from 'components/atoms/Icons/UserIcon';
