@@ -1,12 +1,12 @@
 export { default as BacklogTable } from 'components/organisms/BacklogTable';
-export { default as ConfirmModal } from 'components/organisms/ConfirmModal';
+export { default as ConfirmModal } from 'components/organisms/Modal/ConfirmModal';
 export { default as FilterPopup } from 'components/organisms/FilterPopup';
 export { default as ProjectCardContainer } from 'components/templates/ProjectCardContainer';
 export { default as NewProjectCard } from 'components/organisms/NewProjectCard';
-export { default as NewSprintModal } from 'components/organisms/NewSprintModal';
+export { default as NewSprintModal } from 'components/organisms/Modal/NewSprintModal';
 export { default as NodeDetailWrapper } from 'components/organisms/NodeDetailWrapper';
 export { default as ProjectCard } from 'components/organisms/ProjectCard';
-export { default as TextInputModal } from 'components/organisms/TextInputModal';
+export { default as TextInputModal } from 'components/organisms/Modal/TextInputModal';
 export { default as LabelList } from 'components/organisms/LabelList';
 export { default as MindmapBtnWrapper } from 'components/organisms/MindmapBtnWrapper';
 export { default as Mindmap } from 'components/organisms/Mindmap';
