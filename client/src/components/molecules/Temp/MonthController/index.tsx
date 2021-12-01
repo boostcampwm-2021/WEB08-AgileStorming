@@ -1,8 +1,8 @@
 import React from 'react';
 import { IconButton } from 'components/molecules';
+import { MonthSelectorWrapper } from './style';
 import { arrowLeft, arrowRight } from 'img';
 import { getNextMonthISODate, getPrevMonthISODate, parseISODate } from 'utils/date';
-import { MonthSelectorWrapper } from './style';
 
 interface IProps {
   currentDateISO: string;
