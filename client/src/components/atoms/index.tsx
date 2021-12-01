@@ -14,3 +14,7 @@ export { default as Wrapper } from 'components/atoms/Wrapper';
 export { default as PriorityIcon } from 'components/atoms/Icons/PriorityIcon';
 export { default as NodeTag } from 'components/atoms/NodeTag';
 export { default as LabelIcon } from 'components/atoms/Icons/LabelIcon';
+export { default as LayerDay } from 'components/atoms/CalendarDays/LayerDay';
+export { default as LayerSprintDay } from 'components/atoms/CalendarDays/LayerSprintDay';
+export { default as LayerScheduleDay } from 'components/atoms/CalendarDays/LayerScheduleDay';
+export { default as LayerTaskDetailDay } from 'components/atoms/CalendarDays/LayerTaskDetailDay';

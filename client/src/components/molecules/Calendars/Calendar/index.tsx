@@ -1,6 +1,6 @@
 import React from 'react';
 import { getTodayISODate, makeISODate, parseISODate } from 'utils/date';
-import { CalendarHeader, CalendarDay } from './style';
+import { CalendarDay, CalendarHeader } from './style';
 
 interface IProps {
   currentDateISO: string;
