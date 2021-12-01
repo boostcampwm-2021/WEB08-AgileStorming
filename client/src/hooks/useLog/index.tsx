@@ -42,7 +42,7 @@ export const useLog = () => {
   };
 
   const convertTaskInformation = ({ dataFrom, dataTo }: IConvertTaskInformationParams) => {
-    const changedTask = Object.keys(dataFrom!.changed)[0];
+    const changedTask = Object.keys(dataTo!.changed)[0];
     let [task, before, after]: [string, string, string] = ['', '', ''];
 
     switch (changedTask) {
@@ -51,10 +51,12 @@ export const useLog = () => {
         before = `${dataFrom!.changed[changedTask] ? userList[dataFrom!.changed[changedTask]!].name : '지정하지 않음'}`;
         after = `${dataTo!.changed[changedTask] ? userList[dataTo!.changed[changedTask]!].name : '지정하지 않음'}`;
         break;
-      case 'labels':
+      case 'labelIds':
         task = ' 라벨 : ';
-        before = `${dataFrom!.changed[changedTask]!.map((labelId) => labelList[labelId])}`;
-        after = `${dataTo!.changed[changedTask]!.map((labelId) => labelList[labelId])}`;
+        const fromLabels = JSON.parse(dataFrom!.changed[changedTask]!);
+        const toLabels = JSON.parse(dataTo!.changed[changedTask]!);
+        before = `${fromLabels.length ? fromLabels.map((labelId: number) => labelList[labelId].name) : '지정하지 않음'}`;
+        after = `${toLabels.length ? toLabels.map((labelId: number) => labelList[labelId].name) : '지정하지 않음'}`;
         break;
       case 'priority':
         task = ' 중요도 : ';
