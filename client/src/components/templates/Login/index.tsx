@@ -11,9 +11,11 @@ import { BoxButton, Input, Title } from 'components/atoms';
 import { IUser } from 'types/user';
 import { auth } from 'utils/api';
 import { logoMovePrimary } from 'img';
+import useCustomHistory from 'hooks/useCustomHistory';
 
 interface IHistoryProps {
-  link: string;
+  redirectPage: string;
+  projectId: string;
 }
 
 const Login = () => {
@@ -21,6 +23,7 @@ const Login = () => {
   const setUser = useSetRecoilState(userState);
   const id = useRef<string>('');
   const history: History<IHistoryProps> = useHistory();
+  const { historyPush } = useCustomHistory();
   const { showModal } = useModal();
   const { showMessage, showError } = useToast();
 
@@ -38,7 +41,9 @@ const Login = () => {
         setUser(user);
         localStorage.setItem('user', JSON.stringify(user));
         showMessage('로그인 되었습니다.');
-        history.push(history.location.state?.link ? history.location.state.link : '/project');
+        const redirectPage = history.location.state?.redirectPage;
+        if (redirectPage) historyPush(redirectPage, history.location.state?.projectId);
+        else historyPush('project');
       }
     } catch (err) {
       showError(err as Error | AxiosError);

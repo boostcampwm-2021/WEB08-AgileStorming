@@ -1,7 +1,6 @@
 import { Title, UserIcon, Wrapper } from 'components/atoms';
-import useProjectId from 'hooks/useRoomId';
+import useCustomHistory from 'hooks/useCustomHistory';
 import React from 'react';
-import { useHistory } from 'react-router';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { assigneeFilterState, filteredUserInProgressTaskState, userMouseOverState } from 'recoil/project';
 import { IUser } from 'types/user';
@@ -22,11 +21,10 @@ export const UserInProgressList: React.FC<IProps> = ({ user }) => {
   const filteredUserInProgressTask = useRecoilValue(filteredUserInProgressTaskState);
   const mouseOverUser = useRecoilValue(userMouseOverState);
   const setAssigneeFilter = useSetRecoilState(assigneeFilterState);
-  const history = useHistory();
-  const projectId = useProjectId();
+  const { historyPush } = useCustomHistory();
   const handleOnClick = () => {
     setAssigneeFilter(mouseOverUser);
-    history.push('/kanban/' + projectId);
+    historyPush('kanban');
   };
   return (
     <StyledUserInProgressContainer>

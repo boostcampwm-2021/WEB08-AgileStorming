@@ -128,6 +128,8 @@ const getAllChildren = (node: IMindNode, mindmapData: IMindmapData) => {
   return allChildren;
 };
 
+const PAGES = ['mindmap', 'kanban', 'calendar', 'chart', 'backlog'];
+
 export {
   getChildLevel,
   fillPayload,
@@ -146,6 +148,7 @@ export {
   levelToIdx,
   setTreeLevel,
   getAllChildren,
+  PAGES,
 };
 export type TRect = IRect;
 export type TCoord = ICoord;

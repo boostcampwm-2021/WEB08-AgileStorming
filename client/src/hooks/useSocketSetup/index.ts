@@ -1,4 +1,4 @@
-import useProjectId from 'hooks/useRoomId';
+import useProjectId from 'hooks/useProjectId';
 import useHistoryReceiver, { IHistoryReceiver } from 'hooks/useHistoryReceiver';
 import { useEffect } from 'react';
 import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
@@ -19,7 +19,6 @@ interface IInitProps {
 }
 
 const initSocket = ({ projectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver, setUserFocusNode }: IInitProps) => {
-  console.log('socket connected');
   window.socket = io(process.env.REACT_APP_SERVER!, {
     query: {
       projectId,
@@ -76,15 +75,14 @@ const useSocketSetup = () => {
 
   useEffect(() => {
     (async () => {
-      const isNewProject = projectId !== newProjectId;
+      const isNewProject = newProjectId && projectId !== newProjectId;
       if (!isNewProject) return;
-      if (projectId) {
-        console.log('socket leave');
+      if (window.socket) {
         window.socket!.emit('leave', projectId);
         window.socket = null;
       }
       initSocket({ projectId: newProjectId, setSocket, historyReceiver, nonHistoryEventReceiver, userReceiver, setUserFocusNode });
     })();
-  }, [newProjectId, projectId, historyReceiver, userReceiver]);
+  }, [newProjectId]);
 };
 export default useSocketSetup;

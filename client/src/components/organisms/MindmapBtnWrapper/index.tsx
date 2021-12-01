@@ -1,13 +1,12 @@
-import { useHistory } from 'react-router-dom';
 import { clock, plusCircle } from 'img';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import { getChildLevel } from 'utils/helpers';
 import { BoxButton } from 'components/atoms';
-import useProjectId from 'hooks/useRoomId';
 import { selectedNodeIdState, selectedNodeState } from 'recoil/node';
 import { Wrapper } from './style';
 import { IMindmapData, IMindNode } from 'types/mindmap';
+import useCustomHistory from 'hooks/useCustomHistory';
 
 interface ITempNodeParams {
   mindmapData: IMindmapData;
@@ -33,11 +32,10 @@ const MindmapWrapper: React.FC = () => {
   const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeIdState);
   const selectedNode = useRecoilValue(selectedNodeState);
   const [mindmapData, setMindmapData] = useRecoilState(mindmapState);
-  const history = useHistory();
-  const projectId = useProjectId();
+  const { historyPush } = useCustomHistory();
 
   const handleHistoryBtnClick = () => {
-    history.push(`/history/${projectId}`);
+    historyPush('history');
   };
 
   const handlePlusNodeBtnClick = () => {

@@ -1,4 +1,4 @@
-import useRoomId from 'hooks/useRoomId';
+import useProjectId from 'hooks/useProjectId';
 import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { mindmapState } from 'recoil/mindmap';
@@ -17,15 +17,13 @@ const useProject = () => {
   const setLabelList = useSetRecoilState(labelListState);
   const setMindmap = useSetRecoilState(mindmapState);
 
-  const roomId = useRoomId();
+  const prevProjectId = useProjectId();
 
   const setProjectInfoData = async () => {
-    if (roomId === projectId) {
-      return;
-    }
-    const { projectInfo, projectNodeInfo } = await project.getInfo(roomId);
+    if (prevProjectId === projectId) return;
+    const { projectInfo, projectNodeInfo } = await project.getInfo(prevProjectId);
 
-    setProjectId(roomId);
+    setProjectId(prevProjectId);
 
     const sprintList: Record<number, ISprint> = {};
     projectInfo.sprints.forEach((sprint) => (sprintList[sprint.id] = sprint));
@@ -53,9 +51,6 @@ const useProject = () => {
 
   useEffect(() => {
     setProjectInfoData();
-    return () => {
-      setProjectId(null);
-    };
   }, []);
 };
 

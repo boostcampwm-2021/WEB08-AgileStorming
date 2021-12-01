@@ -1,4 +1,4 @@
-import useProjectId from 'hooks/useRoomId';
+import useProjectId from 'hooks/useProjectId';
 import { useCallback } from 'react';
 import { useHistory } from 'react-router';
 import { TPage } from 'types/page';

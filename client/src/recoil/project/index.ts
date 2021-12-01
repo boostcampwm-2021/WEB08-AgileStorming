@@ -58,7 +58,7 @@ const userFocusNodeState = atom<Map<string, number>>({
 
 const urlLocationState = atom<string>({
   key: 'urlLocationState',
-  default: '/mindmap/',
+  default: '/',
 });
 
 const filteredTaskState = selector<Record<number, IMindNode>>({

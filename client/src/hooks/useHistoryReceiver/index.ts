@@ -35,14 +35,32 @@ interface IAddNodeProps {
   data: THistoryEventData;
 }
 
-interface IUpdateNodeParent {
-  nextMapState: IMindmapData;
+interface IDeleteNodeProps {
+  mindNodes: IMindNodes;
+  targetId: number;
+  dataFrom: TDeleteNodeData;
+}
+
+interface IUpdateNodeParentProps {
+  mindNodes: IMindNodes;
   oldParentId: number;
   newParentId: number;
   data: TUpdateNodeParent;
 }
 
-const addNode = ({ data, mindNodes, parentId, newId }: IAddNodeProps) => {
+interface IUpdateNodeContentProps {
+  mindNodes: IMindNodes;
+  targetId: number;
+  dataTo: TUpdateNodeContent;
+}
+
+interface IUpdateTaskInformationProps {
+  mindNodes: IMindNodes;
+  targetId: number;
+  dataTo: TUpdateTaskInformation;
+}
+
+export const addNode = ({ data, mindNodes, parentId, newId }: IAddNodeProps) => {
   const { content } = data.dataTo as TAddNodeData;
   const parent = mindNodes.get(parentId);
   const level = getChildLevel(parent!.level);
@@ -54,7 +72,15 @@ const addNode = ({ data, mindNodes, parentId, newId }: IAddNodeProps) => {
   mindNodes.set(parentId, newParent);
 };
 
-const updateNodeParent = ({ nextMapState: { mindNodes }, oldParentId, newParentId, data: { nodeId } }: IUpdateNodeParent) => {
+export const deleteNode = ({ mindNodes, targetId, dataFrom }: IDeleteNodeProps) => {
+  const parentNode = mindNodes.get(targetId)!;
+  const { nodeId, sideEffect } = dataFrom;
+  parentNode.children = parentNode.children.filter((childId) => childId !== nodeId);
+  mindNodes.delete(nodeId!);
+  sideEffect.forEach((childNode) => mindNodes.delete(childNode.nodeId));
+};
+
+export const updateNodeParent = ({ mindNodes, oldParentId, newParentId, data: { nodeId } }: IUpdateNodeParentProps) => {
   const oldParentNode = mindNodes.get(oldParentId)!;
   oldParentNode.children = oldParentNode.children.filter((childId) => childId !== nodeId);
   const newParentNode = mindNodes.get(newParentId)!;
@@ -62,6 +88,22 @@ const updateNodeParent = ({ nextMapState: { mindNodes }, oldParentId, newParentI
   const childNode = mindNodes.get(nodeId)!;
   childNode.level = getChildLevel(newParentNode.level);
   setTreeLevel(mindNodes, nodeId, levelToIdx(childNode.level));
+};
+
+export const updateNodeContent = ({ mindNodes, targetId, dataTo }: IUpdateNodeContentProps) => {
+  const targetNode = mindNodes.get(targetId)!;
+  mindNodes.set(targetId!, {
+    ...targetNode,
+    ...dataTo,
+  });
+};
+
+export const updateTaskInformation = ({ mindNodes, targetId, dataTo }: IUpdateTaskInformationProps) => {
+  const targetNode = mindNodes.get(targetId)!;
+  mindNodes.set(targetId, {
+    ...targetNode,
+    ...(dataTo.changed as TTask),
+  });
 };
 
 export const historyHandler = ({ setMindmap, historyData }: IHistoryHandlerProps) => {
@@ -82,42 +124,33 @@ export const historyHandler = ({ setMindmap, historyData }: IHistoryHandlerProps
     case 'DELETE_NODE':
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
-        const parentNode = nextMapState.mindNodes.get(nodeFrom!)!;
-        const { nodeId, sideEffect } = dataFrom as TDeleteNodeData;
-        parentNode.children = parentNode.children.filter((childId) => childId !== nodeId);
-        nextMapState.mindNodes.delete(nodeId!);
-        console.log(123123, sideEffect);
-        sideEffect.forEach((childNode) => nextMapState.mindNodes.delete(childNode.nodeId));
+        deleteNode({ mindNodes: nextMapState.mindNodes, targetId: nodeFrom!, dataFrom: dataFrom as TDeleteNodeData });
         return nextMapState;
       });
       break;
     case 'UPDATE_NODE_PARENT':
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
-        const data = dataTo as TUpdateNodeParent;
-        updateNodeParent({ nextMapState, oldParentId: nodeFrom!, newParentId: nodeTo!, data });
+        updateNodeParent({
+          mindNodes: nextMapState.mindNodes,
+          oldParentId: nodeFrom!,
+          newParentId: nodeTo!,
+          data: dataTo as TUpdateNodeParent,
+        });
         return nextMapState;
       });
       break;
     case 'UPDATE_NODE_CONTENT':
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
-        const targetNode = nextMapState.mindNodes.get(nodeFrom!)!;
-        nextMapState.mindNodes.set(nodeFrom!, {
-          ...targetNode,
-          ...(dataTo as TUpdateNodeContent),
-        });
+        updateNodeContent({ mindNodes: nextMapState.mindNodes, targetId: nodeFrom!, dataTo: dataTo as TUpdateNodeContent });
         return nextMapState;
       });
       break;
     case 'UPDATE_TASK_INFORMATION':
       setMindmap((prev) => {
         const nextMapState = getNextMapState(prev);
-        const targetNode = nextMapState.mindNodes.get(nodeFrom!)!;
-        nextMapState.mindNodes.set(nodeFrom!, {
-          ...targetNode,
-          ...((dataTo as TUpdateTaskInformation).changed as TTask),
-        });
+        updateTaskInformation({ mindNodes: nextMapState.mindNodes, targetId: nodeFrom!, dataTo: dataTo as TUpdateTaskInformation });
         return nextMapState;
       });
       break;
