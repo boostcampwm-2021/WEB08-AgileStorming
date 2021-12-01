@@ -18,20 +18,21 @@ interface IProps {
   };
 }
 
-interface IStyledProjectCardProps {
+interface IStyledProps {
   color: string;
 }
 
-const StyledProjectCard = styled.div<IStyledProjectCardProps>`
+const StyledProjectCard = styled.div<IStyledProps>`
   ${({ theme }) => theme.flex.column}
   width: 320px;
   height: 300px;
-  background: ${({ color }) => '#' + color};
+  background: ${({ theme }) => theme.color.bgWhite};
   border: 1px solid ${({ theme }) => theme.color.gray3};
   border-radius: 5px;
-  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
+  filter: ${({ color }) => `drop-shadow(0px 3px 3px #${color})`};
   margin: 10px;
-  padding: ${({ theme }) => theme.padding.xxlarge};
+  overflow: hidden;
+  justify-content: space-between;
   :hover {
     cursor: pointer;
     background: ${({ theme }) => theme.color.bgWhite};
@@ -47,43 +48,47 @@ const StyledLowerContainer = styled.div`
 const StyledIconContainer = styled.div`
   ${({ theme }) => theme.flex.rowCenter}
   align-items: center;
+  margin-top: ${({ theme }) => theme.margin.normal};
 `;
 
-const StyledUpperContainer = styled.div`
-  ${({ theme }) => theme.flex.columnCenter}
-  margin: auto 0;
+const StyledBottomContainer = styled.div`
+  ${({ theme }) => theme.flex.columnCenter};
+  overflow: hidden;
+  padding: ${({ theme }) => theme.padding.normal};
 `;
 
 const StyledTextContainer = styled.div`
   ${({ theme }) => theme.flex.column};
   width: 100%;
-  padding-left: 1.5rem;
+  padding-left: ${({ theme }) => theme.padding.normal};
 `;
 
 const ProjectCard: React.FC<IProps> = ({ name, count, creator, onClickShareButton, onClickDeleteButton, onClickProjectCard }) => {
   return (
     <StyledProjectCard onClick={onClickProjectCard} color={creator.color}>
-      <StyledUpperContainer>
-        <IconImg imgSrc={thumbnail} altText='썸네일' size={{ width: '260px', height: '160px' }} borderRadius='20px' noHover={true} />
+      <IconImg imgSrc={thumbnail} altText='썸네일' size={{ width: '100%', height: '60%' }} noPadding={true} noHover={true} />
+      <StyledBottomContainer>
         <StyledTextContainer>
-          <Title titleStyle={'xlarge'}>{name}</Title>
-          <SmallText color={'primary1'} weight={'bold'}>
+          <Title titleStyle={'xlarge'} cursor={'pointer'}>
+            {name}
+          </Title>
+          <SmallText color={'primary1'} weight={'bold'} cursor={'pointer'}>
             {'프로젝트 관리자: ' + creator.name}
           </SmallText>
         </StyledTextContainer>
-      </StyledUpperContainer>
-      <StyledLowerContainer>
-        <StyledIconContainer>
-          <IconImg imgSrc={participants} altText='' noHover={true} />
-          <Title titleStyle={'normal'} margin='4px 0 0 0'>
-            {count}
-          </Title>
-        </StyledIconContainer>
-        <StyledIconContainer>
-          <IconButton onClick={onClickShareButton} imgSrc={share} altText='공유하기 버튼' />
-          <IconButton onClick={onClickDeleteButton} imgSrc={trashcan} altText='삭제하기 버튼' />
-        </StyledIconContainer>
-      </StyledLowerContainer>
+        <StyledLowerContainer>
+          <StyledIconContainer>
+            <IconImg imgSrc={participants} altText='' noHover={true} />
+            <Title titleStyle={'normal'} margin='4px 0 0 0' cursor={'pointer'}>
+              {count}
+            </Title>
+          </StyledIconContainer>
+          <StyledIconContainer>
+            <IconButton onClick={onClickShareButton} imgSrc={share} altText='공유하기 버튼' />
+            <IconButton onClick={onClickDeleteButton} imgSrc={trashcan} altText='삭제하기 버튼' />
+          </StyledIconContainer>
+        </StyledLowerContainer>
+      </StyledBottomContainer>
     </StyledProjectCard>
   );
 };

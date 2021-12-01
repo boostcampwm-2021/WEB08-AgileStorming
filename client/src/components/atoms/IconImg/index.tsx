@@ -5,19 +5,18 @@ interface IProps {
   imgSrc: string;
   altText: string;
   size?: { width: string; height: string };
-  borderRadius?: string;
+  noPadding?: boolean;
   noHover?: boolean;
 }
 
 interface IImgProps {
-  borderRadius?: string;
+  noPadding?: boolean;
   noHover?: boolean;
 }
 
 const StyledIconImg = styled.img<IImgProps>`
   ${({ theme }) => theme.flex.columnCenter}
-  padding: ${({ theme }) => theme.padding.small};
-  border-radius: ${({ borderRadius }) => borderRadius ?? 0};
+  padding: ${({ theme, noPadding }) => (noPadding ? null : theme.padding.small)};
   :hover {
     ${({ noHover, theme }) =>
       noHover
@@ -29,10 +28,8 @@ const StyledIconImg = styled.img<IImgProps>`
   }
 `;
 
-const IconImg: React.FC<IProps> = ({ imgSrc, altText, size, borderRadius, noHover }) => {
-  return (
-    <StyledIconImg src={imgSrc} alt={altText} width={size?.width} height={size?.height} borderRadius={borderRadius} noHover={noHover} />
-  );
+const IconImg: React.FC<IProps> = ({ imgSrc, altText, size, noPadding, noHover }) => {
+  return <StyledIconImg src={imgSrc} alt={altText} width={size?.width} height={size?.height} noPadding={noPadding} noHover={noHover} />;
 };
 
 export default IconImg;

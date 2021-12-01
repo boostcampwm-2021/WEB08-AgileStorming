@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 import * as Types from 'styles/common';
+import { TCursor } from '../Title/style';
 
 interface IStyleProps {
   color: Types.TColor;
   weight?: string;
   margin?: string;
+  cursor?: TCursor;
 }
 
 const SmallText = styled.p<IStyleProps>`
@@ -12,7 +14,7 @@ const SmallText = styled.p<IStyleProps>`
   font-size: ${({ theme }) => theme.fontSize.small};
   font-weight: ${({ weight }) => weight ?? 'normal'};
   margin: ${({ margin }) => margin ?? '0'};
-  cursor: default;
+  cursor: ${({ cursor }) => cursor ?? 'default'};
 `;
 
 export default SmallText;
