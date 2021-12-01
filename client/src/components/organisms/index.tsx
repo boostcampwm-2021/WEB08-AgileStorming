@@ -19,7 +19,7 @@ export { default as ScheduleCalendar } from 'components/organisms/ScheduleCalend
 export { default as TaskCard } from 'components/organisms/TaskCard';
 export { default as HistoryHeader } from 'components/organisms/HistoryHeader';
 export { default as UserInProgressList } from 'components/organisms/UserInProgressList';
-export { default as BurnDownChart } from 'components/organisms/BurnDownChart';
-export { default as TaskRatioChart } from 'components/organisms/TaskRatioChart';
-export { default as DoneTaskChart } from 'components/organisms/DoneTaskChart';
-export { default as PriorityChart } from 'components/organisms/PriorityChart';
+export { default as BurnDownChart } from 'components/organisms/Charts/BurnDownChart';
+export { default as TaskRatioChart } from 'components/organisms/Charts/TaskRatioChart';
+export { default as DoneTaskChart } from 'components/organisms/Charts/DoneTaskChart';
+export { default as PriorityChart } from 'components/organisms/Charts/PriorityChart';
