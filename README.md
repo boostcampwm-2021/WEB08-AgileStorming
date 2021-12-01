@@ -122,4 +122,5 @@ CI 환경을 구축, 테스트와 lint를 자동화하여 코드 품질을 보�
 <br />
 
 <h2>소켓 데이터 흐름도</h2>
+
 ![소켓_데이터_흐름도](https://user-images.githubusercontent.com/67942309/143988668-1bfb6efc-6ee0-44bb-8922-001529f7310f.jpeg)
