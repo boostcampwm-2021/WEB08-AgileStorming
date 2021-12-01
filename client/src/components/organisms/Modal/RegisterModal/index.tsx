@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useRef } from 'react';
-import { ModalBox, ModalOverlay, Input, Title } from 'components/atoms';
+import { ModalOverlay, Input, Title } from 'components/atoms';
 import { PopupLayout, TextButton } from 'components/molecules';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
