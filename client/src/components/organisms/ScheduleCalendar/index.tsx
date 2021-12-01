@@ -5,7 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import { selectedNodeIdState } from 'recoil/node';
 import { IMindNode } from 'types/mindmap';
 import { getTodayISODate } from 'utils/date';
-import { Calendar, LayerScheduleCalendar, LayerSprintCalendar, LayerTaskDetailCalendar, MonthSelector } from 'components/molecules';
+import { Calendar, LayerScheduleCalendar, LayerSprintCalendar, LayerTaskDetailCalendar, MonthController } from 'components/molecules';
 
 const ScheduleCalendar = () => {
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
@@ -17,7 +17,7 @@ const ScheduleCalendar = () => {
 
   return (
     <Wrapper onClick={() => handleClickOutside()}>
-      <MonthSelector currentDateISO={currentDateISO} setCurrentDateISO={setCurrentDateISO} />
+      <MonthController currentDateISO={currentDateISO} setCurrentDateISO={setCurrentDateISO} />
       <CalendarWrapper>
         <Calendar currentDateISO={currentDateISO} />
       </CalendarWrapper>

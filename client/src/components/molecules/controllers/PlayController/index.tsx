@@ -1,9 +1,9 @@
+import { IconButton } from 'components/molecules';
 import useHistoryController from 'hooks/useHistoryController';
 import { backwardBtn, playBtn, forwardBtn, pauseBtn } from 'img';
 import { useCallback, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentReverseIdxState, isHistoryCalculatingState } from 'recoil/history';
-import { IconButton } from '..';
 import { Wrapper } from './style';
 
 const PlayController = () => {

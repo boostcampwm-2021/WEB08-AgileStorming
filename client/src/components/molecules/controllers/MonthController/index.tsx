@@ -9,7 +9,7 @@ interface IProps {
   setCurrentDateISO: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const MonthSelector: React.FC<IProps> = ({ currentDateISO, setCurrentDateISO }) => {
+const MonthController: React.FC<IProps> = ({ currentDateISO, setCurrentDateISO }) => {
   const { year, month } = parseISODate(currentDateISO);
   const currentYearMonth = `${year}년 ${month}월`;
   const handleClickNextMonth = () => setCurrentDateISO(getNextMonthISODate(currentDateISO));
@@ -24,6 +24,6 @@ const MonthSelector: React.FC<IProps> = ({ currentDateISO, setCurrentDateISO }) 
   );
 };
 
-const MonthSelectorMemo = React.memo(MonthSelector);
+const MonthControllerMemo = React.memo(MonthController);
 
-export default MonthSelectorMemo;
+export default MonthControllerMemo;
