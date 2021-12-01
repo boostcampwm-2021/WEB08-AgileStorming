@@ -2,8 +2,7 @@ import { TaskRow } from './style';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedNodeIdState } from 'recoil/node';
 import { labelListState, sprintListState, userListState } from 'recoil/project';
-import { ColorIcon, UserIcon } from 'components/atoms';
-import { LabelIcon } from 'components/molecules';
+import { ColorIcon, UserIcon, LabelIcon } from 'components/atoms';
 import { IMindNode } from 'types/mindmap';
 
 interface IProps {
