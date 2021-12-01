@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import FilterButton from './FilterButton';
 import { LeftInfo, RightInfo, Template } from './style';
-import { NodeDetailWrapper, UserList, Header, FilterPopup } from 'components/organisms';
+import { NodeDetailPopup, UserListPopup, Header, FilterPopup } from 'components/organisms';
 import useSocketSetup from 'hooks/useSocketSetup';
 import useProject from 'hooks/useProject';
 import useAuthentication from 'hooks/useAuthentication';
@@ -25,11 +25,11 @@ const CommonLayout: React.FC<IProps> = ({ children, refProp }) => {
       <Header />
 
       <LeftInfo>
-        <UserList />
+        <UserListPopup />
       </LeftInfo>
       <RightInfo>
         {DisplayFilter ? <FilterPopup onClose={handleClickFilterPopupClose} /> : <FilterButton onClick={handleClickFilterButton} />}
-        <NodeDetailWrapper />
+        <NodeDetailPopup />
       </RightInfo>
       {children}
     </Template>
