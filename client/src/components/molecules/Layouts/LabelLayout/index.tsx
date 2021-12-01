@@ -9,7 +9,7 @@ interface IProps extends LabelHTMLAttributes<HTMLLabelElement> {
   margin?: string;
 }
 
-const Label: React.FC<IProps> = ({ children, label, ratio, labelStyle = 'normal', margin = '0', ...props }) => {
+const LabelLayout: React.FC<IProps> = ({ children, label, ratio, labelStyle = 'normal', margin = '0', ...props }) => {
   return (
     <Wrapper labelStyle={labelStyle} margin={margin} ratio={ratio}>
       <StyledLabel labelStyle={labelStyle} {...props}>
@@ -20,4 +20,4 @@ const Label: React.FC<IProps> = ({ children, label, ratio, labelStyle = 'normal'
   );
 };
 
-export default Label;
+export default LabelLayout;

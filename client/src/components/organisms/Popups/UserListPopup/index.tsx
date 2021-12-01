@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { PopupItemLayout, PopupLayout, IconButton, Profile } from 'components/molecules';
-import { UserInProgressList } from 'components/organisms';
+import { UserInProgressPopup } from 'components/organisms';
 import { BoxButton } from 'components/atoms';
 import { userIcon, share } from 'img';
 import styled from '@emotion/styled';
@@ -64,7 +64,7 @@ export const UserList = () => {
               <StyledConnectionStatus online={connectedUsers[user.id]}>
                 {connectedUsers[user.id] ? 'online' : 'offline'}
               </StyledConnectionStatus>
-              {mouseOverUser === user.id ? <UserInProgressList user={user}></UserInProgressList> : null}
+              {mouseOverUser === user.id ? <UserInProgressPopup user={user} /> : null}
             </StyledUserInfoBox>
           );
         })}

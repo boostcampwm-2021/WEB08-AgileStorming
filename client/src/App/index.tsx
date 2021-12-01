@@ -3,9 +3,8 @@ import { Global, ThemeProvider } from '@emotion/react';
 import { RecoilRoot } from 'recoil';
 import { common, global } from 'styles';
 import { GlobalModal } from 'components/templates/GlobalModal';
-import { Toast } from 'components/atoms';
+import { SpinnerBackground, Toast } from 'components/atoms';
 import loadable from '@loadable/component';
-import { Spinner } from 'components/molecules';
 import { TPageComponent } from 'types/page';
 
 interface IProps {
@@ -14,7 +13,7 @@ interface IProps {
 
 const AsyncPage = loadable(({ page }: IProps) => import(`pages/${page}`), {
   cacheKey: ({ page }) => page,
-  fallback: <Spinner />,
+  fallback: <SpinnerBackground />,
 });
 
 const App = () => {
