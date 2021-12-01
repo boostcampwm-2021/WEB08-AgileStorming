@@ -6,6 +6,8 @@ import { NewProjectModalWrapper } from 'components/templates';
 import useToast from 'hooks/useToast';
 import { API } from 'utils/api';
 import { useHistory } from 'react-router';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user';
 
 const StyledProjectCardContainer = styled.div`
   ${(props) => props.theme.flex.row}
@@ -21,13 +23,16 @@ interface IProps {
 const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList }) => {
   const { showMessage } = useToast();
   const history = useHistory();
+  const user = useRecoilValue(userState);
+
   const handleClickShareButton = (event: React.MouseEvent<HTMLButtonElement>, projectId: string) => {
     event.stopPropagation();
     navigator.clipboard.writeText(process.env.REACT_APP_CLIENT + 'mindmap:' + projectId);
     showMessage('마인드맵 링크가 클립보드에 복사되었습니다.');
   };
-  const handleClickTrashButton = (event: React.MouseEvent<HTMLButtonElement>, projectId: string) => {
+  const handleClickTrashButton = (event: React.MouseEvent<HTMLButtonElement>, projectId: string, userId: string) => {
     event.stopPropagation();
+    if (!user || user.id !== userId) return showMessage('프로젝트 관리자만 삭제할 수 있습니다.');
     setProjectList((list) => list.filter((p) => p.id !== projectId));
     API.project.delete(projectId);
   };
@@ -51,7 +56,7 @@ const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList })
             creator={creator}
             onClickProjectCard={() => handleClickProjectCard(id)}
             onClickShareButton={(event: React.MouseEvent<HTMLButtonElement>) => handleClickShareButton(event, id)}
-            onClickDeleteButton={(event: React.MouseEvent<HTMLButtonElement>) => handleClickTrashButton(event, id)}
+            onClickDeleteButton={(event: React.MouseEvent<HTMLButtonElement>) => handleClickTrashButton(event, id, creator.id)}
           />
         );
       })}
