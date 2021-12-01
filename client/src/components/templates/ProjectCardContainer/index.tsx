@@ -11,6 +11,7 @@ const StyledProjectCardContainer = styled.div`
   ${(props) => props.theme.flex.row}
   flex-wrap: wrap;
   margin: ${(props) => props.theme.margin.xxxlarge};
+  margin-top: ${(props) => props.theme.HEADER_HEIGHT};
 `;
 
 interface IProps {
