@@ -3,6 +3,8 @@ import { IconButton } from 'components/molecules';
 import { IconImg, SmallText, Title } from 'components/atoms';
 import { StyledBottomContainer, StyledIconContainer, StyledLowerContainer, StyledProjectCard, StyledTextContainer } from './style';
 import { participants, share, thumbnail, trashcan } from 'img';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user';
 
 interface IProps {
   projectId: string;
@@ -15,10 +17,14 @@ interface IProps {
     color: string;
     icon: string;
     name: string;
+    id: string;
   };
 }
 
 const ProjectCard: React.FC<IProps> = ({ name, count, creator, onClickShareButton, onClickDeleteButton, onClickProjectCard }) => {
+  const user = useRecoilValue(userState);
+  const isCreator = creator.id === user?.id;
+
   return (
     <StyledProjectCard onClick={onClickProjectCard} color={creator.color}>
       <IconImg imgSrc={thumbnail} altText='썸네일' size={{ width: '100%', height: '60%' }} noPadding={true} noHover={true} />
@@ -40,7 +46,7 @@ const ProjectCard: React.FC<IProps> = ({ name, count, creator, onClickShareButto
           </StyledIconContainer>
           <StyledIconContainer>
             <IconButton onClick={onClickShareButton} imgSrc={share} altText='공유하기 버튼' />
-            <IconButton onClick={onClickDeleteButton} imgSrc={trashcan} altText='삭제하기 버튼' />
+            {isCreator && <IconButton onClick={onClickDeleteButton} imgSrc={trashcan} altText='삭제하기 버튼' />}
           </StyledIconContainer>
         </StyledLowerContainer>
       </StyledBottomContainer>
