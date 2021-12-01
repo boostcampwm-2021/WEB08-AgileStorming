@@ -26,16 +26,3 @@ export const mindmapNodesState = selector({
     return mindNodes;
   },
 });
-
-export const historyMapDataState = atom<IMindmapData>({
-  key: 'historyMapAtom',
-  default: { rootId: ROOT_NODE_ID, mindNodes: new Map() },
-});
-
-export const historyMapState = selector({
-  key: 'historyNodesState',
-  get: ({ get }) => {
-    const { mindNodes } = get(historyMapDataState)!;
-    return mindNodes;
-  },
-});

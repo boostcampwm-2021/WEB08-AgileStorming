@@ -118,3 +118,9 @@ CI 환경을 구축, 테스트와 lint를 자동화하여 코드 품질을 보�
 |---|---|
 |<img src="https://user-images.githubusercontent.com/60315683/140672467-22b3aa52-daab-47ac-93fc-44a02662c98c.png" style="width:500px;height:300px;"/>|<img src="https://user-images.githubusercontent.com/60315683/140672641-5bfd2e75-b626-4afa-9b41-cfe4efc0e627.png" style="width:500px;height:300px;"/>|
 </div>
+
+<br />
+
+<h2>소켓 데이터 흐름도</h2>
+
+![소켓_데이터_흐름도](https://user-images.githubusercontent.com/67942309/143988668-1bfb6efc-6ee0-44bb-8922-001529f7310f.jpeg)

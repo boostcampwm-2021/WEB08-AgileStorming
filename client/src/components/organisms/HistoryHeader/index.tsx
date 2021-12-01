@@ -1,8 +1,7 @@
 import { RightWrapper, Wrapper, Range } from './style';
 import { IconButton, PlayController } from 'components/molecules';
-import { historyMapDataState } from 'recoil/mindmap';
 import { useResetRecoilState, useSetRecoilState } from 'recoil';
-import { currentReverseIdxState, historyDataListState, historyMovingSpeedState } from 'recoil/history';
+import { currentReverseIdxState, historyDataListState, historyMapDataState, historyMovingSpeedState } from 'recoil/history';
 import useLinkClick from 'hooks/useLinkClick';
 import { whiteCloseBtn } from 'img';
 import { useCallback } from 'react';
