@@ -10,7 +10,7 @@ interface IStyleProps {
   width?: string;
 }
 
-export type TStyle = 'small' | 'normal' | 'large' | 'xlarge' | 'xxxlarge' | 'title';
+export type TStyle = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge' | 'title';
 export type TColor = 'black' | 'white';
 export type TCursor = 'default' | 'pointer' | 'text' | 'none';
 
@@ -38,6 +38,9 @@ const styleOptions: { [key in TStyle]: string } = {
   `,
   xlarge: `
     font-size: ${common.fontSize.xlarge};
+  `,
+  xxlarge: `
+    font-size: ${common.fontSize.xxlarge};
   `,
   xxxlarge: `
     font-size: ${common.fontSize.xxxlarge};
