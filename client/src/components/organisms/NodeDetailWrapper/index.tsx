@@ -2,7 +2,7 @@ import React from 'react';
 import { Label, PopupItemLayout, PopupLayout, Dropdown } from 'components/molecules';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedNodeState, selectedNodeIdState } from 'recoil/node';
-import { priorityListState, statusListState } from 'recoil/meta-data';
+import { priorityListState } from 'recoil/meta-data';
 import { Input } from 'components/atoms';
 import { isISODate, isPositiveNumber } from 'utils/form';
 import useToast from 'hooks/useToast';
@@ -14,7 +14,6 @@ import { LabelList } from 'components/organisms';
 
 export const NodeDetailWrapper = () => {
   const priorityList = useRecoilValue(priorityListState);
-  const statusList = useRecoilValue(statusListState);
   const setSelectedNodeId = useSetRecoilState(selectedNodeIdState);
   const selectedNode = useRecoilValue(selectedNodeState);
   const sprintList = useRecoilValue(sprintListState);
@@ -26,9 +25,6 @@ export const NodeDetailWrapper = () => {
   const priorityDropdownItem: Record<string, string> = {};
   priorityList.forEach((priority) => (priorityDropdownItem[priority] = priority));
 
-  const statusDropdownItem: Record<string, string> = {};
-  statusList.forEach((status) => (statusDropdownItem[status] = status));
-
   const sprintDropdownItem: Record<number, string> = {};
   Object.values(sprintList).forEach((sprint) => (sprintDropdownItem[sprint.id] = sprint.name));
 
@@ -37,12 +33,8 @@ export const NodeDetailWrapper = () => {
 
   const handleCloseButton = () => setSelectedNodeId(null);
 
-  const handleFocusAlarm = (msg: string) => () => showMessage(msg);
-
   const handleBlurNodeDetail = (info: keyof IMindNode) => (e: React.FocusEvent<HTMLInputElement>) => {
-    if (e.target.value === selectedNode?.[info]) {
-      return;
-    }
+    if (e.target.value === selectedNode?.[info]) return;
     const { nodeId, content } = selectedNode!;
     updateNodeContent({ nodeFrom: nodeId, dataFrom: { content: content }, dataTo: { content: e.target.value } });
     showMessage(`${info} ${e.target.value}로 변경.`);
@@ -50,10 +42,7 @@ export const NodeDetailWrapper = () => {
 
   const handleChangeNodeDetail = (info: keyof TTask) => (value: number | string) => {
     const prevValue = selectedNode![info];
-    if (value === prevValue) {
-      return;
-    }
-
+    if (value === prevValue) return;
     updateTaskInformation({
       nodeFrom: selectedNode!.nodeId,
       dataFrom: { changed: { [info]: prevValue } },
@@ -62,9 +51,7 @@ export const NodeDetailWrapper = () => {
   };
 
   const handleBlurDueDate = ({ target }: React.FocusEvent<HTMLInputElement>) => {
-    if (!target.value) {
-      return;
-    }
+    if (!target.value) return;
     if (!isISODate(target.value)) {
       showMessage('YYYY-MM-DD 형식으로 입력하세요.');
       return;
@@ -126,96 +113,106 @@ export const NodeDetailWrapper = () => {
       dataTo: { changed: { labelIds: JSON.stringify(newLabelList) } },
     });
 
-  return selectedNode ? (
+  if (!selectedNode) {
+    return null;
+  }
+
+  const NodeDetailContent = () => (
+    <PopupItemLayout title={'내용'}>
+      <Input
+        key={selectedNode.content}
+        defaultValue={selectedNode.content}
+        onBlur={handleBlurNodeDetail('content')}
+        inputStyle='gray'
+        margin='0.2rem 0 0 0'
+      />
+    </PopupItemLayout>
+  );
+
+  if (selectedNode.level !== 'TASK') {
+    return (
+      <PopupLayout title={`#${String(selectedNode.nodeId)}`} onClose={handleCloseButton} popupStyle='normal'>
+        <NodeDetailContent />
+      </PopupLayout>
+    );
+  }
+
+  return (
     <PopupLayout title={`#${String(selectedNode.nodeId)}`} onClose={handleCloseButton} popupStyle='normal'>
-      <PopupItemLayout title={'내용'}>
-        <Input
-          key={selectedNode.content}
-          defaultValue={selectedNode.content}
-          onBlur={handleBlurNodeDetail('content')}
-          inputStyle='gray'
-          margin='0.2rem 0 0 0'
-        ></Input>
+      <NodeDetailContent />
+      <PopupItemLayout title={'세부사항'}>
+        <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
+          <Dropdown
+            id='sprint'
+            key={selectedNode.sprintId}
+            items={sprintDropdownItem}
+            placeholder={selectedNode.sprintId && sprintList[selectedNode.sprintId] ? sprintList[selectedNode.sprintId].name : ''}
+            onValueChange={handleChangeNodeDetail('sprintId')}
+            dropdownStyle='small'
+            margin='0.1rem 0'
+          />
+        </Label>
+        <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
+          <Dropdown
+            id='assignee'
+            key={selectedNode.assigneeId}
+            items={uerDropdownItem}
+            placeholder={selectedNode.assigneeId ? userList[selectedNode.assigneeId].name : ''}
+            onValueChange={handleChangeNodeDetail('assigneeId')}
+            dropdownStyle='small'
+            margin='0.1rem 0'
+          />
+        </Label>
+        <Label label='마감 날짜' labelStyle='small' ratio={0.5} htmlFor='dueDate'>
+          <Input
+            id='dueDate'
+            key={selectedNode.nodeId}
+            placeholder={selectedNode.dueDate}
+            onFocus={() => showMessage('YYYY-MM-DD 형식으로 입력하세요.')}
+            onBlur={handleBlurDueDate}
+            inputStyle='small'
+            margin='0.1rem 0'
+          />
+        </Label>
+        <Label label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
+          <Input
+            id='estimatedTime'
+            key={selectedNode.estimatedTime}
+            placeholder={selectedNode.estimatedTime ? `${selectedNode.estimatedTime}시간` : ''}
+            onFocus={() => showMessage('숫자만 입력하세요. 단위는 시(hour)입니다.')}
+            onBlur={handleBlurEstimatedTime}
+            inputStyle='small'
+            margin='0.1rem 0'
+          />
+        </Label>
+        <Label label='실제 소요 시간' labelStyle='small' ratio={0.5} htmlFor='finishedTime'>
+          <Input
+            id='finishedTime'
+            key={selectedNode.finishedTime}
+            placeholder={selectedNode.finishedTime ? `${selectedNode.finishedTime}시간` : ''}
+            onFocus={() => showMessage('숫자만 입력하세요. 단위는 시(hour)입니다.')}
+            onBlur={handleBlurFinishedTime}
+            inputStyle='small'
+            margin='0.1rem 0'
+          />
+        </Label>
+        <Label label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>
+          <Dropdown
+            id='priority'
+            key={selectedNode.nodeId}
+            items={priorityDropdownItem}
+            placeholder={selectedNode.priority}
+            onValueChange={handleChangeNodeDetail('priority')}
+            dropdownStyle='small'
+            margin='0.1rem 0'
+          />
+        </Label>
       </PopupItemLayout>
-      {selectedNode.level === 'TASK' ? (
-        <>
-          <PopupItemLayout title={'세부사항'}>
-            <Label label='스프린트' labelStyle='small' ratio={0.5} htmlFor='sprint'>
-              <Dropdown
-                id='sprint'
-                key={selectedNode.sprintId}
-                items={sprintDropdownItem}
-                placeholder={selectedNode.sprintId && sprintList[selectedNode.sprintId] ? sprintList[selectedNode.sprintId].name : ''}
-                onValueChange={handleChangeNodeDetail('sprintId')}
-                dropdownStyle='small'
-                margin='0.1rem 0'
-              />
-            </Label>
-            <Label label='담당자' labelStyle='small' ratio={0.5} htmlFor='assignee'>
-              <Dropdown
-                id='assignee'
-                key={selectedNode.assigneeId}
-                items={uerDropdownItem}
-                placeholder={selectedNode.assigneeId ? userList[selectedNode.assigneeId].name : ''}
-                onValueChange={handleChangeNodeDetail('assigneeId')}
-                dropdownStyle='small'
-                margin='0.1rem 0'
-              />
-            </Label>
-            <Label label='마감 날짜' labelStyle='small' ratio={0.5} htmlFor='dueDate'>
-              <Input
-                id='dueDate'
-                key={selectedNode.nodeId}
-                placeholder={selectedNode.dueDate}
-                onFocus={handleFocusAlarm('YYYY-MM-DD 형식으로 입력하세요.')}
-                onBlur={handleBlurDueDate}
-                inputStyle='small'
-                margin='0.1rem 0'
-              />
-            </Label>
-            <Label label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
-              <Input
-                id='estimatedTime'
-                key={selectedNode.estimatedTime}
-                placeholder={selectedNode.estimatedTime ? `${selectedNode.estimatedTime}시간` : ''}
-                onFocus={handleFocusAlarm('숫자만 입력하세요. 단위는 시(hour)입니다.')}
-                onBlur={handleBlurEstimatedTime}
-                inputStyle='small'
-                margin='0.1rem 0'
-              />
-            </Label>
-            <Label label='실제 소요 시간' labelStyle='small' ratio={0.5} htmlFor='finishedTime'>
-              <Input
-                id='finishedTime'
-                key={selectedNode.finishedTime}
-                placeholder={selectedNode.finishedTime ? `${selectedNode.finishedTime}시간` : ''}
-                onFocus={handleFocusAlarm('숫자만 입력하세요. 단위는 시(hour)입니다.')}
-                onBlur={handleBlurFinishedTime}
-                inputStyle='small'
-                margin='0.1rem 0'
-              />
-            </Label>
-            <Label label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>
-              <Dropdown
-                id='priority'
-                key={selectedNode.nodeId}
-                items={priorityDropdownItem}
-                placeholder={selectedNode.priority}
-                onValueChange={handleChangeNodeDetail('priority')}
-                dropdownStyle='small'
-                margin='0.1rem 0'
-              />
-            </Label>
-          </PopupItemLayout>
-          <PopupItemLayout title={'라벨'}>
-            <LabelList labelIds={JSON.parse(selectedNode.labelIds ?? '[]')} onChange={requestLabelChange} />
-          </PopupItemLayout>
-        </>
-      ) : (
-        ''
-      )}
+      <PopupItemLayout title={'라벨'}>
+        <LabelList labelIds={JSON.parse(selectedNode.labelIds ?? '[]')} onChange={requestLabelChange} />
+      </PopupItemLayout>
     </PopupLayout>
-  ) : null;
+  );
 };
 
 export default NodeDetailWrapper;

@@ -2,8 +2,8 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { labelListState, sprintListState, userListState } from 'recoil/project';
 import { IMindNode } from 'types/mindmap';
-import { SmallText, UserIcon, Wrapper } from 'components/atoms';
-import { LabelIcon, TaskInfo } from 'components/molecules';
+import { SmallText, UserIcon, LabelIcon, Wrapper } from 'components/atoms';
+import { TaskInfo } from 'components/molecules';
 import { StyledTaskCard, StyledCardInfoLeft, StyledCardInfoRight, StyledTaskTitle, StyledIconContainer } from './style';
 
 interface IProps {

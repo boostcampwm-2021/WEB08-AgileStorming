@@ -1,13 +1,15 @@
-import LayerTaskDetailDay from './LayerTaskDetailDay';
-import { IMindNode } from 'types/mindmap';
+import React from 'react';
+import { LayerSprintDay } from 'components/atoms';
+import { useRecoilValue } from 'recoil';
+import { sprintListState } from 'recoil/project';
 import { parseISODate } from 'utils/date';
 
 interface IProps {
   currentDateISO: string;
-  hoveredNode: IMindNode | null;
 }
 
-const LayerTaskDetailMonth: React.FC<IProps> = ({ currentDateISO, hoveredNode }) => {
+const LayerSprintMonth: React.FC<IProps> = ({ currentDateISO }) => {
+  const sprintList = useRecoilValue(sprintListState);
   const { year, month } = parseISODate(currentDateISO);
   const prevDays = new Date(year, month - 1, 1).getDay();
   const days = new Date(year, month, 0).getDate();
@@ -18,20 +20,22 @@ const LayerTaskDetailMonth: React.FC<IProps> = ({ currentDateISO, hoveredNode })
       {Array(prevDays)
         .fill(0)
         .map((_, idx) => (
-          <LayerTaskDetailDay key={idx} />
+          <LayerSprintDay key={idx} />
         ))}
       {Array(days)
         .fill(0)
         .map((_, idx) => (
-          <LayerTaskDetailDay key={idx} dayDate={{ year, month, date: idx + 1 }} task={hoveredNode} />
+          <LayerSprintDay key={idx} dayDate={{ year, month, date: idx + 1 }} sprints={Object.values(sprintList)} />
         ))}
       {Array(nextDays)
         .fill(0)
         .map((_, idx) => (
-          <LayerTaskDetailDay key={idx} />
+          <LayerSprintDay key={idx} />
         ))}
     </>
   );
 };
 
-export default LayerTaskDetailMonth;
+const LayerSprintMonthMemo = React.memo(LayerSprintMonth);
+
+export default LayerSprintMonthMemo;

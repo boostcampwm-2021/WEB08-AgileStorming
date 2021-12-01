@@ -2,7 +2,7 @@ import React from 'react';
 import { Wrapper } from './style';
 import { useRecoilValue } from 'recoil';
 import { labelListState } from 'recoil/project';
-import { LabelIcon } from 'components/molecules';
+import { LabelIcon } from 'components/atoms';
 
 interface IProps {
   labelIds: number[];

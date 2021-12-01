@@ -14,4 +14,5 @@ const SmallText = styled.p<IStyleProps>`
   margin: ${({ margin }) => margin ?? '0'};
   cursor: default;
 `;
+
 export default SmallText;

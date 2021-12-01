@@ -6,6 +6,7 @@ export type TStyle = 'normal' | 'modal';
 interface IStyleProps {
   popupStyle: TStyle;
   margin?: string;
+  isShow?: boolean;
 }
 
 const styleOptions: { [key in TStyle]: string } = {
@@ -15,9 +16,11 @@ const styleOptions: { [key in TStyle]: string } = {
       padding: 0.5rem;
     `,
   modal: `
-      ${common.absoluteCenter}
       position: fixed;
-      width: 25rem;
+      top: 35%;
+      left: 37.5%;
+      width: 25%;
+      min-width: 20rem;
       padding: 0.5rem  1rem  1rem 1rem;
       font-size: ${common.fontSize.normal};
       z-index: 3;
@@ -51,6 +54,37 @@ export const Layout = styled.div<IStyleProps>`
   margin: ${({ margin }) => margin};
   background-color: ${({ theme }) => theme.color.white};
   border-radius: 0.5rem;
+  animation: ${({ isShow }) => (isShow ? 'popShow' : 'popHide')} 0.3s forwards;
+
+  @keyframes popShow {
+    0% {
+      transform: scale(0.6);
+    }
+    40% {
+      transform: scale(1);
+    }
+    60% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes popHide {
+    0% {
+      transform: scale(1);
+    }
+    40% {
+      transform: scale(1.1);
+    }
+    60% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
 `;
 
 export const PopupHeaderBackGround = styled.div<IStyleProps>`

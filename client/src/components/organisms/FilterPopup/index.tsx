@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { FilterMenuHeader, FilterItem, SprintItem, FilterButton, FilterItemContainer } from './style';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { LabelIcon, PopupItemLayout, PopupLayout } from 'components/molecules';
-import { ColorIcon, UserIcon } from 'components/atoms';
+import { PopupItemLayout, PopupLayout } from 'components/molecules';
+import { ColorIcon, UserIcon, LabelIcon } from 'components/atoms';
 import { ISOtoYYMMDD } from 'utils/form';
 import { assigneeFilterState, labelFilterState, labelListState, sprintFilterState, sprintListState, userListState } from 'recoil/project';
 import { closeIcon, plus } from 'img';
