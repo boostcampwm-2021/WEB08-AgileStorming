@@ -18,3 +18,4 @@ export { default as LayerDay } from 'components/atoms/CalendarDays/LayerDay';
 export { default as LayerSprintDay } from 'components/atoms/CalendarDays/LayerSprintDay';
 export { default as LayerScheduleDay } from 'components/atoms/CalendarDays/LayerScheduleDay';
 export { default as LayerTaskDetailDay } from 'components/atoms/CalendarDays/LayerTaskDetailDay';
+export { default as SpinnerBackground } from 'components/atoms/Backgrounds/SpinnerBackground';

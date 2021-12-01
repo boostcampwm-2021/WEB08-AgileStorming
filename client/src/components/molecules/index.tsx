@@ -11,7 +11,6 @@ export { default as PlayController } from 'components/molecules/controllers/Play
 export { default as Tree } from 'components/molecules/Tree';
 export { default as HistoryLog } from 'components/molecules/HistoryLog';
 export { default as Profile } from 'components/molecules/Profile';
-export { default as Spinner } from 'components/molecules/Spinner';
 export { default as HistoryWindow } from 'components/molecules/HistoryWindow';
 export { default as TempNode } from 'components/molecules/TempNode';
 export { default as TaskInfo } from 'components/molecules/TaskInfo';
