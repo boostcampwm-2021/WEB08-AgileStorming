@@ -1,17 +1,13 @@
 import styled from '@emotion/styled';
 
-interface IStyledProps {
-  color: string;
-}
-
-export const StyledProjectCard = styled.div<IStyledProps>`
+export const StyledProjectCard = styled.div`
   ${({ theme }) => theme.flex.column}
   width: 320px;
   height: 300px;
   background: ${({ theme }) => theme.color.bgWhite};
   border: 1px solid ${({ theme }) => theme.color.gray3};
   border-radius: 5px;
-  filter: ${({ color }) => `drop-shadow(0px 3px 3px #${color})`};
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25));
   margin: 10px;
   overflow: hidden;
   justify-content: space-between;

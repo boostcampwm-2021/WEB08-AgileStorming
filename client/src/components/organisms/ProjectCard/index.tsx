@@ -26,7 +26,7 @@ const ProjectCard: React.FC<IProps> = ({ name, count, creator, onClickShareButto
   const isCreator = creator.id === user?.id;
 
   return (
-    <StyledProjectCard onClick={onClickProjectCard} color={creator.color}>
+    <StyledProjectCard onClick={onClickProjectCard}>
       <IconImg imgSrc={thumbnail} altText='썸네일' size={{ width: '100%', height: '60%' }} noPadding={true} noHover={true} />
       <StyledBottomContainer>
         <StyledTextContainer>
