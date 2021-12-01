@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { participants, share, thumbnail, trashcan } from 'img';
-import { IconImg, SmallText, Title } from 'components/atoms';
 import { IconButton } from 'components/molecules';
+import { IconImg, SmallText, Title } from 'components/atoms';
+import { StyledBottomContainer, StyledIconContainer, StyledLowerContainer, StyledProjectCard, StyledTextContainer } from './style';
+import { participants, share, thumbnail, trashcan } from 'img';
 
 interface IProps {
   projectId: string;
@@ -17,51 +17,6 @@ interface IProps {
     name: string;
   };
 }
-
-interface IStyledProps {
-  color: string;
-}
-
-const StyledProjectCard = styled.div<IStyledProps>`
-  ${({ theme }) => theme.flex.column}
-  width: 320px;
-  height: 300px;
-  background: ${({ theme }) => theme.color.bgWhite};
-  border: 1px solid ${({ theme }) => theme.color.gray3};
-  border-radius: 5px;
-  filter: ${({ color }) => `drop-shadow(0px 3px 3px #${color})`};
-  margin: 10px;
-  overflow: hidden;
-  justify-content: space-between;
-  :hover {
-    cursor: pointer;
-    background: ${({ theme }) => theme.color.bgWhite};
-  }
-`;
-
-const StyledLowerContainer = styled.div`
-  ${({ theme }) => theme.flex.row}
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const StyledIconContainer = styled.div`
-  ${({ theme }) => theme.flex.rowCenter}
-  align-items: center;
-  margin-top: ${({ theme }) => theme.margin.normal};
-`;
-
-const StyledBottomContainer = styled.div`
-  ${({ theme }) => theme.flex.columnCenter};
-  overflow: hidden;
-  padding: ${({ theme }) => theme.padding.normal};
-`;
-
-const StyledTextContainer = styled.div`
-  ${({ theme }) => theme.flex.column};
-  width: 100%;
-  padding-left: ${({ theme }) => theme.padding.normal};
-`;
 
 const ProjectCard: React.FC<IProps> = ({ name, count, creator, onClickShareButton, onClickDeleteButton, onClickProjectCard }) => {
   return (
