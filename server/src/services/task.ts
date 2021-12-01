@@ -6,7 +6,7 @@ import { findOneNode } from './mindmap';
 import { findOneSprint } from './sprint';
 import { findOneUser } from './user';
 
-export const findOneTask = async (taskId: string) => {
+export const findOneTask = (taskId: string) => {
   return getRepository(Task).findOne({ relations: ['taskId'], where: { taskId } });
 };
 
@@ -15,7 +15,7 @@ export const createTask = async (taskId: number) => {
   return getRepository(Task).save({ taskId: node });
 };
 
-export const deleteTask = async (taskId: number) => {
+export const deleteTask = (taskId: number) => {
   return getRepository(Task).createQueryBuilder('task').leftJoin('task.taskId', 'taskId').delete().where({ taskId: taskId }).execute();
 };
 
@@ -34,15 +34,11 @@ const findOneOrCreate = async (taskId: number) => {
 };
 
 export const updateTask = async (nodeFrom: number, { changed }: TUpdateTaskInformation) => {
-  const { assigneeId, labels, sprintId, labelIds, ...info } = changed;
+  const { assigneeId, sprintId, labelIds, ...info } = changed;
   const task = await findOneOrCreate(nodeFrom);
   if (assigneeId) {
     const newAssignee = await findOneUser(assigneeId.toString(10));
     task.assignee = newAssignee;
-  }
-  if (labels) {
-    const newLabels = await getRepository(Label).findByIds(labels);
-    task.labels = newLabels;
   }
   if (labelIds) {
     const labeIdList = JSON.parse(labelIds);

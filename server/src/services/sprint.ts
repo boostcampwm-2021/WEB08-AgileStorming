@@ -4,7 +4,7 @@ import { TAddSprint } from '../utils/event-type';
 import { Sprint } from '../database/entities/Sprint';
 import { Color } from '../database/entities/Color';
 
-export const findOneSprint = async (id: string) => {
+export const findOneSprint = (id: string) => {
   return getRepository(Sprint).findOne({ where: { id } });
 };
 export const createSprint = async (projectId: string, sprintInfo: TAddSprint) => {
@@ -13,6 +13,6 @@ export const createSprint = async (projectId: string, sprintInfo: TAddSprint) =>
   const newSprint = await getRepository(Sprint).save({ ...sprintInfo, project, color: color.rgb });
   return newSprint;
 };
-export const deleteSprint = async (sprintId: number) => {
+export const deleteSprint = (sprintId: number) => {
   return getRepository(Sprint).createQueryBuilder().delete().where({ id: sprintId }).execute();
 };

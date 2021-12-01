@@ -29,25 +29,18 @@ export const project = {
     return projectList.data;
   },
   create: async (name: string) => {
-    const newProject = await api.post('/project/create', {
+    const newProject = await api.post('/project', {
       name,
     });
     return newProject.data;
   },
-  delete: (projectId: string) =>
-    api.delete('/project/delete', {
-      data: { projectId },
-    }),
+  delete: (projectId: string) => api.delete(`/project/${projectId}`),
   getUserList: async (projectId: string) => {
-    const userList = await api.get('/project/user-list', {
-      params: { projectId },
-    });
+    const userList = await api.get(`/project/user-list/${projectId}`);
     return userList;
   },
   getInfo: async (projectId: string): Promise<{ projectInfo: IProject; projectNodeInfo: IMindmapData[] }> => {
-    const info = await api.get('/project/info', {
-      params: { projectId },
-    });
+    const info = await api.get(`/project/info/${projectId}`);
     return info.data;
   },
 };

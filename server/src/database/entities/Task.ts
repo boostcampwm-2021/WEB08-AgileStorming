@@ -1,6 +1,5 @@
-import { Entity, Column, OneToOne, ManyToMany, JoinColumn, JoinTable, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 import { Mindmap } from './Mindmap';
-import { Label } from './Label';
 import { Sprint } from './Sprint';
 import { User } from './User';
 
@@ -39,8 +38,4 @@ export class Task {
 
   @ManyToOne(() => Sprint, (sprints) => sprints.id, { onDelete: 'SET NULL' })
   sprint: Sprint;
-
-  @ManyToMany(() => Label, (labels) => labels.id, { cascade: true })
-  @JoinTable()
-  labels: Label[];
 }
