@@ -75,7 +75,7 @@ export const getProjectInfo = (projectId: string) => {
     .getOne();
 };
 
-export const getProjectNodeInfo = (ProjectId: string) => {
+export const getProjectNodeInfo = (projectId: string) => {
   return getManager().query(
     `
   SELECT *
@@ -83,6 +83,30 @@ export const getProjectNodeInfo = (ProjectId: string) => {
   LEFT JOIN task
   ON mindmap.id = task.taskId
   WHERE mindmap.projectId = ? ;`,
-    [ProjectId]
+    [projectId]
   );
+};
+
+export const getProjectServiceQueries = (userId: string, projectId: string) => {
+  const queries: Record<string, string> = {};
+  queries.getProjectInfo = getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoinAndSelect('project.users', 'users')
+    .leftJoinAndSelect('project.sprints', 'sprints')
+    .leftJoinAndSelect('project.labels', 'labels')
+    .where('project.id = :projectId', { projectId })
+    .getSql();
+  queries.getProjectAndUsers = getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoinAndSelect('project.users', 'users')
+    .where('project.id = :projectId', { projectId })
+    .getSql();
+  queries.getUserProject = getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoin('project.users', 'users')
+    .innerJoinAndSelect('project.creator', 'creator')
+    .loadRelationCountAndMap('project.count', 'project.users')
+    .where('users.id = :userId', { userId })
+    .getSql();
+  return queries;
 };

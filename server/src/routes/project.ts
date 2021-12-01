@@ -70,4 +70,15 @@ router.get('/info/:projectId', async (req: Request, res: Response, next: Next) =
   }
 });
 
+router.get('/queries/:projectId', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
+  try {
+    const { projectId } = req.params;
+    const projectQueries = await projectService.getProjectServiceQueries(res.locals.user, projectId);
+    console.log(projectQueries);
+    res.send(projectQueries);
+  } catch (e) {
+    next(e);
+  }
+});
+
 export default router;
