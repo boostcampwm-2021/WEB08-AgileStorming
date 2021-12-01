@@ -2,7 +2,6 @@ export { default as Calendar } from 'components/molecules/Calendars/Calendar';
 export { default as Dropdown } from 'components/molecules/Dropdown';
 export { default as IconButton } from 'components/molecules/Buttons/IconButton';
 export { default as TextButton } from 'components/molecules/Buttons/TextButton';
-export { default as MindmapBackground } from 'components/molecules/MindmapBackground';
 export { default as MonthController } from 'components/molecules/controllers/MonthController';
 export { default as Path } from 'components/molecules/Path';
 export { default as PopupItemLayout } from 'components/molecules/Layouts/PopupItemLayout';
