@@ -17,10 +17,15 @@ export const StyledProjectCard = styled.div`
   }
 `;
 
-export const StyledLowerContainer = styled.div`
+export const StyledLowerWrapper = styled.div`
   ${({ theme }) => theme.flex.row}
   width: 100%;
   justify-content: space-between;
+`;
+
+export const StyledRowCenterWrapper = styled.div`
+  ${({ theme }) => theme.flex.rowCenter};
+  align-items: center;
 `;
 
 export const StyledIconContainer = styled.div`
@@ -29,7 +34,7 @@ export const StyledIconContainer = styled.div`
   margin-top: ${({ theme }) => theme.margin.normal};
 `;
 
-export const StyledBottomContainer = styled.div`
+export const StyledBottomWrapper = styled.div`
   ${({ theme }) => theme.flex.columnCenter};
   overflow: hidden;
   padding: ${({ theme }) => theme.padding.normal};
