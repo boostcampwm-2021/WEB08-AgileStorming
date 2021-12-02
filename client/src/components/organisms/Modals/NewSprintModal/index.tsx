@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import { SplitDiv } from './style';
 import { ModalOverlay, Input, SmallText } from 'components/atoms';
 import { PopupLayout, TextButton } from 'components/molecules';
-import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import useKeys from 'hooks/useKeys';
 import useModal from 'hooks/useModal';
+import useSocketEmitter from 'hooks/useSocketEmitter';
 import useToast from 'hooks/useToast';
 import { TAddSprint } from 'types/event';
 import { isHaveEmptyString, isISODate } from 'utils/form';
@@ -15,7 +15,7 @@ export interface INewSprintModalProps {
 
 const NewSprintModal: React.FC<INewSprintModalProps> = () => {
   const newSprint = useRef<TAddSprint>({ name: '', startDate: '', endDate: '' });
-  const { addSprint } = useHistoryEmitter();
+  const { addSprint } = useSocketEmitter();
   const { hideModal } = useModal();
   const { setOnEnterKey, setOnEscKey } = useKeys();
   const { showMessage } = useToast();

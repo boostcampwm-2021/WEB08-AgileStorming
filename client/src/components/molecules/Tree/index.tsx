@@ -4,7 +4,7 @@ import { NodeContainer, ChildContainer, NodeDeleteBtn } from './style';
 import { Node, PriorityIcon, UserIcon } from 'components/atoms';
 import { Path, TempNode, UserFocusBox } from 'components/molecules';
 import { ITaskFilters } from 'components/organisms/MindmapTree';
-import useHistoryEmitter from 'hooks/useHistoryEmitter';
+import useSocketEmitter from 'hooks/useSocketEmitter';
 import { currentHistoryNodeIdState, isHistoryOpenState } from 'recoil/history';
 import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
@@ -78,7 +78,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     .slice(0, 3);
   const isFiltering = !!Object.values(taskFilters).reduce((acc, filter) => (acc += filter ? filter : ''), '');
 
-  const { addNode } = useHistoryEmitter();
+  const { addNode } = useSocketEmitter();
   const setMindmapData = useSetRecoilState(mindmapState);
 
   const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeIdState);

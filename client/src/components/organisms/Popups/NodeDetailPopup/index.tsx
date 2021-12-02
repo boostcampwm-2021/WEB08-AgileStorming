@@ -3,7 +3,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Input } from 'components/atoms';
 import { LabelLayout, PopupItemLayout, PopupLayout, Dropdown } from 'components/molecules';
 import { LabelList } from 'components/organisms';
-import useHistoryEmitter from 'hooks/useHistoryEmitter';
+import useSocketEmitter from 'hooks/useSocketEmitter';
 import useToast from 'hooks/useToast';
 import { priorityListState } from 'recoil/meta-data';
 import { selectedNodeState, selectedNodeIdState } from 'recoil/node';
@@ -20,7 +20,7 @@ export const NodeDetailWrapper = () => {
   const userList = useRecoilValue(userListState);
 
   const { showMessage } = useToast();
-  const { updateNodeContent, updateTaskInformation } = useHistoryEmitter();
+  const { updateNodeContent, updateTaskInformation } = useSocketEmitter();
 
   const priorityDropdownItem: Record<string, string> = {};
   priorityList.forEach((priority) => (priorityDropdownItem[priority] = priority));
