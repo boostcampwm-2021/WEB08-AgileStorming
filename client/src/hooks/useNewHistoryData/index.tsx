@@ -32,7 +32,7 @@ const useNewHistoryData = () => {
 
   const getMoreHistoryData = useCallback(() => {
     const currentHistoryData = historyDataList.at(0);
-    const rangeFrom = '(' + currentHistoryData?.streamId;
+    const rangeFrom = currentHistoryData?.streamId ? '(' + currentHistoryData.streamId : undefined;
 
     getNewHistoryData(rangeFrom);
   }, [historyDataList, getNewHistoryData]);
