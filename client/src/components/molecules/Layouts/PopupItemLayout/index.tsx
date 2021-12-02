@@ -12,7 +12,11 @@ export const Layout = styled.div`
   border-top: 2px solid black;
   padding: 0.5rem 0;
   margin-top: 0.2rem;
-
+  max-height: 25vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  white-space: nowrap;
+  ${({ theme }) => theme.customScrollbar.primary3}
   .selected {
     color: ${({ theme }) => theme.color.white};
     background-color: ${({ theme }) => theme.color.primary1};
