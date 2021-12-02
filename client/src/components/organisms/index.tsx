@@ -23,3 +23,4 @@ export { default as BurnDownChart } from 'components/organisms/Charts/BurnDownCh
 export { default as TaskRatioChart } from 'components/organisms/Charts/TaskRatioChart';
 export { default as DoneTaskChart } from 'components/organisms/Charts/DoneTaskChart';
 export { default as PriorityChart } from 'components/organisms/Charts/PriorityChart';
+export { default as RegisterModal } from 'components/organisms/Modals/RegisterModal';

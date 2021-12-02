@@ -1,14 +1,11 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 import { ProjectCard } from 'components/organisms';
 import { NewProjectModalWrapper } from 'components/templates';
-import useCumstomHistory from 'hooks/useCustomHistory';
+import useCustomHistory from 'hooks/useCustomHistory';
 import useToast from 'hooks/useToast';
 import { IProject } from 'pages/Project';
-import { userState } from 'recoil/user';
 import { API } from 'utils/api';
-
 
 const StyledProjectCardContainer = styled.div`
   ${(props) => props.theme.flex.row}
@@ -24,9 +21,7 @@ interface IProps {
 
 const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList }) => {
   const { showMessage } = useToast();
-  const { historyPush } = useCumstomHistory();
-  const user = useRecoilValue(userState);
-
+  const { historyPush } = useCustomHistory();
 
   const handleClickShareButton = (event: React.MouseEvent<HTMLButtonElement>, projectId: string) => {
     event.stopPropagation();
