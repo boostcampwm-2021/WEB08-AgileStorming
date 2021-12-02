@@ -1,9 +1,13 @@
 import styled from '@emotion/styled';
 
-export const StyledUserInProgressContainer = styled.div`
+interface IStyledUserInProgressContainerProps {
+  offset: number;
+}
+
+export const StyledUserInProgressContainer = styled.div<IStyledUserInProgressContainerProps>`
   position: absolute;
   left: 100%;
-  top: 0;
+  top: ${({ offset }) => offset + 'px'};
   padding: ${({ theme }) => theme.padding.xlarge};
   padding-top: 0;
 `;

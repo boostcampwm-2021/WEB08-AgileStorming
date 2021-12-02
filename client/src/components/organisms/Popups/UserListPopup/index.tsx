@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { BoxButton } from 'components/atoms';
+import { BoxButton, ScrollBox } from 'components/atoms';
 import { PopupItemLayout, PopupLayout, IconButton, Profile } from 'components/molecules';
 import { UserInProgressPopup } from 'components/organisms';
 import useToast from 'hooks/useToast';
@@ -13,7 +13,6 @@ interface IStyledConnectionStatus {
 }
 
 const StyledUserInfoBox = styled.div`
-  position: relative;
   background-color: ${({ theme }) => theme.color.primary1};
   ${({ theme }) => theme.flex.rowCenter}
   border-radius: 8px;
@@ -33,6 +32,7 @@ export const UserList = () => {
   const userList = useRecoilValue(userListCurrentUserTopState)!;
   const connectedUsers = useRecoilValue(connectedUserState);
   const { showMessage } = useToast();
+  const [offset, setOffset] = useState(0);
 
   const handleClickCloseBtn = () => setUserListOpen(false);
   const handleClickBoxBtn = () => setUserListOpen(true);
@@ -42,6 +42,7 @@ export const UserList = () => {
   };
   const handleOnMouseEnterList = (event: React.MouseEvent<HTMLElement>) => {
     setMouseOverUser(event.currentTarget.dataset.user!);
+    setOffset(event.currentTarget.getBoundingClientRect().top - event.currentTarget.parentElement!.getBoundingClientRect().top);
   };
   const handleOnMouseLeaveList = () => setMouseOverUser('');
   return isUserListOpen ? (
@@ -52,22 +53,21 @@ export const UserList = () => {
       extraBtn={<IconButton zIdx={'1'} onClick={handleClickShareBtn} imgSrc={share} altText='공유하기 버튼' />}
     >
       <PopupItemLayout>
-        {userList.map((user) => {
-          return (
-            <StyledUserInfoBox
-              key={user.id}
-              data-user={user.id}
-              onMouseEnter={handleOnMouseEnterList}
-              onMouseLeave={handleOnMouseLeaveList}
-            >
-              <Profile user={user} width='120px' />
-              <StyledConnectionStatus online={connectedUsers[user.id]}>
-                {connectedUsers[user.id] ? 'online' : 'offline'}
-              </StyledConnectionStatus>
-              {mouseOverUser === user.id ? <UserInProgressPopup user={user} /> : null}
-            </StyledUserInfoBox>
-          );
-        })}
+        <ScrollBox onMouseLeave={handleOnMouseLeaveList}>
+          {userList.map((user) => {
+            return (
+              <StyledUserInfoBox key={user.id} data-user={user.id} onMouseEnter={handleOnMouseEnterList}>
+                <Profile user={user} width='120px' />
+                <StyledConnectionStatus online={connectedUsers[user.id]}>
+                  {connectedUsers[user.id] ? 'online' : 'offline'}
+                </StyledConnectionStatus>
+              </StyledUserInfoBox>
+            );
+          })}
+          {mouseOverUser !== '' ? (
+            <UserInProgressPopup user={userList.find((value) => value.id === mouseOverUser)!} offset={offset} />
+          ) : null}
+        </ScrollBox>
       </PopupItemLayout>
     </PopupLayout>
   ) : (

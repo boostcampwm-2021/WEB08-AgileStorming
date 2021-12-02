@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Input } from 'components/atoms';
+import { Input, ScrollBox } from 'components/atoms';
 import { LabelLayout, PopupItemLayout, PopupLayout, Dropdown } from 'components/molecules';
 import { LabelList } from 'components/organisms';
 import useSocketEmitter from 'hooks/useSocketEmitter';
@@ -210,7 +210,9 @@ export const NodeDetailWrapper = () => {
         </LabelLayout>
       </PopupItemLayout>
       <PopupItemLayout title={'라벨'}>
-        <LabelList labelIds={JSON.parse(selectedNode.labelIds ?? '[]')} onChange={requestLabelChange} />
+        <ScrollBox>
+          <LabelList labelIds={JSON.parse(selectedNode.labelIds ?? '[]')} onChange={requestLabelChange} />
+        </ScrollBox>
       </PopupItemLayout>
     </PopupLayout>
   );
