@@ -29,15 +29,13 @@ const UserFocusTag = styled(NodeTag)<IFocusProps>`
 
 const UserFocusBox: React.FC<IProps> = ({ users }) => {
   return (
-    <>
-      <Container>
-        {users.map(({ id, color, name }) => (
-          <UserFocusTag key={id} userColor={color}>
-            {name}
-          </UserFocusTag>
-        ))}
-      </Container>
-    </>
+    <Container>
+      {users.map(({ id, color, name }) => (
+        <UserFocusTag key={id} userColor={color}>
+          {name}
+        </UserFocusTag>
+      ))}
+    </Container>
   );
 };
 
