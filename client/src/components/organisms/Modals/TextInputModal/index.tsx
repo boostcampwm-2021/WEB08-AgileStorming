@@ -20,9 +20,10 @@ const TextInputModal: React.FC<ITextInputModalProps> = ({
   placeholder,
 }) => {
   const { hideModal } = useModal();
-  const { setOnEnterKey, setOnEscKey } = useKeys();
+  const { setOnEscKey } = useKeys();
 
-  setOnEnterKey(onClickSubmitButton);
+  // 맥 이슈로 enter 막아놈
+  // setOnEnterKey(onClickSubmitButton);
   setOnEscKey(hideModal);
 
   return (
