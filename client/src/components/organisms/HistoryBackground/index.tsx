@@ -1,11 +1,11 @@
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { Mindmap } from '..';
 import { Background } from 'components/atoms';
 import useCumstomHistory from 'hooks/useCustomHistory';
 import useDragBackground from 'hooks/useDragBackground';
-import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { historyMapDataState } from 'recoil/history';
 import { getNextMapState, mindmapState } from 'recoil/mindmap';
-import { Mindmap } from '..';
 
 const UNDER_ELEMENT = -10;
 

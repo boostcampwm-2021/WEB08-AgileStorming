@@ -1,16 +1,16 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { NodeContainer, ChildContainer, NodeDeleteBtn } from './style';
 import { Node, PriorityIcon, UserIcon } from 'components/atoms';
 import { Path, TempNode, UserFocusBox } from 'components/molecules';
 import { ITaskFilters } from 'components/organisms/MindmapTree';
-import { NodeContainer, ChildContainer, NodeDeleteBtn } from './style';
+import useHistoryEmitter from 'hooks/useHistoryEmitter';
+import { currentHistoryNodeIdState, isHistoryOpenState } from 'recoil/history';
 import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
-import { currentHistoryNodeIdState, isHistoryOpenState } from 'recoil/history';
-import useHistoryEmitter from 'hooks/useHistoryEmitter';
-import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect, Levels } from 'utils/helpers';
-import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
 import { assigneeFilterState, labelFilterState, sprintFilterState, userFocusNodeState, userListState } from 'recoil/project';
+import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
+import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect, Levels } from 'utils/helpers';
 
 interface ITreeProps {
   nodeId: number;

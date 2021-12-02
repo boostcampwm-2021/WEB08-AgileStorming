@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import * as img from 'img';
 import { useRecoilValue } from 'recoil';
-import { urlLocationState } from 'recoil/project';
-import useCustomHistory from 'hooks/useCustomHistory';
-import { PAGES } from 'utils/helpers';
 import { TextLink, HeaderContainer, Icon, TextBox } from './style';
+import useCustomHistory from 'hooks/useCustomHistory';
+import * as img from 'img';
+import { urlLocationState } from 'recoil/project';
+import { PAGES } from 'utils/helpers';
 
 const TABS = ['마인드맵', '칸반보드', '캘린더', '차트', '백로그'];
 

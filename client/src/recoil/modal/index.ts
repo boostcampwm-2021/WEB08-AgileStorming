@@ -1,8 +1,8 @@
 import { atom } from 'recoil';
+import { IConfirmModalProps } from 'components/organisms/Modals/ConfirmModal';
+import { INewSprintModalProps } from 'components/organisms/Modals/NewSprintModal';
 import { IRegisterModalProps } from 'components/organisms/Modals/RegisterModal';
 import { ITextInputModalProps } from 'components/organisms/Modals/TextInputModal';
-import { INewSprintModalProps } from 'components/organisms/Modals/NewSprintModal';
-import { IConfirmModalProps } from 'components/organisms/Modals/ConfirmModal';
 
 export interface IConfirmModal {
   modalType: 'confirmModal';

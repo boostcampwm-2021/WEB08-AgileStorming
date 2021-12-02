@@ -1,5 +1,5 @@
-import useEvents, { EventElems } from 'hooks/useEvents';
 import React, { useRef } from 'react';
+import useEvents, { EventElems } from 'hooks/useEvents';
 
 export interface IEvents {
   [key: string]: any;

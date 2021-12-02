@@ -1,7 +1,7 @@
+import axios, { AxiosError } from 'axios';
 import { useRef } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { toastState } from 'recoil/toast';
-import axios, { AxiosError } from 'axios';
 
 const useToast = () => {
   const setToast = useSetRecoilState(toastState);

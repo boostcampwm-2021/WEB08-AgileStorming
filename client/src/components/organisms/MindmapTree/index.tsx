@@ -1,6 +1,6 @@
+import React from 'react';
 import { Tree } from 'components/molecules';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
-import React from 'react';
 import { IMindmapData, IMindNode } from 'types/mindmap';
 import { getAllChildren } from 'utils/helpers';
 

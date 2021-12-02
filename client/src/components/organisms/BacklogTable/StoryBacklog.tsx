@@ -1,6 +1,6 @@
-import TaskBacklog from './TaskBacklog';
-import { StoryRow } from './style';
 import { useRecoilValue } from 'recoil';
+import { StoryRow } from './style';
+import TaskBacklog from './TaskBacklog';
 import { filteredTaskState } from 'recoil/project';
 import { IMindNode } from 'types/mindmap';
 

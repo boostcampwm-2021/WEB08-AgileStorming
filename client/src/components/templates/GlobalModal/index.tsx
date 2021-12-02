@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
-import RegisterModal from 'components/organisms/Modals/RegisterModal';
 import { ConfirmModal, NewSprintModal, TextInputModal } from 'components/organisms';
+import RegisterModal from 'components/organisms/Modals/RegisterModal';
 import { modalState } from 'recoil/modal';
 
 export type TModal = 'confirmModal' | 'registerModal' | 'textInputModal' | 'newSprintModal';

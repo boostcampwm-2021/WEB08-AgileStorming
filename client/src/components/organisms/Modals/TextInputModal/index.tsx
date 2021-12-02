@@ -1,8 +1,8 @@
 import React, { ChangeEvent } from 'react';
 import { ModalOverlay, Input, SmallText } from 'components/atoms';
 import { PopupLayout, TextButton } from 'components/molecules';
-import useModal from 'hooks/useModal';
 import useKeys from 'hooks/useKeys';
+import useModal from 'hooks/useModal';
 
 export interface ITextInputModalProps {
   onClickSubmitButton?: () => void;

@@ -2,9 +2,9 @@ import { useState } from 'react';
 import FilterButton from './FilterButton';
 import { LeftInfo, RightInfo, Template } from './style';
 import { NodeDetailPopup, UserListPopup, FilterPopup } from 'components/organisms';
-import useSocketSetup from 'hooks/useSocketSetup';
-import useProject from 'hooks/useProject';
 import useAuthentication from 'hooks/useAuthentication';
+import useProject from 'hooks/useProject';
+import useSocketSetup from 'hooks/useSocketSetup';
 
 interface IProps {
   refProp?: React.MutableRefObject<HTMLDivElement | null>;

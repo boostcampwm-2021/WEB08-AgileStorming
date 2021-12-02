@@ -1,6 +1,6 @@
-import useRestoreHistory from 'hooks/useRestoreHistory';
 import { useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import useRestoreHistory from 'hooks/useRestoreHistory';
 import { currentReverseIdxState, historyDataListState, historyMovingSpeedState, isHistoryCalculatingState } from 'recoil/history';
 import { IHistoryData } from 'types/history';
 

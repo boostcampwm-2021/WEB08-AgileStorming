@@ -1,6 +1,6 @@
 import { StyledIconImg } from './style';
-import { TPriority } from 'types/event';
 import { sirenGreenIcon, sirenOrangeIcon, sirenRedIcon } from 'img';
+import { TPriority } from 'types/event';
 
 interface IProps {
   priority: TPriority;

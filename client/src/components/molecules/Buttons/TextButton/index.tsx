@@ -1,7 +1,7 @@
 import React from 'react';
+import { StyledTextButton } from './style';
 import { SmallText, TransparentButton } from 'components/atoms';
 import * as Types from 'styles/common';
-import { StyledTextButton } from './style';
 
 interface IProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;

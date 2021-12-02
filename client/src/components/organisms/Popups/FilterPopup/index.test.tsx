@@ -1,5 +1,5 @@
-import { fireEvent, render } from '@testing-library/react';
 import { ThemeProvider } from '@emotion/react';
+import { fireEvent, render } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 import FilterPopup from './index';
 import { labelListState, sprintFilterState, sprintListState, userListState } from 'recoil/project';

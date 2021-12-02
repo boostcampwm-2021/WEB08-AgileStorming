@@ -1,7 +1,7 @@
-import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import drilldown from 'highcharts/modules/drilldown';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { userTaskRatioState } from 'recoil/project';
 drilldown(Highcharts);

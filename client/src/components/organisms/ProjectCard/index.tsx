@@ -1,9 +1,9 @@
 import React from 'react';
-import { IconButton } from 'components/molecules';
-import { IconImg, SmallText, Title } from 'components/atoms';
-import { StyledBottomWrapper, StyledIconContainer, StyledLowerWrapper, StyledProjectCard, StyledTextContainer } from './style';
-import { participants, share, thumbnail, trashcan } from 'img';
 import { useRecoilValue } from 'recoil';
+import { StyledBottomWrapper, StyledIconContainer, StyledLowerWrapper, StyledProjectCard, StyledTextContainer } from './style';
+import { IconImg, SmallText, Title } from 'components/atoms';
+import { IconButton } from 'components/molecules';
+import { participants, share, thumbnail, trashcan } from 'img';
 import { userState } from 'recoil/user';
 
 interface IProps {

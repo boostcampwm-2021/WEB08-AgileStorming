@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { isNumber } from 'utils/form';
 import { DropdownList, StyledInput, TStyle, Wrapper } from './style';
+import { isNumber } from 'utils/form';
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onValueChange?: (arg: string | number) => void;

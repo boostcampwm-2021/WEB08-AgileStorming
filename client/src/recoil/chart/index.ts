@@ -1,5 +1,4 @@
 import { atom , selector } from 'recoil';
-
 import { mindmapNodesState } from 'recoil/mindmap';
 import { sprintListState, userListState } from 'recoil/project';
 import { IUser } from 'types/user';

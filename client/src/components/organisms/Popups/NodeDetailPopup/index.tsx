@@ -1,16 +1,16 @@
 import React from 'react';
-import { LabelLayout, PopupItemLayout, PopupLayout, Dropdown } from 'components/molecules';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { selectedNodeState, selectedNodeIdState } from 'recoil/node';
-import { priorityListState } from 'recoil/meta-data';
 import { Input } from 'components/atoms';
-import { isISODate, isPositiveNumber } from 'utils/form';
-import useToast from 'hooks/useToast';
+import { LabelLayout, PopupItemLayout, PopupLayout, Dropdown } from 'components/molecules';
+import { LabelList } from 'components/organisms';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
-import { IMindNode } from 'types/mindmap';
+import useToast from 'hooks/useToast';
+import { priorityListState } from 'recoil/meta-data';
+import { selectedNodeState, selectedNodeIdState } from 'recoil/node';
 import { sprintListState, userListState } from 'recoil/project';
 import { TTask } from 'types/event';
-import { LabelList } from 'components/organisms';
+import { IMindNode } from 'types/mindmap';
+import { isISODate, isPositiveNumber } from 'utils/form';
 
 export const NodeDetailWrapper = () => {
   const priorityList = useRecoilValue(priorityListState);

@@ -1,13 +1,13 @@
+import { MouseEvent, useEffect, useRef } from 'react';
+import { useRecoilValue } from 'recoil';
+import { IconButton } from '..';
 import { Wrapper, IconWrapper, After, Before } from './style';
 import { UserIcon } from 'components/atoms';
-import { IconButton } from '..';
-import { MouseEvent, useEffect, useRef } from 'react';
 import useDragBackground from 'hooks/useDragBackground';
-import { useRecoilValue } from 'recoil';
+import useNewHistoryData from 'hooks/useNewHistoryData';
+import { primaryPlusCircle } from 'img';
 import { currentReverseIdxState, historyDataListState } from 'recoil/history';
 import { userListState } from 'recoil/project';
-import { primaryPlusCircle } from 'img';
-import useNewHistoryData from 'hooks/useNewHistoryData';
 
 interface IProps {
   onClick: (idx: number) => (event: MouseEvent) => void;

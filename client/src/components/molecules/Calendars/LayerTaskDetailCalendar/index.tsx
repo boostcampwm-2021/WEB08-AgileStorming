@@ -1,5 +1,5 @@
-import { IMindNode } from 'types/mindmap';
 import { LayerTaskDetailDay } from 'components/atoms';
+import { IMindNode } from 'types/mindmap';
 import { parseISODate } from 'utils/date';
 
 interface IProps {

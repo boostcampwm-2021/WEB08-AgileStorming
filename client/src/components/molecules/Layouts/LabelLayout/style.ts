@@ -1,5 +1,5 @@
-import { LabelHTMLAttributes } from 'react';
 import styled from '@emotion/styled';
+import { LabelHTMLAttributes } from 'react';
 import { common } from 'styles';
 
 export type TStyle = 'small' | 'normal' | 'large';

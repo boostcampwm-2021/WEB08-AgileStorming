@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
-import { mindmapState, ROOT_NODE_ID } from 'recoil/mindmap';
-import { Mindmap, MindmapBtnWrapper } from 'components/organisms';
 import { Background } from 'components/atoms';
+import { Mindmap, MindmapBtnWrapper } from 'components/organisms';
+import { mindmapState, ROOT_NODE_ID } from 'recoil/mindmap';
 
 const MindmapTemplate: React.FC = () => {
   const mindmapData = useRecoilValue(mindmapState);

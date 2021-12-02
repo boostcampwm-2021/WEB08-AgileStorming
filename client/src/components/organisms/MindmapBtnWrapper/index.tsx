@@ -1,12 +1,12 @@
-import { clock, plusCircle } from 'img';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
-import { getChildLevel } from 'utils/helpers';
-import { BoxButton } from 'components/atoms';
-import { selectedNodeIdState, selectedNodeState } from 'recoil/node';
 import { Wrapper } from './style';
-import { IMindmapData, IMindNode } from 'types/mindmap';
+import { BoxButton } from 'components/atoms';
 import useCustomHistory from 'hooks/useCustomHistory';
+import { clock, plusCircle } from 'img';
+import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
+import { selectedNodeIdState, selectedNodeState } from 'recoil/node';
+import { IMindmapData, IMindNode } from 'types/mindmap';
+import { getChildLevel } from 'utils/helpers';
 
 interface ITempNodeParams {
   mindmapData: IMindmapData;

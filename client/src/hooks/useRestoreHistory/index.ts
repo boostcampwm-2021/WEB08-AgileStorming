@@ -1,9 +1,9 @@
 import { useRecoilState } from 'recoil';
-import { getNextMapState } from 'recoil/mindmap';
-import { IMindNode, IMindNodes } from 'types/mindmap';
-import { IHistoryData } from 'types/history';
-import { TAddNodeData, TDeleteNodeData, TUpdateNodeParent, TUpdateTaskInformation } from 'types/event';
 import { historyDataListState, historyMapDataState } from 'recoil/history';
+import { getNextMapState } from 'recoil/mindmap';
+import { TAddNodeData, TDeleteNodeData, TUpdateNodeParent, TUpdateTaskInformation } from 'types/event';
+import { IHistoryData } from 'types/history';
+import { IMindNode, IMindNodes } from 'types/mindmap';
 
 export interface IParams {
   historyData: IHistoryData;

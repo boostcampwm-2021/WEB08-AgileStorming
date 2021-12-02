@@ -1,9 +1,5 @@
-import { Title, UserIcon, Wrapper } from 'components/atoms';
-import useCustomHistory from 'hooks/useCustomHistory';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { assigneeFilterState, filteredUserInProgressTaskState, userMouseOverState } from 'recoil/project';
-import { IUser } from 'types/user';
 import {
   StyledUserInProgressContainer,
   StyledUserInProgressBackground,
@@ -12,6 +8,10 @@ import {
   StyledTextFlow,
   StyledTextButton,
 } from './style';
+import { Title, UserIcon, Wrapper } from 'components/atoms';
+import useCustomHistory from 'hooks/useCustomHistory';
+import { assigneeFilterState, filteredUserInProgressTaskState, userMouseOverState } from 'recoil/project';
+import { IUser } from 'types/user';
 
 interface IProps {
   user: IUser;

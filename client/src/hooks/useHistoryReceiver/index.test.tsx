@@ -1,9 +1,9 @@
 import { snapshot_UNSTABLE } from 'recoil';
+import { addNode, deleteNode, updateNodeContent, updateNodeParent, updateTaskInformation } from '.';
 import { getNextMapState, mindmapState } from 'recoil/mindmap';
 import { TDeleteNodeData, TUpdateNodeContent, TUpdateNodeParent, TUpdateTaskInformation } from 'types/event';
 import { IMindNode } from 'types/mindmap';
 import { Levels } from 'utils/helpers';
-import { addNode, deleteNode, updateNodeContent, updateNodeParent, updateTaskInformation } from '.';
 
 describe('historyHandler는', () => {
   const dummyNode = (nodeId: number, level: Levels, children: Array<number>): IMindNode => ({

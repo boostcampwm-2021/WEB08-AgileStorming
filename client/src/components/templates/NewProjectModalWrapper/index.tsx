@@ -1,8 +1,8 @@
 import React, { useRef, ChangeEvent } from 'react';
 import { NewProjectCard } from 'components/organisms';
+import useModal from 'hooks/useModal';
 import { IProject } from 'pages/Project';
 import { API } from 'utils/api';
-import useModal from 'hooks/useModal';
 
 interface IProps {
   addNewProject: (newProject: IProject) => void;

@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { FilterMenuHeader, FilterItem, SprintItem, FilterButton, FilterItemContainer } from './style';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { PopupItemLayout, PopupLayout } from 'components/molecules';
+import { FilterMenuHeader, FilterItem, SprintItem, FilterButton, FilterItemContainer } from './style';
 import { ColorIcon, UserIcon, LabelIcon } from 'components/atoms';
-import { ISOtoYYMMDD } from 'utils/form';
-import { assigneeFilterState, labelFilterState, labelListState, sprintFilterState, sprintListState, userListState } from 'recoil/project';
-import { closeIcon, plus } from 'img';
-import useModal from 'hooks/useModal';
+import { PopupItemLayout, PopupLayout } from 'components/molecules';
 import useHistoryEmitter from 'hooks/useHistoryEmitter';
+import useModal from 'hooks/useModal';
+import { closeIcon, plus } from 'img';
+import { assigneeFilterState, labelFilterState, labelListState, sprintFilterState, sprintListState, userListState } from 'recoil/project';
+import { ISOtoYYMMDD } from 'utils/form';
 
 interface IProps {
   onClose: () => void;

@@ -1,9 +1,9 @@
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { RightWrapper, Wrapper, Range } from './style';
 import { IconButton, PlayController } from 'components/molecules';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
-import { currentReverseIdxState, historyDataListState, historyMapDataState, historyMovingSpeedState } from 'recoil/history';
-import { whiteCloseBtn } from 'img';
 import useCumstomHistory from 'hooks/useCustomHistory';
+import { whiteCloseBtn } from 'img';
+import { currentReverseIdxState, historyDataListState, historyMapDataState, historyMovingSpeedState } from 'recoil/history';
 
 const HistoryHeader = () => {
   const setHistoryMovingSpeed = useSetRecoilState(historyMovingSpeedState);
