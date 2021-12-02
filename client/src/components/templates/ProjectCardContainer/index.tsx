@@ -3,6 +3,7 @@ import React from 'react';
 import { ProjectCard } from 'components/organisms';
 import { NewProjectModalWrapper } from 'components/templates';
 import useCustomHistory from 'hooks/useCustomHistory';
+import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
 import { IProject } from 'pages/Project';
 import { API } from 'utils/api';
@@ -20,6 +21,7 @@ interface IProps {
 }
 
 const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList }) => {
+  const { showModal, hideModal } = useModal();
   const { showMessage } = useToast();
   const { historyPush } = useCustomHistory();
 
@@ -30,8 +32,19 @@ const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList })
   };
   const handleClickTrashButton = (event: React.MouseEvent<HTMLButtonElement>, projectId: string) => {
     event.stopPropagation();
-    setProjectList((list) => list.filter((p) => p.id !== projectId));
-    API.project.delete(projectId);
+    showModal({
+      modalType: 'confirmModal',
+      modalProps: {
+        title: '프로젝트 삭제',
+        text: `프로젝트를 삭제합니다`,
+        onClickSubmitButton: () => {
+          setProjectList((list) => list.filter((p) => p.id !== projectId));
+          API.project.delete(projectId);
+          hideModal();
+        },
+        onCancelButton: hideModal,
+      },
+    });
   };
   const handleClickProjectCard = (projectId: string) => {
     historyPush(`mindmap`, projectId);

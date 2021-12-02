@@ -106,12 +106,13 @@ export const NodeDetailWrapper = () => {
     }
   };
 
-  const requestLabelChange = (newLabelList: number[]) =>
+  const requestLabelChange = (newLabelList: number[]) => {
     updateTaskInformation({
       nodeFrom: selectedNode!.nodeId,
-      dataFrom: { changed: { labelIds: JSON.stringify(newLabelList) } },
+      dataFrom: { changed: { labelIds: selectedNode!.labelIds ? selectedNode!.labelIds : '[]' } },
       dataTo: { changed: { labelIds: JSON.stringify(newLabelList) } },
     });
+  };
 
   if (!selectedNode) {
     return null;

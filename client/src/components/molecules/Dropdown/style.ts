@@ -40,12 +40,18 @@ export const DropdownList = styled.ul<IStyleProps>`
   width: 100%;
   background-color: ${({ theme }) => theme.color.gray4};
   margin-top: 0.2 rem;
+  max-height: 8rem;
+  overflow-y: auto;
+  ${({ theme }) => theme.customScrollbar.primary1}
   z-index: 1;
 
   li {
     ${({ dropdownStyle }) => styleOptions[dropdownStyle]}
     width: 100%;
     margin: 0.2rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     &:hover {
       color: white;
       background-color: ${({ theme }) => theme.color.primary1};
