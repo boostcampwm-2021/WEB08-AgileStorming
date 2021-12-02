@@ -30,6 +30,7 @@ services:
       - DB_DATABASE=${DB_DATABASE}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - REDIS_HOST=${REDIS_HOST}
+      - SAMPLE_PROJECT=${SAMPLE_PROJECT}
 
   nginx:
     container_name: nginx
