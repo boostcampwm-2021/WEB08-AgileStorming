@@ -1,17 +1,13 @@
 import styled from '@emotion/styled';
 
-interface IStyledProps {
-  color: string;
-}
-
-export const StyledProjectCard = styled.div<IStyledProps>`
+export const StyledProjectCard = styled.div`
   ${({ theme }) => theme.flex.column}
   width: 320px;
   height: 300px;
   background: ${({ theme }) => theme.color.bgWhite};
   border: 1px solid ${({ theme }) => theme.color.gray3};
   border-radius: 5px;
-  filter: ${({ color }) => `drop-shadow(0px 3px 3px #${color})`};
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25));
   margin: 10px;
   overflow: hidden;
   justify-content: space-between;
@@ -21,10 +17,15 @@ export const StyledProjectCard = styled.div<IStyledProps>`
   }
 `;
 
-export const StyledLowerContainer = styled.div`
+export const StyledLowerWrapper = styled.div`
   ${({ theme }) => theme.flex.row}
   width: 100%;
   justify-content: space-between;
+`;
+
+export const StyledRowCenterWrapper = styled.div`
+  ${({ theme }) => theme.flex.rowCenter};
+  align-items: center;
 `;
 
 export const StyledIconContainer = styled.div`
@@ -33,7 +34,7 @@ export const StyledIconContainer = styled.div`
   margin-top: ${({ theme }) => theme.margin.normal};
 `;
 
-export const StyledBottomContainer = styled.div`
+export const StyledBottomWrapper = styled.div`
   ${({ theme }) => theme.flex.columnCenter};
   overflow: hidden;
   padding: ${({ theme }) => theme.padding.normal};
