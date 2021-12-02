@@ -1,8 +1,8 @@
 import { getRepository } from 'typeorm';
-import { findOneProject } from './project';
-import { TAddLabel } from '../utils/event-type';
-import { Label } from '../database/entities/Label';
 import { Color } from '../database/entities/Color';
+import { Label } from '../database/entities/Label';
+import { TAddLabel } from '../utils/event-type';
+import { findOneProject } from './project';
 
 export const findOneLabel = (id: string) => {
   return getRepository(Label).findOne({ where: { id } });

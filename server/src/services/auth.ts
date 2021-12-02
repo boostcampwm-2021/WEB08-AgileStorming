@@ -1,5 +1,5 @@
-import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import * as jwt from 'jsonwebtoken';
 dotenv.config();
 
 export const createJWTToken = (id: string) => {

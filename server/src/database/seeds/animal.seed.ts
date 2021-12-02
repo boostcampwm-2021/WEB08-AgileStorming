@@ -1,5 +1,5 @@
-import { Factory, Seeder } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
+import { Factory, Seeder } from 'typeorm-seeding';
 import { Animal } from '../entities/Animal';
 
 const ANIMAL_LIST = ['panda', 'frog', 'dog', 'cat', 'rabbit'];

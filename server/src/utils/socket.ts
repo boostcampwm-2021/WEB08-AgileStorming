@@ -1,10 +1,10 @@
-import { Server, Socket } from 'socket.io';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { xread, xadd } from './redis';
-import { convertHistoryEvent, convertEvent } from './event-converter';
+import jwt from 'jsonwebtoken';
+import { Server, Socket } from 'socket.io';
 import { getUserHasProject, addUserToProject } from '../services/project';
 import { findOneUser } from '../services/user';
+import { convertHistoryEvent, convertEvent } from './event-converter';
+import { xread, xadd } from './redis';
 
 dotenv.config();
 

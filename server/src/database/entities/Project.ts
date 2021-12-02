@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryColumn, OneToMany, CreateDateColumn, ManyToOne, ManyToMany, JoinTable, Generated } from 'typeorm';
-import { User } from './User';
+import { Label } from './Label';
 import { Mindmap } from './Mindmap';
 import { Sprint } from './Sprint';
-import { Label } from './Label';
+import { User } from './User';
 
 @Entity()
 export class Project {
