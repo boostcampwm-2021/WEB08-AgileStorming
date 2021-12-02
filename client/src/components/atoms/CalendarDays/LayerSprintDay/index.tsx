@@ -1,6 +1,6 @@
+import { LayerSprint, LayerSprintDayWrapper } from './style';
 import { ISprint } from 'types/sprint';
 import { makeISODate } from 'utils/date';
-import { LayerSprint, LayerSprintDayWrapper } from './style';
 
 interface IProps {
   dayDate?: { year: number; month: number; date: number };

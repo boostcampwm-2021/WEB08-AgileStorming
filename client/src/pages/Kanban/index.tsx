@@ -1,7 +1,7 @@
-import CommonLayout from 'components/templates/CommonLayout';
-import { TaskCardContainer } from 'components/templates';
-import { Wrapper } from 'components/atoms';
 import { useRecoilValue } from 'recoil';
+import { Wrapper } from 'components/atoms';
+import { TaskCardContainer } from 'components/templates';
+import CommonLayout from 'components/templates/CommonLayout';
 import { filteredTaskState } from 'recoil/project';
 import { userState } from 'recoil/user';
 

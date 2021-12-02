@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { LayerScheduleDay } from 'components/atoms';
 import { useRecoilValue } from 'recoil';
+import { LayerScheduleDay } from 'components/atoms';
 import { filteredTaskState } from 'recoil/project';
 import { IMindNode } from 'types/mindmap';
 import { makeISODate, parseISODate } from 'utils/date';

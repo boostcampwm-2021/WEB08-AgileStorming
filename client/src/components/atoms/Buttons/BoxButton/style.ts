@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import { ButtonHTMLAttributes } from 'react';
 import { common } from 'styles';
-import styled from '@emotion/styled';
 
 export type TStyle = 'small' | 'normal' | 'large' | 'full';
 export type TColor = 'white' | 'primary1' | 'primary2' | 'primary3';

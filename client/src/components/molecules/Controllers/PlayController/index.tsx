@@ -1,10 +1,10 @@
+import { useCallback, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { Wrapper } from './style';
 import { IconButton } from 'components/molecules';
 import useHistoryController from 'hooks/useHistoryController';
 import { backwardBtn, playBtn, forwardBtn, pauseBtn } from 'img';
-import { useCallback, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentReverseIdxState, isHistoryCalculatingState } from 'recoil/history';
-import { Wrapper } from './style';
 
 const PlayController = () => {
   const currentReverseIdx = useRecoilValue(currentReverseIdxState);

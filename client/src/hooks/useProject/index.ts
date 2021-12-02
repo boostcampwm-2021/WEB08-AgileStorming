@@ -1,6 +1,6 @@
-import useProjectId from 'hooks/useProjectId';
 import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import useProjectId from 'hooks/useProjectId';
 import { mindmapState } from 'recoil/mindmap';
 import { labelListState, projectIdState, sprintListState, userListState } from 'recoil/project';
 import { ILabel } from 'types/label';

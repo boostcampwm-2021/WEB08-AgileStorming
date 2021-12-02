@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import * as Types from 'styles/common';
 import { TCursor } from '../Title/style';
+import * as Types from 'styles/common';
 
 interface IStyleProps {
   color: Types.TColor;

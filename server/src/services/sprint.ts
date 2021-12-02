@@ -1,8 +1,8 @@
 import { getRepository } from 'typeorm';
-import { findOneProject } from './project';
-import { TAddSprint } from '../utils/event-type';
-import { Sprint } from '../database/entities/Sprint';
 import { Color } from '../database/entities/Color';
+import { Sprint } from '../database/entities/Sprint';
+import { TAddSprint } from '../utils/event-type';
+import { findOneProject } from './project';
 
 export const findOneSprint = (id: string) => {
   return getRepository(Sprint).findOne({ where: { id } });

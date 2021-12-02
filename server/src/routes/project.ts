@@ -1,8 +1,8 @@
 import { Router, Request, Response, Next } from 'express';
-import { createCustomError, deleteProjectHistory } from '../utils';
-import * as projectService from '../services/project';
 import { verifyToken } from '../middlewares/auth';
 import { identifyUser } from '../middlewares/user';
+import * as projectService from '../services/project';
+import { createCustomError, deleteProjectHistory } from '../utils';
 const router = Router();
 
 router.get('/', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {

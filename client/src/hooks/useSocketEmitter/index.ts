@@ -25,7 +25,7 @@ export interface INonHistoryEmitterProps {
   payload: TEventData;
 }
 
-const useHistoryEmitter = () => {
+const useSocketEmitter = () => {
   const { showError } = useToast();
 
   const isSocketConnected = () => {
@@ -89,4 +89,4 @@ const useHistoryEmitter = () => {
   };
 };
 
-export default useHistoryEmitter;
+export default useSocketEmitter;

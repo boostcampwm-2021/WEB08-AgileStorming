@@ -1,6 +1,6 @@
 import React from 'react';
-import { LayerSprintDay } from 'components/atoms';
 import { useRecoilValue } from 'recoil';
+import { LayerSprintDay } from 'components/atoms';
 import { sprintListState } from 'recoil/project';
 import { parseISODate } from 'utils/date';
 

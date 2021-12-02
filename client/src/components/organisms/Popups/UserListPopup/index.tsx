@@ -1,11 +1,11 @@
+import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { BoxButton } from 'components/atoms';
 import { PopupItemLayout, PopupLayout, IconButton, Profile } from 'components/molecules';
 import { UserInProgressPopup } from 'components/organisms';
-import { BoxButton } from 'components/atoms';
-import { userIcon, share } from 'img';
-import styled from '@emotion/styled';
 import useToast from 'hooks/useToast';
+import { userIcon, share } from 'img';
 import { connectedUserState, userListCurrentUserTopState, userMouseOverState } from 'recoil/project';
 
 interface IStyledConnectionStatus {

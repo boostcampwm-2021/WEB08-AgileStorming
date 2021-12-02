@@ -1,5 +1,5 @@
-import { common } from 'styles';
 import styled from '@emotion/styled';
+import { common } from 'styles';
 
 export type TStyle = 'normal' | 'modal';
 

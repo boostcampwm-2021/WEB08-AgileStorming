@@ -1,5 +1,5 @@
-import redis from 'redis';
 import * as dotenv from 'dotenv';
+import redis from 'redis';
 dotenv.config();
 
 export const xread = (stream: string, id: string, callback: (str) => void) => {

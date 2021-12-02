@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
-import { toastState } from 'recoil/toast';
 import { StyledToast, StyledToastContainer } from './style';
+import { toastState } from 'recoil/toast';
 
 const Toast = () => {
   const [toastList] = useRecoilState(toastState);

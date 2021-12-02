@@ -1,6 +1,6 @@
 import React from 'react';
-import * as img from 'img';
 import { StyledNewProjectCard } from './style';
+import * as img from 'img';
 
 interface IProps {
   onClickPlusButton: (event: React.MouseEvent<HTMLButtonElement>) => void;

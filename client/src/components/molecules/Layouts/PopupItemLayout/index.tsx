@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import { Title } from 'components/atoms';
 import React from 'react';
+import { Title } from 'components/atoms';
 
 interface IProps {
   children?: React.ReactNode;

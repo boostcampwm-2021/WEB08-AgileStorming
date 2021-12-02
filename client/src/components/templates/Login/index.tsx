@@ -1,17 +1,17 @@
-import React, { useRef } from 'react';
-import { Template, Wrapper } from './style';
 import { AxiosError } from 'axios';
-import { useHistory } from 'react-router-dom';
 import { History } from 'history';
+import React, { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import { Template, Wrapper } from './style';
+import { BoxButton, Input, Title } from 'components/atoms';
+import useCustomHistory from 'hooks/useCustomHistory';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
+import { logoMovePrimary } from 'img';
 import { isAuthenticatedState, userState } from 'recoil/user';
-import { BoxButton, Input, Title } from 'components/atoms';
 import { IUser } from 'types/user';
 import { auth } from 'utils/api';
-import { logoMovePrimary } from 'img';
-import useCustomHistory from 'hooks/useCustomHistory';
 
 interface IHistoryProps {
   redirectPage: string;

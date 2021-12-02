@@ -1,9 +1,9 @@
 import React from 'react';
+import { BottomButtonWrapper } from './style';
 import { ModalOverlay, SmallText } from 'components/atoms';
 import { PopupLayout, TextButton } from 'components/molecules';
-import useModal from 'hooks/useModal';
-import { BottomButtonWrapper } from './style';
 import useKeys from 'hooks/useKeys';
+import useModal from 'hooks/useModal';
 
 export interface IConfirmModalProps {
   onClickSubmitButton?: () => void;

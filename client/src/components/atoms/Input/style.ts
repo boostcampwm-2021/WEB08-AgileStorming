@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import { InputHTMLAttributes } from 'react';
 import { common } from 'styles';
-import styled from '@emotion/styled';
 
 export type TStyle = 'small' | 'normal' | 'large' | 'full' | 'gray';
 

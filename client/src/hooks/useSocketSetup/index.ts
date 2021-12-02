@@ -1,13 +1,13 @@
-import useProjectId from 'hooks/useProjectId';
-import useHistoryReceiver, { IHistoryReceiver } from 'hooks/useHistoryReceiver';
 import { useEffect } from 'react';
 import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
-import { ISocket, socketState } from 'recoil/socket';
 import io from 'socket.io-client';
+import useProjectId from 'hooks/useProjectId';
+import useSocketReceiver, { IHistoryReceiver } from 'hooks/useSocketReceiver';
 import useUserReceiver, { IUserReceiver } from 'hooks/useUserReceiver';
-import { parseHistoryEvent, parseNonHistoryEvent } from 'utils/parser';
-import { INonHistoryEventData } from 'types/event';
 import { userFocusNodeState } from 'recoil/project';
+import { ISocket, socketState } from 'recoil/socket';
+import { INonHistoryEventData } from 'types/event';
+import { parseHistoryEvent, parseNonHistoryEvent } from 'utils/parser';
 
 interface IInitProps {
   projectId: string;
@@ -70,7 +70,7 @@ const useSocketSetup = () => {
   const newProjectId = useProjectId();
   const [{ projectId }, setSocket] = useRecoilState(socketState);
   const setUserFocusNode = useSetRecoilState(userFocusNodeState);
-  const { historyReceiver, nonHistoryEventReceiver } = useHistoryReceiver();
+  const { historyReceiver, nonHistoryEventReceiver } = useSocketReceiver();
   const userReceiver = useUserReceiver();
 
   useEffect(() => {

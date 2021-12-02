@@ -1,6 +1,6 @@
 import { snapshot_UNSTABLE } from 'recoil';
-import { mindmapState } from 'recoil/mindmap';
 import { assigneeFilterState, filteredTaskState, labelFilterState, sprintFilterState } from '.';
+import { mindmapState } from 'recoil/mindmap';
 
 describe('FilteredTask selector는', () => {
   const dummyNode = (nodeId: number, assigneeId: string, sprintId: number, labelIds: string, level: string) => ({

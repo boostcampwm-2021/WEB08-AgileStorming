@@ -1,11 +1,11 @@
+import { AxiosError } from 'axios';
 import React, { ChangeEvent, useRef } from 'react';
 import { ModalOverlay, Input, Title } from 'components/atoms';
 import { PopupLayout, TextButton } from 'components/molecules';
+import useKeys from 'hooks/useKeys';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
-import { AxiosError } from 'axios';
 import { auth } from 'utils/api';
-import useKeys from 'hooks/useKeys';
 
 export interface IRegisterModalProps {
   key?: string;

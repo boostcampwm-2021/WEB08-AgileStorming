@@ -1,5 +1,5 @@
-import { Factory, Seeder } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
+import { Factory, Seeder } from 'typeorm-seeding';
 import { Color } from '../entities/Color';
 
 const COLOR_LIST = ['6ED5EB', '4CB8B8', '94D3CC', '4CA1DE', 'D092E2', '817DCE', '4A6CC3', 'B9D58C', 'E6D267', 'E2B765'];

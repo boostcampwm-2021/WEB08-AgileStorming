@@ -1,7 +1,7 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import { StyledChartHeader, StyledTitleWrapper, StyledTitleUnderline } from './style';
 import { Title } from 'components/atoms';
-import { useRecoilState } from 'recoil';
 import { selectedChartState } from 'recoil/chart';
 
 const ChartHeader: React.FC = () => {

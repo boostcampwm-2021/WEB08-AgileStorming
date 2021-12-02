@@ -1,6 +1,6 @@
-import drilldown from 'highcharts/modules/drilldown';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import drilldown from 'highcharts/modules/drilldown';
 import { useRecoilValue } from 'recoil';
 import { priorityChartState } from 'recoil/chart';
 drilldown(Highcharts);

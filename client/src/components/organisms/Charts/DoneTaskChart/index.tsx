@@ -1,8 +1,8 @@
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useCustomHistory from 'hooks/useCustomHistory';
 import useToast from 'hooks/useToast';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { doneTaskChartState } from 'recoil/chart';
 import { assigneeFilterState, sprintFilterState } from 'recoil/project';
 

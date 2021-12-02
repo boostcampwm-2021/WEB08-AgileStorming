@@ -1,10 +1,10 @@
-import { Title } from 'components/atoms';
-import { useLog } from 'hooks/useLog';
 import { useRecoilValue } from 'recoil';
-import { userListState } from 'recoil/project';
-import { IHistoryData } from 'types/history';
 import { Profile } from '..';
 import { Wrapper } from './style';
+import { Title } from 'components/atoms';
+import { useLog } from 'hooks/useLog';
+import { userListState } from 'recoil/project';
+import { IHistoryData } from 'types/history';
 
 interface IProps {
   historyData: IHistoryData | null;
