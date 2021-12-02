@@ -15,9 +15,10 @@ import { IUser } from 'types/user';
 
 interface IProps {
   user: IUser;
+  offset: number;
 }
 
-export const UserInProgressList: React.FC<IProps> = ({ user }) => {
+export const UserInProgressList: React.FC<IProps> = ({ user, offset }) => {
   const filteredUserInProgressTask = useRecoilValue(filteredUserInProgressTaskState);
   const mouseOverUser = useRecoilValue(userMouseOverState);
   const setAssigneeFilter = useSetRecoilState(assigneeFilterState);
@@ -27,7 +28,7 @@ export const UserInProgressList: React.FC<IProps> = ({ user }) => {
     historyPush('kanban');
   };
   return (
-    <StyledUserInProgressContainer>
+    <StyledUserInProgressContainer offset={offset}>
       <StyledUserInProgressBackground>
         <Wrapper flex={'rowCenter'}>
           <Title titleStyle={'large'} margin='0 5px 0 0'>
