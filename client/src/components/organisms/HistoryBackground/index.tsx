@@ -1,6 +1,6 @@
 import { Background } from 'components/atoms';
+import useCumstomHistory from 'hooks/useCustomHistory';
 import useDragBackground from 'hooks/useDragBackground';
-import useLinkClick from 'hooks/useLinkClick';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { historyMapDataState } from 'recoil/history';
@@ -10,13 +10,13 @@ import { Mindmap } from '..';
 const UNDER_ELEMENT = -10;
 
 const HistoryBackground = () => {
-  const linkToMindmap = useLinkClick('mindmap');
+  const { historyPush } = useCumstomHistory();
   useDragBackground();
   const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
   const mindmapData = useRecoilValue(mindmapState);
 
   useEffect(() => {
-    if (!mindmapData.mindNodes.size) return linkToMindmap();
+    if (!mindmapData.mindNodes.size) return historyPush('mindmap');
     const newMapData = getNextMapState(mindmapData);
 
     setHistoryMapData(newMapData);

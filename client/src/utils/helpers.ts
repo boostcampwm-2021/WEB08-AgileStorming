@@ -128,7 +128,7 @@ const getAllChildren = (node: IMindNode, mindmapData: IMindmapData) => {
   return allChildren;
 };
 
-const PAGES = ['mindmap', 'kanban', 'calendar', 'chart', 'backlog'];
+const PAGES = ['mindmap', 'kanban', 'calendar', 'chart', 'backlog', 'history'];
 
 export {
   getChildLevel,
