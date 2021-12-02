@@ -122,7 +122,7 @@ CI 환경을 구축, 테스트와 lint를 자동화하여 코드 품질을 보�
 	
 |<a href="https://www.figma.com/file/2q8KexaWzWsfdptQfBviLX/AgileStorming">🎀 피그마</a>|<a href="https://github.com/boostcampwm-2021/web08/wiki/ER-Diagram">🛢 ER Diagram</a>|
 |---|---|
-|<img src="https://user-images.githubusercontent.com/60315683/140672467-22b3aa52-daab-47ac-93fc-44a02662c98c.png" style="width:500px;height:300px;"/>|<img src="https://user-images.githubusercontent.com/60315683/140672641-5bfd2e75-b626-4afa-9b41-cfe4efc0e627.png" style="width:500px;height:300px;"/>|
+|<img src="https://user-images.githubusercontent.com/60315683/140672467-22b3aa52-daab-47ac-93fc-44a02662c98c.png" style="width:500px;height:300px;"/>|<img src="https://user-images.githubusercontent.com/60315683/143969449-a7b8c6c6-4037-4621-8fff-e50038798e76.png" style="width:500px;height:300px;"/>|
 </div>
 
 <br />
