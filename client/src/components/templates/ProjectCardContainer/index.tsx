@@ -5,7 +5,10 @@ import { ProjectCard } from 'components/organisms';
 import { NewProjectModalWrapper } from 'components/templates';
 import useToast from 'hooks/useToast';
 import { API } from 'utils/api';
-import { useHistory } from 'react-router';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user';
+import useCumstomHistory from 'hooks/useCustomHistory';
+
 
 const StyledProjectCardContainer = styled.div`
   ${(props) => props.theme.flex.row}
@@ -21,7 +24,9 @@ interface IProps {
 
 const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList }) => {
   const { showMessage } = useToast();
-  const history = useHistory();
+  const { historyPush } = useCumstomHistory();
+  const user = useRecoilValue(userState);
+
 
   const handleClickShareButton = (event: React.MouseEvent<HTMLButtonElement>, projectId: string) => {
     event.stopPropagation();
@@ -34,7 +39,7 @@ const ProjectCardContainer: React.FC<IProps> = ({ projectList, setProjectList })
     API.project.delete(projectId);
   };
   const handleClickProjectCard = (projectId: string) => {
-    history.push(`/mindmap/${projectId}`);
+    historyPush(`mindmap`, projectId);
   };
   const addNewProject = (newProject: IProject) => {
     const newProjectWithCount = { ...newProject, count: 1 };
