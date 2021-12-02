@@ -54,6 +54,4 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, setSelectedNodeIdTask, onMouseDo
   );
 };
 
-const isPropsEqual = (prev: IProps, curr: IProps) => JSON.stringify(prev.taskInfo) === JSON.stringify(curr.taskInfo);
-const TaskCardMemo = React.memo(TaskCard, isPropsEqual);
-export default TaskCardMemo;
+export default TaskCard;
