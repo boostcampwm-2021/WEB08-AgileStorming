@@ -198,7 +198,7 @@ const nonHistoryEventHandler = ({ response, setLabelList, setSprintList }: INonH
   }
 };
 
-const useHistoryReceiver = () => {
+const useSocketReceiver = () => {
   const setMindmap = useSetRecoilState(mindmapState);
   const setLabelList = useSetRecoilState(labelListState);
   const setSprintList = useSetRecoilState(sprintListState);
@@ -210,4 +210,4 @@ const useHistoryReceiver = () => {
 
   return { historyReceiver, nonHistoryEventReceiver };
 };
-export default useHistoryReceiver;
+export default useSocketReceiver;

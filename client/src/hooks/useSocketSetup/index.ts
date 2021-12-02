@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
 import io from 'socket.io-client';
-import useHistoryReceiver, { IHistoryReceiver } from 'hooks/useHistoryReceiver';
 import useProjectId from 'hooks/useProjectId';
+import useSocketReceiver, { IHistoryReceiver } from 'hooks/useSocketReceiver';
 import useUserReceiver, { IUserReceiver } from 'hooks/useUserReceiver';
 import { userFocusNodeState } from 'recoil/project';
 import { ISocket, socketState } from 'recoil/socket';
@@ -70,7 +70,7 @@ const useSocketSetup = () => {
   const newProjectId = useProjectId();
   const [{ projectId }, setSocket] = useRecoilState(socketState);
   const setUserFocusNode = useSetRecoilState(userFocusNodeState);
-  const { historyReceiver, nonHistoryEventReceiver } = useHistoryReceiver();
+  const { historyReceiver, nonHistoryEventReceiver } = useSocketReceiver();
   const userReceiver = useUserReceiver();
 
   useEffect(() => {
