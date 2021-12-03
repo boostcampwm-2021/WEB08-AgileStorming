@@ -11,3 +11,14 @@ export interface IHistoryData {
   historyId: number;
   streamId: string;
 }
+
+export interface IHistoryControllerProps {
+  fromIdx: number;
+  toIdx: number;
+}
+
+export interface IHandleMoveProps {
+  historyData: IHistoryData;
+  idx: number;
+  fromIdx: number;
+}

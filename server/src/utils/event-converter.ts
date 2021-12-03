@@ -1,7 +1,7 @@
-import { createNode, updateNode, updateNodeParent, deleteNode } from '../services/mindmap';
-import { deleteChildTasks, deleteTask, updateTask } from '../services/task';
-import { createSprint, deleteSprint } from '../services/sprint';
 import { createLabel, deleteLabel } from '../services/label';
+import { createNode, updateNode, updateNodeParent, deleteNode } from '../services/mindmap';
+import { createSprint, deleteSprint } from '../services/sprint';
+import { deleteChildTasks, deleteTask, updateTask } from '../services/task';
 import * as eventType from './event-type';
 
 enum EventArgs {

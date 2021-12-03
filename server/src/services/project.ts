@@ -3,7 +3,7 @@ import { Project } from '../database/entities/Project';
 import { createNode } from './mindmap';
 import { findOneUser } from './user';
 
-export const getUserProject = async (userId: string) => {
+export const getUserProject = (userId: string) => {
   return getRepository(Project)
     .createQueryBuilder('project')
     .leftJoin('project.users', 'users')
@@ -22,7 +22,7 @@ export const getProjectUserList = async (projectId: string) => {
   return project.users;
 };
 
-export const getUserHasProject = async (userId: string, projectId: string) => {
+export const getUserHasProject = (userId: string, projectId: string) => {
   return getRepository(Project)
     .createQueryBuilder('project')
     .leftJoin('project.users', 'users')
@@ -61,11 +61,11 @@ export const deleteProject = async (userId: string, projectId: string) => {
   return getConnection().createQueryBuilder().delete().from(Project).where(projectCondition).execute();
 };
 
-export const findOneProject = async (id: string) => {
+export const findOneProject = (id: string) => {
   return getRepository(Project).findOne({ where: { id } });
 };
 
-export const getProjectInfo = async (projectId: string) => {
+export const getProjectInfo = (projectId: string) => {
   return getRepository(Project)
     .createQueryBuilder('project')
     .leftJoinAndSelect('project.users', 'users')
@@ -75,7 +75,7 @@ export const getProjectInfo = async (projectId: string) => {
     .getOne();
 };
 
-export const getProjectNodeInfo = async (ProjectId: string) => {
+export const getProjectNodeInfo = (projectId: string) => {
   return getManager().query(
     `
   SELECT *
@@ -83,6 +83,30 @@ export const getProjectNodeInfo = async (ProjectId: string) => {
   LEFT JOIN task
   ON mindmap.id = task.taskId
   WHERE mindmap.projectId = ? ;`,
-    [ProjectId]
+    [projectId]
   );
+};
+
+export const getProjectServiceQueries = (userId: string, projectId: string) => {
+  const queries: Record<string, string> = {};
+  queries.getProjectInfo = getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoinAndSelect('project.users', 'users')
+    .leftJoinAndSelect('project.sprints', 'sprints')
+    .leftJoinAndSelect('project.labels', 'labels')
+    .where('project.id = :projectId', { projectId })
+    .getSql();
+  queries.getProjectAndUsers = getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoinAndSelect('project.users', 'users')
+    .where('project.id = :projectId', { projectId })
+    .getSql();
+  queries.getUserProject = getRepository(Project)
+    .createQueryBuilder('project')
+    .leftJoin('project.users', 'users')
+    .innerJoinAndSelect('project.creator', 'creator')
+    .loadRelationCountAndMap('project.count', 'project.users')
+    .where('users.id = :userId', { userId })
+    .getSql();
+  return queries;
 };

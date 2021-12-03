@@ -1,6 +1,6 @@
+import { useRecoilValue } from 'recoil';
 import { BoxButton } from 'components/atoms';
 import { filterIcon } from 'img';
-import { useRecoilValue } from 'recoil';
 import { assigneeFilterState, labelFilterState, labelListState, sprintFilterState, sprintListState, userListState } from 'recoil/project';
 
 interface IProps {

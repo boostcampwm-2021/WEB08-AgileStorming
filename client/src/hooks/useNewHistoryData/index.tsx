@@ -1,11 +1,11 @@
+import { useCallback } from 'react';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
+import useProjectId from 'hooks/useProjectId';
+import useToast from 'hooks/useToast';
 import { historyDataListState } from 'recoil/history';
 import { IHistoryData, THistoryRowData } from 'types/history';
 import { API } from 'utils/api';
 import { parseHistory } from 'utils/parser';
-import useProjectId from 'hooks/useRoomId';
-import useToast from 'hooks/useToast';
-import { useCallback } from 'react';
 
 const useNewHistoryData = () => {
   const setHistoryDataList = useSetRecoilState(historyDataListState);
@@ -32,7 +32,7 @@ const useNewHistoryData = () => {
 
   const getMoreHistoryData = useCallback(() => {
     const currentHistoryData = historyDataList.at(0);
-    const rangeFrom = '(' + currentHistoryData?.streamId;
+    const rangeFrom = currentHistoryData?.streamId ? '(' + currentHistoryData.streamId : undefined;
 
     getNewHistoryData(rangeFrom);
   }, [historyDataList, getNewHistoryData]);

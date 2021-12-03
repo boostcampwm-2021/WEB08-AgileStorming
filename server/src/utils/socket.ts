@@ -1,10 +1,10 @@
-import { Server, Socket } from 'socket.io';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { xread, xadd } from './redis';
-import { convertHistoryEvent, convertEvent } from './event-converter';
+import jwt from 'jsonwebtoken';
+import { Server, Socket } from 'socket.io';
 import { getUserHasProject, addUserToProject } from '../services/project';
 import { findOneUser } from '../services/user';
+import { convertHistoryEvent, convertEvent } from './event-converter';
+import { xread, xadd } from './redis';
 
 dotenv.config();
 
@@ -38,7 +38,6 @@ const socketIO = (server, origin) => {
 
   io.on('connection', async (socket: ISocket) => {
     const { id } = socket.decoded;
-    console.log(id, 'connected');
     const projectId = socket.handshake.query.projectId as string;
 
     const handleNewEvent = async (data: Record<number, object>) => {
@@ -75,7 +74,6 @@ const socketIO = (server, origin) => {
 
     socket.on('leave', (targetProjectId) => {
       socket.leave(targetProjectId);
-      console.log(id, 'leave');
       socket.disconnect();
     });
 

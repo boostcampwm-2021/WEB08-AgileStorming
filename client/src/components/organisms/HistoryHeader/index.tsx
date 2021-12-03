@@ -1,25 +1,25 @@
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { RightWrapper, Wrapper, Range } from './style';
 import { IconButton, PlayController } from 'components/molecules';
-import { historyMapDataState } from 'recoil/mindmap';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
-import { currentReverseIdxState, historyDataListState, historyMovingSpeedState } from 'recoil/history';
-import useLinkClick from 'hooks/useLinkClick';
+import useCumstomHistory from 'hooks/useCustomHistory';
 import { whiteCloseBtn } from 'img';
-import { useCallback } from 'react';
+import { currentReverseIdxState, historyDataListState, historyMapDataState, historyMovingSpeedState } from 'recoil/history';
 
 const HistoryHeader = () => {
   const setHistoryMovingSpeed = useSetRecoilState(historyMovingSpeedState);
   const resetHistoryDataList = useResetRecoilState(historyDataListState);
   const resetHistoryMapData = useResetRecoilState(historyMapDataState);
   const resetCurrentReverseIdx = useResetRecoilState(currentReverseIdxState);
-  const linkToMindmap = useLinkClick('mindmap');
+  const resetMovingSpeed = useResetRecoilState(historyMovingSpeedState);
+  const { historyPush } = useCumstomHistory();
 
-  const handleCloseHistoryBtnClick = useCallback(() => {
+  const handleCloseHistoryBtnClick = () => {
     resetHistoryDataList();
     resetHistoryMapData();
     resetCurrentReverseIdx();
-    linkToMindmap();
-  }, [linkToMindmap]);
+    resetMovingSpeed();
+    historyPush('mindmap');
+  };
 
   const changeHistoryMovingSpeed = ({ currentTarget }: React.MouseEvent<HTMLInputElement>) => {
     const changedSpeed = 1000 - Number(currentTarget.value) * 10;

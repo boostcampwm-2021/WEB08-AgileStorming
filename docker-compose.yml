@@ -30,6 +30,7 @@ services:
       - DB_DATABASE=${DB_DATABASE}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - REDIS_HOST=${REDIS_HOST}
+      - SAMPLE_PROJECT=${SAMPLE_PROJECT}
 
   nginx:
     container_name: nginx
@@ -61,6 +62,7 @@ services:
     image: redis
     volumes:
       - ./server/redis.conf:/usr/local/etc/redis/redis.conf
+      - /data/redis:/data
     ports:
       - 6379:6379
     command: redis-server /usr/local/etc/redis/redis.conf

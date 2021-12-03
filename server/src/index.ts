@@ -1,14 +1,14 @@
 import 'reflect-metadata';
-import express, { Error, Request, Response, Next } from 'express';
+import http from 'http';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express, { Error, Request, Response, Next } from 'express';
 import morgan from 'morgan';
 import { createConnection } from 'typeorm';
-import cors from 'cors';
-import http from 'http';
-import router from './routes';
 import ormConfig from '../ormconfig';
+import router from './routes';
 import { socketIO } from './utils';
-import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();

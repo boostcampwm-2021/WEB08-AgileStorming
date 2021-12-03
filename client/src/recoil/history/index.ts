@@ -1,8 +1,23 @@
 import { atom, selector } from 'recoil';
 import { TAddNodeData, TDeleteNodeData, THistoryEventData, TUpdateNodeParent } from 'types/event';
 import { IHistoryData } from 'types/history';
+import { IMindmapData } from 'types/mindmap';
 
 const CANNOT_FIND_NODE_ID = -3;
+const ROOT_NODE_ID = -1;
+
+export const historyMapDataState = atom<IMindmapData>({
+  key: 'historyMapAtom',
+  default: { rootId: ROOT_NODE_ID, mindNodes: new Map() },
+});
+
+export const historyMapState = selector({
+  key: 'historyNodesState',
+  get: ({ get }) => {
+    const { mindNodes } = get(historyMapDataState)!;
+    return mindNodes;
+  },
+});
 
 export const historyDataListState = atom<IHistoryData[]>({
   key: 'historyDataListAtom',

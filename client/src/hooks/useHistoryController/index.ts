@@ -1,9 +1,8 @@
-import { useCallback, useRef } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRef } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import useRestoreHistory from 'hooks/useRestoreHistory';
 import { currentReverseIdxState, historyDataListState, historyMovingSpeedState, isHistoryCalculatingState } from 'recoil/history';
-import { historyMapDataState } from 'recoil/mindmap';
 import { IHistoryData } from 'types/history';
-import { restoreHistory } from 'utils/historyHandler';
 
 interface IHistoryControllerProps {
   fromIdx: number;
@@ -40,91 +39,73 @@ const restoreAsyncHistory = (
 };
 
 const useHistoryController = () => {
-  const [historyMapData, setHistoryMapData] = useRecoilState(historyMapDataState);
-  const [historyDataList, setHistoryDataList] = useRecoilState(historyDataListState);
+  const historyDataList = useRecoilValue(historyDataListState);
   const setCurrentReverseIdx = useSetRecoilState(currentReverseIdxState);
   const setIsCalculating = useSetRecoilState(isHistoryCalculatingState);
+  const { restoreHistory } = useRestoreHistory();
   const time = useRecoilValue(historyMovingSpeedState);
   const intervalId = useRef<NodeJS.Timer | null>(null);
 
-  const handleMoveForward = useCallback(
-    ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
-      const params = { historyData, isForward: true, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
-      restoreHistory(params);
-      setCurrentReverseIdx(fromIdx + idx);
-    },
-    [historyDataList, historyMapData]
-  );
+  const handleMoveForward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
+    const params = { historyData, isForward: true };
+    restoreHistory(params);
+    setCurrentReverseIdx(fromIdx + idx);
+  };
 
-  const handleMoveBackward = useCallback(
-    ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
-      const params = { historyData, isForward: false, setHistoryMapData, setHistoryDataList, historyDataList, historyMapData };
-      restoreHistory(params);
-      setCurrentReverseIdx(fromIdx - idx);
-    },
-    [historyDataList, historyMapData]
-  );
+  const handleMoveBackward = ({ historyData, idx, fromIdx }: IHandleMoveProps) => {
+    const params = { historyData, isForward: false };
+    restoreHistory(params);
+    setCurrentReverseIdx(fromIdx - idx);
+  };
 
-  const historyController = useCallback(
-    ({ fromIdx, toIdx }: IHistoryControllerProps) => {
-      const isForward = fromIdx < toIdx;
-      const [from, to] = getFromTo(fromIdx, toIdx, isForward);
-      const stopHistories = historyDataList.slice(from, to);
+  const historyController = ({ fromIdx, toIdx }: IHistoryControllerProps) => {
+    const isForward = fromIdx < toIdx;
+    const [from, to] = getFromTo(fromIdx, toIdx, isForward);
+    const stopHistories = historyDataList.slice(from, to);
 
-      if (isForward) {
-        return restoreAsyncHistory(stopHistories, handleMoveForward, fromIdx + 1, time);
-      } else {
-        stopHistories.reverse();
-        return restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1, time);
-      }
-    },
-    [handleMoveForward, handleMoveBackward, time, historyDataList]
-  );
-
-  const getOldestHistory = useCallback(
-    (fromIdx: number) => {
-      const [from, to] = getFromTo(fromIdx, 0, false);
-      const stopHistories = historyDataList.slice(from, to);
+    if (isForward) {
+      return restoreAsyncHistory(stopHistories, handleMoveForward, fromIdx + 1, time);
+    } else {
       stopHistories.reverse();
+      return restoreAsyncHistory(stopHistories, handleMoveBackward, fromIdx - 1, time);
+    }
+  };
 
-      stopHistories.forEach((historyData, idx) => handleMoveBackward({ historyData, idx, fromIdx: fromIdx - 1 }));
-    },
-    [historyDataList, handleMoveBackward]
-  );
+  const getOldestHistory = (fromIdx: number) => {
+    const [from, to] = getFromTo(fromIdx, 0, false);
+    const stopHistories = historyDataList.slice(from, to);
+    stopHistories.reverse();
 
-  const getYoungestHistory = useCallback(
-    (fromIdx: number) => {
-      const [from, to] = getFromTo(fromIdx, -1, true);
-      const stopHistories = historyDataList.slice(from, to);
+    stopHistories.forEach((historyData, idx) => handleMoveBackward({ historyData, idx, fromIdx: fromIdx - 1 }));
+  };
 
-      stopHistories.forEach((historyData, idx) => handleMoveForward({ historyData, idx, fromIdx: fromIdx + 1 }));
-    },
-    [historyDataList, handleMoveForward]
-  );
+  const getYoungestHistory = (fromIdx: number) => {
+    const [from, to] = getFromTo(fromIdx, -1, true);
+    const stopHistories = historyDataList.slice(from, to);
 
-  const playHistories = useCallback(
-    (fromIdx: number, setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>) => {
-      let idx = 1;
+    stopHistories.forEach((historyData, idx) => handleMoveForward({ historyData, idx, fromIdx: fromIdx + 1 }));
+  };
 
-      intervalId.current = setInterval(() => {
-        if (fromIdx + idx === 0) {
-          setIsPlaying(false);
-          setIsCalculating(false);
-          clearInterval(intervalId.current!);
-          return;
-        }
+  const playHistories = (fromIdx: number, setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>) => {
+    let idx = 1;
 
-        const historyData = historyDataList.at(fromIdx + idx)!;
-        handleMoveForward({ historyData, idx, fromIdx });
-        idx++;
-      }, time);
-    },
-    [historyDataList, intervalId.current, handleMoveForward, time, setIsCalculating]
-  );
+    intervalId.current = setInterval(() => {
+      if (fromIdx + idx === 0) {
+        setIsPlaying(false);
+        setIsCalculating(false);
+        clearInterval(intervalId.current!);
+        return;
+      }
 
-  const stopHistories = useCallback(() => {
+      const historyData = historyDataList.at(fromIdx + idx)!;
+      handleMoveForward({ historyData, idx, fromIdx });
+      idx++;
+    }, time);
+  };
+
+  const stopHistories = () => {
     clearInterval(intervalId.current!);
-  }, [intervalId.current]);
+  };
 
   return {
     historyController,

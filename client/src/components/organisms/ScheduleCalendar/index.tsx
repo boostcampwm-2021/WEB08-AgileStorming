@@ -1,12 +1,7 @@
 import { useState } from 'react';
-import { CalendarWrapper, LayerWrapper, Wrapper } from './style';
-import MonthSelector from './MonthSelector';
-import Calendar from './Calendar';
-import LayerSprintMonth from './LayerSprintMonth';
-import LayerTaskDetailMonth from './LayerTaskDetailMonth';
-import LayerScheduleMonth from './LayerScheduleMonth';
-
 import { useSetRecoilState } from 'recoil';
+import { CalendarWrapper, LayerWrapper, Wrapper } from './style';
+import { Calendar, LayerScheduleCalendar, LayerSprintCalendar, LayerTaskDetailCalendar, MonthController } from 'components/molecules';
 import { selectedNodeIdState } from 'recoil/node';
 import { IMindNode } from 'types/mindmap';
 import { getTodayISODate } from 'utils/date';
@@ -21,18 +16,18 @@ const ScheduleCalendar = () => {
 
   return (
     <Wrapper onClick={() => handleClickOutside()}>
-      <MonthSelector currentDateISO={currentDateISO} setCurrentDateISO={setCurrentDateISO} />
+      <MonthController currentDateISO={currentDateISO} setCurrentDateISO={setCurrentDateISO} />
       <CalendarWrapper>
         <Calendar currentDateISO={currentDateISO} />
       </CalendarWrapper>
       <LayerWrapper className={hoveredNode ? 'blur no-click' : 'no-click'}>
-        <LayerSprintMonth currentDateISO={currentDateISO} />
+        <LayerSprintCalendar currentDateISO={currentDateISO} />
       </LayerWrapper>
       <LayerWrapper className={hoveredNode ? 'blur' : ''}>
-        <LayerScheduleMonth currentDateISO={currentDateISO} setHoveredNode={setHoveredNode} />
+        <LayerScheduleCalendar currentDateISO={currentDateISO} setHoveredNode={setHoveredNode} />
       </LayerWrapper>
       <LayerWrapper className={'no-click'}>
-        <LayerTaskDetailMonth currentDateISO={currentDateISO} hoveredNode={hoveredNode} />
+        <LayerTaskDetailCalendar currentDateISO={currentDateISO} hoveredNode={hoveredNode} />
       </LayerWrapper>
     </Wrapper>
   );

@@ -1,7 +1,7 @@
-import emotionReset from 'emotion-reset';
 import { css } from '@emotion/react';
+import emotionReset from 'emotion-reset';
 
-const global = css`
+const globalStyle = css`
   ${emotionReset}
   *,
   *::after,
@@ -16,4 +16,4 @@ const global = css`
   }
 `;
 
-export default global;
+export default globalStyle;

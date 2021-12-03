@@ -1,17 +1,17 @@
+import axios, { AxiosError } from 'axios';
 import { useRef } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { toastState } from 'recoil/toast';
-import axios, { AxiosError } from 'axios';
 
 const useToast = () => {
   const setToast = useSetRecoilState(toastState);
-  const id = useRef(0);
+  const id = useRef(new Date().getTime());
 
   const showMessage = (message: string) => {
     setToast((toastList) => [...toastList, { id: id.current, show: true, message }]);
     const timerId = id.current;
     setTimeout(() => hideMessage(timerId), 2000);
-    id.current = id.current + 1;
+    id.current = new Date().getTime();
   };
 
   const showError = (err: Error | AxiosError) => {
@@ -25,7 +25,7 @@ const useToast = () => {
     setToast((toastList) => [...toastList, { id: id.current, show: true, message }]);
     const timerId = id.current;
     setTimeout(() => hideMessage(timerId), 2000);
-    id.current = id.current + 1;
+    id.current = new Date().getTime();
   };
 
   const hideMessage = (tid: number) => {

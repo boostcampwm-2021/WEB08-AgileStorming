@@ -1,16 +1,16 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { NodeContainer, ChildContainer, NodeDeleteBtn } from './style';
 import { Node, PriorityIcon, UserIcon } from 'components/atoms';
 import { Path, TempNode, UserFocusBox } from 'components/molecules';
 import { ITaskFilters } from 'components/organisms/MindmapTree';
-import { NodeContainer, ChildContainer, NodeDeleteBtn } from './style';
+import useSocketEmitter from 'hooks/useSocketEmitter';
+import { currentHistoryNodeIdState, isHistoryOpenState } from 'recoil/history';
 import { getNextMapState, mindmapState, TEMP_NODE_ID } from 'recoil/mindmap';
 import { selectedNodeIdState } from 'recoil/node';
-import { currentHistoryNodeIdState, isHistoryOpenState } from 'recoil/history';
-import useHistoryEmitter from 'hooks/useHistoryEmitter';
-import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect, Levels } from 'utils/helpers';
-import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
 import { assigneeFilterState, labelFilterState, sprintFilterState, userFocusNodeState, userListState } from 'recoil/project';
+import { IMindmapData, IMindNode, IMindNodes } from 'types/mindmap';
+import { TCoord, TRect, getCurrentCoord, getGap, getType, calcRect, Levels } from 'utils/helpers';
 
 interface ITreeProps {
   nodeId: number;
@@ -78,7 +78,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     .slice(0, 3);
   const isFiltering = !!Object.values(taskFilters).reduce((acc, filter) => (acc += filter ? filter : ''), '');
 
-  const { addNode } = useHistoryEmitter();
+  const { addNode } = useSocketEmitter();
   const setMindmapData = useSetRecoilState(mindmapState);
 
   const [selectedNodeId, setSelectedNodeId] = useRecoilState(selectedNodeIdState);
@@ -153,6 +153,12 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
     removeTempNode();
   };
 
+  useEffect(() => {
+    if (isHistorySelected) {
+      nodeRef.current?.scrollIntoView({ block: 'center', inline: 'center' });
+    }
+  }, [isHistorySelected]);
+
   return (
     <NodeContainer id={nodeId + 'container'} ref={containerRef} isRoot={isRoot} className='node-container mindmap-area'>
       {nodeId === TEMP_NODE_ID ? (
@@ -181,7 +187,7 @@ const Tree: React.FC<ITreeProps> = ({ nodeId, mindmapData, parentCoord, parentId
             {!isHistoryOpen && !isRoot && isSelected && (
               <NodeDeleteBtn onClick={handleDeleteBtnClick.bind(null, parentId!, node)}>삭제</NodeDeleteBtn>
             )}
-            <UserFocusBox users={focusingUsers} />
+            {!isHistoryOpen && <UserFocusBox users={focusingUsers} />}
             {content}
           </Node>
         </>

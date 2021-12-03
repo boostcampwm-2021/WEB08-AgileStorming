@@ -1,5 +1,5 @@
-import { SmallText, Wrapper } from 'components/atoms';
 import React from 'react';
+import { SmallText, Wrapper } from 'components/atoms';
 
 interface IProps {
   title: string;

@@ -1,8 +1,8 @@
 import { Router, Request, Response, Next } from 'express';
-import { createCustomError, deleteProjectHistory } from '../utils';
-import * as projectService from '../services/project';
 import { verifyToken } from '../middlewares/auth';
 import { identifyUser } from '../middlewares/user';
+import * as projectService from '../services/project';
+import { createCustomError, deleteProjectHistory } from '../utils';
 const router = Router();
 
 router.get('/', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
@@ -14,7 +14,18 @@ router.get('/', verifyToken, identifyUser, async (req: Request, res: Response, n
   }
 });
 
-router.post('/create', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
+router.get('/:projectId', async (req: Request, res: Response, next: Next) => {
+  try {
+    const { projectId } = req.params;
+    const project = await projectService.findOneProject(projectId);
+    if (project) res.sendStatus(200);
+    else throw createCustomError(404, 'project does not exist');
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.post('/', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
   try {
     const { name } = req.body;
     if (!name) throw createCustomError(400, 'no project name');
@@ -25,9 +36,9 @@ router.post('/create', verifyToken, identifyUser, async (req: Request, res: Resp
   }
 });
 
-router.delete('/delete', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
+router.delete('/:projectId', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
   try {
-    const { projectId } = req.body;
+    const { projectId } = req.params;
     await projectService.deleteProject(res.locals.user.id, projectId);
     await deleteProjectHistory(projectId);
     res.sendStatus(200);
@@ -36,9 +47,9 @@ router.delete('/delete', verifyToken, identifyUser, async (req: Request, res: Re
   }
 });
 
-router.get('/user-list', async (req: Request, res: Response, next: Next) => {
+router.get('/user-list/:projectId', async (req: Request, res: Response, next: Next) => {
   try {
-    const { projectId } = req.query;
+    const { projectId } = req.params;
     const projectList = await projectService.getProjectUserList(projectId);
     res.send(projectList);
   } catch (e) {
@@ -46,14 +57,25 @@ router.get('/user-list', async (req: Request, res: Response, next: Next) => {
   }
 });
 
-router.get('/info', async (req: Request, res: Response, next: Next) => {
+router.get('/info/:projectId', async (req: Request, res: Response, next: Next) => {
   try {
-    const { projectId } = req.query;
+    const { projectId } = req.params;
     const projectInfo = await projectService.getProjectInfo(projectId);
     const projectNodeInfo = await projectService.getProjectNodeInfo(projectId);
 
     projectNodeInfo.forEach((node) => (node.children = JSON.parse(node.children)));
     res.send({ projectInfo, projectNodeInfo });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.get('/queries/:projectId', verifyToken, identifyUser, async (req: Request, res: Response, next: Next) => {
+  try {
+    const { projectId } = req.params;
+    const projectQueries = await projectService.getProjectServiceQueries(res.locals.user, projectId);
+    console.log(projectQueries);
+    res.send(projectQueries);
   } catch (e) {
     next(e);
   }

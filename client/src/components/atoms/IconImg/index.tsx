@@ -1,24 +1,35 @@
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
 
 interface IProps {
   imgSrc: string;
   altText: string;
   size?: { width: string; height: string };
+  noPadding?: boolean;
+  noHover?: boolean;
 }
 
-const StyledIconImg = styled.img`
+interface IImgProps {
+  noPadding?: boolean;
+  noHover?: boolean;
+}
+
+const StyledIconImg = styled.img<IImgProps>`
   ${({ theme }) => theme.flex.columnCenter}
-  padding: ${({ theme }) => theme.padding.small};
+  padding: ${({ theme, noPadding }) => (noPadding ? null : theme.padding.small)};
   :hover {
-    cursor: pointer;
+    ${({ noHover, theme }) =>
+      noHover
+        ? null
+        : `{ cursor: pointer;
     border-radius: 99px;
-    background: ${({ theme }) => theme.color.gray3};
+    background: ${theme.color.gray3};}
+    `}
   }
 `;
 
-const IconImg: React.FC<IProps> = ({ imgSrc, altText, size }) => {
-  return <StyledIconImg src={imgSrc} alt={altText} width={size?.width} height={size?.height} />;
+const IconImg: React.FC<IProps> = ({ imgSrc, altText, size, noPadding, noHover }) => {
+  return <StyledIconImg src={imgSrc} alt={altText} width={size?.width} height={size?.height} noPadding={noPadding} noHover={noHover} />;
 };
 
 export default IconImg;

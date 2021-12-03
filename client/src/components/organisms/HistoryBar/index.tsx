@@ -1,10 +1,10 @@
-import { Wrapper } from './style';
-import { HistoryLog, HistoryWindow } from 'components/molecules';
 import { useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentReverseIdxState, historyDataListState, isHistoryCalculatingState } from 'recoil/history';
-import useHistoryController from 'hooks/useHistoryController';
 import { HistoryHeader } from '..';
+import { Wrapper } from './style';
+import { HistoryLog, HistoryWindow } from 'components/molecules';
+import useHistoryController from 'hooks/useHistoryController';
+import { currentReverseIdxState, historyDataListState, isHistoryCalculatingState } from 'recoil/history';
 
 const HistoryBar: React.FC = () => {
   const historyDataList = useRecoilValue(historyDataListState);
@@ -29,7 +29,7 @@ const HistoryBar: React.FC = () => {
   );
 
   return (
-    <Wrapper>
+    <Wrapper className='history'>
       <HistoryHeader />
       <HistoryWindow onClick={handleHistoryClick} />
       <HistoryLog historyData={historyDataList.at(currentReverseIdx) ?? null} />

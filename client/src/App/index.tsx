@@ -1,11 +1,11 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
 import { Global, ThemeProvider } from '@emotion/react';
-import { RecoilRoot } from 'recoil';
-import { common, global } from 'styles';
-import { GlobalModal } from 'components/templates/GlobalModal';
-import { Toast } from 'components/atoms';
 import loadable from '@loadable/component';
-import { Spinner } from 'components/molecules';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
+import { SpinnerBackground, Toast } from 'components/atoms';
+import { Header } from 'components/organisms';
+import { GlobalModal } from 'components/templates/GlobalModal';
+import { common, global } from 'styles';
 import { TPageComponent } from 'types/page';
 
 interface IProps {
@@ -14,7 +14,7 @@ interface IProps {
 
 const AsyncPage = loadable(({ page }: IProps) => import(`pages/${page}`), {
   cacheKey: ({ page }) => page,
-  fallback: <Spinner />,
+  fallback: <SpinnerBackground />,
 });
 
 const App = () => {
@@ -22,6 +22,7 @@ const App = () => {
     <ThemeProvider theme={common}>
       <RecoilRoot>
         <Global styles={global} />
+        <Header />
         <Switch>
           <Route path='/' exact render={() => <AsyncPage page={'Login'} />} />
           <Route path='/project' render={() => <AsyncPage page={'Project'} />} />
@@ -31,7 +32,6 @@ const App = () => {
           <Route path='/calendar/:projectId' render={() => <AsyncPage page={'Calendar'} />} />
           <Route path='/chart/:projectId' render={() => <AsyncPage page={'Chart'} />} />
           <Route path='/backlog/:projectId' render={() => <AsyncPage page={'Backlog'} />} />
-
           <Redirect from='*' to='/' />
         </Switch>
         <GlobalModal />

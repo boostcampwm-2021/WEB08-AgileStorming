@@ -1,13 +1,40 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StyledInput, TStyle } from './style';
 
-interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  onFocus?: () => void;
   inputStyle?: TStyle;
   margin?: string;
 }
 
-const BoxButton: React.FC<IProps> = ({ inputStyle = 'normal', margin = '0', ...props }) => {
-  return <StyledInput inputStyle={inputStyle} margin={margin} autoComplete={'off'} {...props} />;
+const Input: React.FC<IProps> = ({ onFocus = () => {}, inputStyle = 'normal', margin = '0', ...props }) => {
+  const ref = useRef<HTMLInputElement>(null);
+  const handleEnter = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      ref.current?.blur();
+    }
+  };
+  const waitEnter = () => {
+    onFocus();
+    document.addEventListener('keydown', handleEnter);
+  };
+  const stopWaitEnter = () => document.removeEventListener('keydown', handleEnter);
+
+  useEffect(() => {
+    return () => stopWaitEnter();
+  }, []);
+
+  return (
+    <StyledInput
+      ref={ref}
+      onFocus={waitEnter}
+      onBlur={stopWaitEnter}
+      inputStyle={inputStyle}
+      margin={margin}
+      autoComplete={'off'}
+      {...props}
+    />
+  );
 };
 
-export default BoxButton;
+export default Input;

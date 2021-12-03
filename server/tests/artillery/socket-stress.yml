@@ -1,0 +1,13 @@
+config:
+  target: 'http://localhost:5000'
+  socketio:
+    query: 'projectId=5dac75af-c5a5-443c-82ed-16c5dbfcdc3c&EIO=4&transport=websocket'
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: warm up
+scenarios:
+  - name: 'join project'
+    engine: 'socketio'
+    flow:
+      - think: 60

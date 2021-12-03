@@ -14,7 +14,7 @@ export const findOneNode = (nodeId: number) => {
   return getRepository(Mindmap).findOne({ where: { id } });
 };
 
-export const getMindMap = async (projectId: string) => {
+export const getMindMap = (projectId: string) => {
   return getRepository(Mindmap)
     .createQueryBuilder('mindmap')
     .leftJoinAndSelect('mindmap.task', 'task')
@@ -23,7 +23,7 @@ export const getMindMap = async (projectId: string) => {
     .getMany();
 };
 
-export const updateNode = async (nodeId: number, newData: INode) => {
+export const updateNode = (nodeId: number, newData: INode) => {
   return getRepository(Mindmap).createQueryBuilder().update().set(newData).where('id = :nodeId', { nodeId }).execute();
 };
 
@@ -48,7 +48,7 @@ const deleteNodeAndChildren = async (nodeId: number) => {
   getRepository(Mindmap).createQueryBuilder().delete().where({ id: nodeId }).execute();
 };
 
-export const updateNodeParent = async (parentBeforeId: number, parentAfterId: number, nodeId: number) => {
+export const updateNodeParent = (parentBeforeId: number, parentAfterId: number, nodeId: number) => {
   deleteNodeFromParent(parentBeforeId, nodeId);
   addNodeToParent(parentAfterId, nodeId);
 };
@@ -62,7 +62,7 @@ export const createNode = async (projectId: string, parentId: number | null, nod
   return newNode.id;
 };
 
-export const deleteNode = async (parentId: number, nodeId: number) => {
+export const deleteNode = (parentId: number, nodeId: number) => {
   deleteNodeFromParent(parentId, nodeId);
   deleteNodeAndChildren(nodeId);
   return;

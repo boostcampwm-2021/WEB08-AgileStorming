@@ -1,5 +1,5 @@
-import { Levels } from 'utils/helpers';
 import { TTask } from './event';
+import { Levels } from 'utils/helpers';
 
 export type IMindNodes = Map<number, IMindNode>;
 

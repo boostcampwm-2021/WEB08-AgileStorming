@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import { StyledTaskCard, StyledCardInfoLeft, StyledCardInfoRight, StyledTaskTitle, StyledIconContainer } from './style';
+import { SmallText, UserIcon, LabelIcon, Wrapper } from 'components/atoms';
+import { TaskInfo } from 'components/molecules';
 import { labelListState, sprintListState, userListState } from 'recoil/project';
 import { IMindNode } from 'types/mindmap';
-import { SmallText, UserIcon, Wrapper } from 'components/atoms';
-import { LabelIcon, TaskInfo } from 'components/molecules';
-import { StyledTaskCard, StyledCardInfoLeft, StyledCardInfoRight, StyledTaskTitle, StyledIconContainer } from './style';
 
 interface IProps {
   taskInfo: IMindNode;
@@ -54,6 +54,4 @@ const TaskCard: React.FC<IProps> = ({ taskInfo, setSelectedNodeIdTask, onMouseDo
   );
 };
 
-const isPropsEqual = (prev: IProps, curr: IProps) => JSON.stringify(prev.taskInfo) === JSON.stringify(curr.taskInfo);
-const TaskCardMemo = React.memo(TaskCard, isPropsEqual);
-export default TaskCardMemo;
+export default TaskCard;

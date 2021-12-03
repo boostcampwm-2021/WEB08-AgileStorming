@@ -1,8 +1,8 @@
 import React from 'react';
-import { BurnDownChart, DoneTaskChart, PriorityChart, TaskRatioChart } from 'components/organisms';
-import { StyledChartBackground, StyledChartContainer } from './style';
-import ChartHeader from './ChartHeader';
 import { useRecoilValue } from 'recoil';
+import ChartHeader from './ChartHeader';
+import { StyledChartBackground, StyledChartContainer } from './style';
+import { BurnDownChart, DoneTaskChart, PriorityChart, TaskRatioChart } from 'components/organisms';
 import { selectedChartState } from 'recoil/chart';
 
 const ChartContainer: React.FC = () => {

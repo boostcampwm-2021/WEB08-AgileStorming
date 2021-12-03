@@ -26,5 +26,6 @@ declare module '@emotion/react' {
     nodeBgColors: string[];
     nodeColors: string[];
     nodeFontSizes: string[];
+    HEADER_HEIGHT: string;
   }
 }

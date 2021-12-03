@@ -1,6 +1,6 @@
-import { Tree } from 'components/molecules';
-import useHistoryEmitter from 'hooks/useHistoryEmitter';
 import React from 'react';
+import { Tree } from 'components/molecules';
+import useSocketEmitter from 'hooks/useSocketEmitter';
 import { IMindmapData, IMindNode } from 'types/mindmap';
 import { getAllChildren } from 'utils/helpers';
 
@@ -16,7 +16,7 @@ export interface ITaskFilters {
 
 const MindmapTree: React.FC<IProps> = ({ mindmapData }) => {
   const rootId = mindmapData.rootId;
-  const { deleteNode } = useHistoryEmitter();
+  const { deleteNode } = useSocketEmitter();
 
   const handleDeleteBtnClick = (parentId: number, node: IMindNode) => {
     const sideEffect: IMindNode[] = getAllChildren(node, mindmapData);

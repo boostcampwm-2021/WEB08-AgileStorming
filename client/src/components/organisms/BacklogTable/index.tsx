@@ -1,8 +1,8 @@
-import { BacklogHeader, BacklogInfo, TableWrapper } from './style';
 import { useRecoilValue } from 'recoil';
+import StoryBacklog from './StoryBacklog';
+import { BacklogHeader, BacklogInfo, TableWrapper } from './style';
 import { mindmapNodesState } from 'recoil/mindmap';
 import { filteredTaskTimeState } from 'recoil/project';
-import StoryBacklog from './StoryBacklog';
 
 const BacklogWrapper = () => {
   const nodeList = useRecoilValue(mindmapNodesState);
