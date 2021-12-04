@@ -1,5 +1,8 @@
 export { default as Calendar } from 'components/molecules/Calendars/Calendar';
 export { default as Dropdown } from 'components/molecules/Dropdown';
+export { default as StoryBacklog } from 'components/molecules/BacklogRows/StoryBacklog';
+export { default as TaskBacklog } from 'components/molecules/BacklogRows/TaskBacklog';
+export { default as FilterButton } from 'components/molecules/Buttons/FilterButton';
 export { default as IconButton } from 'components/molecules/Buttons/IconButton';
 export { default as TextButton } from 'components/molecules/Buttons/TextButton';
 export { default as MonthController } from 'components/molecules/Controllers/MonthController';

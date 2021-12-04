@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import FilterButton from './FilterButton';
 import { LeftInfo, RightInfo, Template } from './style';
+import { FilterButton } from 'components/molecules';
 import { NodeDetailPopup, UserListPopup, FilterPopup } from 'components/organisms';
 import useAuthentication from 'hooks/useAuthentication';
 import useProject from 'hooks/useProject';
