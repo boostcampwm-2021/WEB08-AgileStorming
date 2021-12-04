@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { Template, Wrapper } from './style';
-import { BoxButton, Input, Title } from 'components/atoms';
+import { BoxButton, Input, SmallText, Title } from 'components/atoms';
 import useCustomHistory from 'hooks/useCustomHistory';
 import useModal from 'hooks/useModal';
 import useToast from 'hooks/useToast';
@@ -75,6 +75,9 @@ const Login = () => {
         <BoxButton onClick={handleClickRegister} btnStyle={'full'} color={'primary3'} margin={'0.3rem 0'}>
           회원가입
         </BoxButton>
+        <SmallText color={'white'} margin={'1rem 0'}>
+          웹 크롬 브라우저만 지원합니다.
+        </SmallText>
       </Wrapper>
     </Template>
   );
