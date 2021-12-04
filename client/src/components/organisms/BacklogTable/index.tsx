@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
-import StoryBacklog from './StoryBacklog';
 import { BacklogHeader, BacklogInfo, TableWrapper } from './style';
+import { StoryBacklog } from 'components/molecules';
 import { mindmapNodesState } from 'recoil/mindmap';
 import { filteredTaskTimeState } from 'recoil/project';
 
