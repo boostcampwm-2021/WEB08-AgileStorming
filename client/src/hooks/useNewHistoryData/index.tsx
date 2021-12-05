@@ -23,7 +23,6 @@ const useNewHistoryData = () => {
         const newHistoryDataList: IHistoryData[] = historyRowData.map((data: THistoryRowData) => parseHistory(data)).reverse();
         setHistoryDataList((prev: IHistoryData[]) => [...newHistoryDataList, ...prev]);
       } catch (err) {
-        console.log(err);
         showMessage('히스토리를 가져오지 못했습니다.');
       }
     },
