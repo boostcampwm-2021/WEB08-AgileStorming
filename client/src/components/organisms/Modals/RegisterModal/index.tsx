@@ -19,7 +19,7 @@ interface INewUser {
 const RegisterModal: React.FC<IRegisterModalProps> = () => {
   const newUser = useRef<INewUser>({ id: '', name: '' });
   const { hideModal } = useModal();
-  const { setOnEscKey } = useKeys();
+  const { setOnEscKey, setOnEnterKey } = useKeys();
   const { showMessage, showError } = useToast();
 
   const handleIdChange = (e: ChangeEvent<HTMLInputElement>) => (newUser.current.id = e.target.value);
@@ -40,7 +40,7 @@ const RegisterModal: React.FC<IRegisterModalProps> = () => {
     }
   };
 
-  // setOnEnterKey(handleSubmit); // 맥 한글 엔터 이슈.
+  setOnEnterKey(handleSubmit);
   setOnEscKey(hideModal);
 
   return (
