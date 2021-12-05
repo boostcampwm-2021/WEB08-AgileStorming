@@ -126,6 +126,7 @@ export const NodeDetailWrapper = () => {
         onBlur={handleBlurNodeDetail('content')}
         inputStyle='gray'
         margin='0.2rem 0 0 0'
+        useEnter={true}
       />
     </PopupItemLayout>
   );
@@ -173,6 +174,7 @@ export const NodeDetailWrapper = () => {
             onBlur={handleBlurDueDate}
             inputStyle='small'
             margin='0.1rem 0'
+            useEnter={true}
           />
         </LabelLayout>
         <LabelLayout label='예상 소요 시간' labelStyle='small' ratio={0.5} htmlFor='estimatedTime'>
@@ -184,6 +186,7 @@ export const NodeDetailWrapper = () => {
             onBlur={handleBlurEstimatedTime}
             inputStyle='small'
             margin='0.1rem 0'
+            useEnter={true}
           />
         </LabelLayout>
         <LabelLayout label='실제 소요 시간' labelStyle='small' ratio={0.5} htmlFor='finishedTime'>
@@ -195,6 +198,7 @@ export const NodeDetailWrapper = () => {
             onBlur={handleBlurFinishedTime}
             inputStyle='small'
             margin='0.1rem 0'
+            useEnter={true}
           />
         </LabelLayout>
         <LabelLayout label='중요도' htmlFor='priority' labelStyle='small' ratio={0.5}>

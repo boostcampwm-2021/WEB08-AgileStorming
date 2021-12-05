@@ -39,13 +39,11 @@ const useSocketEmitter = () => {
   const historyEmitter = ({ type, payload }: IHistoryEmitterProps) => {
     if (!isSocketConnected()) return;
     payload = fillPayload(payload);
-    console.log(type, payload);
     window.socket!.emit('history-event', type, JSON.stringify(payload));
   };
 
   const nonHistoryEmitter = ({ type, payload }: INonHistoryEmitterProps) => {
     if (!isSocketConnected()) return;
-    console.log(type, payload);
     window.socket!.emit('non-history-event', type, JSON.stringify(payload));
   };
 

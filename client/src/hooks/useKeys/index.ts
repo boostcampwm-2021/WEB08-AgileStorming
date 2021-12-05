@@ -10,6 +10,7 @@ const useKeys = () => {
   const handleKeyDown = (e: KeyboardEvent) => {
     switch (e.key) {
       case 'Enter':
+        if (e.isComposing) return;
         onEnterKey();
         break;
       case 'Esc': //IE
