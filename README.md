@@ -1,6 +1,8 @@
 # AgileStorming
 
-서비스 주소 : https://agilestorming.live/
+~~서비스 주소 : https://agilestorming.live/~~
+
+데모 영상 : https://youtu.be/dQBu_paYQ0Q
 	
 💡 `AgileStorming`은 쉽게 쓰는 **실시간 애자일 협업 툴**입니다.
 	
